@@ -212,9 +212,10 @@ footer p{margin-top:8px}
       <rect x="-11.5" y="1" width="10" height="18"/>
       <path d="M-6.5 1L-11.5 6M-6.5 19L-11.5 14" fill="none"/>
       <rect x="-1.5" y="5" width="1.5" height="10"/>
-      <path d="M2 0H83L85 2V18L83 20H2L0 18V2Z"/>
-      <path d="M85 5H86.75V19.25H85Z"/>
-      <path d="M86.75 7.5H88L89 8.5V11.5L88 12.5H86.75Z"/>
+      <rect x="0" y="0" width="85" height="20"/>
+      <path d="M0 2L2 0M83 0L85 2M85 18L83 20M2 20L0 18" fill="none"/>
+      <path d="M85 6H86.75V20.25H85Z"/>
+      <path d="M86.75 7H88.25L89.25 8V12L88.25 13H86.75Z"/>
       <path d="M4.8 2.4V13.6H3.3L5.6 17.6L7.9 13.6H6.4V2.4Z" fill="none" stroke-width=".3"/>
       <text transform="translate(9.4 3.2) rotate(90)" font-family="Quicksand,Arial,sans-serif" font-size="4" font-weight="700" fill="none" stroke-width=".28" letter-spacing=".2">CLOSE</text>
     </g>
@@ -572,8 +573,8 @@ document.addEventListener('DOMContentLoaded',function(){
 
   // ---------- 本体 85×20×20：上面に78×13の開口、底面に69×6のスリット、底板3.5 ----------
   (function(){
-    var s=new THREE.Shape(); rrect(s,-41.9,-9.4,83.8,18.8,1.2,false); rrect(s,-38.4,-5.9,76.8,11.8,1.5,true);
-    add(upright(new THREE.ExtrudeGeometry(s,{depth:18.8,bevelEnabled:true,bevelThickness:0.6,bevelSize:0.6,bevelSegments:2,curveSegments:6}),0.6));
+    var s=new THREE.Shape(); rrect(s,-42,-9.5,84,19,0.3,false); rrect(s,-38.5,-6,77,12,1.5,true);
+    add(upright(new THREE.ExtrudeGeometry(s,{depth:19,bevelEnabled:true,bevelThickness:0.5,bevelSize:0.5,bevelSegments:1,curveSegments:6}),0.5));
     var b=new THREE.Shape(); rrect(b,-39.5,-7,79,14,1,false); rrect(b,-34.5,-3,69,6,2.9,true);
     add(upright(new THREE.ExtrudeGeometry(b,{depth:3.5,bevelEnabled:false,curveSegments:8}),0));
   })();
@@ -593,13 +594,15 @@ document.addEventListener('DOMContentLoaded',function(){
   // ---------- シャフト（回転部）：Tr8×2 1条、ハンドル18角＋頂点面取り5×5×5 ----------
   var shaft=new THREE.Group(); shaft.position.set(0,10,0); dev.add(shaft);
   (function(){
-    var core=new THREE.CylinderGeometry(3.25,3.25,86,24); core.rotateZ(Math.PI/2); add(core,POM,shaft).position.x=1.5;
+    var core=new THREE.CylinderGeometry(3.25,3.25,84,24); core.rotateZ(Math.PI/2); add(core,POM,shaft).position.x=0.5;
+    var groove=new THREE.CylinderGeometry(2,2,2.4,20); groove.rotateZ(Math.PI/2); add(groove,POM,shaft).position.x=43.6;
     var pts=[], turns=38, seg=turns*20;
     for(var k=0;k<=seg;k++){ var t=k/seg, a=t*turns*Math.PI*2; pts.push(new THREE.Vector3(-38+t*turns*2,Math.cos(a)*3.4,Math.sin(a)*3.4)); }
     add(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts),seg,0.62,6,false),POM,shaft);
     var neck=new THREE.CylinderGeometry(5,5,4,32); neck.rotateZ(Math.PI/2); add(neck,POM,shaft).position.x=-42.5;
     var fl=new THREE.CylinderGeometry(6,6,1,32); fl.rotateZ(Math.PI/2); add(fl,POM,shaft).position.x=-43.7;
-    var tip=new THREE.CylinderGeometry(2.2,3,2.3,24); tip.rotateZ(-Math.PI/2); add(tip,POM,shaft).position.x=45.4;
+    var tip=new THREE.CylinderGeometry(2,3,1,24); tip.rotateZ(-Math.PI/2); add(tip,POM,shaft).position.x=46.25;
+    var tipb=new THREE.CylinderGeometry(3,3,1,24); tipb.rotateZ(Math.PI/2); add(tipb,POM,shaft).position.x=45.25;
     // ハンドル：内側端 x=-44 → 外側端 x=-54（長さ10）、断面18×18、外側4隅を5mm頂点面取り
     var A=-44, B=-54, M=-49, h=9, c=4, v=[];
     function tri(p,q,r){ v.push(p[0],p[1],p[2],q[0],q[1],q[2],r[0],r[1],r[2]); }
@@ -619,26 +622,54 @@ document.addEventListener('DOMContentLoaded',function(){
   (function(){
     var s=new THREE.Shape(); s.moveTo(-5.25,5.25); s.absarc(0,5.25,5.25,Math.PI,2*Math.PI,false); s.lineTo(5.25,9); s.absarc(0,9,5.25,0,Math.PI,false); s.lineTo(-5.25,5.25);
     var g=new THREE.ExtrudeGeometry(s,{depth:1.75,bevelEnabled:true,bevelThickness:0.3,bevelSize:0.3,bevelSegments:1,curveSegments:24});
-    g.rotateY(Math.PI/2); add(g).position.set(42.8,0.75,0);
+    g.rotateY(Math.PI/2); add(g).position.set(42.8,-0.25,0);
   })();
 
-  // ---------- アーム：図面の側面形状を厚み6で押し出し ----------
-  function armShape(d){
-    var s=new THREE.Shape(), X=function(x){return x*d;};
-    s.moveTo(0,2); s.lineTo(0,-39);
-    s.quadraticCurveTo(0,-40.2,X(1.6),-40.1); s.quadraticCurveTo(X(3.4),-39.8,X(4.6),-38.2); s.quadraticCurveTo(X(5.2),-37.2,X(5.1),-34);
-    s.lineTo(X(2.6),-17.6); s.quadraticCurveTo(X(2.4),-15.2,X(4.2),-15); s.lineTo(X(7.2),-15); s.quadraticCurveTo(X(8),-15,X(8),-14.2);
-    s.lineTo(X(8),2); s.lineTo(0,2);
-    var g=new THREE.ExtrudeGeometry(s,{depth:3.4,bevelEnabled:true,bevelThickness:1.3,bevelSize:0.8,bevelSegments:4,curveSegments:14});
-    g.translate(0,0,-1.7); return g;
+  // ---------- アーム：図面の側面形状（駆動アーム図・本体図）をそのまま断面に ----------
+  // 内側の直線面が x=0、外側へ +x。本体下面 y=0 から下へ40mm。上部15mmは幅8、段差（くぼみ）の後、
+  // 幅2.5→5へ太くなる刃部（逆テーパー）、先端はR3。厚み方向(z)は6mm、先端は半径3の丸、角R1。
+  function armOutline(top){
+    var P=[[0,top]], cur=[0,top];
+    function L(x,y){ P.push([x,y]); cur=[x,y]; }
+    function Q(cx,cy,x,y){ for(var i=1;i<=16;i++){ var t=i/16,a=(1-t)*(1-t),b=2*(1-t)*t,c=t*t; P.push([a*cur[0]+b*cx+c*x,a*cur[1]+b*cy+c*y]); } cur=[x,y]; }
+    L(0,-39); Q(0,-40.2,1.6,-40.1); Q(3.4,-39.8,4.6,-38.2); Q(5.2,-37.2,5.1,-34);
+    L(2.6,-17.6); Q(2.4,-15.2,4.2,-15); L(7.2,-15); Q(8,-15,8,-14.2); L(8,top);
+    return P;
   }
-  var INNER=-34.5;                                   // 両アームの内側面（最小時は接する）
-  add(armShape(-1)).position.x=INNER-0.8;            // 固定アーム（ハンドル側、本体と一体）
+  function spanAt(P,y){
+    var lo=1e9, hi=-1e9;
+    for(var i=0;i<P.length;i++){ var p=P[i], q=P[(i+1)%P.length];
+      if((p[1]-y)*(q[1]-y)<=0 && p[1]!==q[1]){ var x=p[0]+(q[0]-p[0])*(y-p[1])/(q[1]-p[1]); lo=Math.min(lo,x); hi=Math.max(hi,x); } }
+    return lo<=hi?[lo,hi]:null;
+  }
+  function armGeo(dir,top,fillet){
+    var P=armOutline(top), yb=Math.min.apply(null,P.map(function(p){return p[1];}));
+    var ys=[], y; for(y=top;y>yb+0.05;y-=0.1) ys.push(y+0.0137); ys.push(yb+0.02);
+    var CK=6, pos=[], idx=[], rings=0, center=[];
+    ys.forEach(function(yy){
+      var sp=spanAt(P,yy); if(!sp) return;
+      var hz=3, yc=yb+3;
+      if(yy<yc) hz=Math.sqrt(Math.max(0.0004,9-(yy-yc)*(yy-yc)));
+      if(fillet){ if(yy>0) hz=8; else if(yy>-5) hz=8-Math.sqrt(25-(yy+5)*(yy+5)); }   // 本体との付け根 R5
+      var cx=(sp[0]+sp[1])/2, ax=Math.max(0.02,(sp[1]-sp[0])/2), r=Math.min(1,ax*0.95,hz*0.95);
+      for(var q=0;q<4;q++){ var sx=(q===0||q===3)?1:-1, sz=q<2?1:-1;
+        for(var k=0;k<CK;k++){ var th=(q+k/(CK-1))*Math.PI/2;
+          pos.push(dir*(cx+sx*(ax-r)+r*Math.cos(th)), yy, sz*(hz-r)+r*Math.sin(th)); } }
+      center.push([dir*cx,yy]); rings++;
+    });
+    var N=CK*4;
+    for(var i=0;i<rings-1;i++) for(var j=0;j<N;j++){ var a=i*N+j,b=i*N+(j+1)%N; idx.push(a,a+N,b, b,a+N,b+N); }
+    var t0=pos.length/3; pos.push(center[0][0],top,0); for(j=0;j<N;j++) idx.push(t0,j,(j+1)%N);
+    var t1=pos.length/3, lc=center[rings-1]; pos.push(lc[0],yb,0); for(j=0;j<N;j++) idx.push((rings-1)*N+(j+1)%N,(rings-1)*N+j,t1);
+    var g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3)); g.setIndex(idx); g.computeVertexNormals(); return g;
+  }
+  var INNER=-34.5;                                   // 両アームの内側面（本体左端から8mm。最小時は2本が接する）
+  add(armGeo(-1,2,true)).position.x=INNER;           // 固定アーム（ハンドル側、本体と一体）
   var mover=new THREE.Group(); dev.add(mover);
-  add(armShape(1),POM,mover).position.x=INNER+0.8;   // 駆動アーム
+  add(armGeo(1,4,false),POM,mover).position.x=INNER; // 駆動アーム（ナット下面から44mm）
   var nut=new THREE.BoxGeometry(12,12,12); nut.translate(INNER+6,10,0); add(nut,POM,mover);
 
-  function place(){ mover.position.x=current; shaft.rotation.x=current*Math.PI; }   // 1回転=2mm
+  function place(){ mover.position.x=current; shaft.rotation.x=-current*Math.PI; }  // 1回転(2π)=2mm。閉じる向き＝側面の矢印が下へ動く向き
 
   function resize(){
     var w=stage.clientWidth,h=stage.clientHeight; renderer.setSize(w,h,false);
@@ -656,7 +687,7 @@ document.addEventListener('DOMContentLoaded',function(){
   var running=false, visible=true, t0=performance.now();
   function frame(now){
     var anim=!reduce;
-    if(demo&&anim){ target=30*(1-Math.cos((now-t0)/1000*0.8))/2; show(target); slider.value=10+target; }
+    if(demo&&anim){ target=20*(1-Math.cos((now-t0)/1000*0.6))/2; show(target); slider.value=10+target; }
     if(!touched&&anim) rotT=BASE+Math.sin((now-t0)/3400)*0.3;
     rotY+=(rotT-rotY)*0.1; current+=(target-current)*(demo?1:0.16); if(Math.abs(target-current)<0.01) current=target;
     model.rotation.y=rotY; place(); renderer.render(scene,camera);
