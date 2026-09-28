@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://saigonmanira-glitch.github.io/luca-bloom-lp/sitemap.xml
+Sitemap: https://luca-bloom.com/sitemap.xml

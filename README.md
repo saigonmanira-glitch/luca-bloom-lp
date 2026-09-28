@@ -7,5 +7,12 @@
 
 ## SEO
 
-- 公開URLは `https://saigonmanira-glitch.github.io/luca-bloom-lp/`（GitHub Pages）を前提にしています。独自ドメインで公開する場合は、`index.html` の canonical / og:url / og:image / JSON-LD、`robots.txt`、`sitemap.xml` のURLを置き換えてください。
+- 公開URLは `https://luca-bloom.com/` を前提にしています（同梱カードのQRコード `https://luca-bloom.com/jp` と同じドメイン）。変更する場合は、`index.html` の canonical / og:url / og:image / JSON-LD、`robots.txt`、`sitemap.xml` のURLを置き換えてください。
 - `og.png`（1200×630）、`favicon.svg`、`apple-touch-icon.png` を同梱。
+
+## サポートページ（同梱カードのQRコードの飛び先）
+
+- `jp/index.html` … QRコード `https://luca-bloom.com/jp` の着地ページ。「ご使用マニュアル」「取扱説明書 兼 免責事項」の選択画面
+- `jp/manual.html` … 図解のご使用マニュアル（画像は `jp/img/`、同梱ガイドPDFから切り出し）
+- `jp/disclaimer.html` … 取扱説明書 兼 免責事項（PDFの全文）
+- `https://luca-bloom.com/jp` へのアクセスは、静的ホスティング（GitHub Pages 等）で `jp/index.html` が表示されます。
