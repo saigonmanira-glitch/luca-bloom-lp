@@ -161,6 +161,23 @@ footer p{margin-top:8px}
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <!-- 駆動アーム／固定アームの側面形状（図面寸法・単位mm、本体下面が y=0、内側の直線面が x=0） -->
+    <path id="lb-arm" d="M0 0V39Q0 40.2 1.6 40.1Q3.4 39.8 4.6 38.2Q5.2 37.2 5.1 34L2.6 17.6Q2.4 15.2 4.2 15H7.2Q8 15 8 14.2V0Z"/>
+    <!-- 正面図：ハンドル＋本体＋キーホール留め具（本体左上が原点） -->
+    <g id="lb-body">
+      <rect x="-11.5" y="1" width="10" height="18"/>
+      <path d="M-6.5 1L-11.5 6M-6.5 19L-11.5 14" fill="none"/>
+      <rect x="-1.5" y="5" width="1.5" height="10"/>
+      <path d="M2 0H83L85 2V18L83 20H2L0 18V2Z"/>
+      <path d="M85 5H86.75V19.25H85Z"/>
+      <path d="M86.75 7.5H88L89 8.5V11.5L88 12.5H86.75Z"/>
+      <path d="M4.8 2.4V13.6H3.3L5.6 17.6L7.9 13.6H6.4V2.4Z" fill="none" stroke-width=".3"/>
+      <text transform="translate(9.4 3.2) rotate(90)" font-family="Quicksand,Arial,sans-serif" font-size="4" font-weight="700" fill="none" stroke-width=".28" letter-spacing=".2">CLOSE</text>
+    </g>
+  </defs>
+</svg>
 
 <!-- ================= HERO ================= -->
 <header class="hero">
@@ -175,12 +192,12 @@ footer p{margin-top:8px}
 
     <div class="stage" id="stage" aria-label="Luca Bloomの3Dモデル。横にドラッグすると回転します。">
       <div class="fb" id="fb">
-        <svg viewBox="0 0 300 220" aria-hidden="true">
-          <rect x="62" y="40" width="200" height="40" rx="10" fill="#F1EEE6"/>
-          <rect x="30" y="42" width="30" height="36" rx="12" fill="#E6E2D8"/>
-          <rect x="262" y="52" width="10" height="16" rx="4" fill="#E6E2D8"/>
-          <path d="M64 80h18v28c-2 8-4 12-4 20l2 60c0 12-16 12-16 0l2-60c0-8-2-12-2-20z" fill="#F1EEE6"/>
-          <path d="M150 80h10v28c0 8 2 12 2 20l2 60c0 12-16 12-16 0l2-60c0-8 0-12 0-20z" fill="#F1EEE6"/>
+        <svg viewBox="-14 -3 106 67" aria-hidden="true">
+          <g fill="#F1EEE6" stroke="#8990A6" stroke-width=".35" stroke-linejoin="round">
+            <use href="#lb-arm" transform="translate(8 20) scale(-1 1)"/>
+            <use href="#lb-arm" transform="translate(28 20)"/>
+            <use href="#lb-body"/>
+          </g>
         </svg>
       </div>
     </div>
@@ -233,24 +250,27 @@ footer p{margin-top:8px}
 
       <article class="reason">
         <div class="ill">
-          <svg viewBox="0 0 300 180" aria-hidden="true">
-            <rect x="40" y="18" width="220" height="30" rx="10" fill="#FFFFFF"/>
-            <rect x="40" y="18" width="220" height="30" rx="10" fill="none" stroke="#D9D4C8" stroke-width="1.5"/>
-            <!-- arms: narrow near body, wider toward tip -->
-            <path d="M104 48h12v26c0 8 6 16 6 34v34c0 14-24 14-24 0v-34c0-18 6-26 6-34z" fill="#FFFFFF" stroke="#D9D4C8" stroke-width="1.5"/>
-            <path d="M184 48h12v26c0 8 6 16 6 34v34c0 14-24 14-24 0v-34c0-18 6-26 6-34z" fill="#FFFFFF" stroke="#D9D4C8" stroke-width="1.5"/>
-            <!-- skin ring caught at neck -->
-            <ellipse cx="150" cy="80" rx="58" ry="11" fill="none" stroke="#C9707F" stroke-width="5" opacity=".9"/>
-            <!-- blocked arrows -->
-            <path d="M150 104v26" stroke="#161A29" stroke-width="2.5" stroke-linecap="round"/>
-            <path d="M143 122l7 9 7-9" fill="none" stroke="#161A29" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M140 146h20" stroke="#E3B34E" stroke-width="4" stroke-linecap="round"/>
-            <text x="150" y="170" text-anchor="middle" font-family="Zen Kaku Gothic New,sans-serif" font-size="12" font-weight="700" fill="#161A29">抜けにくい</text>
+          <svg viewBox="-9 -3 70 64" aria-hidden="true">
+            <path d="M4.6 37.5A10.4 2.4 0 0 1 25.4 37.5" fill="none" stroke="#C9707F" stroke-width="1.3" opacity=".55"/>
+            <g fill="#FFFFFF" stroke="#8990A6" stroke-width=".35" stroke-linejoin="round">
+              <use href="#lb-arm" transform="translate(8 20) scale(-1 1)"/>
+              <use href="#lb-arm" transform="translate(22 20)"/>
+              <use href="#lb-body"/>
+            </g>
+            <path d="M4.6 37.5A10.4 2.4 0 0 0 25.4 37.5" fill="none" stroke="#C9707F" stroke-width="1.3"/>
+            <g stroke="#161A29" stroke-width=".35" fill="none">
+              <path d="M26.5 37.5H35"/><path d="M27.4 55.5L35 55.5"/>
+            </g>
+            <circle cx="26.2" cy="37.5" r=".7" fill="#161A29"/><circle cx="27" cy="54.8" r=".7" fill="#161A29"/>
+            <g font-family="Zen Kaku Gothic New,sans-serif" font-weight="700" fill="#161A29" font-size="3">
+              <text x="36" y="36.4">細いくぼみに</text><text x="36" y="40.4">ぴたりと収まる</text>
+              <text x="36" y="54.4">先端が太く</text><text x="36" y="58.4">抜けにくい</text>
+            </g>
           </svg>
         </div>
         <div class="body">
           <p class="no">REASON 01</p>
-          <h3>ずれにくい<span style="display:inline-block">「逆テーパー」アーム</span></h3>
+          <h3>ずれにくい<br>「逆テーパー」アーム</h3>
           <p>アームは根元が細く、先端に向かって太くなる形<small class="gl">（逆テーパー）</small>。包皮が根元にぴたりと収まり、使用中にずれにくくなります。肌に面で当たるので、一点に負担がかかりません。</p>
         </div>
       </article>
@@ -258,19 +278,20 @@ footer p{margin-top:8px}
       <article class="reason">
         <div class="ill">
           <svg viewBox="0 0 300 180" aria-hidden="true">
-            <!-- dial -->
-            <circle cx="92" cy="90" r="52" fill="#FFFFFF" stroke="#D9D4C8" stroke-width="1.5"/>
-            <circle cx="92" cy="90" r="36" fill="#F5F3EE"/>
-            <path d="M92 38v14" stroke="#161A29" stroke-width="3" stroke-linecap="round"/>
-            <path d="M140 72a52 52 0 0 1 0 36" fill="none" stroke="#E3B34E" stroke-width="5" stroke-linecap="round"/>
-            <path d="M134 110l7 -2 1 8" fill="none" stroke="#E3B34E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-            <!-- lock -->
-            <rect x="190" y="84" width="60" height="48" rx="10" fill="#161A29"/>
-            <path d="M204 84v-12a16 16 0 0 1 32 0v12" fill="none" stroke="#161A29" stroke-width="7"/>
-            <circle cx="220" cy="104" r="6" fill="#E3B34E"/>
-            <path d="M220 108v10" stroke="#E3B34E" stroke-width="4" stroke-linecap="round"/>
-            <text x="92" y="165" text-anchor="middle" font-family="Zen Kaku Gothic New,sans-serif" font-size="12" font-weight="700" fill="#161A29">回すだけ</text>
-            <text x="220" y="165" text-anchor="middle" font-family="Zen Kaku Gothic New,sans-serif" font-size="12" font-weight="700" fill="#161A29">戻らない</text>
+            <!-- ハンドル端面：18mm角＋頂点面取り5mm -->
+            <path d="M92 26A64 64 0 0 1 150 70" fill="none" stroke="#E3B34E" stroke-width="5" stroke-linecap="round"/>
+            <path d="M141 66l9 6 3-11" fill="none" stroke="#E3B34E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <rect x="47" y="45" width="90" height="90" fill="#FFFFFF" stroke="#8990A6" stroke-width="1.6"/>
+            <path d="M72 45L47 70M112 45L137 70M137 110L112 135M47 110L72 135" stroke="#8990A6" stroke-width="1.6"/>
+            <path d="M72 45H112L137 70V110L112 135H72L47 110V70Z" fill="#F5F3EE"/>
+            <path d="M72 45H112L137 70V110L112 135H72L47 110V70Z" fill="none" stroke="#8990A6" stroke-width="1.2"/>
+            <!-- ロック -->
+            <rect x="200" y="84" width="60" height="48" rx="10" fill="#161A29"/>
+            <path d="M214 84v-12a16 16 0 0 1 32 0v12" fill="none" stroke="#161A29" stroke-width="7"/>
+            <circle cx="230" cy="104" r="6" fill="#E3B34E"/>
+            <path d="M230 108v10" stroke="#E3B34E" stroke-width="4" stroke-linecap="round"/>
+            <text x="92" y="165" text-anchor="middle" font-family="Zen Kaku Gothic New,sans-serif" font-size="12" font-weight="700" fill="#161A29">ハンドルを回すだけ</text>
+            <text x="230" y="165" text-anchor="middle" font-family="Zen Kaku Gothic New,sans-serif" font-size="12" font-weight="700" fill="#161A29">戻らない</text>
           </svg>
         </div>
         <div class="body">
@@ -282,14 +303,17 @@ footer p{margin-top:8px}
 
       <article class="reason">
         <div class="ill">
-          <svg viewBox="0 0 300 180" aria-hidden="true">
-            <rect x="30" y="30" width="240" height="26" rx="9" fill="#FFFFFF" stroke="#D9D4C8" stroke-width="1.5"/>
-            <path d="M52 56h14v70c0 12-14 12-14 0z" fill="#FFFFFF" stroke="#D9D4C8" stroke-width="1.5"/>
-            <path d="M234 56h14v70c0 12-14 12-14 0z" fill="#FFFFFF" stroke="#D9D4C8" stroke-width="1.5"/>
-            <path d="M72 100h156" stroke="#E3B34E" stroke-width="3"/>
-            <path d="M80 93l-8 7 8 7M220 93l8 7-8 7" fill="none" stroke="#E3B34E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-            <text x="150" y="90" text-anchor="middle" font-family="Quicksand,sans-serif" font-size="22" font-weight="700" fill="#161A29">70mm</text>
-            <text x="150" y="160" text-anchor="middle" font-family="Zen Kaku Gothic New,sans-serif" font-size="12" font-weight="700" fill="#161A29">最後まで平行に開く</text>
+          <svg viewBox="-14 -3 106 76" aria-hidden="true">
+            <g fill="#FFFFFF" stroke="#8990A6" stroke-width=".35" stroke-linejoin="round">
+              <use href="#lb-arm" transform="translate(8 20) scale(-1 1)"/>
+              <use href="#lb-arm" transform="translate(68 20)"/>
+              <use href="#lb-body"/>
+            </g>
+            <g stroke="#E3B34E" stroke-width=".7" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2.9 55V66M73.1 55V66" stroke-width=".35" stroke="#8990A6" stroke-dasharray="1 1"/>
+              <path d="M3.4 63.5H72.6"/><path d="M6 61.6L3.4 63.5L6 65.4M70 61.6L72.6 63.5L70 65.4"/>
+            </g>
+            <text x="38" y="61.2" text-anchor="middle" font-family="Quicksand,sans-serif" font-size="6" font-weight="700" fill="#161A29">70mm</text>
           </svg>
         </div>
         <div class="body">
@@ -345,11 +369,11 @@ footer p{margin-top:8px}
         <div><p class="s">STEP 1</p><b>クリームやオイルでなじませる</b><span>アームと包皮をしっかり保湿・潤滑すると、入れやすくなります。</span></div>
       </li>
       <li>
-        <div class="pic"><svg viewBox="0 0 60 60" aria-hidden="true"><rect x="10" y="8" width="40" height="10" rx="4" fill="#161A29"/><path d="M24 18h4v28c0 5-6 5-6 0v-18z" fill="#161A29"/><path d="M32 18h4v10l2 18c0 5-6 5-6 0z" fill="#161A29"/><path d="M30 52v-8" stroke="#E3B34E" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+        <div class="pic"><svg viewBox="-9 10 34 34" aria-hidden="true"><g fill="#161A29" stroke="#161A29" stroke-width=".3" stroke-linejoin="round"><use href="#lb-arm" transform="translate(8 20) scale(-1 1)"/><use href="#lb-arm" transform="translate(8 20)"/><rect x="-9" y="10" width="34" height="10"/></g><path d="M21 27v10" stroke="#E3B34E" stroke-width="1.6" stroke-linecap="round"/><path d="M18.6 34.6L21 37.4L23.4 34.6" fill="none" stroke="#E3B34E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <div><p class="s">STEP 2</p><b>閉じたアームを入れる</b><span>アームを閉じた状態で、先端から包皮の狭い部分へ。</span></div>
       </li>
       <li>
-        <div class="pic"><svg viewBox="0 0 60 60" aria-hidden="true"><circle cx="30" cy="30" r="18" fill="none" stroke="#161A29" stroke-width="5"/><path d="M30 12v8" stroke="#161A29" stroke-width="5" stroke-linecap="round"/><path d="M48 26a18 18 0 0 1-4 16" fill="none" stroke="#E3B34E" stroke-width="3.5" stroke-linecap="round"/><path d="M40 43l4-1 1 4" fill="none" stroke="#E3B34E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="pic"><svg viewBox="0 0 60 60" aria-hidden="true"><rect x="15" y="15" width="30" height="30" fill="#161A29"/><path d="M23.3 15H36.7L45 23.3V36.7L36.7 45H23.3L15 36.7V23.3Z" fill="#2E3550"/><path d="M30 6A24 24 0 0 1 53 23" fill="none" stroke="#E3B34E" stroke-width="3.5" stroke-linecap="round"/><path d="M47.5 21.5l5.5 2 1.5-5.6" fill="none" stroke="#E3B34E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <div><p class="s">STEP 3</p><b>痛くない幅まで、回して開く</b><span>ハンドルをゆっくり回し、痛みを感じない幅で止めます。そのまま固定されます。</span></div>
       </li>
     </ol>
@@ -433,11 +457,10 @@ footer p{margin-top:8px}
 <script>
 (function(){
   var slider=document.getElementById('gap'), out=document.getElementById('gapv');
-  var target=10, current=10, demo=true, kick=function(){};
-  function show(v){ out.innerHTML=(Math.round(v*2)/2).toFixed(v%1?1:0)+'<small>mm</small>'; }
-  slider.addEventListener('input',function(){ demo=false; target=parseFloat(slider.value); show(target); kick(); });
+  var target=0, current=0, demo=true, kick=function(){};   // target/current = アームの移動量(mm) 0〜60。開き幅 = 10 + 移動量
+  function show(travel){ var v=Math.round((10+travel)*2)/2; out.innerHTML=(v%1?v.toFixed(1):v)+'<small>mm</small>'; }
+  slider.addEventListener('input',function(){ demo=false; target=parseFloat(slider.value)-10; show(target); kick(); });
 
-  // sticky bar hides while a main CTA is visible
   var bar=document.getElementById('bar');
   if('IntersectionObserver' in window){
     var vis=new Set();
@@ -455,95 +478,109 @@ footer p{margin-top:8px}
   stage.appendChild(renderer.domElement);
 
   var scene=new THREE.Scene();
-  var camera=new THREE.PerspectiveCamera(26,1,1,2000);
-  var LOOK=new THREE.Vector3(-4,-9,0);
+  var camera=new THREE.PerspectiveCamera(24,1,1,2000);
+  var LOOK=new THREE.Vector3(0,-6,0);
 
   scene.add(new THREE.HemisphereLight(0xffffff,0x3a4160,0.6));
-  var key=new THREE.DirectionalLight(0xffffff,0.85); key.position.set(70,150,140); key.castShadow=true;
+  var key=new THREE.DirectionalLight(0xffffff,0.85); key.position.set(-40,160,120); key.castShadow=true;
   key.shadow.mapSize.set(1024,1024); var sc=key.shadow.camera; sc.left=-100;sc.right=100;sc.top=100;sc.bottom=-100;sc.near=10;sc.far=450;
-  key.shadow.radius=6; scene.add(key);
-  var rim=new THREE.DirectionalLight(0xc6d0ff,0.55); rim.position.set(-120,60,-110); scene.add(rim);
+  scene.add(key);
+  var fill=new THREE.DirectionalLight(0xdfe4ff,0.35); fill.position.set(120,40,60); scene.add(fill);
+  var rim=new THREE.DirectionalLight(0xc6d0ff,0.45); rim.position.set(60,60,-140); scene.add(rim);
   var ground=new THREE.Mesh(new THREE.PlaneGeometry(700,700),new THREE.ShadowMaterial({opacity:0.35}));
-  ground.rotation.x=-Math.PI/2; ground.position.y=-46; ground.receiveShadow=true; scene.add(ground);
+  ground.rotation.x=-Math.PI/2; ground.position.y=-41.5; ground.receiveShadow=true; scene.add(ground);
 
-  var POM=new THREE.MeshStandardMaterial({color:0xe8e4da,roughness:0.45,metalness:0});
-  var POMS=new THREE.MeshStandardMaterial({color:0xe8e4da,roughness:0.45,metalness:0,side:THREE.DoubleSide});
-  var SHADE=new THREE.MeshStandardMaterial({color:0xcfcabf,roughness:0.6});
+  var POM=new THREE.MeshStandardMaterial({color:0xe8e4da,roughness:0.5,metalness:0,side:THREE.DoubleSide});
+  var POMF=new THREE.MeshStandardMaterial({color:0xe8e4da,roughness:0.5,metalness:0,side:THREE.DoubleSide,flatShading:true});
   var model=new THREE.Group(); scene.add(model);
-  function add(mesh,parent){ mesh.castShadow=true; mesh.receiveShadow=true; (parent||model).add(mesh); return mesh; }
+  var dev=new THREE.Group(); dev.position.x=4; model.add(dev);   // 全体の中心を回転軸に合わせる
+  function add(g,mat,parent){ var m=new THREE.Mesh(g,mat||POM); m.castShadow=true; m.receiveShadow=true; (parent||dev).add(m); return m; }
+  function rrect(s,x,y,w,h,r,hole){
+    var p=hole?new THREE.Path():s;
+    p.moveTo(x+r,y); p.lineTo(x+w-r,y); p.quadraticCurveTo(x+w,y,x+w,y+r); p.lineTo(x+w,y+h-r); p.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+    p.lineTo(x+r,y+h); p.quadraticCurveTo(x,y+h,x,y+h-r); p.lineTo(x,y+r); p.quadraticCurveTo(x,y,x+r,y);
+    if(hole) s.holes.push(p);
+  }
+  function upright(g,y0){ g.rotateX(-Math.PI/2); g.translate(0,y0,0); return g; }  // 押し出し方向を上(+Y)に
 
-  // ---- body: 85 x 20 x 20, soft rounded box
+  // ---------- 本体 85×20×20：上面に78×13の開口、底面に69×6のスリット、底板3.5 ----------
   (function(){
-    var s=new THREE.Shape(), w=18, h=18, r=4.5, x=-w/2, y=-h/2;
-    s.moveTo(x+r,y); s.lineTo(x+w-r,y); s.quadraticCurveTo(x+w,y,x+w,y+r); s.lineTo(x+w,y+h-r); s.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
-    s.lineTo(x+r,y+h); s.quadraticCurveTo(x,y+h,x,y+h-r); s.lineTo(x,y+r); s.quadraticCurveTo(x,y,x+r,y);
-    var g=new THREE.ExtrudeGeometry(s,{depth:83,bevelEnabled:true,bevelThickness:1,bevelSize:1,bevelSegments:4,curveSegments:10});
-    g.translate(0,0,-41.5); g.rotateY(Math.PI/2);
-    var m=add(new THREE.Mesh(g,POM)); m.position.set(0,10,0);
-    // slot on the underside
-    var slot=new THREE.Mesh(new THREE.BoxGeometry(66,0.4,5),SHADE); slot.position.set(4,0.05,0); model.add(slot);
+    var s=new THREE.Shape(); rrect(s,-41.9,-9.4,83.8,18.8,1.2,false); rrect(s,-38.4,-5.9,76.8,11.8,1.5,true);
+    add(upright(new THREE.ExtrudeGeometry(s,{depth:18.8,bevelEnabled:true,bevelThickness:0.6,bevelSize:0.6,bevelSegments:2,curveSegments:6}),0.6));
+    var b=new THREE.Shape(); rrect(b,-39.5,-7,79,14,1,false); rrect(b,-34.5,-3,69,6,2.9,true);
+    add(upright(new THREE.ExtrudeGeometry(b,{depth:3.5,bevelEnabled:false,curveSegments:8}),0));
   })();
 
-  // lathe helper: profile along axis (x), returns mesh with axis on X
-  function lathe(pts,dir){
-    var v=pts.map(function(p){return new THREE.Vector2(p[1],p[0]);});
-    var g=new THREE.LatheGeometry(v,40); g.rotateZ(dir*Math.PI/2); return g;
-  }
-  // ---- handle (rotates)
-  var handle=new THREE.Group(); handle.position.set(0,10,0); model.add(handle);
-  var hp=[[0,0.01],[0,4],[1.5,4],[1.5,9.4],[2.2,9.9],[3.5,10],[8.5,10],[10.2,9.4],[11.2,8],[11.7,5.5],[11.9,0.01]];
-  var hg=lathe(hp,1);
-  add(new THREE.Mesh(hg,POM),handle).position.x=-42.5;
-  var notch=new THREE.Mesh(new THREE.BoxGeometry(7.5,1.2,1.4),SHADE); notch.position.set(-49.2,9.75,0); handle.add(notch);
-  // ---- keyhole retainer (right end)
-  var kg=lathe([[0,0.01],[0,3.4],[3,3.4],[4,2.8],[4.4,1.5],[4.5,0.01]],-1);
-  add(new THREE.Mesh(kg,POM)).position.set(42.5,10,0);
+  // ---------- 刻印「↓CLOSE」（側面2か所） ----------
+  (function(){
+    var c=document.createElement('canvas'); c.width=240; c.height=360; var g=c.getContext('2d');
+    g.strokeStyle='#8c877b'; g.lineWidth=5; g.lineJoin='round';
+    g.beginPath(); g.moveTo(40,8); g.lineTo(40,232); g.lineTo(10,232); g.lineTo(56,318); g.lineTo(102,232); g.lineTo(72,232); g.lineTo(72,8); g.closePath(); g.stroke();
+    g.save(); g.translate(150,180); g.rotate(Math.PI/2); g.font='700 84px Quicksand, Arial, sans-serif'; g.textAlign='center'; g.textBaseline='middle';
+    g.lineWidth=5; g.strokeText('CLOSE',0,0); g.restore();
+    var mat=new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(c),transparent:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2});
+    var p1=new THREE.Mesh(new THREE.PlaneGeometry(12,18),mat); p1.position.set(-33.75,10,10.02); dev.add(p1);
+    var p2=p1.clone(); p2.rotation.y=Math.PI; p2.position.z=-10.02; dev.add(p2);
+  })();
 
-  // ---- swept arm geometry: superellipse cross-sections (flat faces, rounded corners)
-  function sweep(yTop,yBot,fn){
-    var SEG=40, RN=28, pos=[], idx=[];
-    for(var i=0;i<=SEG;i++){
-      var t=i/SEG, y=yTop+(yBot-yTop)*t, d=fn(t);
-      for(var j=0;j<RN;j++){
-        var a=j/RN*Math.PI*2, c=Math.cos(a), s=Math.sin(a);
-        pos.push(d.cx+d.wx/2*Math.sign(c)*Math.pow(Math.abs(c),0.55), y, d.wz/2*Math.sign(s)*Math.pow(Math.abs(s),0.55));
-      }
-    }
-    for(i=0;i<SEG;i++) for(var j2=0;j2<RN;j2++){
-      var a0=i*RN+j2, a1=i*RN+(j2+1)%RN, b0=a0+RN, b1=a1+RN;
-      idx.push(a0,b0,a1, a1,b0,b1);
-    }
-    var tip=pos.length/3, last=fn(1); pos.push(last.cx,yBot-0.2,0);
-    for(j2=0;j2<RN;j2++) idx.push(SEG*RN+j2, tip, SEG*RN+(j2+1)%RN);
-    var g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3)); g.setIndex(idx); g.computeVertexNormals(); return g;
-  }
-  function tipRound(t,start){ if(t<start) return 1; var u=(t-start)/(1-start); return Math.sqrt(Math.max(0.0004,1-u*u)); }
-  function ease(t){ return t*t*(3-2*t); }
-  // blade: slim near the root, fuller toward the tip (reverse taper), rounded end
-  function blade(cx){
-    return sweep(-11,-41,function(t){ var k=tipRound(t,0.82); return {cx:cx, wx:(4.0+0.6*ease(t))*k, wz:(3.4+3.2*ease(Math.min(1,t*1.15)))*k}; });
-  }
-  function block(cx,wx,wz,yBot){
-    return sweep(1,yBot,function(t){ var k=t>0.8?0.75+0.25*tipRound(t,0.8):1; return {cx:cx, wx:wx*k, wz:wz*k}; });
-  }
-  // fixed arm (under the handle end)
-  add(new THREE.Mesh(block(-38.5,8,6,-15),POMS));
-  add(new THREE.Mesh(blade(-35.75),POMS));
-  // moving arm
-  var mover=new THREE.Group(); model.add(mover);
-  add(new THREE.Mesh(block(-30.5,4,5.5,-15),POMS),mover);
-  add(new THREE.Mesh(blade(-30.25),POMS),mover);
+  // ---------- シャフト（回転部）：Tr8×2 1条、ハンドル18角＋頂点面取り5×5×5 ----------
+  var shaft=new THREE.Group(); shaft.position.set(0,10,0); dev.add(shaft);
+  (function(){
+    var core=new THREE.CylinderGeometry(3.25,3.25,86,24); core.rotateZ(Math.PI/2); add(core,POM,shaft).position.x=1.5;
+    var pts=[], turns=38, seg=turns*20;
+    for(var k=0;k<=seg;k++){ var t=k/seg, a=t*turns*Math.PI*2; pts.push(new THREE.Vector3(-38+t*turns*2,Math.cos(a)*3.4,Math.sin(a)*3.4)); }
+    add(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts),seg,0.62,6,false),POM,shaft);
+    var neck=new THREE.CylinderGeometry(5,5,4,32); neck.rotateZ(Math.PI/2); add(neck,POM,shaft).position.x=-42.5;
+    var fl=new THREE.CylinderGeometry(6,6,1,32); fl.rotateZ(Math.PI/2); add(fl,POM,shaft).position.x=-43.7;
+    var tip=new THREE.CylinderGeometry(2.2,3,2.3,24); tip.rotateZ(-Math.PI/2); add(tip,POM,shaft).position.x=45.4;
+    // ハンドル：内側端 x=-44 → 外側端 x=-54（長さ10）、断面18×18、外側4隅を5mm頂点面取り
+    var A=-44, B=-54, M=-49, h=9, c=4, v=[];
+    function tri(p,q,r){ v.push(p[0],p[1],p[2],q[0],q[1],q[2],r[0],r[1],r[2]); }
+    function poly(ps){ for(var i=1;i<ps.length-1;i++) tri(ps[0],ps[i],ps[i+1]); }
+    poly([[A,-h,-h],[A,h,-h],[A,h,h],[A,-h,h]]);
+    poly([[B,h,-c],[B,h,c],[B,c,h],[B,-c,h],[B,-h,c],[B,-h,-c],[B,-c,-h],[B,c,-h]]);
+    poly([[A,h,-h],[A,h,h],[M,h,h],[B,h,c],[B,h,-c],[M,h,-h]]);     // 上面 y=+9
+    poly([[A,-h,-h],[A,-h,h],[M,-h,h],[B,-h,c],[B,-h,-c],[M,-h,-h]]); // 下面 y=-9
+    poly([[A,-h,h],[A,h,h],[M,h,h],[B,c,h],[B,-c,h],[M,-h,h]]);     // 手前 z=+9
+    poly([[A,-h,-h],[A,h,-h],[M,h,-h],[B,c,-h],[B,-c,-h],[M,-h,-h]]); // 奥 z=-9
+    [[1,1],[1,-1],[-1,1],[-1,-1]].forEach(function(s){ tri([M,s[0]*h,s[1]*h],[B,s[0]*h,s[1]*c],[B,s[0]*c,s[1]*h]); }); // 面取り三角
+    var kg=new THREE.BufferGeometry(); kg.setAttribute('position',new THREE.Float32BufferAttribute(v,3)); kg.computeVertexNormals();
+    add(kg,POMF,shaft);
+  })();
 
-  function place(){ mover.position.x=current-10; handle.rotation.x=-(current-10)/2*Math.PI*2; }
+  // ---------- キーホール留め具：10.5×14.25 長円、厚み1.75（右端） ----------
+  (function(){
+    var s=new THREE.Shape(); s.moveTo(-5.25,5.25); s.absarc(0,5.25,5.25,Math.PI,2*Math.PI,false); s.lineTo(5.25,9); s.absarc(0,9,5.25,0,Math.PI,false); s.lineTo(-5.25,5.25);
+    var g=new THREE.ExtrudeGeometry(s,{depth:1.75,bevelEnabled:true,bevelThickness:0.3,bevelSize:0.3,bevelSegments:1,curveSegments:24});
+    g.rotateY(Math.PI/2); add(g).position.set(42.8,0.75,0);
+  })();
+
+  // ---------- アーム：図面の側面形状を厚み6で押し出し ----------
+  function armShape(d){
+    var s=new THREE.Shape(), X=function(x){return x*d;};
+    s.moveTo(0,2); s.lineTo(0,-39);
+    s.quadraticCurveTo(0,-40.2,X(1.6),-40.1); s.quadraticCurveTo(X(3.4),-39.8,X(4.6),-38.2); s.quadraticCurveTo(X(5.2),-37.2,X(5.1),-34);
+    s.lineTo(X(2.6),-17.6); s.quadraticCurveTo(X(2.4),-15.2,X(4.2),-15); s.lineTo(X(7.2),-15); s.quadraticCurveTo(X(8),-15,X(8),-14.2);
+    s.lineTo(X(8),2); s.lineTo(0,2);
+    var g=new THREE.ExtrudeGeometry(s,{depth:3.4,bevelEnabled:true,bevelThickness:1.3,bevelSize:0.8,bevelSegments:4,curveSegments:14});
+    g.translate(0,0,-1.7); return g;
+  }
+  var INNER=-34.5;                                   // 両アームの内側面（最小時は接する）
+  add(armShape(-1)).position.x=INNER-0.8;            // 固定アーム（ハンドル側、本体と一体）
+  var mover=new THREE.Group(); dev.add(mover);
+  add(armShape(1),POM,mover).position.x=INNER+0.8;   // 駆動アーム
+  var nut=new THREE.BoxGeometry(12,12,12); nut.translate(INNER+6,10,0); add(nut,POM,mover);
+
+  function place(){ mover.position.x=current; shaft.rotation.x=current*Math.PI; }   // 1回転=2mm
 
   function resize(){
     var w=stage.clientWidth,h=stage.clientHeight; renderer.setSize(w,h,false);
-    camera.aspect=w/h; var d=w/h<1.1?205:190;
-    camera.position.set(LOOK.x+d*0.28,LOOK.y+d*0.22,d*0.93); camera.lookAt(LOOK); camera.updateProjectionMatrix(); kick();
+    camera.aspect=w/h; var d=w/h<1.1?250:228;
+    camera.position.set(LOOK.x-d*0.30,LOOK.y+d*0.36,d*0.88); camera.lookAt(LOOK); camera.updateProjectionMatrix(); kick();
   }
   if('ResizeObserver' in window) new ResizeObserver(resize).observe(stage); else window.addEventListener('resize',resize);
 
-  var rotY=-0.42, rotT=-0.42, drag=false, lx=0, touched=false;
+  var BASE=0, rotY=BASE, rotT=BASE, drag=false, lx=0, touched=false;
   var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   stage.addEventListener('pointerdown',function(e){drag=true;touched=true;lx=e.clientX;try{stage.setPointerCapture(e.pointerId);}catch(_){}});
   stage.addEventListener('pointermove',function(e){if(!drag)return;rotT+=(e.clientX-lx)*0.012;lx=e.clientX;kick();});
@@ -552,8 +589,8 @@ footer p{margin-top:8px}
   var running=false, visible=true, t0=performance.now();
   function frame(now){
     var anim=!reduce;
-    if(demo&&anim){ var ph=(now-t0)/1000; target=10+22*(1-Math.cos(ph*0.9))/2; show(target); slider.value=target; }
-    if(!touched&&anim) rotT=-0.42+Math.sin((now-t0)/3200)*0.28;
+    if(demo&&anim){ target=30*(1-Math.cos((now-t0)/1000*0.8))/2; show(target); slider.value=10+target; }
+    if(!touched&&anim) rotT=BASE+Math.sin((now-t0)/3400)*0.3;
     rotY+=(rotT-rotY)*0.1; current+=(target-current)*(demo?1:0.16); if(Math.abs(target-current)<0.01) current=target;
     model.rotation.y=rotY; place(); renderer.render(scene,camera);
     var more=(demo&&anim)||(!touched&&anim)||Math.abs(rotT-rotY)>0.0005||current!==target;
