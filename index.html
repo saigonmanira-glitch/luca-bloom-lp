@@ -4,567 +4,425 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Luca Bloom</title>
-<meta name="description" content="Luca Bloom｜1回転2.0mmで広げる、ネジ式の包皮ストレッチ補助具。セルフロック構造で設定した幅を保持。21,800円。">
+<meta name="description" content="Luca Bloom｜包皮が狭い方のためのセルフケアツール。ずれにくい逆テーパーアーム、無段階調整とセルフロック、業界最大70mm。実用新案出願済み。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=JetBrains+Mono:wght@400;600&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap">
 <style>
 :root{
-  --paper:#F1F4F2;
-  --surface:#FFFFFF;
-  --ink:#13211F;
-  --muted:#586764;
-  --line:#D3DBD8;
-  --grid:rgba(30,110,98,.08);
-  --accent:#1E6E62;
-  --accent-ink:#FFFFFF;
-  --accent-soft:#DDEDE8;
-  --petal:#C4617A;
-  --pom:#ECE8DF;
-  --warn-bg:#FBEFF2;
+  color-scheme:light;
+  --navy:#161A29;
+  --navy-2:#1F2437;
+  --navy-line:#2E3550;
+  --ivory:#F5F3EE;
+  --white:#FFFFFF;
+  --ink:#1A1E2C;
+  --muted:#686D7D;
+  --on-navy:#EEF0F6;
+  --on-navy-muted:#A3AAC0;
+  --silver:#C3CADB;
+  --gold:#E3B34E;
+  --gold-hi:#F0C66A;
+  --line:#E3E0D8;
   --font-jp:"Zen Kaku Gothic New","Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",Meiryo,sans-serif;
-  --font-brand:"Marcellus","Times New Roman",serif;
-  --font-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  --gutter:clamp(16px,5vw,32px);
-  --radius:14px;
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    color-scheme:dark;
-    --paper:#0E1716;--surface:#15201E;--ink:#E4ECE9;--muted:#93A39F;--line:#293835;
-    --grid:rgba(92,192,174,.08);--accent:#5CC0AE;--accent-ink:#0E1716;--accent-soft:#1B3330;
-    --petal:#E68CA1;--warn-bg:#2A1B20;
-  }
-}
-:root[data-theme="dark"]{
-  color-scheme:dark;
-  --paper:#0E1716;--surface:#15201E;--ink:#E4ECE9;--muted:#93A39F;--line:#293835;
-  --grid:rgba(92,192,174,.08);--accent:#5CC0AE;--accent-ink:#0E1716;--accent-soft:#1B3330;
-  --petal:#E68CA1;--warn-bg:#2A1B20;
+  --font-en:"Quicksand","Avenir Next","Helvetica Neue",Arial,sans-serif;
+  --gutter:20px;
 }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-jp);font-size:16px;line-height:1.8;letter-spacing:.02em}
+body{margin:0;background:var(--ivory);color:var(--ink);font-family:var(--font-jp);font-size:16px;line-height:1.85;letter-spacing:.03em}
 img,svg,canvas{max-width:100%}
+h1,h2,h3,p{margin:0}
+h1,h2,h3{text-wrap:balance;line-height:1.4}
 a{color:inherit}
-:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
-.wrap{max-width:720px;margin:0 auto;padding-inline:var(--gutter)}
-h1,h2,h3{text-wrap:balance;line-height:1.35;margin:0}
-p{margin:0}
-.mono{font-family:var(--font-mono);font-variant-numeric:tabular-nums;letter-spacing:0}
-.eyebrow{font-family:var(--font-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
-dfn{font-style:normal;border-bottom:1px dotted var(--accent);cursor:help}
-.note{font-size:13px;color:var(--muted);line-height:1.7}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:6px}
+.wrap{max-width:560px;margin:0 auto;padding-inline:var(--gutter)}
+.en{font-family:var(--font-en);letter-spacing:.04em}
+.num{font-family:var(--font-en);font-weight:700;letter-spacing:0}
+.dark{background:var(--navy);color:var(--on-navy)}
+.label{font-family:var(--font-en);font-weight:600;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+.sec{padding-block:64px}
+.sec h2{font-size:26px;font-weight:900;margin-top:10px}
+.sec .sub{margin-top:12px;color:var(--muted);font-size:15px}
+.dark .sub{color:var(--on-navy-muted)}
+small.gl{font-size:12px;color:var(--muted);font-weight:400}
+.dark small.gl{color:var(--on-navy-muted)}
 
-/* header */
-.top{display:flex;align-items:center;justify-content:space-between;padding-block:14px}
-.brand{font-family:var(--font-brand);font-size:22px;letter-spacing:.06em;display:flex;align-items:center;gap:8px;text-decoration:none}
-.brand i{width:7px;height:7px;border-radius:50%;background:var(--petal);display:inline-block}
-.top .tag{font-family:var(--font-mono);font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:99px;padding:2px 10px}
-
-/* hero */
-.hero{padding-block:8px 28px}
-.hero h1{font-size:clamp(40px,12vw,68px);font-weight:900;letter-spacing:-.01em;line-height:1.1}
-.hero h1 .mono{font-weight:600}
-.hero h1 small{display:block;font-size:.34em;font-weight:700;letter-spacing:.04em;line-height:1.5;margin-top:14px;color:var(--ink)}
-.hero .lead{margin-top:14px;color:var(--muted);font-size:15px}
-
-.viewer{position:relative;margin-top:20px;border:1px solid var(--line);border-radius:var(--radius);background:
-  linear-gradient(var(--grid) 1px,transparent 1px) 0 0/20px 20px,
-  linear-gradient(90deg,var(--grid) 1px,transparent 1px) 0 0/20px 20px,var(--surface);overflow:hidden}
-.stage{position:relative;width:100%;aspect-ratio:4/3.1;touch-action:pan-y;cursor:grab}
-.stage:active{cursor:grabbing}
-.stage canvas{display:block;width:100%;height:100%}
-.stage .fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:16px}
-.stage .hint{position:absolute;left:12px;top:10px;font-family:var(--font-mono);font-size:11px;color:var(--muted);pointer-events:none}
-.stage .tb{position:absolute;right:12px;top:10px;font-family:var(--font-mono);font-size:10px;line-height:1.5;color:var(--muted);text-align:right;pointer-events:none}
-
-.ctrl{border-top:1px solid var(--line);padding:14px 16px 16px;display:grid;gap:12px}
-.readout{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.readout div{display:grid;gap:0}
-.readout span{font-size:12px;color:var(--muted)}
-.readout b{font-family:var(--font-mono);font-variant-numeric:tabular-nums;font-size:30px;font-weight:600;line-height:1.2}
-.readout b em{font-style:normal;font-size:14px;margin-left:4px;color:var(--muted);font-weight:400}
-.readout .gap b{color:var(--accent)}
-input[type=range]{width:100%;accent-color:var(--accent);height:28px;margin:0}
-.ruler{position:relative;height:22px;font-family:var(--font-mono);font-size:10px;color:var(--muted)}
-.ruler span{position:absolute;top:0;transform:translateX(-50%)}
-.ruler span:first-child{transform:none}.ruler span:last-child{transform:translateX(-100%)}
-.btns{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.btns button{font:600 13px/1 var(--font-mono);padding:12px 4px;border-radius:10px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
-.btns button:active{transform:translateY(1px)}
-.ctrl .note{text-align:left}
-
-.price-row{margin-top:22px;display:flex;align-items:end;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.price{font-family:var(--font-mono);font-size:34px;font-weight:600;line-height:1}
-.price small{font-family:var(--font-jp);font-size:14px;font-weight:500;margin-left:2px}
-.cta{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--accent);color:var(--accent-ink);text-decoration:none;font-weight:700;font-size:16px;border-radius:12px;padding:14px 22px;min-height:52px}
+/* ---------- CTA ---------- */
+.cta{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:58px;border-radius:14px;background:var(--gold);color:var(--navy);text-decoration:none;font-weight:900;font-size:17px;letter-spacing:.06em;box-shadow:0 8px 24px -10px rgba(227,179,78,.7)}
+.cta:active{transform:translateY(1px)}
 .cta svg{width:18px;height:18px}
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px;padding:0;list-style:none}
-.chips li{font-size:12.5px;border:1px solid var(--line);border-radius:99px;padding:4px 12px;background:var(--surface)}
-.chips b{font-family:var(--font-mono);color:var(--accent);font-weight:600}
+.price{display:flex;align-items:baseline;justify-content:center;gap:6px}
+.price .num{font-size:40px;line-height:1}
+.price .yen{font-size:18px;font-weight:700}
+.price .tax{font-size:12px;color:var(--on-navy-muted)}
 
-/* sections */
-section.block{padding-block:56px;border-top:1px solid var(--line)}
-section.block h2{font-size:clamp(24px,6.6vw,34px);font-weight:900;margin-top:8px}
-section.block .intro{margin-top:14px;color:var(--muted)}
-.stack{display:grid;gap:18px;margin-top:28px}
+/* ---------- HERO ---------- */
+.hero{position:relative;overflow:hidden;background:
+  radial-gradient(120% 60% at 50% 42%,#2A3150 0%,rgba(42,49,80,0) 60%),var(--navy);color:var(--on-navy);padding-bottom:40px}
+.top{display:flex;align-items:center;justify-content:space-between;padding-block:16px}
+.logo{font-family:var(--font-en);font-weight:600;font-size:22px;letter-spacing:.06em;color:var(--silver);text-decoration:none}
+.top .pill{font-size:11px;color:var(--on-navy-muted);border:1px solid var(--navy-line);border-radius:99px;padding:3px 10px}
+.hero .for{margin-top:18px;font-size:13px;color:var(--gold);font-weight:700;letter-spacing:.1em}
+.hero h1 span{display:inline-block}
+.hero h1{margin-top:8px;font-size:28px;font-weight:900;line-height:1.45;letter-spacing:.04em}
+.hero .lead{margin-top:12px;font-size:15px;color:var(--on-navy-muted)}
+.stage{position:relative;width:100%;aspect-ratio:1/0.82;margin-top:6px;touch-action:pan-y}
+.stage canvas{display:block;width:100%;height:100%}
+.stage .fb{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.meter{display:grid;gap:6px;background:var(--navy-2);border:1px solid var(--navy-line);border-radius:16px;padding:14px 16px 12px}
+.meter-row{display:flex;align-items:baseline;justify-content:space-between}
+.meter-row span{font-size:13px;color:var(--on-navy-muted)}
+.meter-row b{font-family:var(--font-en);font-size:30px;font-weight:700;color:var(--white);line-height:1}
+.meter-row b small{font-size:14px;margin-left:3px;color:var(--on-navy-muted)}
+.meter input{width:100%;accent-color:var(--gold);height:30px;margin:0}
+.meter .ends{display:flex;justify-content:space-between;font-family:var(--font-en);font-size:11px;color:var(--on-navy-muted)}
+.badges{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:22px;padding:0;list-style:none}
+.badges li{border:1px solid var(--navy-line);border-radius:12px;padding:12px 4px;text-align:center;font-size:11.5px;line-height:1.45;color:var(--on-navy-muted)}
+.badges b{display:block;color:var(--white);font-size:14px;font-weight:900;margin-bottom:2px}
+.buy{margin-top:26px;display:grid;gap:12px}
 
-.pain{display:grid;gap:10px;margin:24px 0 0;padding:0;list-style:none}
-.pain li{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
-.pain li::before{content:"";width:8px;height:8px;margin-top:9px;border-radius:50%;background:var(--petal)}
-.pain b{display:block}
-.pain span{font-size:14px;color:var(--muted)}
+/* ---------- WORRY ---------- */
+.worry{list-style:none;padding:0;margin:26px 0 0;display:grid;gap:10px}
+.worry li{display:flex;gap:12px;align-items:flex-start;background:var(--white);border-radius:14px;padding:16px;font-weight:700;font-size:15.5px;line-height:1.6}
+.worry svg{flex:none;width:22px;height:22px;margin-top:1px}
+.bridge{margin-top:34px;text-align:center}
+.bridge .arrow{width:2px;height:36px;margin:0 auto 18px;background:linear-gradient(var(--line),var(--gold))}
+.bridge p{font-size:20px;font-weight:900;line-height:1.6}
+.bridge p .en{font-size:24px;font-weight:600;color:var(--navy)}
+.bridge .note{margin-top:10px;font-size:14px;color:var(--muted);font-weight:400}
 
-.feature{display:grid;gap:14px;padding-top:26px}
-.feature+.feature{border-top:1px dashed var(--line);margin-top:26px}
-.feature .num{font-family:var(--font-mono);font-size:12px;color:var(--accent);letter-spacing:.1em}
-.feature h3{font-size:21px;font-weight:700}
-.figure{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;overflow-x:auto}
-.figure svg{display:block;width:100%;height:auto;min-width:280px}
-.figure figcaption{font-size:12.5px;color:var(--muted);margin-top:10px;line-height:1.6}
-figure{margin:0}
-.kv{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.kv div{background:var(--accent-soft);border-radius:10px;padding:10px 8px;text-align:center}
-.kv b{display:block;font-family:var(--font-mono);font-size:20px;font-weight:600;color:var(--accent);line-height:1.3}
-.kv span{font-size:11.5px;color:var(--muted);line-height:1.4;display:block}
+/* ---------- REASONS ---------- */
+.reasons{display:grid;gap:18px;margin-top:30px}
+.reason{background:var(--white);border-radius:20px;overflow:hidden}
+.reason .ill{background:#EEEBE3;display:flex;align-items:center;justify-content:center;padding:18px}
+.reason .ill svg{width:100%;max-width:300px;height:auto;display:block}
+.reason .body{padding:20px 20px 24px}
+.reason .no{font-family:var(--font-en);font-weight:700;font-size:13px;color:var(--gold);letter-spacing:.12em}
+.reason h3{font-size:21px;font-weight:900;margin-top:4px}
+.reason p{margin-top:10px;font-size:15px;color:#3E4352}
+.reason .big{font-family:var(--font-en);font-weight:700;font-size:56px;line-height:1;color:var(--navy)}
+.reason .big small{font-size:22px}
 
-/* svg tokens */
-.s-ink{fill:none;stroke:var(--ink);stroke-width:1.5}
-.s-thin{fill:none;stroke:var(--muted);stroke-width:1}
-.s-dash{fill:none;stroke:var(--muted);stroke-width:1;stroke-dasharray:4 3}
-.s-acc{fill:none;stroke:var(--accent);stroke-width:2}
-.f-pom{fill:var(--pom);stroke:var(--ink);stroke-width:1.5}
-.f-acc{fill:var(--accent)}
-.f-accsoft{fill:var(--accent-soft)}
-.f-petal{fill:var(--petal)}
-.f-line{fill:var(--line)}
-.t{fill:var(--ink);font-family:var(--font-jp);font-size:12px}
-.t-m{fill:var(--muted);font-family:var(--font-jp);font-size:11px}
-.t-mono{fill:var(--ink);font-family:var(--font-mono);font-size:11px}
-.t-acc{fill:var(--accent);font-family:var(--font-mono);font-size:12px;font-weight:600}
+/* ---------- PRIVACY ---------- */
+.box-ill{margin:30px auto 0;max-width:340px}
+.privacy-points{list-style:none;padding:0;margin:26px 0 0;display:grid;gap:10px}
+.privacy-points li{display:flex;gap:12px;align-items:center;border-bottom:1px solid var(--navy-line);padding-bottom:12px;font-size:15px}
+.privacy-points svg{flex:none;width:20px;height:20px}
 
-/* compare */
-.tbl-wrap{overflow-x:auto;margin-top:26px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}
-table{border-collapse:collapse;width:100%;font-size:13.5px;line-height:1.6}
-th,td{padding:12px 14px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
-tr:last-child th,tr:last-child td{border-bottom:0}
-thead th{font-size:12px;color:var(--muted);font-weight:500;background:var(--paper)}
-thead th:last-child{color:var(--accent);font-weight:700}
-tbody th{font-weight:700;white-space:nowrap}
-td.us{background:var(--accent-soft);font-weight:500}
-td .mono{font-weight:600}
-@media (max-width:599px){
-  .tbl-wrap{overflow:visible}
-  table,tbody,tr,th,td{display:block}
-  thead{display:none}
-  tbody tr{padding:14px 16px;border-bottom:1px solid var(--line);display:grid;gap:6px}
-  tbody tr:last-child{border-bottom:0}
-  tbody th,tbody td{border:0;padding:0}
-  tbody th{font-size:15px}
-  tbody td{display:grid;grid-template-columns:92px 1fr;gap:8px;font-size:13.5px}
-  tbody td::before{content:attr(data-l);font-size:11px;color:var(--muted);padding-top:2px}
-  td.us{background:var(--accent-soft);border-radius:8px;padding:8px 10px;margin-inline:-10px}
-  td.us::before{color:var(--accent);font-weight:700}
-}
+/* ---------- HOW TO ---------- */
+.steps{list-style:none;padding:0;margin:28px 0 0;display:grid;gap:14px}
+.steps li{display:grid;grid-template-columns:92px 1fr;gap:16px;align-items:center;background:var(--white);border-radius:18px;padding:14px}
+.steps .pic{background:#EEEBE3;border-radius:12px;aspect-ratio:1;display:flex;align-items:center;justify-content:center}
+.steps .pic svg{width:74%;height:auto}
+.steps .s{font-family:var(--font-en);font-weight:700;font-size:12px;color:var(--gold);letter-spacing:.12em}
+.steps b{display:block;font-size:17px;line-height:1.5}
+.steps span{display:block;font-size:13.5px;color:var(--muted);line-height:1.65;margin-top:2px}
+.guide{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.guide div{background:var(--navy);color:var(--on-navy);border-radius:16px;padding:16px 10px;text-align:center}
+.guide span{display:block;font-size:12px;color:var(--on-navy-muted)}
+.guide b{font-family:var(--font-en);font-size:32px;font-weight:700;line-height:1.2}
+.guide b small{font-family:var(--font-jp);font-size:14px;margin-left:2px}
+.guide-note{margin-top:12px;font-size:13.5px;color:var(--muted);text-align:center}
 
-/* steps */
-.steps{list-style:none;margin:28px 0 0;padding:0;display:grid;gap:0;counter-reset:s}
-.steps li{counter-increment:s;display:grid;grid-template-columns:40px 1fr;gap:14px;padding-bottom:22px;position:relative}
-.steps li::before{content:counter(s);font-family:var(--font-mono);font-weight:600;width:40px;height:40px;border-radius:50%;border:1.5px solid var(--accent);color:var(--accent);display:flex;align-items:center;justify-content:center;background:var(--paper);position:relative;z-index:1}
-.steps li:not(:last-child)::after{content:"";position:absolute;left:19.5px;top:40px;bottom:0;width:1px;background:var(--line)}
-.steps b{display:block;font-size:16px;margin-top:7px}
-.steps span{font-size:14px;color:var(--muted)}
-.warn{margin-top:8px;background:var(--warn-bg);border-radius:12px;padding:16px;font-size:13.5px;line-height:1.75}
-.warn b{color:var(--petal)}
-.warn ul{margin:6px 0 0;padding-left:1.2em}
+/* ---------- TRUST ---------- */
+.trust{display:grid;gap:10px;margin-top:26px}
+.trust div{display:grid;grid-template-columns:48px 1fr;gap:14px;align-items:center;background:var(--white);border-radius:16px;padding:16px}
+.trust svg{width:48px;height:48px}
+.trust b{display:block;font-size:16px}
+.trust span{display:block;font-size:13.5px;color:var(--muted);line-height:1.65}
 
-/* spec */
-.spec{margin-top:26px;display:grid;grid-template-columns:auto 1fr;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);overflow:hidden;font-size:14px}
-.spec dt,.spec dd{margin:0;padding:12px 14px;border-bottom:1px solid var(--line)}
-.spec dt{color:var(--muted);font-size:13px;white-space:nowrap;background:var(--paper)}
-.spec dd{font-family:var(--font-mono);font-variant-numeric:tabular-nums;font-size:13.5px}
-.spec dd small{font-family:var(--font-jp);color:var(--muted);font-size:12px;display:block}
-.spec dt:nth-last-of-type(1),.spec dd:nth-last-of-type(1){border-bottom:0}
-
-/* glossary & faq */
-.gloss{margin-top:26px;display:grid;gap:0;border-top:1px solid var(--line)}
-.gloss div{padding:14px 0;border-bottom:1px solid var(--line);display:grid;gap:4px}
-.gloss dt{font-weight:700;font-size:15px}
-.gloss dt small{font-family:var(--font-mono);font-weight:400;color:var(--muted);font-size:11px;margin-left:8px}
-.gloss dd{margin:0;font-size:14px;color:var(--muted)}
-details{border-bottom:1px solid var(--line)}
-details:first-of-type{border-top:1px solid var(--line)}
-summary{list-style:none;cursor:pointer;padding:16px 28px 16px 0;font-weight:700;position:relative}
-summary::-webkit-details-marker{display:none}
-summary::after{content:"+";position:absolute;right:4px;top:13px;font-family:var(--font-mono);font-size:20px;color:var(--accent)}
-details[open] summary::after{content:"−"}
-details p{padding-bottom:16px;font-size:14.5px;color:var(--muted)}
+/* ---------- FAQ ---------- */
 .faq{margin-top:22px}
+details{background:var(--white);border-radius:14px;margin-bottom:10px}
+summary{list-style:none;cursor:pointer;padding:16px 44px 16px 16px;font-weight:700;position:relative;line-height:1.6}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"Q";font-family:var(--font-en);color:var(--gold);margin-right:8px;font-weight:700}
+summary::after{content:"";position:absolute;right:18px;top:24px;width:9px;height:9px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);transition:transform .2s}
+details[open] summary::after{transform:rotate(-135deg);top:28px}
+details p{padding:0 16px 16px;font-size:14.5px;color:#3E4352}
 
-/* closing */
-.closing{padding-block:56px 40px;border-top:1px solid var(--line);text-align:left}
-.closing h2{font-size:clamp(26px,7vw,36px);font-weight:900}
-.closing .price-row{margin-top:18px}
-footer{padding-block:28px 120px;border-top:1px solid var(--line);font-size:12px;color:var(--muted);display:grid;gap:8px}
-footer .brand{font-size:18px;color:var(--ink)}
+/* ---------- FINAL ---------- */
+.final{text-align:center;background:radial-gradient(90% 60% at 50% 0%,#2A3150 0%,rgba(42,49,80,0) 70%),var(--navy)}
+.final h2{font-size:28px}
+.final .buy{margin-top:26px}
+footer{background:var(--navy);color:var(--on-navy-muted);font-size:12px;line-height:1.8;padding-block:28px 120px;border-top:1px solid var(--navy-line)}
+footer .logo{font-size:18px}
+footer p{margin-top:8px}
 
-/* sticky buy bar */
-.buybar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:10px var(--gutter) calc(10px + env(safe-area-inset-bottom,0px));transform:translateY(0);transition:transform .25s ease}
-.buybar.hide{transform:translateY(110%)}
-.buybar .in{max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.buybar .p{font-family:var(--font-mono);font-weight:600;font-size:20px;line-height:1.1}
-.buybar .p small{display:block;font-family:var(--font-jp);font-size:11px;font-weight:400;color:var(--muted)}
-.buybar .cta{padding:12px 18px;min-height:46px;font-size:15px}
-
-@media (min-width:760px){
-  .hero{padding-block:24px 36px}
-  .stack.two{grid-template-columns:1fr 1fr}
-}
-@media (prefers-reduced-motion:reduce){.buybar{transition:none}}
+/* ---------- sticky bar ---------- */
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:rgba(22,26,41,.94);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-top:1px solid var(--navy-line);padding:10px var(--gutter) calc(10px + env(safe-area-inset-bottom,0px));transition:transform .25s ease}
+.bar.hide{transform:translateY(120%)}
+.bar .in{max-width:560px;margin:0 auto;display:flex;gap:12px;align-items:center}
+.bar .p{color:var(--white);font-family:var(--font-en);font-weight:700;font-size:21px;line-height:1.1;white-space:nowrap}
+.bar .p small{display:block;font-family:var(--font-jp);font-size:10.5px;font-weight:400;color:var(--on-navy-muted)}
+.bar .cta{min-height:48px;font-size:15px;flex:1}
+@media (prefers-reduced-motion:reduce){.bar{transition:none}summary::after{transition:none}}
 </style>
 </head>
 <body>
 
-<div class="wrap">
-  <header class="top">
-    <a class="brand" href="#top" aria-label="Luca Bloom"><i></i>Luca Bloom</a>
-    <span class="tag">実用新案 出願済</span>
-  </header>
+<!-- ================= HERO ================= -->
+<header class="hero">
+  <div class="wrap">
+    <div class="top">
+      <a class="logo" href="#top">Luca Bloom</a>
+      <span class="pill">実用新案出願済み</span>
+    </div>
+    <p class="for" id="top">包皮が狭い方のためのセルフケアツール</p>
+    <h1><span>誰にも言えない</span><span>悩みを、</span><br><span>自分の手で、</span><span>少しずつ。</span></h1>
+    <p class="lead">ハンドルを回すだけ。ずれにくく、手を離しても戻らない。最大70mmまで、あなたのペースで広げられます。</p>
 
-  <main id="top">
-  <!-- ===== HERO ===== -->
-  <section class="hero" aria-labelledby="h-hero">
-    <p class="eyebrow">Screw-driven stretcher</p>
-    <h1 id="h-hero"><span class="mono">1</span>回転、<span class="mono">2.0</span>mm。
-      <small>ネジで広げて、ネジで止める。<br>包皮ストレッチを、指先で0.5mm単位に。</small></h1>
-    <p class="lead">Luca Bloomは、2本のアームを平行に開いて包皮を内側から広げるセルフケア器具です。操作部を回した分だけ正確に広がり、手を離してもその幅で止まります。</p>
+    <div class="stage" id="stage" aria-label="Luca Bloomの3Dモデル。横にドラッグすると回転します。">
+      <div class="fb" id="fb">
+        <svg viewBox="0 0 300 220" aria-hidden="true">
+          <rect x="62" y="40" width="200" height="40" rx="10" fill="#F1EEE6"/>
+          <rect x="30" y="42" width="30" height="36" rx="12" fill="#E6E2D8"/>
+          <rect x="262" y="52" width="10" height="16" rx="4" fill="#E6E2D8"/>
+          <path d="M64 80h18v28c-2 8-4 12-4 20l2 60c0 12-16 12-16 0l2-60c0-8-2-12-2-20z" fill="#F1EEE6"/>
+          <path d="M150 80h10v28c0 8 2 12 2 20l2 60c0 12-16 12-16 0l2-60c0-8 0-12 0-20z" fill="#F1EEE6"/>
+        </svg>
+      </div>
+    </div>
+    <div class="meter">
+      <div class="meter-row"><span>ハンドルを回して開き幅を調整</span><b id="gapv">10<small>mm</small></b></div>
+      <input id="gap" type="range" min="10" max="70" step="0.5" value="10" aria-label="開き幅">
+      <div class="ends"><span>10mm</span><span>MAX 70mm</span></div>
+    </div>
 
-    <div class="viewer">
-      <div class="stage" id="stage" aria-label="Luca Bloomの3Dモデル。横にドラッグすると回転します。">
-        <div class="fallback" id="fallback">
-          <svg viewBox="0 0 320 210" role="img" aria-label="側面図">
-            <rect class="f-pom" x="70" y="40" width="170" height="40" rx="3"/>
-            <rect class="f-pom" x="44" y="40" width="23" height="40" rx="4"/>
-            <rect class="f-pom" x="240" y="54" width="8" height="12" rx="2"/>
-            <path class="f-pom" d="M86 80 v28 q0 8 -6 14 l-4 40 q-2 10 6 10 q6 0 6 -8 l0 -56 z"/>
-            <path class="f-pom" d="M140 80 v28 q0 8 6 14 l4 40 q2 10 -6 10 q-6 0 -6 -8 l0 -56 z"/>
-            <text class="t-mono" x="160" y="200" text-anchor="middle">間隔 10〜70 mm</text>
+    <ul class="badges">
+      <li><b>業界最大</b>70mmの開き幅</li>
+      <li><b>無段階</b>好きな幅で止まる</li>
+      <li><b>国内</b>洗浄・組み立て</li>
+    </ul>
+
+    <div class="buy">
+      <div class="price"><span class="num">21,800</span><span class="yen">円</span></div>
+      <a class="cta js-buy" href="https://www.amazon.co.jp/dp/B0HHXQ1X4C" target="_blank" rel="noopener">Amazonで購入する
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 4l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+  </div>
+</header>
+
+<main>
+<!-- ================= WORRY ================= -->
+<section class="sec">
+  <div class="wrap">
+    <p class="label">Your worries</p>
+    <h2>こんなお悩み、<br>ひとりで<span style="display:inline-block">抱えていませんか？</span></h2>
+    <ul class="worry">
+      <li><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="#161A29"/><path d="M6.5 11.2l3 3 6-6.4" fill="none" stroke="#E3B34E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>包皮が狭くて、むけない。むくと痛い。</li>
+      <li><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="#161A29"/><path d="M6.5 11.2l3 3 6-6.4" fill="none" stroke="#E3B34E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>誰かに相談するのは、正直恥ずかしい。</li>
+      <li><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="#161A29"/><path d="M6.5 11.2l3 3 6-6.4" fill="none" stroke="#E3B34E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>器具を試したけど、ずれる・痛い・続かない。</li>
+      <li><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="#161A29"/><path d="M6.5 11.2l3 3 6-6.4" fill="none" stroke="#E3B34E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>家族に届いた荷物を見られたくない。</li>
+    </ul>
+    <div class="bridge">
+      <div class="arrow"></div>
+      <p>その悩みのために生まれたのが<br><span class="en">Luca Bloom</span> です。</p>
+      <p class="note">開発者とモニターの声を何度も重ねて完成しました。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= REASONS ================= -->
+<section class="sec" style="padding-top:0">
+  <div class="wrap">
+    <p class="label">3 reasons</p>
+    <h2>Luca Bloomが<br>選ばれる3つの理由</h2>
+    <div class="reasons">
+
+      <article class="reason">
+        <div class="ill">
+          <svg viewBox="0 0 300 180" aria-hidden="true">
+            <rect x="40" y="18" width="220" height="30" rx="10" fill="#FFFFFF"/>
+            <rect x="40" y="18" width="220" height="30" rx="10" fill="none" stroke="#D9D4C8" stroke-width="1.5"/>
+            <!-- arms: narrow near body, wider toward tip -->
+            <path d="M104 48h12v26c0 8 6 16 6 34v34c0 14-24 14-24 0v-34c0-18 6-26 6-34z" fill="#FFFFFF" stroke="#D9D4C8" stroke-width="1.5"/>
+            <path d="M184 48h12v26c0 8 6 16 6 34v34c0 14-24 14-24 0v-34c0-18 6-26 6-34z" fill="#FFFFFF" stroke="#D9D4C8" stroke-width="1.5"/>
+            <!-- skin ring caught at neck -->
+            <ellipse cx="150" cy="80" rx="58" ry="11" fill="none" stroke="#C9707F" stroke-width="5" opacity=".9"/>
+            <!-- blocked arrows -->
+            <path d="M150 104v26" stroke="#161A29" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M143 122l7 9 7-9" fill="none" stroke="#161A29" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M140 146h20" stroke="#E3B34E" stroke-width="4" stroke-linecap="round"/>
+            <text x="150" y="170" text-anchor="middle" font-family="Zen Kaku Gothic New,sans-serif" font-size="12" font-weight="700" fill="#161A29">抜けにくい</text>
           </svg>
         </div>
-        <span class="hint" id="hint">← ドラッグで回転 →</span>
-        <span class="tb">Tr8×2 / 1条<br>POM</span>
-      </div>
-      <div class="ctrl">
-        <div class="readout" aria-live="polite">
-          <div><span>操作部の回転数</span><b id="r-turns">0.00<em>回転</em></b></div>
-          <div class="gap"><span>アームの間隔</span><b id="r-gap">10.0<em>mm</em></b></div>
+        <div class="body">
+          <p class="no">REASON 01</p>
+          <h3>ずれにくい<span style="display:inline-block">「逆テーパー」アーム</span></h3>
+          <p>アームは根元が細く、先端に向かって太くなる形<small class="gl">（逆テーパー）</small>。包皮が根元にぴたりと収まり、使用中にずれにくくなります。肌に面で当たるので、一点に負担がかかりません。</p>
         </div>
-        <label for="turns" class="note" style="margin-bottom:-6px">スライダーで操作部を回す</label>
-        <input id="turns" type="range" min="0" max="30" step="0.25" value="0">
-        <div class="ruler" aria-hidden="true">
-          <span style="left:0">10mm</span><span style="left:33.33%">30mm</span><span style="left:66.66%">50mm</span><span style="left:100%">70mm</span>
-        </div>
-        <div class="btns">
-          <button type="button" data-d="-1">−1回転</button>
-          <button type="button" data-d="-0.25">−¼</button>
-          <button type="button" data-d="0.25">+¼</button>
-          <button type="button" data-d="1">+1回転</button>
-        </div>
-        <p class="note">1回転で2.0mm、¼回転で0.5mm広がります。最小10mmから30回転で最大70mmです。</p>
-      </div>
-    </div>
+      </article>
 
-    <div class="price-row">
-      <div>
-        <p class="note">Luca Bloom 本体</p>
-        <p class="price">21,800<small>円</small></p>
-      </div>
-      <a class="cta js-buy" href="https://www.amazon.co.jp/dp/B0HHXQ1X4C" target="_blank" rel="noopener">
-        Amazonで購入する
-        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 4l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
+      <article class="reason">
+        <div class="ill">
+          <svg viewBox="0 0 300 180" aria-hidden="true">
+            <!-- dial -->
+            <circle cx="92" cy="90" r="52" fill="#FFFFFF" stroke="#D9D4C8" stroke-width="1.5"/>
+            <circle cx="92" cy="90" r="36" fill="#F5F3EE"/>
+            <path d="M92 38v14" stroke="#161A29" stroke-width="3" stroke-linecap="round"/>
+            <path d="M140 72a52 52 0 0 1 0 36" fill="none" stroke="#E3B34E" stroke-width="5" stroke-linecap="round"/>
+            <path d="M134 110l7 -2 1 8" fill="none" stroke="#E3B34E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- lock -->
+            <rect x="190" y="84" width="60" height="48" rx="10" fill="#161A29"/>
+            <path d="M204 84v-12a16 16 0 0 1 32 0v12" fill="none" stroke="#161A29" stroke-width="7"/>
+            <circle cx="220" cy="104" r="6" fill="#E3B34E"/>
+            <path d="M220 108v10" stroke="#E3B34E" stroke-width="4" stroke-linecap="round"/>
+            <text x="92" y="165" text-anchor="middle" font-family="Zen Kaku Gothic New,sans-serif" font-size="12" font-weight="700" fill="#161A29">回すだけ</text>
+            <text x="220" y="165" text-anchor="middle" font-family="Zen Kaku Gothic New,sans-serif" font-size="12" font-weight="700" fill="#161A29">戻らない</text>
+          </svg>
+        </div>
+        <div class="body">
+          <p class="no">REASON 02</p>
+          <h3>回すだけ。<br>手を離しても戻らない。</h3>
+          <p>ハンドルを回すと、アームがなめらかに開きます。段階ではなく無段階なので、「ちょうどいい幅」でぴたりと止められます。ネジの力でその位置に固定される構造<small class="gl">（セルフロック）</small>なので、手を離しても急に閉じません。</p>
+        </div>
+      </article>
+
+      <article class="reason">
+        <div class="ill">
+          <svg viewBox="0 0 300 180" aria-hidden="true">
+            <rect x="30" y="30" width="240" height="26" rx="9" fill="#FFFFFF" stroke="#D9D4C8" stroke-width="1.5"/>
+            <path d="M52 56h14v70c0 12-14 12-14 0z" fill="#FFFFFF" stroke="#D9D4C8" stroke-width="1.5"/>
+            <path d="M234 56h14v70c0 12-14 12-14 0z" fill="#FFFFFF" stroke="#D9D4C8" stroke-width="1.5"/>
+            <path d="M72 100h156" stroke="#E3B34E" stroke-width="3"/>
+            <path d="M80 93l-8 7 8 7M220 93l8 7-8 7" fill="none" stroke="#E3B34E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <text x="150" y="90" text-anchor="middle" font-family="Quicksand,sans-serif" font-size="22" font-weight="700" fill="#161A29">70mm</text>
+            <text x="150" y="160" text-anchor="middle" font-family="Zen Kaku Gothic New,sans-serif" font-size="12" font-weight="700" fill="#161A29">最後まで平行に開く</text>
+          </svg>
+        </div>
+        <div class="body">
+          <p class="no">REASON 03</p>
+          <p class="big">70<small>mm</small></p>
+          <h3>業界最大の開き幅</h3>
+          <p>最大70mmまで開くので、はじめの一歩から、慣れてきた後まで長く使えます。2本のアームは最後まで平行のまま開き、根元から先端まで均等に広げます。</p>
+        </div>
+      </article>
     </div>
-    <ul class="chips">
-      <li>調整 <b>0.5mm</b> 単位</li>
-      <li>開口 <b>10–70mm</b></li>
-      <li>バネ <b>0</b> 本</li>
-      <li>全長 <b>100.75mm</b></li>
+  </div>
+</section>
+
+<!-- ================= PRIVACY ================= -->
+<section class="sec dark">
+  <div class="wrap">
+    <p class="label">Privacy</p>
+    <h2>届いても、<br>誰にもわからない。</h2>
+    <p class="sub">製品名から梱包の箱まで、恥ずかしさを感じさせないことを徹底しました。</p>
+    <div class="box-ill">
+      <svg viewBox="0 0 340 230" role="img" aria-label="Luca Bloomのロゴだけが入ったネイビーの化粧箱">
+        <defs>
+          <linearGradient id="bt" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2F3754"/><stop offset="1" stop-color="#232A42"/></linearGradient>
+        </defs>
+        <ellipse cx="170" cy="206" rx="140" ry="14" fill="#0E1120"/>
+        <!-- top -->
+        <path d="M30 96 L190 40 L318 92 L158 150 Z" fill="url(#bt)"/>
+        <!-- left side -->
+        <path d="M30 96 L158 150 L158 196 L30 142 Z" fill="#1A2035"/>
+        <!-- right side -->
+        <path d="M158 150 L318 92 L318 138 L158 196 Z" fill="#12172A"/>
+        <path d="M30 96 L190 40 L318 92" fill="none" stroke="#3E4768" stroke-width="1.2"/>
+        <path d="M158 150 L158 196" stroke="#2A3150" stroke-width="1"/>
+        <text transform="matrix(0.921 0.389 -0.944 0.330 172 96)" text-anchor="middle" y="7" font-family="Quicksand,sans-serif" font-size="24" font-weight="600" fill="#8E97B3" letter-spacing="1">Luca Bloom</text>
+      </svg>
+    </div>
+    <ul class="privacy-points">
+      <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="none" stroke="#E3B34E" stroke-width="1.6"/><path d="M6 10.2l2.6 2.6L14 7.4" fill="none" stroke="#E3B34E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>箱にはブランド名「Luca Bloom」だけ</li>
+      <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="none" stroke="#E3B34E" stroke-width="1.6"/><path d="M6 10.2l2.6 2.6L14 7.4" fill="none" stroke="#E3B34E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>本体は専用のクッション材に収めてお届け</li>
+      <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="none" stroke="#E3B34E" stroke-width="1.6"/><path d="M6 10.2l2.6 2.6L14 7.4" fill="none" stroke="#E3B34E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>そのまま引き出しにしまえる上質なボックス</li>
     </ul>
-  </section>
+  </div>
+</section>
 
-  <!-- ===== PROBLEM ===== -->
-  <section class="block" aria-labelledby="h-pain">
-    <p class="eyebrow">Problem</p>
-    <h2 id="h-pain">ハサミ式の拡張器具で、<br>こんな経験はありませんか。</h2>
-    <ul class="pain">
-      <li><div><b>アームから皮膚がずるっと滑る</b><span>丸い棒状のアームは表面に引っかかりがなく、広げた位置で止まりません。</span></div></li>
-      <li><div><b>「あと少し」が調整できない</b><span><dfn title="歯車と爪を噛み合わせて、1方向にだけ段階的に動かす仕組み">ラチェット</dfn>式は歯1枚ぶんずつしか動かず、ちょうどいい幅の手前か先で止まります。</span></div></li>
-      <li><div><b>ロックが外れて急に閉じる</b><span>噛み合いが外れると、内蔵バネの力で2本のアームが一気に閉じます。</span></div></li>
-      <li><div><b>1点だけが痛い</b><span>断面が円形のアームは皮膚に線で当たるため、圧力が1か所に集中します。</span></div></li>
-    </ul>
-  </section>
-
-  <!-- ===== FEATURES ===== -->
-  <section class="block" aria-labelledby="h-feat">
-    <p class="eyebrow">Mechanism</p>
-    <h2 id="h-feat">4つの構造で、<br>その悩みを機械的に解決します。</h2>
-
-    <!-- F1 -->
-    <div class="feature">
-      <p class="num">STRUCTURE 1 / 送りネジ</p>
-      <h3>回した分だけ、正確に広がる。</h3>
-      <p>本体の中に<dfn title="回転運動を直線運動に変えるネジ。工作機械やジャッキに使われる仕組み">送りネジ</dfn>を内蔵。操作部を回すとネジシャフトが回転し、ネジにかみ合った可動アームがまっすぐ移動します。ネジは<dfn title="山の断面が台形のネジ。三角ネジより丈夫で、力を伝える用途に使われる">台形ネジ</dfn>Tr8×2の<dfn title="ネジ山が1本のらせんで刻まれていること。2本なら2条">1条ネジ</dfn>で、1回転で進む距離（<dfn title="ネジを1回転させたときに進む距離">リード</dfn>）は2.0mmです。</p>
-      <div class="kv">
-        <div><b>2.0<small>mm</small></b><span>1回転あたり</span></div>
-        <div><b>0.5<small>mm</small></b><span>¼回転あたり</span></div>
-        <div><b>30<small>回転</small></b><span>10→70mm</span></div>
-      </div>
-      <figure class="figure">
-        <svg viewBox="0 0 340 170" role="img" aria-label="台形ネジの断面図。ピッチ2mm、ネジ山の角度30度">
-          <!-- thread profile: 1mm = 40px ; pitch 2mm = 80px -->
-          <rect class="f-accsoft" x="10" y="92" width="320" height="42"/>
-          <path class="f-pom" d="M10 92 L22 92 L30 62 L62 62 L70 92 L102 92 L110 62 L142 62 L150 92 L182 92 L190 62 L222 62 L230 92 L262 92 L270 62 L302 62 L310 92 L330 92 L330 134 L10 134 Z"/>
-          <line class="s-dash" x1="10" y1="62" x2="330" y2="62"/>
-          <!-- pitch dim -->
-          <line class="s-thin" x1="46" y1="40" x2="126" y2="40"/>
-          <line class="s-thin" x1="46" y1="34" x2="46" y2="58"/><line class="s-thin" x1="126" y1="34" x2="126" y2="58"/>
-          <text class="t-acc" x="86" y="32" text-anchor="middle">P = 2.0mm</text>
-          <!-- angle -->
-          <line class="s-acc" x1="190" y1="62" x2="182" y2="30"/><line class="s-acc" x1="222" y1="62" x2="230" y2="30"/>
-          <text class="t-mono" x="206" y="26" text-anchor="middle">30°</text>
-          <!-- dims -->
-          <text class="t-m" x="10" y="156">外径 8mm ／ 谷径 6.5mm ／ 1条なのでリード＝ピッチ＝2.0mm</text>
-        </svg>
-        <figcaption>台形ネジの断面（参考寸法）。<dfn title="隣り合うネジ山の間隔">ピッチ</dfn>2.0mm、山の角度30°。1条ネジは1回転でピッチ1つ分＝2.0mm進みます。</figcaption>
-      </figure>
-    </div>
-
-    <!-- F2 -->
-    <div class="feature">
-      <p class="num">STRUCTURE 2 / セルフロック</p>
-      <h3>手を離しても、閉じない。</h3>
-      <p>皮膚が縮もうとしてアームを押し戻しても、ネジは逆回転しません。これを<dfn title="押し戻す力が加わってもネジが自然に戻らない性質。ネジの傾きが摩擦より小さいときに起きる">セルフロック</dfn>と呼びます。ネジ山の傾き（<dfn title="ネジ山のらせんの傾きの角度。小さいほど戻りにくい">進み角</dfn>）が、摩擦で止まる限界の角度（<dfn title="摩擦によって滑らずにいられる限界の傾き">摩擦角</dfn>）より小さいと成立します。バネを使っていないため、ロックが外れて急に閉じる仕組みそのものがありません。</p>
-      <figure class="figure">
-        <svg viewBox="0 0 340 176" role="img" aria-label="進み角と摩擦角の比較グラフ。1条5.2度、2条10.3度、摩擦角11.7度">
-          <!-- scale: 0-14deg over x=110..320 => 15px/deg -->
-          <g class="t-m">
-            <text x="110" y="166" text-anchor="middle">0°</text>
-            <text x="185" y="166" text-anchor="middle">5°</text>
-            <text x="260" y="166" text-anchor="middle">10°</text>
-            <text x="320" y="166" text-anchor="middle">14°</text>
-          </g>
-          <line class="s-thin" x1="110" y1="12" x2="110" y2="152"/>
-          <line class="s-dash" x1="185" y1="12" x2="185" y2="152"/>
-          <line class="s-dash" x1="260" y1="12" x2="260" y2="152"/>
-          <!-- friction angle zone 11.7 -> x=285.5 -->
-          <rect class="f-accsoft" x="110" y="12" width="175.5" height="140" opacity=".55"/>
-          <line x1="285.5" y1="8" x2="285.5" y2="152" stroke="var(--petal)" stroke-width="2"/>
-          <text class="t-mono" x="281" y="22" text-anchor="end" style="fill:var(--petal)">摩擦角 11.7°</text>
-          <!-- bars -->
-          <text class="t" x="8" y="58">Luca Bloom</text><text class="t-m" x="8" y="74">1条 Tr8×2</text>
-          <rect class="f-acc" x="110" y="50" width="78" height="22" rx="3"/>
-          <text class="t-acc" x="194" y="66">5.2°</text>
-          <text class="t" x="8" y="118">仮に2条</text><text class="t-m" x="8" y="134">リード4mm</text>
-          <rect class="f-line" x="110" y="110" width="154.5" height="22" rx="3"/>
-          <text class="t-mono" x="270" y="126" style="fill:var(--muted)">10.3°</text>
-        </svg>
-        <figcaption>進み角が摩擦角より小さいほど、押し戻されても回りません。1条は摩擦角との差が6.5°、2条は1.4°。Luca Bloomは戻りにくさを優先して1条を採用しています。<br>計算条件：有効径7.0mm、POM同士の摩擦係数0.2、ネジ山半角15°。</figcaption>
-      </figure>
-    </div>
-
-    <!-- F3 -->
-    <div class="feature">
-      <p class="num">STRUCTURE 3 / 3段アーム</p>
-      <h3>入れやすく、滑らず、挟まない。</h3>
-      <p>アームは長さ40mm。先端から根元へ3つの形を連続させています。細い先端で入れ、ふくらみで広げ、根元のくぼみで皮膚の位置を決めます。皮膚は縮もうとする力で自然にくぼみへ収まり、先端側へ抜けることも、本体側へ滑り込んで挟まれることも防ぎます。</p>
-      <figure class="figure">
-        <svg viewBox="0 0 340 250" role="img" aria-label="アームの側面図。根元のくぼみ部、中間の拡張作動部、先端の収束部">
-          <!-- body underside -->
-          <rect class="f-pom" x="40" y="10" width="120" height="22" rx="2"/>
-          <text class="t-m" x="100" y="25" text-anchor="middle">本体</text>
-          <!-- arm, 1mm = 5px, top at y=32, length 40mm = 200px -->
-          <path class="f-pom" d="M80 32 L100 32 L100 95 C100 112 118 118 120 132 L108 212 Q104 234 92 234 Q80 234 80 220 Z"/>
-          <!-- skin ring schematic -->
-          <path d="M80 86 q-22 -5 -40 6" fill="none" stroke="var(--petal)" stroke-width="3" stroke-linecap="round"/>
-          <text class="t-m" x="74" y="62" text-anchor="end" style="fill:var(--petal)">皮膚が</text><text class="t-m" x="74" y="76" text-anchor="end" style="fill:var(--petal)">収まる</text>
-          <!-- zone brackets -->
-          <g class="s-thin"><path d="M200 34 h6 v72 h-6"/><path d="M200 110 h6 v62 h-6"/><path d="M200 176 h6 v58 h-6"/></g>
-          <text class="t" x="214" y="68">くぼみ部</text><text class="t-m" x="214" y="84">位置決め・滑り止め</text>
-          <text class="t" x="214" y="138">拡張作動部</text><text class="t-m" x="214" y="154">最大幅で押し広げる</text>
-          <text class="t" x="214" y="204">収束部</text><text class="t-m" x="214" y="220">細い先端で挿入</text>
-          <line class="s-dash" x1="30" y1="32" x2="30" y2="234"/>
-          <text class="t-mono" x="36" y="160">40</text>
-        </svg>
-        <figcaption>アーム側面図（模式）。単位mm。2本のアームはどちらも外側へふくらむ向きに配置しています。</figcaption>
-      </figure>
-    </div>
-
-    <!-- F4 -->
-    <div class="feature">
-      <p class="num">STRUCTURE 4 / 面で支える断面</p>
-      <h3>1点に集中させず、面で広げる。</h3>
-      <p>アームの断面は幅6mm。皮膚に当たる面を平らにし、角をR（丸み）で落としています。丸棒のように線で当たらず、面で当たるので、広げる力が分散します。</p>
-      <figure class="figure">
-        <svg viewBox="0 0 340 170" role="img" aria-label="断面の比較。円形は線接触、Luca Bloomは平面で面接触">
-          <!-- skin line -->
-          <text class="t-m" x="85" y="18" text-anchor="middle">一般的な円形断面</text>
-          <text class="t" x="255" y="18" text-anchor="middle">Luca Bloom</text>
-          <!-- round -->
-          <path d="M20 118 Q85 40 150 118" fill="none" stroke="var(--petal)" stroke-width="3"/>
-          <circle class="f-pom" cx="85" cy="112" r="30"/>
-          <path d="M85 60 v18" stroke="var(--petal)" stroke-width="2.5"/><path d="M79 72 l6 8 6-8" fill="none" stroke="var(--petal)" stroke-width="2.5"/>
-          <text class="t-m" x="85" y="162" text-anchor="middle">皮膚に線で当たる</text>
-          <!-- flat -->
-          <path d="M190 118 Q196 82 222 82 L288 82 Q314 82 320 118" fill="none" stroke="var(--accent)" stroke-width="3"/>
-          <rect class="f-pom" x="225" y="84" width="60" height="56" rx="10"/>
-          <g stroke="var(--accent)" stroke-width="2" fill="none">
-            <path d="M235 54 v18"/><path d="M231 66 l4 6 4-6"/>
-            <path d="M255 54 v18"/><path d="M251 66 l4 6 4-6"/>
-            <path d="M275 54 v18"/><path d="M271 66 l4 6 4-6"/>
-          </g>
-          <text class="t-m" x="255" y="162" text-anchor="middle">平面＋R面取りで面接触</text>
-        </svg>
-        <figcaption>断面の模式図。矢印は皮膚が受ける圧力。面で当てることで、同じ力でも1か所あたりの圧力が下がります。</figcaption>
-      </figure>
-    </div>
-
-    <!-- F5 parallel -->
-    <div class="feature">
-      <p class="num">+ 平行移動</p>
-      <h3>最後まで平行に、最大70mm。</h3>
-      <p>可動アームは本体の溝（スリット）に沿って、姿勢を変えずに直線移動します。支点を中心に開くハサミ式と違い、2本のアームは常に平行。ネジの長さをそのまま移動距離に使うため、移動距離（<dfn title="可動部が動ける距離">ストローク</dfn>）は60mm、最大間隔は70mmあります。</p>
-      <figure class="figure">
-        <svg viewBox="0 0 340 150" role="img" aria-label="ハサミ式は扇状に開き、Luca Bloomは平行に開く">
-          <text class="t-m" x="80" y="16" text-anchor="middle">ハサミ式：扇状に開く</text>
-          <circle cx="80" cy="34" r="4" class="f-acc" style="fill:var(--muted)"/>
-          <path class="s-ink" d="M80 34 L48 128 M80 34 L112 128"/>
-          <path class="s-dash" d="M80 34 L30 120 M80 34 L130 120"/>
-          <text class="t-m" x="80" y="144" text-anchor="middle">根元と先端で幅が違う</text>
-          <text class="t" x="255" y="16" text-anchor="middle">Luca Bloom：平行に開く</text>
-          <rect class="f-pom" x="190" y="28" width="130" height="14" rx="2"/>
-          <path class="s-ink" d="M204 42 V128 M236 42 V128"/>
-          <path class="s-acc" d="M236 42 V128" stroke-dasharray="4 3" opacity=".4"/>
-          <path d="M268 42 V128" stroke="var(--accent)" stroke-width="2"/>
-          <path d="M240 86 h22" stroke="var(--accent)" stroke-width="1.5"/><path d="M256 81 l6 5 -6 5" fill="none" stroke="var(--accent)" stroke-width="1.5"/>
-          <text class="t-m" x="255" y="144" text-anchor="middle">根元から先端まで同じ幅</text>
-        </svg>
-      </figure>
-    </div>
-  </section>
-
-  <!-- ===== COMPARE ===== -->
-  <section class="block" aria-labelledby="h-cmp">
-    <p class="eyebrow">Comparison</p>
-    <h2 id="h-cmp">従来のハサミ式との違い</h2>
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th scope="col">項目</th><th scope="col">ハサミ式・ラチェット式</th><th scope="col">Luca Bloom</th></tr></thead>
-        <tbody>
-          <tr><th scope="row">開き方</th><td data-l="ハサミ式"><span>支点を中心に扇状</span></td><td class="us" data-l="Luca Bloom"><span>スリットに沿って平行移動</span></td></tr>
-          <tr><th scope="row">調整</th><td data-l="ハサミ式"><span>ラチェットの歯1枚ずつ（段階的）</span></td><td class="us" data-l="Luca Bloom"><span><dfn title="段差なく、好きな位置で止められること">無段階</dfn>／<span class="mono">¼</span>回転＝<span class="mono">0.5mm</span></span></td></tr>
-          <tr><th scope="row">保持</th><td data-l="ハサミ式"><span>ラチェットの噛み合い。外れるとバネで閉じる</span></td><td class="us" data-l="Luca Bloom"><span>ネジの摩擦で固定（セルフロック）。バネ<span class="mono">0</span>本</span></td></tr>
-          <tr><th scope="row">アーム形状</th><td data-l="ハサミ式"><span>単純な棒状</span></td><td class="us" data-l="Luca Bloom"><span>収束部・拡張作動部・くぼみ部の3段</span></td></tr>
-          <tr><th scope="row">断面</th><td data-l="ハサミ式"><span>円形（線で当たる）</span></td><td class="us" data-l="Luca Bloom"><span>平面＋R（面で当たる）幅<span class="mono">6mm</span></span></td></tr>
-          <tr><th scope="row">間隔</th><td data-l="ハサミ式"><span>支点の位置で上限が決まる</span></td><td class="us" data-l="Luca Bloom"><span><span class="mono">10〜70mm</span>（ストローク<span class="mono">60mm</span>）</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-      </section>
-
-  <!-- ===== HOW TO ===== -->
-  <section class="block" aria-labelledby="h-use">
-    <p class="eyebrow">How to use</p>
-    <h2 id="h-use">使い方</h2>
+<!-- ================= HOW TO ================= -->
+<section class="sec">
+  <div class="wrap">
+    <p class="label">How to use</p>
+    <h2>使い方は、3ステップ。</h2>
     <ol class="steps">
-      <li><div><b>洗って乾かす</b><span>使用前後に中性洗剤で洗い、水気を拭き取ります。</span></div></li>
-      <li><div><b>最小幅まで閉じる</b><span>本体側面の「CLOSE」矢印の方向へ操作部を回し、アーム間隔を最小の10mmにします。</span></div></li>
-      <li><div><b>先端から入れる</b><span>2本のアームを先端（収束部）から包皮の口に入れ、根元のくぼみ部に皮膚が収まる位置まで進めます。</span></div></li>
-      <li><div><b>少しずつ回す</b><span>CLOSEと逆方向へ回します。¼回転で0.5mm広がります。痛みを感じる手前で止めてください。</span></div></li>
-      <li><div><b>その幅で保持する</b><span>手を離してもセルフロックで幅が保たれます。</span></div></li>
-      <li><div><b>閉じてから外す</b><span>CLOSE方向へ回してアームを閉じ、ゆっくり抜きます。</span></div></li>
+      <li>
+        <div class="pic"><svg viewBox="0 0 60 60" aria-hidden="true"><path d="M30 8c8 12 14 20 14 28a14 14 0 0 1-28 0c0-8 6-16 14-28z" fill="#161A29"/><path d="M24 38a6 6 0 0 0 6 6" fill="none" stroke="#E3B34E" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+        <div><p class="s">STEP 1</p><b>クリームやオイルでなじませる</b><span>アームと包皮をしっかり保湿・潤滑すると、入れやすくなります。</span></div>
+      </li>
+      <li>
+        <div class="pic"><svg viewBox="0 0 60 60" aria-hidden="true"><rect x="10" y="8" width="40" height="10" rx="4" fill="#161A29"/><path d="M24 18h4v28c0 5-6 5-6 0v-18z" fill="#161A29"/><path d="M32 18h4v10l2 18c0 5-6 5-6 0z" fill="#161A29"/><path d="M30 52v-8" stroke="#E3B34E" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+        <div><p class="s">STEP 2</p><b>閉じたアームを入れる</b><span>アームを閉じた状態で、先端から包皮の狭い部分へ。</span></div>
+      </li>
+      <li>
+        <div class="pic"><svg viewBox="0 0 60 60" aria-hidden="true"><circle cx="30" cy="30" r="18" fill="none" stroke="#161A29" stroke-width="5"/><path d="M30 12v8" stroke="#161A29" stroke-width="5" stroke-linecap="round"/><path d="M48 26a18 18 0 0 1-4 16" fill="none" stroke="#E3B34E" stroke-width="3.5" stroke-linecap="round"/><path d="M40 43l4-1 1 4" fill="none" stroke="#E3B34E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><p class="s">STEP 3</p><b>痛くない幅まで、回して開く</b><span>ハンドルをゆっくり回し、痛みを感じない幅で止めます。そのまま固定されます。</span></div>
+      </li>
     </ol>
-    <div class="warn" role="note">
-      <b>ご使用上の注意</b>
-      <ul>
-        <li>本品は医療機器ではありません。病気の治療や診断を目的とするものではありません。</li>
-        <li>痛み・出血・腫れ・傷がある場合は使用を中止し、医師にご相談ください。</li>
-        <li>皮膚が元の位置に戻らなくなった場合は、すぐに医療機関を受診してください。</li>
-        <li>一度に大きく広げず、痛みのない範囲で少しずつ調整してください。</li>
-      </ul>
+    <div class="guide">
+      <div><span>1回の目安</span><b>30<small>分以内</small></b></div>
+      <div><span>1日の目安</span><b>2<small>回まで</small></b></div>
     </div>
-  </section>
+    <p class="guide-note">焦らず、十分な期間をかけて。異変を感じたらすぐに使用を中止してください。</p>
+  </div>
+</section>
 
-  <!-- ===== SPEC ===== -->
-  <section class="block" aria-labelledby="h-spec">
-    <p class="eyebrow">Specifications</p>
-    <h2 id="h-spec">仕様</h2>
-    <dl class="spec">
-      <dt>商品名</dt><dd>Luca Bloom</dd>
-      <dt>価格</dt><dd>21,800円</dd>
-      <dt>全長</dt><dd>100.75 mm<small>操作部を含む</small></dd>
-      <dt>本体</dt><dd>85 × 20 × 20 mm</dd>
-      <dt>アーム</dt><dd>長さ 40 mm ／ 幅 6 mm<small>2本（固定1・可動1）</small></dd>
-      <dt>アーム間隔</dt><dd>10 〜 70 mm<small>ストローク 60 mm</small></dd>
-      <dt>ネジ</dt><dd>台形ネジ Tr8×2 ／ 1条<small>リード 2.0 mm（1回転あたりの移動量）</small></dd>
-      <dt>材質</dt><dd>POM<small>ポリアセタール樹脂（全部品）</small></dd>
-      <dt>構成部品</dt><dd>4点<small>本体・シャフト・キーホール留め具・駆動アーム</small></dd>
-      <dt>知的財産</dt><dd>実用新案 出願済</dd>
-    </dl>
-  </section>
+<!-- ================= TRUST ================= -->
+<section class="sec" style="padding-top:0">
+  <div class="wrap">
+    <p class="label">Quality</p>
+    <h2>毎日使うものだから、<br>安心できる品質を。</h2>
+    <div class="trust">
+      <div>
+        <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#161A29"/><circle cx="24" cy="24" r="8" fill="#C9505E"/></svg>
+        <p><b>日本国内で洗浄・組み立て</b><span>仕上げの工程は、すべて国内で行っています。</span></p>
+      </div>
+      <div>
+        <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#161A29"/><path d="M15 30c3-10 15-14 19-14-1 6-4 17-15 17" fill="#F5F3EE"/><path d="M15 34c4-6 8-10 14-13" stroke="#161A29" stroke-width="1.6" fill="none"/></svg>
+        <p><b>軽くて冷たくない樹脂製</b><span>POM樹脂<small class="gl">（歯車などにも使われる、なめらかで丈夫なプラスチック）</small>を採用。金属のような重さや冷たさがありません。</span></p>
+      </div>
+      <div>
+        <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#161A29"/><path d="M16 12h12l6 6v18H16z" fill="#F5F3EE"/><path d="M20 22h10M20 27h10M20 32h6" stroke="#161A29" stroke-width="1.8" stroke-linecap="round"/><circle cx="33" cy="33" r="6" fill="#E3B34E"/></svg>
+        <p><b>実用新案出願済みの独自構造</b><span>従来にない構造として、実用新案<small class="gl">（形や構造の工夫を守る国の制度）</small>を出願済みです。</span></p>
+      </div>
+    </div>
+  </div>
+</section>
 
-  <!-- ===== GLOSSARY ===== -->
-  <section class="block" aria-labelledby="h-gl">
-    <p class="eyebrow">Glossary</p>
-    <h2 id="h-gl">用語の説明</h2>
-    <dl class="gloss">
-      <div><dt>送りネジ<small>lead screw</small></dt><dd>ネジを回す動きを、まっすぐ進む動きに変える仕組み。工作機械や車のジャッキにも使われます。</dd></div>
-      <div><dt>台形ネジ<small>Tr</small></dt><dd>ネジ山の断面が台形のネジ。一般的な三角のネジより山が太く、力を伝える用途に向きます。「Tr8×2」は外径8mm・ピッチ2mmの意味です。</dd></div>
-      <div><dt>1条ネジ</dt><dd>ネジ山が1本のらせんで刻まれたネジ。2本のらせんなら2条。条数が少ないほど1回転の移動量は小さく、戻りにくくなります。</dd></div>
-      <div><dt>ピッチ／リード</dt><dd>ピッチは隣り合うネジ山の間隔、リードは1回転で進む距離。1条ネジではどちらも同じ2.0mmです。</dd></div>
-      <div><dt>セルフロック</dt><dd>押し戻す力が加わってもネジが勝手に回らない性質。ネジの傾き（進み角5.2°）が摩擦の限界角度（摩擦角11.7°）より小さいため成立します。</dd></div>
-      <div><dt>ラチェット</dt><dd>歯車と爪を噛み合わせて、1方向にだけ段階的に動かす仕組み。噛み合いが外れると保持力がなくなります。</dd></div>
-      <div><dt>POM<small>polyacetal</small></dt><dd>ポリアセタール樹脂。摩擦が小さく摩耗に強いため、歯車やファスナーなど動く部品に使われるプラスチックです。</dd></div>
-      <div><dt>R（アール）</dt><dd>角を丸く落とした形状。「R2」は半径2mmの丸みを意味します。</dd></div>
-      <div><dt>実用新案</dt><dd>物の形や構造の工夫を保護する、日本の知的財産権。特許より小さな発明（考案）が対象です。</dd></div>
-    </dl>
-  </section>
-
-  <!-- ===== FAQ ===== -->
-  <section class="block" aria-labelledby="h-faq">
-    <p class="eyebrow">FAQ</p>
-    <h2 id="h-faq">よくある質問</h2>
+<!-- ================= FAQ ================= -->
+<section class="sec" style="padding-top:0">
+  <div class="wrap">
+    <p class="label">FAQ</p>
+    <h2>よくある質問</h2>
     <div class="faq">
-      <details><summary>1回転でどれくらい広がりますか？</summary><p>2.0mmです。¼回転（90°）なら0.5mm。最小10mmから最大70mmまで、30回転で移動します。</p></details>
-      <details><summary>手を離すと閉じてしまいませんか？</summary><p>閉じません。ネジの進み角5.2°が摩擦角11.7°より小さいため、皮膚から押し戻す力がかかってもネジは回りません（セルフロック）。閉じるときは操作部をCLOSE方向へ回します。</p></details>
-      <details><summary>どの方向に回すと閉じますか？</summary><p>本体側面に刻印された「CLOSE」の矢印方向です。深さ0.3mmの刻印なので、指でも確認できます。</p></details>
-      <details><summary>素材は何ですか？</summary><p>全部品POM（ポリアセタール樹脂）です。金属やバネは使用していません。</p></details>
-      <details><summary>医療機器ですか？</summary><p>医療機器ではありません。ご自身の判断で使うセルフケア器具です。症状がある場合は医師にご相談ください。</p></details>
+      <details><summary>家族に中身を知られませんか？</summary><p>箱にはブランド名「Luca Bloom」だけが入っており、製品名から梱包まで、ひと目で用途がわからないようにしています。</p></details>
+      <details><summary>痛くないですか？</summary><p>無段階で少しずつ開けるので、痛みを感じない幅で止められます。クリームやオイルで保湿・潤滑してからお使いください。痛みや異変があれば、すぐに使用を中止してください。</p></details>
+      <details><summary>どれくらい使えばいいですか？</summary><p>1回30分以内、1日2回までが目安です。焦らず、十分な期間をかけてお使いください。</p></details>
+      <details><summary>アームの先端が少し開いています。</summary><p>個体差により、アームの先端がわずかに開いている場合があります。製品の仕様ですので、ご了承ください。</p></details>
+      <details><summary>医療機器ですか？</summary><p>本製品は雑貨であり、医療機器ではありません。治療に関する効果をうたうものではありません。</p></details>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ===== CLOSING ===== -->
-  <section class="closing" aria-labelledby="h-end">
-    <p class="eyebrow">Luca Bloom</p>
-    <h2 id="h-end">自分のペースで、<br><span class="mono">0.5</span>mmずつ。</h2>
-    <div class="price-row">
-      <p class="price">21,800<small>円</small></p>
+<!-- ================= FINAL ================= -->
+<section class="sec dark final">
+  <div class="wrap">
+    <p class="label">Luca Bloom</p>
+    <h2>今日から、<br>自分のペースで。</h2>
+    <p class="sub">誰にも知られず、ひとりで始められます。</p>
+    <div class="buy">
+      <div class="price"><span class="num">21,800</span><span class="yen">円</span></div>
       <a class="cta js-buy" href="https://www.amazon.co.jp/dp/B0HHXQ1X4C" target="_blank" rel="noopener">Amazonで購入する
-        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 4l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 4l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
     </div>
-  </section>
-  </main>
+  </div>
+</section>
+</main>
 
-  <footer>
-    <span class="brand"><i></i>Luca Bloom</span>
-    <p>実用新案 出願済。本品は医療機器ではありません。</p>
-    <p>ページ内の図はすべて説明用の模式図・3Dモデルです。</p>
+<footer>
+  <div class="wrap">
+    <span class="logo">Luca Bloom</span>
+    <p>本製品は雑貨であり、医療機器ではありません。治療に関していかなる表明も行いません。想定使用年齢：18歳以上。詳しい注意事項・使用方法は、同梱のQRコードからご確認ください。</p>
+    <p>ページ内の製品画像は3Dモデル・イラストです。</p>
     <p>© Luca Bloom</p>
-  </footer>
-</div>
+  </div>
+</footer>
 
-<div class="buybar" id="buybar">
+<div class="bar" id="bar">
   <div class="in">
     <p class="p">21,800円<small>Luca Bloom</small></p>
     <a class="cta" href="https://www.amazon.co.jp/dp/B0HHXQ1X4C" target="_blank" rel="noopener">Amazonで購入する</a>
@@ -574,190 +432,135 @@ footer .brand{font-size:18px;color:var(--ink)}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 (function(){
-  var MIN_GAP=10, LEAD=2, MAX_TURNS=30;
-  var slider=document.getElementById('turns');
-  var rTurns=document.getElementById('r-turns');
-  var rGap=document.getElementById('r-gap');
-  var target=0, current=0;
+  var slider=document.getElementById('gap'), out=document.getElementById('gapv');
+  var target=10, current=10, demo=true, kick=function(){};
+  function show(v){ out.innerHTML=(Math.round(v*2)/2).toFixed(v%1?1:0)+'<small>mm</small>'; }
+  slider.addEventListener('input',function(){ demo=false; target=parseFloat(slider.value); show(target); kick(); });
 
-  function setTurns(t){
-    target=Math.max(0,Math.min(MAX_TURNS,t));
-    slider.value=target;
-    rTurns.innerHTML=target.toFixed(2)+'<em>回転</em>';
-    rGap.innerHTML=(MIN_GAP+target*LEAD).toFixed(1)+'<em>mm</em>';
-    kick();
-  }
-  slider.addEventListener('input',function(){setTurns(parseFloat(slider.value));});
-  document.querySelectorAll('.btns button').forEach(function(b){
-    b.addEventListener('click',function(){setTurns(target+parseFloat(b.dataset.d));});
-  });
-
-  // sticky buy bar: hide while a main CTA is on screen
-  var bar=document.getElementById('buybar');
+  // sticky bar hides while a main CTA is visible
+  var bar=document.getElementById('bar');
   if('IntersectionObserver' in window){
     var vis=new Set();
-    var io=new IntersectionObserver(function(es){
-      es.forEach(function(e){e.isIntersecting?vis.add(e.target):vis.delete(e.target);});
-      bar.classList.toggle('hide',vis.size>0);
-    });
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){e.isIntersecting?vis.add(e.target):vis.delete(e.target);});bar.classList.toggle('hide',vis.size>0);});
     document.querySelectorAll('.js-buy').forEach(function(el){io.observe(el);});
   }
 
-  var kick=function(){};
   if(typeof THREE==='undefined') return;
-
-  var stage=document.getElementById('stage');
-  var renderer;
+  var stage=document.getElementById('stage'), renderer;
   try{ renderer=new THREE.WebGLRenderer({antialias:true,alpha:true}); }catch(e){ return; }
-  document.getElementById('fallback').remove();
+  document.getElementById('fb').remove();
   renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
-  renderer.shadowMap.enabled=true;
-  renderer.shadowMap.type=THREE.PCFSoftShadowMap;
-  if(renderer.outputEncoding!==undefined) renderer.outputEncoding=THREE.sRGBEncoding;
-  stage.insertBefore(renderer.domElement,stage.firstChild);
+  renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+  renderer.outputEncoding=THREE.sRGBEncoding;
+  stage.appendChild(renderer.domElement);
 
   var scene=new THREE.Scene();
-  var camera=new THREE.PerspectiveCamera(24,4/3,1,2000);
-  camera.position.set(55,55,215);
-  camera.lookAt(0,-10,0);
+  var camera=new THREE.PerspectiveCamera(26,1,1,2000);
+  var LOOK=new THREE.Vector3(-4,-9,0);
 
-  scene.add(new THREE.HemisphereLight(0xffffff,0x9fb0ab,0.55));
-  var key=new THREE.DirectionalLight(0xffffff,1.0);
-  key.position.set(60,160,120);
-  key.castShadow=true;
-  key.shadow.mapSize.set(1024,1024);
-  var sc=key.shadow.camera; sc.left=-90;sc.right=90;sc.top=90;sc.bottom=-90;sc.near=10;sc.far=400;
-  scene.add(key);
-  var rim=new THREE.DirectionalLight(0xdff3ee,0.35); rim.position.set(-120,40,-80); scene.add(rim);
+  scene.add(new THREE.HemisphereLight(0xffffff,0x3a4160,0.6));
+  var key=new THREE.DirectionalLight(0xffffff,0.85); key.position.set(70,150,140); key.castShadow=true;
+  key.shadow.mapSize.set(1024,1024); var sc=key.shadow.camera; sc.left=-100;sc.right=100;sc.top=100;sc.bottom=-100;sc.near=10;sc.far=450;
+  key.shadow.radius=6; scene.add(key);
+  var rim=new THREE.DirectionalLight(0xc6d0ff,0.55); rim.position.set(-120,60,-110); scene.add(rim);
+  var ground=new THREE.Mesh(new THREE.PlaneGeometry(700,700),new THREE.ShadowMaterial({opacity:0.35}));
+  ground.rotation.x=-Math.PI/2; ground.position.y=-46; ground.receiveShadow=true; scene.add(ground);
 
-  var ground=new THREE.Mesh(new THREE.PlaneGeometry(600,600),new THREE.ShadowMaterial({opacity:0.12}));
-  ground.rotation.x=-Math.PI/2; ground.position.y=-44; ground.receiveShadow=true; scene.add(ground);
-
-  var pom=new THREE.MeshStandardMaterial({color:0xe4dfd3,roughness:0.55,metalness:0});
-  var pomMove=new THREE.MeshStandardMaterial({color:0xdde5e1,roughness:0.5,metalness:0});
-  var inner=new THREE.MeshStandardMaterial({color:0xd8d3c8,roughness:0.7});
-
+  var POM=new THREE.MeshStandardMaterial({color:0xe8e4da,roughness:0.45,metalness:0});
+  var POMS=new THREE.MeshStandardMaterial({color:0xe8e4da,roughness:0.45,metalness:0,side:THREE.DoubleSide});
+  var SHADE=new THREE.MeshStandardMaterial({color:0xcfcabf,roughness:0.6});
   var model=new THREE.Group(); scene.add(model);
+  function add(mesh,parent){ mesh.castShadow=true; mesh.receiveShadow=true; (parent||model).add(mesh); return mesh; }
 
-  function box(w,h,d,x,y,z,mat){
-    var m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat||pom);
-    m.position.set(x,y,z); m.castShadow=true; m.receiveShadow=true; model.add(m); return m;
-  }
-  // ---- body 85 x 20 x 20 (x:-42.5..42.5, y:0..20, z:-10..10)
-  // bottom plate with slot (x:-32..37, z:-3..3)
-  box(10.5,3,20,-37.25,1.5,0);
-  box(5.5,3,20,39.75,1.5,0);
-  box(69,3,7,4.5,1.5,6.5);
-  box(69,3,7,4.5,1.5,-6.5);
-  // side walls (top opening 13 wide)
-  box(85,17,3.5,0,11.5,8.25);
-  box(85,17,3.5,0,11.5,-8.25);
-  // end walls (opening 78 long)
-  box(3.5,17,13,-40.75,11.5,0);
-  box(3.5,17,13,40.75,11.5,0);
-  // cavity floor tint
-  var floor=new THREE.Mesh(new THREE.PlaneGeometry(78,13),inner);
-  floor.rotation.x=-Math.PI/2; floor.position.set(0,3.02,0); model.add(floor);
-
-  // CLOSE engraving (front face, near knob end)
+  // ---- body: 85 x 20 x 20, soft rounded box
   (function(){
-    var c=document.createElement('canvas'); c.width=256; c.height=460;
-    var g=c.getContext('2d');
-    g.strokeStyle='#8f897c'; g.fillStyle='#8f897c'; g.lineWidth=10;
-    g.beginPath(); g.moveTo(60,30); g.lineTo(60,340); g.stroke();
-    g.beginPath(); g.moveTo(20,320); g.lineTo(60,420); g.lineTo(100,320); g.closePath(); g.stroke();
-    g.save(); g.translate(190,230); g.rotate(Math.PI/2);
-    g.font='bold 92px "JetBrains Mono",monospace'; g.textAlign='center'; g.textBaseline='middle';
-    g.lineWidth=5; g.strokeText('CLOSE',0,0); g.restore();
-    var tex=new THREE.CanvasTexture(c);
-    var p=new THREE.Mesh(new THREE.PlaneGeometry(10,18),new THREE.MeshBasicMaterial({map:tex,transparent:true}));
-    p.position.set(-35,10,10.05); model.add(p);
+    var s=new THREE.Shape(), w=18, h=18, r=4.5, x=-w/2, y=-h/2;
+    s.moveTo(x+r,y); s.lineTo(x+w-r,y); s.quadraticCurveTo(x+w,y,x+w,y+r); s.lineTo(x+w,y+h-r); s.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+    s.lineTo(x+r,y+h); s.quadraticCurveTo(x,y+h,x,y+h-r); s.lineTo(x,y+r); s.quadraticCurveTo(x,y,x+r,y);
+    var g=new THREE.ExtrudeGeometry(s,{depth:83,bevelEnabled:true,bevelThickness:1,bevelSize:1,bevelSegments:4,curveSegments:10});
+    g.translate(0,0,-41.5); g.rotateY(Math.PI/2);
+    var m=add(new THREE.Mesh(g,POM)); m.position.set(0,10,0);
+    // slot on the underside
+    var slot=new THREE.Mesh(new THREE.BoxGeometry(66,0.4,5),SHADE); slot.position.set(4,0.05,0); model.add(slot);
   })();
 
-  // ---- knob + shaft (rotating group, axis along x at y=10)
-  var shaft=new THREE.Group(); shaft.position.set(0,10,0); model.add(shaft);
-  var knobGeo=new THREE.CylinderGeometry(10.82,10.82,10,8,1);
-  knobGeo.rotateY(Math.PI/8); knobGeo.rotateZ(Math.PI/2);
-  var knob=new THREE.Mesh(knobGeo,pom); knob.position.x=-49; knob.castShadow=true; shaft.add(knob);
-  // knob grip marks (so rotation is visible)
-  for(var i=0;i<8;i++){
-    var a=i/8*Math.PI*2+Math.PI/8;
-    var mark=new THREE.Mesh(new THREE.BoxGeometry(10.2,0.6,1.2),inner);
-    mark.position.set(-49,Math.cos(a)*10.05,Math.sin(a)*10.05);
-    mark.rotation.x=-a; shaft.add(mark);
+  // lathe helper: profile along axis (x), returns mesh with axis on X
+  function lathe(pts,dir){
+    var v=pts.map(function(p){return new THREE.Vector2(p[1],p[0]);});
+    var g=new THREE.LatheGeometry(v,40); g.rotateZ(dir*Math.PI/2); return g;
   }
-  var cap=new THREE.Mesh(new THREE.CylinderGeometry(4,4,1.4,24),new THREE.MeshStandardMaterial({color:0x1e6e62,roughness:.5}));
-  cap.geometry.rotateZ(Math.PI/2); cap.position.x=-54.2; shaft.add(cap);
-  var core=new THREE.Mesh(new THREE.CylinderGeometry(3.25,3.25,92,24),pom);
-  core.geometry.rotateZ(Math.PI/2); core.position.x=-1; shaft.add(core);
-  // thread helix (pitch 2mm)
-  (function(){
-    var pts=[], turns=38, seg=turns*20;
-    for(var k=0;k<=seg;k++){var t=k/seg, ang=t*turns*Math.PI*2;
-      pts.push(new THREE.Vector3(-38+t*turns*2,Math.cos(ang)*3.45,Math.sin(ang)*3.45));}
-    var th=new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts),seg,0.62,6,false),pom);
-    shaft.add(th);
-  })();
-  // keyhole retainer (right end)
-  var kh=new THREE.Mesh(new THREE.CylinderGeometry(3,3,4.25,20),pom);
-  kh.geometry.rotateZ(Math.PI/2); kh.position.set(44.6,10,0); kh.castShadow=true; model.add(kh);
+  // ---- handle (rotates)
+  var handle=new THREE.Group(); handle.position.set(0,10,0); model.add(handle);
+  var hp=[[0,0.01],[0,4],[1.5,4],[1.5,9.4],[2.2,9.9],[3.5,10],[8.5,10],[10.2,9.4],[11.2,8],[11.7,5.5],[11.9,0.01]];
+  var hg=lathe(hp,1);
+  add(new THREE.Mesh(hg,POM),handle).position.x=-42.5;
+  var notch=new THREE.Mesh(new THREE.BoxGeometry(7.5,1.2,1.4),SHADE); notch.position.set(-49.2,9.75,0); handle.add(notch);
+  // ---- keyhole retainer (right end)
+  var kg=lathe([[0,0.01],[0,3.4],[3,3.4],[4,2.8],[4.4,1.5],[4.5,0.01]],-1);
+  add(new THREE.Mesh(kg,POM)).position.set(42.5,10,0);
 
-  // ---- arms: shape in local 2D (x outward, y down from body underside)
-  function armGeo(dir){
-    var s=new THREE.Shape(), d=dir;
-    s.moveTo(0,1); s.lineTo(4*d,1); s.lineTo(4*d,-14);
-    s.bezierCurveTo(4*d,-18,7.5*d,-18.5,7.5*d,-22);
-    s.lineTo(4.4*d,-35.5);
-    s.quadraticCurveTo(3.4*d,-39.5,1.6*d,-39.5);
-    s.quadraticCurveTo(0,-39.5,0,-37);
-    s.lineTo(0,1);
-    var g=new THREE.ExtrudeGeometry(s,{depth:4,bevelEnabled:true,bevelThickness:1,bevelSize:0.9,bevelSegments:3,curveSegments:10});
-    g.translate(0,0,-2);
-    return g;
+  // ---- swept arm geometry: superellipse cross-sections (flat faces, rounded corners)
+  function sweep(yTop,yBot,fn){
+    var SEG=40, RN=28, pos=[], idx=[];
+    for(var i=0;i<=SEG;i++){
+      var t=i/SEG, y=yTop+(yBot-yTop)*t, d=fn(t);
+      for(var j=0;j<RN;j++){
+        var a=j/RN*Math.PI*2, c=Math.cos(a), s=Math.sin(a);
+        pos.push(d.cx+d.wx/2*Math.sign(c)*Math.pow(Math.abs(c),0.55), y, d.wz/2*Math.sign(s)*Math.pow(Math.abs(s),0.55));
+      }
+    }
+    for(i=0;i<SEG;i++) for(var j2=0;j2<RN;j2++){
+      var a0=i*RN+j2, a1=i*RN+(j2+1)%RN, b0=a0+RN, b1=a1+RN;
+      idx.push(a0,b0,a1, a1,b0,b1);
+    }
+    var tip=pos.length/3, last=fn(1); pos.push(last.cx,yBot-0.2,0);
+    for(j2=0;j2<RN;j2++) idx.push(SEG*RN+j2, tip, SEG*RN+(j2+1)%RN);
+    var g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3)); g.setIndex(idx); g.computeVertexNormals(); return g;
   }
-  var FIXED_INNER=-38.5;
-  var fixedArm=new THREE.Mesh(armGeo(-1),pom);
-  fixedArm.position.set(FIXED_INNER-0.9,0,0); fixedArm.castShadow=true; model.add(fixedArm);
-
+  function tipRound(t,start){ if(t<start) return 1; var u=(t-start)/(1-start); return Math.sqrt(Math.max(0.0004,1-u*u)); }
+  function ease(t){ return t*t*(3-2*t); }
+  // blade: slim near the root, fuller toward the tip (reverse taper), rounded end
+  function blade(cx){
+    return sweep(-11,-41,function(t){ var k=tipRound(t,0.82); return {cx:cx, wx:(4.0+0.6*ease(t))*k, wz:(3.4+3.2*ease(Math.min(1,t*1.15)))*k}; });
+  }
+  function block(cx,wx,wz,yBot){
+    return sweep(1,yBot,function(t){ var k=t>0.8?0.75+0.25*tipRound(t,0.8):1; return {cx:cx, wx:wx*k, wz:wz*k}; });
+  }
+  // fixed arm (under the handle end)
+  add(new THREE.Mesh(block(-38.5,8,6,-15),POMS));
+  add(new THREE.Mesh(blade(-35.75),POMS));
+  // moving arm
   var mover=new THREE.Group(); model.add(mover);
-  var moveArm=new THREE.Mesh(armGeo(1),pomMove); moveArm.position.x=0.9; moveArm.castShadow=true; mover.add(moveArm);
-  var nut=new THREE.Mesh(new THREE.BoxGeometry(12,12,12),pomMove); nut.position.set(2,10,0); nut.castShadow=true; mover.add(nut);
+  add(new THREE.Mesh(block(-30.5,4,5.5,-15),POMS),mover);
+  add(new THREE.Mesh(blade(-30.25),POMS),mover);
 
-  function place(){ mover.position.x=FIXED_INNER+MIN_GAP+current*LEAD; shaft.rotation.x=-current*Math.PI*2; }
-  place();
+  function place(){ mover.position.x=current-10; handle.rotation.x=-(current-10)/2*Math.PI*2; }
 
-  // ---- size
   function resize(){
-    var w=stage.clientWidth, h=stage.clientHeight;
-    renderer.setSize(w,h,false); camera.aspect=w/h;
-    camera.position.z = w/h<1.2 ? 245 : 215;
-    camera.updateProjectionMatrix(); kick();
+    var w=stage.clientWidth,h=stage.clientHeight; renderer.setSize(w,h,false);
+    camera.aspect=w/h; var d=w/h<1.1?205:190;
+    camera.position.set(LOOK.x+d*0.28,LOOK.y+d*0.22,d*0.93); camera.lookAt(LOOK); camera.updateProjectionMatrix(); kick();
   }
   if('ResizeObserver' in window) new ResizeObserver(resize).observe(stage); else window.addEventListener('resize',resize);
 
-  // ---- drag to rotate (horizontal only, vertical scroll stays native)
-  var rotY=-0.3, rotTarget=-0.3, dragging=false, lastX=0, touched=false;
-  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  stage.addEventListener('pointerdown',function(e){dragging=true;touched=true;lastX=e.clientX;stage.setPointerCapture(e.pointerId);document.getElementById('hint').style.opacity=0;});
-  stage.addEventListener('pointermove',function(e){if(!dragging)return;rotTarget+=(e.clientX-lastX)*0.012;lastX=e.clientX;kick();});
-  ['pointerup','pointercancel'].forEach(function(n){stage.addEventListener(n,function(){dragging=false;});});
+  var rotY=-0.42, rotT=-0.42, drag=false, lx=0, touched=false;
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  stage.addEventListener('pointerdown',function(e){drag=true;touched=true;lx=e.clientX;try{stage.setPointerCapture(e.pointerId);}catch(_){}});
+  stage.addEventListener('pointermove',function(e){if(!drag)return;rotT+=(e.clientX-lx)*0.012;lx=e.clientX;kick();});
+  ['pointerup','pointercancel'].forEach(function(n){stage.addEventListener(n,function(){drag=false;});});
 
   var running=false, visible=true, t0=performance.now();
   function frame(now){
-    var idle=!touched&&!reduce;
-    if(idle) rotTarget=-0.3+Math.sin((now-t0)/2600)*0.22;
-    rotY+=(rotTarget-rotY)*0.12;
-    current+=(target-current)*0.14;
-    if(Math.abs(target-current)<0.001) current=target;
-    model.rotation.y=rotY; place();
-    renderer.render(scene,camera);
-    var moving=idle||Math.abs(rotTarget-rotY)>0.0005||current!==target;
-    if(moving&&visible){requestAnimationFrame(frame);}else{running=false;}
+    var anim=!reduce;
+    if(demo&&anim){ var ph=(now-t0)/1000; target=10+22*(1-Math.cos(ph*0.9))/2; show(target); slider.value=target; }
+    if(!touched&&anim) rotT=-0.42+Math.sin((now-t0)/3200)*0.28;
+    rotY+=(rotT-rotY)*0.1; current+=(target-current)*(demo?1:0.16); if(Math.abs(target-current)<0.01) current=target;
+    model.rotation.y=rotY; place(); renderer.render(scene,camera);
+    var more=(demo&&anim)||(!touched&&anim)||Math.abs(rotT-rotY)>0.0005||current!==target;
+    if(more&&visible) requestAnimationFrame(frame); else running=false;
   }
   kick=function(){ if(!running&&visible){running=true;requestAnimationFrame(frame);} };
-  if('IntersectionObserver' in window){
-    new IntersectionObserver(function(es){visible=es[0].isIntersecting; if(visible) kick();}).observe(stage);
-  }
+  if('IntersectionObserver' in window) new IntersectionObserver(function(es){visible=es[0].isIntersecting;if(visible)kick();}).observe(stage);
   resize(); kick();
 })();
 </script>
