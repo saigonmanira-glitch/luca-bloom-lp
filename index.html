@@ -198,8 +198,8 @@ footer p{margin-top:8px}
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
   <defs>
-    <!-- 駆動アーム／固定アームの側面形状（図面寸法・単位mm、本体下面が y=0、内側の直線面が x=0） -->
-    <path id="lb-arm" d="M0 0V39Q0 40.2 1.6 40.1Q3.4 39.8 4.6 38.2Q5.2 37.2 5.1 34L2.6 17.6Q2.4 15.2 4.2 15H7.2Q8 15 8 14.2V0Z"/>
+    <!-- 駆動アーム／固定アームの側面形状（DXF図面の輪郭線から抽出・単位mm、本体下面が y=0、内側の直線面が x=0） -->
+    <path id="lb-arm" d="M0 0V39A1 1 0 0 0 1 40H1.394A2 2 0 0 0 2.504 39.664L3.664 38.891L4.387 38.211A3 3 0 0 0 5 36.394V35.475A20 20 0 0 0 4.784 32.541L2.522 17.293A2 2 0 0 1 4.5 15H7A1 1 0 0 0 8 14V0Z"/>
     <!-- 正面図：ハンドル＋本体＋キーホール留め具（本体左上が原点） -->
     <g id="lb-body">
       <rect x="-11.5" y="1" width="10" height="18"/>
@@ -209,8 +209,8 @@ footer p{margin-top:8px}
       <path d="M0 2L2 0M83 0L85 2M85 18L83 20M2 20L0 18" fill="none"/>
       <path d="M85 6H86.75V20.25H85Z"/>
       <path d="M86.75 7H88.25L89.25 8V12L88.25 13H86.75Z"/>
-      <path d="M4.8 2.4V13.6H3.3L5.6 17.6L7.9 13.6H6.4V2.4Z" fill="none" stroke-width=".3"/>
-      <text transform="translate(9.4 3.2) rotate(90)" font-family="Quicksand,Arial,sans-serif" font-size="4" font-weight="700" fill="none" stroke-width=".28" letter-spacing=".2">CLOSE</text>
+      <path d="M5 2V12H3.5L6 18L8.5 12H7V2Z" fill="none" stroke-width=".3"/>
+      <text transform="translate(9.95 1.3) rotate(90)" font-family="Quicksand,Arial,sans-serif" font-size="5.6" font-weight="700" fill="none" stroke-width=".28" textLength="17.4" lengthAdjust="spacingAndGlyphs">CLOSE</text>
     </g>
   </defs>
 </svg>
@@ -554,7 +554,7 @@ document.addEventListener('DOMContentLoaded',function(){
 
   // ---------- 本体 85×20×20：上面に78×13の開口、底面に69×6のスリット、底板3.5 ----------
   (function(){
-    var s=new THREE.Shape(); rrect(s,-42,-9.5,84,19,0.3,false); rrect(s,-38.5,-6,77,12,1.5,true);
+    var s=new THREE.Shape(); rrect(s,-42,-9.5,84,19,0.3,false); rrect(s,-39.5,-7,79,14,1.5,true);
     add(upright(new THREE.ExtrudeGeometry(s,{depth:19,bevelEnabled:true,bevelThickness:0.5,bevelSize:0.5,bevelSegments:1,curveSegments:6}),0.5));
     var b=new THREE.Shape(); rrect(b,-39.5,-7,79,14,1,false); rrect(b,-34.5,-3,69,6,2.9,true);
     add(upright(new THREE.ExtrudeGeometry(b,{depth:3.5,bevelEnabled:false,curveSegments:8}),0));
@@ -562,13 +562,16 @@ document.addEventListener('DOMContentLoaded',function(){
 
   // ---------- 刻印「↓CLOSE」（側面2か所） ----------
   (function(){
+    // キャンバス 1mm=20px。範囲：本体左端から x 3〜15mm、下面から y 1〜19mm
     var c=document.createElement('canvas'); c.width=240; c.height=360; var g=c.getContext('2d');
+    var X=function(mm){return (mm-3)*20;}, Y=function(mm){return (19-mm)*20;};
     g.strokeStyle='#8c877b'; g.lineWidth=5; g.lineJoin='round';
-    g.beginPath(); g.moveTo(40,8); g.lineTo(40,232); g.lineTo(10,232); g.lineTo(56,318); g.lineTo(102,232); g.lineTo(72,232); g.lineTo(72,8); g.closePath(); g.stroke();
-    g.save(); g.translate(150,180); g.rotate(Math.PI/2); g.font='700 84px Quicksand, Arial, sans-serif'; g.textAlign='center'; g.textBaseline='middle';
-    g.lineWidth=5; g.strokeText('CLOSE',0,0); g.restore();
+    g.beginPath(); g.moveTo(X(5),Y(18)); g.lineTo(X(5),Y(8)); g.lineTo(X(3.5),Y(8)); g.lineTo(X(6),Y(2)); g.lineTo(X(8.5),Y(8)); g.lineTo(X(7),Y(8)); g.lineTo(X(7),Y(18)); g.closePath(); g.stroke();
+    g.save(); g.translate(X(9.95),Y(18.7)); g.rotate(Math.PI/2);
+    g.font='700 100px Quicksand, Arial, sans-serif'; g.textBaseline='alphabetic';
+    var w=g.measureText('CLOSE').width; g.scale(348/w,1); g.lineWidth=5; g.strokeText('CLOSE',0,0); g.restore();
     var mat=new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(c),transparent:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2});
-    var p1=new THREE.Mesh(new THREE.PlaneGeometry(12,18),mat); p1.position.set(-33.75,10,10.02); dev.add(p1);
+    var p1=new THREE.Mesh(new THREE.PlaneGeometry(12,18),mat); p1.position.set(-42.5+9,10,10.02); dev.add(p1);
     var p2=p1.clone(); p2.rotation.y=Math.PI; p2.position.z=-10.02; dev.add(p2);
   })();
 
@@ -610,11 +613,13 @@ document.addEventListener('DOMContentLoaded',function(){
   // 内側の直線面が x=0、外側へ +x。本体下面 y=0 から下へ40mm。上部15mmは幅8、段差（くぼみ）の後、
   // 幅2.5→5へ太くなる刃部（逆テーパー）、先端はR3。厚み方向(z)は6mm、先端は半径3の丸、角R1。
   function armOutline(top){
-    var P=[[0,top]], cur=[0,top];
-    function L(x,y){ P.push([x,y]); cur=[x,y]; }
-    function Q(cx,cy,x,y){ for(var i=1;i<=16;i++){ var t=i/16,a=(1-t)*(1-t),b=2*(1-t)*t,c=t*t; P.push([a*cur[0]+b*cx+c*x,a*cur[1]+b*cy+c*y]); } cur=[x,y]; }
-    L(0,-39); Q(0,-40.2,1.6,-40.1); Q(3.4,-39.8,4.6,-38.2); Q(5.2,-37.2,5.1,-34);
-    L(2.6,-17.6); Q(2.4,-15.2,4.2,-15); L(7.2,-15); Q(8,-15,8,-14.2); L(8,top);
+    // DXF（駆動アーム図 3:1、本体図 1:1）の輪郭線。内側の直線面 x=0、本体下面 y=0。
+    var P=[[0,top]];
+    function L(x,y){ P.push([x,y]); }
+    function A(cx,cy,r,a0,a1){ for(var i=1;i<=24;i++){ var t=(a0+(a1-a0)*i/24)*Math.PI/180; P.push([cx+r*Math.cos(t),cy+r*Math.sin(t)]); } }
+    L(0,-39); A(1,-39,1,180,270); L(1.394,-40); A(1.394,-38,2,270,303.7); L(3.664,-38.891); L(4.387,-38.211);
+    A(2,-36.394,3,322.7,360); L(5,-35.475); A(-15,-35.475,20,0,8.4); L(2.522,-17.293);
+    A(4.5,-17,2,188.4,90); L(7,-15); A(7,-14,1,270,360); L(8,top);
     return P;
   }
   function spanAt(P,y){
@@ -632,8 +637,8 @@ document.addEventListener('DOMContentLoaded',function(){
       var hz=3, yc=yb+3;
       if(yy<yc) hz=Math.sqrt(Math.max(0.0004,9-(yy-yc)*(yy-yc)));
       if(fillet){ if(yy>0) hz=8; else if(yy>-5) hz=8-Math.sqrt(25-(yy+5)*(yy+5)); }   // 本体との付け根 R5
-      var cx=(sp[0]+sp[1])/2, ax=Math.max(0.02,(sp[1]-sp[0])/2), r=Math.min(1,ax*0.95,hz*0.95);
-      for(var q=0;q<4;q++){ var sx=(q===0||q===3)?1:-1, sz=q<2?1:-1;
+      var cx=(sp[0]+sp[1])/2, ax=Math.max(0.02,(sp[1]-sp[0])/2), lim=Math.min(ax,hz)*0.95, rI=Math.min(1,lim), rO=Math.min(yy<-15?2:1,lim);
+      for(var q=0;q<4;q++){ var sx=(q===0||q===3)?1:-1, sz=q<2?1:-1, r=sx>0?rO:rI;
         for(var k=0;k<CK;k++){ var th=(q+k/(CK-1))*Math.PI/2;
           pos.push(dir*(cx+sx*(ax-r)+r*Math.cos(th)), yy, sz*(hz-r)+r*Math.sin(th)); } }
       center.push([dir*cx,yy]); rings++;
