@@ -80,5 +80,11 @@
 </div></main>
 
 <footer class="foot"><div class="wrap">© Luca Bloom（ルカ・ブルーム）｜本製品は雑貨であり、医療機器ではありません。</div></footer>
+<script>
+  // 前のページのスクロール位置を引き継がず、常にページ先頭から表示（#付きリンクのときだけその位置へ）
+  if('scrollRestoration' in history) history.scrollRestoration='manual';
+  function toTop(){ if(!location.hash) window.scrollTo(0,0); }
+  toTop(); window.addEventListener('pageshow',toTop); window.addEventListener('load',toTop);
+</script>
 </body>
 </html>
