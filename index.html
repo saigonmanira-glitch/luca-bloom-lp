@@ -247,9 +247,9 @@ footer p{margin-top:8px}
     <h1 id="top"><span class="for">包皮がきつい方へ</span><span class="catch"><span>誰にも言えない</span><span>悩みを、</span><br><span>自分の手で、</span><span>少しずつ。</span></span></h1>
     <p class="lead">ハンドルを回すだけ。ずれにくく、手を離しても戻らない。最大70mmまで、あなたのペースで広げられます。</p>
 
-    <div class="stage" id="stage" aria-label="Luca Bloomの3Dモデル。ピンクの膜（包皮のイメージ）の口を、アームが内側から広げます。横にドラッグすると回転します。">
+    <div class="stage" id="stage" aria-label="Luca Bloomの3Dモデル。ピンクの膜（狭い穴のイメージ）の口を、アームが内側から広げます。横にドラッグすると回転します。">
       <div class="fb" id="fb">
-        <svg viewBox="-14 -3 106 76" role="img" aria-label="Luca Bloom本体の正面図。アームの先端側をピンクの膜（包皮のイメージ）が包んでいる">
+        <svg viewBox="-14 -3 106 76" role="img" aria-label="Luca Bloom本体の正面図。アームの先端側をピンクの膜（狭い穴のイメージ）が包んでいる">
           <g fill="#F1EEE6" stroke="#8990A6" stroke-width=".35" stroke-linejoin="round">
             <use href="#lb-arm" transform="translate(8 20) scale(-1 1)"/>
             <use href="#lb-arm" transform="translate(28 20)"/>
@@ -260,7 +260,7 @@ footer p{margin-top:8px}
         </svg>
       </div>
     </div>
-    <p class="stage-note"><i aria-hidden="true"></i><span class="nb">ピンクの膜は包皮のイメージ。</span><span class="nb">閉じたアームを入れ、</span><span class="nb">ハンドルで内側から</span><span class="nb">ゆっくり広げます。</span></p>
+    <p class="stage-note"><i aria-hidden="true"></i><span class="nb">ピンクの膜は狭い穴のイメージ。</span><span class="nb">閉じたアームを入れ、</span><span class="nb">ハンドルで内側から</span><span class="nb">ゆっくり広げます。</span></p>
     <div class="meter">
       <div class="meter-row"><span>ハンドルで開き幅を調整</span><b id="gapv">全閉</b></div>
       <input id="gap" type="range" min="10" max="70" step="1" value="10" aria-label="開き幅">
@@ -740,7 +740,7 @@ document.addEventListener('DOMContentLoaded',function(){
   var D=buildDevice(), dev=D.dev, mover=D.mover, shaft=D.shaft; dev.position.x=4; model.add(dev);   // 全体の中心を回転軸に合わせる
 
 
-  // ---------- 包皮に見立てた半透明の膜 ----------
+  // ---------- 狭い穴に見立てた半透明の膜 ----------
   // くぼみ部より下（y=-24）に口があり、アームの先端側を包む。開き幅に合わせて口が横に伸び、膜は薄く明るくなる。
   var sleeve=(function(){
     var INNER=-34.5, CLR=0.7, R0=4.6, B=3.7, YT=-24, YB=-38, RL=0.8, K=14, S=6, LN=12, CN=10;
