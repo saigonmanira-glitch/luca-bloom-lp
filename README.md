@@ -13,7 +13,7 @@
 ## サポートページ（同梱カードのQRコードの飛び先）
 
 - `jp/index.html` … QRコード `https://luca-bloom.com/jp` の着地ページ。「ご使用マニュアル」「取扱説明書 兼 免責事項」の選択画面
-- `jp/manual.html` … 図解のご使用マニュアル（画像は `jp/img/`、同梱ガイドPDFから切り出し）
+- `jp/manual.html` … 図解のご使用マニュアル（図はDXF図面の実寸形状から描いたSVG）
 - `jp/disclaimer.pdf` … 取扱説明書 兼 免責事項（PDF、制定日2026年9月1日版）
 - `https://luca-bloom.com/jp` へのアクセスは、静的ホスティング（GitHub Pages 等）で `jp/index.html` が表示されます。
 
