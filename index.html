@@ -90,6 +90,8 @@ small.gl{font-size:12px;color:var(--muted);font-weight:400}
 .stage{position:relative;width:100%;aspect-ratio:1/0.82;margin-top:6px;touch-action:pan-y}
 .stage canvas{display:block;width:100%;height:100%}
 .stage .fb{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.stage-note{margin:0 0 12px;font-size:12.5px;line-height:1.6;color:var(--on-navy-muted);text-align:center}
+.stage-note i{display:inline-block;width:10px;height:10px;border-radius:50%;background:#E58E9E;opacity:.8;margin-right:5px;vertical-align:-1px}
 .meter{display:grid;gap:6px;background:var(--navy-2);border:1px solid var(--navy-line);border-radius:16px;padding:14px 16px 12px}
 .meter-row{display:flex;align-items:baseline;justify-content:space-between}
 .meter-row span{font-size:13px;color:var(--on-navy-muted);white-space:nowrap}
@@ -245,17 +247,20 @@ footer p{margin-top:8px}
     <h1 id="top"><span class="for">包皮がきつい方へ</span><span class="catch"><span>誰にも言えない</span><span>悩みを、</span><br><span>自分の手で、</span><span>少しずつ。</span></span></h1>
     <p class="lead">ハンドルを回すだけ。ずれにくく、手を離しても戻らない。最大70mmまで、あなたのペースで広げられます。</p>
 
-    <div class="stage" id="stage" aria-label="Luca Bloomの3Dモデル。横にドラッグすると回転します。">
+    <div class="stage" id="stage" aria-label="Luca Bloomの3Dモデル。ピンクの膜（包皮のイメージ）の口を、アームが内側から広げます。横にドラッグすると回転します。">
       <div class="fb" id="fb">
-        <svg viewBox="-14 -3 106 67" role="img" aria-label="Luca Bloom本体の正面図">
+        <svg viewBox="-14 -3 106 76" role="img" aria-label="Luca Bloom本体の正面図。アームの先端側をピンクの膜（包皮のイメージ）が包んでいる">
           <g fill="#F1EEE6" stroke="#8990A6" stroke-width=".35" stroke-linejoin="round">
             <use href="#lb-arm" transform="translate(8 20) scale(-1 1)"/>
             <use href="#lb-arm" transform="translate(28 20)"/>
             <use href="#lb-body"/>
           </g>
+          <path d="M4.2 44L2.6 57Q2.4 71 20.5 71Q38.6 71 38.4 57L36.8 44Z" fill="#E58E9E" opacity=".4"/>
+          <ellipse cx="20.5" cy="44" rx="16.3" ry="1.3" fill="none" stroke="#E58E9E" stroke-width="1.2" opacity=".8"/>
         </svg>
       </div>
     </div>
+    <p class="stage-note"><i aria-hidden="true"></i><span class="nb">ピンクの膜は包皮のイメージ。</span><span class="nb">閉じたアームを入れ、</span><span class="nb">ハンドルで内側から</span><span class="nb">ゆっくり広げます。</span></p>
     <div class="meter">
       <div class="meter-row"><span>ハンドルで開き幅を調整</span><b id="gapv">全閉</b></div>
       <input id="gap" type="range" min="10" max="70" step="1" value="10" aria-label="開き幅">
@@ -602,7 +607,7 @@ document.addEventListener('DOMContentLoaded',function(){
 
   var scene=new THREE.Scene();
   var camera=new THREE.PerspectiveCamera(24,1,1,2000);
-  var LOOK=new THREE.Vector3(0,-6,0);
+  var LOOK=new THREE.Vector3(0,-14,0);
 
   scene.add(new THREE.HemisphereLight(0xffffff,0x3a4160,0.6));
   var key=new THREE.DirectionalLight(0xffffff,0.85); key.position.set(-40,160,120); key.castShadow=true;
@@ -611,7 +616,7 @@ document.addEventListener('DOMContentLoaded',function(){
   var fill=new THREE.DirectionalLight(0xdfe4ff,0.35); fill.position.set(120,40,60); scene.add(fill);
   var rim=new THREE.DirectionalLight(0xc6d0ff,0.45); rim.position.set(60,60,-140); scene.add(rim);
   var ground=new THREE.Mesh(new THREE.PlaneGeometry(700,700),new THREE.ShadowMaterial({opacity:0.35}));
-  ground.rotation.x=-Math.PI/2; ground.position.y=-41.5; ground.receiveShadow=true; scene.add(ground);
+  ground.rotation.x=-Math.PI/2; ground.position.y=-57; ground.receiveShadow=true; scene.add(ground);
 
   var POM=new THREE.MeshStandardMaterial({color:0xe8e4da,roughness:0.5,metalness:0,side:THREE.DoubleSide});
   var POMF=new THREE.MeshStandardMaterial({color:0xe8e4da,roughness:0.5,metalness:0,side:THREE.DoubleSide,flatShading:true});
@@ -729,16 +734,49 @@ document.addEventListener('DOMContentLoaded',function(){
     var mover=new THREE.Group(); dev.add(mover);
     add(armGeo(1,4,false),POM,mover).position.x=INNER; // 駆動アーム（ナット下面から44mm）
     var nut=new THREE.BoxGeometry(12,12,12); nut.translate(INNER+6,10,0); add(nut,POM,mover);
-    return {dev:dev,mover:mover,shaft:shaft};
+    var OUT=armOutline(4);
+    return {dev:dev,mover:mover,shaft:shaft,width:function(y){ var sp=spanAt(OUT,y); return sp?sp[1]:0; }};
   }
   var D=buildDevice(), dev=D.dev, mover=D.mover, shaft=D.shaft; dev.position.x=4; model.add(dev);   // 全体の中心を回転軸に合わせる
 
 
-  function place(){ mover.position.x=current; shaft.rotation.x=-current*Math.PI; }  // 1回転(2π)=2mm。閉じる向き＝側面の矢印が下へ動く向き
+  // ---------- 包皮に見立てた半透明の膜 ----------
+  // くぼみ部より下（y=-24）に口があり、アームの先端側を包む。開き幅に合わせて口が横に伸び、膜は薄く明るくなる。
+  var sleeve=(function(){
+    var INNER=-34.5, CLR=0.7, R0=4.6, B=3.7, YT=-24, YB=-38, RL=0.8, K=14, S=6, LN=12, CN=10;
+    var cols=[], i;
+    for(i=0;i<=K;i++) cols.push([-Math.PI/2+Math.PI*i/K,1]);          // 駆動アーム側の半円
+    for(i=1;i<=S;i++) cols.push([Math.PI/2,1-2*i/(S+1)]);              // 手前の直線部
+    for(i=0;i<=K;i++) cols.push([Math.PI/2+Math.PI*i/K,-1]);           // 固定アーム側の半円
+    for(i=1;i<=S;i++) cols.push([Math.PI*1.5,-1+2*i/(S+1)]);           // 奥の直線部
+    var N=cols.length, ROWS=(LN+1)+(YT-YB)+CN, pos=new Float32Array(N*ROWS*3), idx=[];
+    for(var r=0;r<ROWS-1;r++) for(var j=0;j<N;j++){ var a=r*N+j,b=r*N+(j+1)%N; idx.push(a,a+N,b, b,a+N,b+N); }
+    var g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.BufferAttribute(pos,3)); g.setIndex(idx);
+    var C0=new THREE.Color(0xE58E9E).convertSRGBToLinear(), C1=new THREE.Color(0xF6C3CC).convertSRGBToLinear();
+    var mat=new THREE.MeshStandardMaterial({color:C0.clone(),roughness:0.3,metalness:0,transparent:true,opacity:0.6,side:THREE.DoubleSide,depthWrite:false});
+    var mesh=new THREE.Mesh(g,mat); mesh.renderOrder=2; dev.add(mesh);
+    function sec(y){ var a=current/2+D.width(y)+CLR, s=Math.max(0,a-R0); return [Math.max(a,R0),B+(R0-B)*Math.exp(-s/3)]; }
+    var prev=-1;
+    return function(){
+      if(current===prev) return; prev=current;
+      var cx=INNER+current/2, rows=[], k, t, sc=sec(YT);
+      for(k=0;k<=LN;k++){ var ph=(-150+330*k/LN)*Math.PI/180; rows.push([YT+RL*Math.sin(ph),sc[0],sc[1],RL+RL*Math.cos(ph)]); }  // 口の縁（丸まったふち）
+      for(var y=YT-1;y>=YB;y--){ sc=sec(y); rows.push([y,sc[0],sc[1],0]); }
+      var cap=5+0.3*(sc[0]-R0);                                                                                    // 先端より下は丸く閉じる
+      for(k=1;k<=CN;k++){ t=k/CN; var f=Math.sqrt(Math.max(0,1-t*t)); rows.push([YB-cap*t,sc[0]*f,sc[1]*f,0]); }
+      var p=0;
+      rows.forEach(function(R){ var L=R[1]-R[2];
+        cols.forEach(function(c){ var rr=R[2]+R[3]; pos[p++]=cx+L*c[1]+rr*Math.cos(c[0]); pos[p++]=R[0]; pos[p++]=rr*Math.sin(c[0]); }); });
+      g.attributes.position.needsUpdate=true; g.computeVertexNormals(); g.computeBoundingSphere();
+      var e=current/60; mat.color.copy(C0).lerp(C1,e); mat.opacity=0.6-0.22*e;
+    };
+  })();
+
+  function place(){ mover.position.x=current; shaft.rotation.x=-current*Math.PI; sleeve(); }  // 1回転(2π)=2mm。閉じる向き＝側面の矢印が下へ動く向き
 
   function resize(){
     var w=stage.clientWidth,h=stage.clientHeight; renderer.setSize(w,h,false);
-    camera.aspect=w/h; var d=w/h<1.1?250:228;
+    camera.aspect=w/h; var d=w/h<1.1?268:246;
     camera.position.set(LOOK.x-d*0.30,LOOK.y+d*0.36,d*0.88); camera.lookAt(LOOK); camera.updateProjectionMatrix(); renderer.render(scene,camera); kick();
   }
   if('ResizeObserver' in window) new ResizeObserver(resize).observe(stage); else window.addEventListener('resize',resize);
