@@ -58,6 +58,7 @@ h1,h2,h3{text-wrap:balance;line-height:1.4}
 a{color:inherit}
 :focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:6px}
 .wrap{max-width:560px;margin:0 auto;padding-inline:var(--gutter)}
+.nb{display:inline-block}
 .en{font-family:var(--font-en);letter-spacing:.04em}
 .num{font-family:var(--font-en);font-weight:700;letter-spacing:0}
 .dark{background:var(--navy);color:var(--on-navy)}
@@ -91,13 +92,13 @@ small.gl{font-size:12px;color:var(--muted);font-weight:400}
 .stage .fb{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
 .meter{display:grid;gap:6px;background:var(--navy-2);border:1px solid var(--navy-line);border-radius:16px;padding:14px 16px 12px}
 .meter-row{display:flex;align-items:baseline;justify-content:space-between}
-.meter-row span{font-size:13px;color:var(--on-navy-muted)}
+.meter-row span{font-size:13px;color:var(--on-navy-muted);white-space:nowrap}
 .meter-row b{font-family:var(--font-en);font-size:30px;font-weight:700;color:var(--white);line-height:1}
 .meter-row b small{font-size:14px;margin-left:3px;color:var(--on-navy-muted)}
 .meter input{width:100%;accent-color:var(--gold);height:30px;margin:0}
 .meter .ends{display:flex;justify-content:space-between;font-family:var(--font-en);font-size:11px;color:var(--on-navy-muted)}
 .badges{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:22px;padding:0;list-style:none}
-.badges li{border:1px solid var(--navy-line);border-radius:12px;padding:12px 4px;text-align:center;font-size:11.5px;line-height:1.45;color:var(--on-navy-muted)}
+.badges li{border:1px solid var(--navy-line);border-radius:12px;padding:12px 2px;text-align:center;font-size:11px;letter-spacing:0;line-height:1.45;color:var(--on-navy-muted)}
 .claim-note{margin-top:8px;font-size:11px;color:var(--on-navy-muted);line-height:1.6}
 .reason .claim-note{color:var(--muted)}
 .badges sup{font-size:9px;margin-left:1px}
@@ -208,9 +209,9 @@ footer p{margin-top:8px}
 .bar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:rgba(22,26,41,.94);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-top:1px solid var(--navy-line);padding:10px var(--gutter) calc(10px + env(safe-area-inset-bottom,0px));transition:transform .25s ease}
 .bar.hide{transform:translateY(120%)}
 .bar .in{max-width:560px;margin:0 auto;display:flex;gap:12px;align-items:center}
-.bar .p{color:var(--white);font-family:var(--font-en);font-weight:700;font-size:21px;line-height:1.1;white-space:nowrap}
+.bar .p{color:var(--white);font-family:var(--font-en);font-weight:700;font-size:19px;line-height:1.1;white-space:nowrap}
 .bar .p small{display:block;font-family:var(--font-jp);font-size:10.5px;font-weight:400;color:var(--on-navy-muted)}
-.bar .cta{min-height:48px;font-size:15px;flex:1}
+.bar .cta{min-height:48px;font-size:15px;flex:1;white-space:nowrap;letter-spacing:.02em}
 @media (prefers-reduced-motion:reduce){.bar{transition:none}summary::after{transition:none}}
 </style>
 </head>
@@ -256,7 +257,7 @@ footer p{margin-top:8px}
       </div>
     </div>
     <div class="meter">
-      <div class="meter-row"><span>ハンドルを回して開き幅を調整</span><b id="gapv">10<small>mm</small></b></div>
+      <div class="meter-row"><span>ハンドルで開き幅を調整</span><b id="gapv">10<small>mm</small></b></div>
       <input id="gap" type="range" min="10" max="70" step="1" value="10" aria-label="開き幅">
       <div class="ends"><span>10mm</span><span>MAX 70mm</span></div>
     </div>
@@ -264,9 +265,9 @@ footer p{margin-top:8px}
     <ul class="badges">
       <li><b>業界最大<sup>※</sup></b>70mmの開き幅</li>
       <li><b>無段階</b>好きな幅で止まる</li>
-      <li><b>日本で検品</b>洗浄・組立<br>（製造国：中国）</li>
+      <li><b>日本で検品</b>洗浄・組立<br>製造国：中国</li>
     </ul>
-    <p class="claim-note">※当社調べ（2026年9月時点、国内販売品○製品と比較）</p>
+    <p class="claim-note">※当社調べ（2026年9月時点、国内販売品2製品と比較）</p>
 
     <div class="buy">
             <a class="cta js-buy" href="https://www.amazon.co.jp/dp/B0HHXQ1X4C" target="_blank" rel="noopener">Amazonで購入する
@@ -289,7 +290,7 @@ footer p{margin-top:8px}
     </ul>
     <div class="bridge">
       <div class="arrow"></div>
-      <p>その悩みのために生まれたのが<br><span class="en">Luca Bloom</span> です。</p>
+      <p><span class="nb">その悩みのために</span><span class="nb">生まれたのが</span><br><span class="en">Luca Bloom</span> です。</p>
       <p class="note">開発者とモニターの声を何度も重ねて完成しました。</p>
     </div>
   </div>
@@ -298,7 +299,7 @@ footer p{margin-top:8px}
 <!-- ================= REASONS ================= -->
 <section class="sec" style="padding-top:0">
   <div class="wrap">
-    <p class="label">3 reasons</p>
+    <p class="label">4 reasons</p>
     <h2>Luca Bloomが<br>選ばれる4つの理由</h2>
     <div class="reasons">
 
@@ -391,7 +392,7 @@ footer p{margin-top:8px}
         </div>
         <div class="body">
           <p class="no">REASON 03</p>
-          <h3>無段階調整で、<br>ちょうどいい幅にぴたり。</h3>
+          <h3>無段階調整で、<br><span class="nb">ちょうどいい幅に</span><span class="nb">ぴたり。</span></h3>
           <p>ハンドルを回すと、アームがなめらかに開きます。段階ではなく無段階なので、「ちょうどいい幅」でぴたりと止められます。ネジの力でその位置に固定される構造<small class="gl">（セルフロック）</small>なので、手を離しても急に閉じません。</p>
         </div>
       </article>
@@ -415,8 +416,8 @@ footer p{margin-top:8px}
           <p class="no">REASON 04</p>
           <p class="big">70<small>mm</small></p>
           <h3>業界最大<sup style="font-size:.55em">※</sup>の開き幅</h3>
-          <p>最大70mmまで開くので、はじめの一歩から、慣れてきた後まで長く使えます。2本のアームは最後まで平行のまま開き、根元から先端まで均等に広げます。</p>
-          <p class="claim-note">※当社調べ（2026年9月時点、国内販売品○製品と比較）</p>
+          <p>1台で10〜70mmの間から、ご自身に合った幅を選べます。2本のアームは最後まで平行のまま開き、根元から先端まで均等に広げます。</p>
+          <p class="claim-note">※当社調べ（2026年9月時点、国内販売品2製品と比較）</p>
         </div>
       </article>
     </div>
@@ -435,7 +436,7 @@ footer p{margin-top:8px}
     </div>
     <p class="types-note">Luca Bloomは、包皮が狭い方や匂いが気になる方のためのセルフケアツールです。<br>痛み・腫れ・出血がある場合や、むいた包皮が戻らない場合は、すぐに医療機関を受診してください。</p>
 
-    <h2 class="h2-next">仮性包茎リングとの違い</h2>
+    <h2 class="h2-next"><span class="nb">仮性包茎リング</span><span class="nb">との違い</span></h2>
     <p class="sub">仮性包茎リング（包茎リング）は、むいた包皮を根元側に留めておくための輪です。リングをつけられない方のためのLuca Bloomです。</p>
     <div class="cmp" role="table" aria-label="包茎リングとLuca Bloomの比較">
       <div class="r h" role="row"><span role="columnheader"></span><span role="columnheader">包茎リング</span><span role="columnheader">Luca Bloom</span></div>
@@ -456,7 +457,7 @@ footer p{margin-top:8px}
     <div class="boxstage" id="boxstage" aria-label="化粧箱の3Dモデル。横にドラッグすると回転します。">
       <div class="fb" id="boxfb"><svg viewBox="-228.24 -82.00 402.78 337.00" role="img" aria-label="PANTONE 289 Cのボックス。背面にCool Gray 1 Cで「Luca Bloom」の文字だけ"><ellipse cx="-26.85" cy="229.00" rx="169.17" ry="9" fill="#0E1120" opacity=".55"/><path d="M0.00 -72.00 L-218.24 54.00 L-53.69 149.00 L164.54 23.00Z" fill="#1A3A63" stroke="#2C4A78" stroke-width="0.6" stroke-linejoin="round"/><path d="M164.54 95.00 L-53.69 221.00 L-53.69 149.00 L164.54 23.00Z" fill="#0C2340" stroke="#2C4A78" stroke-width="0.6" stroke-linejoin="round"/><path d="M-218.24 126.00 L-53.69 221.00 L-53.69 149.00 L-218.24 54.00Z" fill="#081A31" stroke="#2C4A78" stroke-width="0.6" stroke-linejoin="round"/><path d="M-218.24 62.00L-53.69 157.00" stroke="#2C4A78" stroke-width=".8"/><text transform="matrix(1.73 -1.00 0 2.00 55.43 122.00)" x="0" y="3.25" text-anchor="middle" font-family="Montserrat,Quicksand,sans-serif" font-weight="200" font-size="9.2" textLength="50" lengthAdjust="spacingAndGlyphs" fill="#D9D9D6">Luca Bloom</text></svg><svg viewBox="-203.12 -506.61 431.36 532.61" role="img" aria-label="ボックスを開けた状態。黒いクッション材の専用くぼみに本体が収まり、フタの内側に名刺サイズのポケット"><ellipse cx="12.56" cy="8.00" rx="181.17" ry="9" fill="#0E1120" opacity=".55"/><path d="M-164.54 -167.00 L53.69 -293.00 L25.12 -496.61 L-193.12 -370.61Z" fill="#10284A" stroke="#2C4A78" stroke-width="0.6" stroke-linejoin="round"/><path d="M-143.83 -219.51 L22.45 -315.51 L4.40 -444.10 L-161.87 -348.10Z" fill="#0C2340" stroke="#3A5584" stroke-width="0.8" stroke-linejoin="round"/><path d="M-61.41 -406.10 L-61.16 -401.73 L-61.58 -397.14 L-62.66 -392.51 L-64.36 -388.02 L-66.61 -383.84 L-69.33 -380.13 L-72.41 -377.03 L-75.73 -374.67 L-79.16 -373.13 L-82.58 -372.47 L-85.86 -372.73 L-88.86 -373.88 L-91.47 -375.88 L-93.59 -378.66 L-95.14 -382.11 L-96.06 -386.10Z" fill="#081A31" stroke="#3A5584" stroke-width="0.8" stroke-linejoin="round"/><path d="M-157.62 -159.00 L53.69 -281.00 L53.69 -289.00 L-157.62 -167.00Z" fill="#081A31"/><path d="M211.31 -190.00 L53.69 -281.00 L53.69 -289.00 L211.31 -198.00Z" fill="#0A1F3A"/><path d="M0.00 -68.00 L211.31 -190.00 L53.69 -281.00 L-157.62 -159.00Z" fill="#161616" stroke="#000" stroke-width="0.5" stroke-linejoin="round"/><g transform="matrix(1.73 -1.00 1.73 1.00 -84.70 -161.10)"><g fill="#050505"><circle cx="42.4" cy="-0.5" r="10"/><circle cx="42.4" cy="20.5" r="10"/></g><g fill="#050505" stroke="#050505" stroke-width="2.2" stroke-linejoin="round"><use href="#lb-arm" transform="translate(8 20) scale(-1 1)"/><use href="#lb-arm" transform="translate(8 20)"/><use href="#lb-body"/></g><g fill="#ECE8DF" stroke="#A8A294" stroke-width=".3" stroke-linejoin="round"><use href="#lb-arm" transform="translate(8 20) scale(-1 1)"/><use href="#lb-arm" transform="translate(8 20)"/><use href="#lb-body"/></g></g><path d="M0.00 0.00 L-164.54 -95.00 L-164.54 -167.00 L0.00 -72.00Z" fill="#081A31" stroke="#2C4A78" stroke-width="0.6" stroke-linejoin="round"/><path d="M0.00 0.00 L218.24 -126.00 L218.24 -198.00 L0.00 -72.00Z" fill="#0C2340" stroke="#2C4A78" stroke-width="0.6" stroke-linejoin="round"/><path d="M0.00 -72.00L218.24 -198.00L53.69 -293.00M0.00 -72.00L-164.54 -167.00" fill="none" stroke="#2C4A78" stroke-width="1.2"/></svg></div>
     </div>
-    <p class="box-cap">化粧箱の表記は、背面の「Luca Bloom」の文字だけ。<br>発送時は、この化粧箱をさらに段ボール等で梱包してお届けします。</p>
+    <p class="box-cap">化粧箱の表記は、背面の「Luca Bloom」の文字だけ。<br>横にドラッグすると向きを変えられます。</p>
     <ul class="privacy-points">
       <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="none" stroke="#E3B34E" stroke-width="1.6"/><path d="M6 10.2l2.6 2.6L14 7.4" fill="none" stroke="#E3B34E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>発送時は、化粧箱をさらに段ボール等で梱包</li>
       <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="none" stroke="#E3B34E" stroke-width="1.6"/><path d="M6 10.2l2.6 2.6L14 7.4" fill="none" stroke="#E3B34E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>箱にはブランド名「Luca Bloom」だけ</li>
@@ -470,7 +471,7 @@ footer p{margin-top:8px}
 <section class="sec">
   <div class="wrap">
     <p class="label">How to use</p>
-    <h2>使い方は、3ステップ。</h2>
+    <h2><span class="nb">使い方は、</span><span class="nb">3ステップ。</span></h2>
     <ol class="steps">
       <li>
         <div class="pic"><svg viewBox="0 0 60 60" aria-hidden="true"><path d="M30 8c8 12 14 20 14 28a14 14 0 0 1-28 0c0-8 6-16 14-28z" fill="#161A29"/><path d="M24 38a6 6 0 0 0 6 6" fill="none" stroke="#E3B34E" stroke-width="2.5" stroke-linecap="round"/></svg></div>
@@ -740,7 +741,7 @@ document.addEventListener('DOMContentLoaded',function(){
   function resize(){
     var w=stage.clientWidth,h=stage.clientHeight; renderer.setSize(w,h,false);
     camera.aspect=w/h; var d=w/h<1.1?250:228;
-    camera.position.set(LOOK.x-d*0.30,LOOK.y+d*0.36,d*0.88); camera.lookAt(LOOK); camera.updateProjectionMatrix(); kick();
+    camera.position.set(LOOK.x-d*0.30,LOOK.y+d*0.36,d*0.88); camera.lookAt(LOOK); camera.updateProjectionMatrix(); renderer.render(scene,camera); kick();
   }
   if('ResizeObserver' in window) new ResizeObserver(resize).observe(stage); else window.addEventListener('resize',resize);
 
@@ -842,7 +843,7 @@ document.addEventListener('DOMContentLoaded',function(){
     tp.rotation.y=Math.PI; tp.position.set(0,18,-DP/2-0.08); grp.add(tp);
 
     function rs(){ var w=st.clientWidth,h=st.clientHeight; r2.setSize(w,h,false); cam.aspect=w/h; var d=w/h<1.15?400:370;
-      cam.position.set(0,LK.y+d*0.36,d*0.93); cam.lookAt(LK); cam.updateProjectionMatrix(); go(); }
+      cam.position.set(0,LK.y+d*0.36,d*0.93); cam.lookAt(LK); cam.updateProjectionMatrix(); grp.rotation.y=ang; pivot.rotation.x=-1.85*ss(0.2,0.8,Math.cos(ang)); r2.render(sc2,cam); go(); }
     // 36秒で1周。正面を向くとフタが開き、背面の文字が見える向きでは閉じる
     var ang=Math.PI*0.8, dragB=false, lxB=0, runB=false, visB=true, lastB=0;
     var redB=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
