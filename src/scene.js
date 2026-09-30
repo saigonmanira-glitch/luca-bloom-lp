@@ -675,8 +675,8 @@ function initHero(state) {
   const HOLD = 2;
   const USERV = 10;
   const reduce = prefersReducedMotion();
-  // 回転の開始位置：200°（ハンドルが本体の奥側に回り込んだ向き）から始める
-  let spin = (200 * Math.PI) / 180;
+  // 回転の開始位置：340°から始める
+  let spin = (340 * Math.PI) / 180;
   let dir = 1;
   let vel = 0;
   let hold = 1;
