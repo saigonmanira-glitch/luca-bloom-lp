@@ -1,34 +1,60 @@
-# Luca Bloom LP
+# Luca Bloom 公式サイト
 
-スマホ優先の販売用ランディングページ（単一HTML）。`index.html` を静的ホスティングに置けば動作します。
+https://luca-bloom.com/ のソース一式です。静的サイトで、GitHub Pages からそのまま配信しています（ビルドが必要なのはトップページの JavaScript のみ）。
 
-- ヒーローの3Dモデル（three.js r186、自サイトから配信）は製品写真の形状に合わせて作成。スライダーで開き幅（最大70mm）を操作できます。アームの先端側を狭い穴に見立てた半透明の膜が包み、開き幅に合わせて口が伸びます。
-- イラストはすべてインラインSVG。写真素材は使用していません。
+## ファイル構成
+
+| パス | 内容 |
+|---|---|
+| `index.html` | 販売用ランディングページ（スマホ優先）。CSS はこのファイル内 |
+| `src/` | トップページの JavaScript のソース（`app.js`：スライダー・購入バー・アクセス解析、`scene.js`：3D） |
+| `assets/js/` | `src/` をビルドした公開用ファイル（three.js r186 を含み、自サイトから配信） |
+| `package.json` | ビルド設定（esbuild） |
+| `hero-fallback.webp` | 3D が表示されるまで／表示できない端末で出す静止画（29KB） |
+| `og.png` | SNS 共有用画像（1200×630） |
+| `favicon.svg` / `apple-touch-icon.png` | アイコン |
+| `privacy.html` | プライバシーポリシー |
+| `404.html` | 存在しない URL を開いたときのページ（GitHub Pages が自動で使用） |
+| `jp/` | 同梱カードの QR コード（`https://luca-bloom.com/jp`）の飛び先。`index.html`＝選択画面、`manual.html`＝ご使用マニュアル（画像は `jp/img/`）、`disclaimer.pdf`＝取扱説明書 兼 免責事項、`support.css`＝共通スタイル |
+| `column/` | コラム。`index.html`＝一覧、各記事は `*.html`、`column.css`＝全記事共通のスタイル |
+| `robots.txt` / `sitemap.xml` | 検索エンジン向け |
+| `CNAME` / `.nojekyll` | GitHub Pages のカスタムドメイン設定と、Jekyll 処理の無効化 |
+| `index.backup.html` | 2026年9月29日の価格表示追加前のトップページ（`robots.txt` で検索対象外） |
+
+## トップページの仕組み
+
+- **3D（three.js r186）**：製品の DXF 図面から作った形状。スライダーで開き幅（全閉〜70mm、1mm刻み）を操作できます。
+  - three.js はページの読み込み完了（load）後に読み込みます。
+  - 3D が描画されるまで、また WebGL が使えない・three.js を読み込めない場合は `hero-fallback.webp` を表示します。
+  - タブが非表示の間と、3D が画面外にある間は描画を止めます。
+- **フォント**：Google Fonts（Zen Kaku Gothic New / Quicksand）は表示を止めない方式で読み込みます。化粧箱の背面ロゴ用の Montserrat は「Luca Bloom」の文字だけを読み込みます。
+- **構造化データ**：Product（価格 5,800円・税込）、FAQPage、WebPage。FAQ の文言を変えるときは、画面の FAQ と JSON-LD の両方を直してください。
 
 ## JavaScript のビルド
 
-- ソースは `src/`（`app.js`：スライダー・購入バー・アクセス解析、`scene.js`：3D）。公開されるのはビルド後の `assets/js/`。
-- 編集後は `npm install`（初回のみ）→ `npm run build` を実行し、`assets/js/` もコミットする。
-- Google アナリティクス 4 は `src/app.js` の `GA_ID` に測定ID（G-から始まる文字列）を入れてビルドすると有効になる。有効にする際は `privacy.html` の「5. アクセス解析ツール・外部サービス」も書き換えること。
+- 編集は `src/` で行い、`npm install`（初回のみ）→ `npm run build` を実行して、`assets/js/` もコミットします。
+- Google アナリティクス 4 は `src/app.js` の `GA_ID` に測定ID（G- から始まる文字列）を入れてビルドすると有効になります。有効にする際は `privacy.html` の「5. アクセス解析ツール・外部サービス」も書き換えてください。
 
-## SEO
+## コラムの追加手順
 
-- 公開URLは `https://luca-bloom.com/` を前提にしています（同梱カードのQRコード `https://luca-bloom.com/jp` と同じドメイン）。変更する場合は、`index.html` の canonical / og:url / og:image / JSON-LD、`robots.txt`、`sitemap.xml` のURLを置き換えてください。
-- `og.png`（1200×630）、`favicon.svg`、`apple-touch-icon.png` を同梱。
+1. 既存の記事（例：`column/hohi-kitsui.html`）を複製し、タイトル・description・canonical・og:url・JSON-LD（Article / BreadcrumbList）・本文を書き換えます。
+2. `column/index.html` の一覧と、JSON-LD（CollectionPage）の記事リストに追加します。
+3. `sitemap.xml` に URL を追加します。
+4. 図・表は `column.css` の部品を使えます：`.points`（この記事のポイント）、`.fig`（図）、`ul.check` / `ul.ng`（チェック・NG リスト）、`ol.steps`（手順）、`.alert`（注意）、`.cards`（カード）、`.tbl`（表）。
 
-## サポートページ（同梱カードのQRコードの飛び先）
+### 表現の決まり（薬機法・景品表示法）
 
-- `jp/index.html` … QRコード `https://luca-bloom.com/jp` の着地ページ。「ご使用マニュアル」「取扱説明書 兼 免責事項」の選択画面
-- `jp/manual.html` … 図解のご使用マニュアル（画像は `jp/img/`、同梱ガイドPDFから切り出し）
-- `jp/disclaimer.pdf` … 取扱説明書 兼 免責事項（PDF、制定日2026年9月1日版）
-- `https://luca-bloom.com/jp` へのアクセスは、静的ホスティング（GitHub Pages 等）で `jp/index.html` が表示されます。
+- 「治る・治療・改善・効果・予防・矯正・手術」など、医療的な効果を示す語は使いません。
+- 製品紹介では状態名（真性包茎など）を対象として書かず、「包皮が狭い方や匂いが気になる方のためのセルフケアツール」と表記します。
+- 状態を解説する記事（真性と仮性の違い・カントン包茎・何科・受診の流れ・包茎リング）には、購入ボタンと価格を置きません。
+- 価格は「初期ロット100個限定価格 5,800円（税込）」のみを表示し、元値と比べる表示（二重価格表示）はしません。
 
-## 公開（QRコード `https://luca-bloom.com/jp` を機能させる手順）
+## 公開（GitHub Pages）
 
 1. GitHub のリポジトリ → Settings → Pages → Build and deployment を「Deploy from a branch」、Branch を `claude/keen-pascal-bs4hhf` / `(root)` にして Save。
 2. 同画面の Custom domain に `luca-bloom.com` が入っていることを確認（リポジトリ直下の `CNAME` で自動設定）。
-3. ドメイン管理画面（お名前.com 等）の DNS に以下を登録。
-   - A レコード（@）：185.199.108.153 / 185.199.109.153 / 185.199.110.153 / 185.199.111.153
-   - CNAME レコード（www）：saigonmanira-glitch.github.io
-4. 反映後（数分〜最大24時間）、Pages 画面で「Enforce HTTPS」にチェック。
-5. `https://luca-bloom.com/jp` を開き、選択画面が表示されれば完了。
+3. DNS（Cloudflare）に以下を登録。プロキシは「DNS のみ」（グレーの雲）にします。
+   - A レコード（名前 `luca-bloom.com`）：185.199.108.153 / 185.199.109.153 / 185.199.110.153 / 185.199.111.153
+   - CNAME レコード（名前 `www`）：saigonmanira-glitch.github.io
+4. Pages 画面で「Enforce HTTPS」にチェック。
+5. ブランチに push すると、1〜2分でサイトに反映されます。

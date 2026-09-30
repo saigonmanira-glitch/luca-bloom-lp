@@ -58,3 +58,5 @@ main{padding-block:28px 64px}
 @media (min-width:640px){.steps{grid-template-columns:1fr 1fr}}
 .foot{background:var(--navy);color:var(--on-navy-muted);font-size:12px;padding-block:24px calc(24px + env(safe-area-inset-bottom,0px))}
 .foot a{color:var(--on-navy-muted)}
+.skip{position:absolute;left:-9999px;top:0;z-index:100;background:var(--gold);color:var(--navy);font-weight:700;font-size:14px;padding:8px 14px;border-radius:8px;text-decoration:none}
+.skip:focus-visible{left:8px;top:8px}
