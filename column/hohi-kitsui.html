@@ -46,18 +46,58 @@ article li{margin:0 0 6px}
 .product p{margin:0 0 12px}
 .product-label{color:var(--gold);font-weight:700;font-size:13px;letter-spacing:.08em}
 .price{font-weight:700;font-size:18px}
-.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px!important}
-.btn{display:inline-block;background:var(--gold);color:var(--navy);text-decoration:none;font-weight:700;
-padding:10px 20px;border-radius:999px}
-.btn.ghost{background:transparent;color:var(--on-navy);border:1px solid var(--on-navy-muted)}
+.btns{display:grid;gap:10px;margin-top:18px!important}
+.btn{position:relative;display:flex;align-items:center;justify-content:center;min-height:58px;padding:14px 44px;border-radius:14px;
+background:var(--gold);color:var(--navy);text-decoration:none;font-weight:900;font-size:17px;letter-spacing:.06em;
+box-shadow:0 8px 24px rgba(227,179,78,.35),inset 0 -2px 0 rgba(0,0,0,.08)}
+.btn::after{content:"";position:absolute;right:22px;top:50%;width:9px;height:9px;margin-top:-5px;border-right:2.5px solid currentColor;border-top:2.5px solid currentColor;transform:rotate(45deg)}
+.btn:active{transform:translateY(1px)}
+.btn.ghost{min-height:50px;font-size:15px;font-weight:700;background:transparent;color:var(--on-navy);border:1.5px solid var(--on-navy-muted);box-shadow:none}
 .related h2{font-size:18px;border:0;margin:40px 0 10px}
 .list{list-style:none;padding:0;margin:0}
-.list li{border-bottom:1px solid var(--line);padding:16px 0;margin:0}
-.list a{text-decoration:none;font-weight:700;display:block}
+.list li{padding:0;margin:0 0 12px}
+.list a{text-decoration:none;font-weight:700;display:block;position:relative;background:var(--white);border:1px solid var(--line);border-radius:14px;padding:16px 46px 16px 18px;line-height:1.6;box-shadow:0 2px 10px rgba(22,26,41,.05)}
+.list a::after{content:"";position:absolute;right:20px;top:50%;width:9px;height:9px;margin-top:-5px;border-right:2.5px solid var(--gold);border-top:2.5px solid var(--gold);transform:rotate(45deg)}
+.related .list a{padding:14px 44px 14px 16px}
 .list span{display:block;color:var(--muted);font-size:13px;font-weight:400;margin-top:4px}
 footer.site{background:var(--navy);color:var(--on-navy-muted);font-size:13px;padding:24px 20px;text-align:center}
 footer.site a{color:var(--on-navy-muted);margin:0 8px}
 @media(max-width:600px){h1{font-size:22px}article h2{font-size:19px}}
+
+/* ---- 図・要点・チェックリスト ---- */
+.points{background:var(--white);border:2px solid var(--gold);border-radius:14px;padding:16px 18px 10px;margin:0 0 30px}
+.points .t{font-weight:900;font-size:15px;color:var(--navy);margin:0 0 10px;letter-spacing:.04em}
+.points ul{list-style:none;padding:0;margin:0}
+.points li{position:relative;padding-left:30px;margin:0 0 10px;font-weight:700;line-height:1.6}
+.points li::before{content:"";position:absolute;left:0;top:.2em;width:20px;height:20px;border-radius:50%;background:var(--gold)}
+.points li::after{content:"";position:absolute;left:7px;top:calc(.2em + 4px);width:5px;height:9px;border:solid var(--navy);border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+.fig{margin:26px 0 30px;background:var(--white);border:1px solid var(--line);border-radius:14px;padding:18px 14px 14px}
+.fig svg{display:block;width:100%;height:auto;max-width:520px;margin:0 auto;font-family:var(--font-jp)}
+.fig figcaption{margin-top:10px;font-size:13px;color:var(--muted);line-height:1.7;text-align:center}
+ul.check,ul.ng{list-style:none;padding:14px 16px 6px;margin:0 0 20px;background:var(--white);border-radius:14px;border:1px solid var(--line)}
+ul.check li,ul.ng li{position:relative;padding-left:30px;margin:0 0 10px;line-height:1.7}
+ul.check li::before{content:"";position:absolute;left:0;top:.25em;width:20px;height:20px;border-radius:50%;background:var(--navy)}
+ul.check li::after{content:"";position:absolute;left:7px;top:calc(.25em + 4px);width:5px;height:9px;border:solid var(--gold);border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+ul.ng li::before{content:"";position:absolute;left:0;top:.25em;width:20px;height:20px;border-radius:50%;background:#C9404F}
+ul.ng li::after{content:"\00D7";position:absolute;left:0;top:.25em;width:20px;line-height:20px;text-align:center;color:#fff;font-weight:900;font-size:15px}
+ol.steps{list-style:none;counter-reset:st;padding:0;margin:0 0 20px}
+ol.steps li{counter-increment:st;position:relative;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:12px 14px 12px 52px;margin:0 0 10px;line-height:1.7}
+ol.steps li::before{content:counter(st);position:absolute;left:14px;top:12px;width:26px;height:26px;border-radius:50%;background:var(--navy);color:var(--gold);font-family:var(--font-en);font-weight:700;font-size:14px;line-height:26px;text-align:center}
+.alert{background:#FBEDEE;border:1px solid #F0C9CD;border-left:5px solid #C9404F;border-radius:12px;padding:14px 16px 6px;margin:0 0 22px}
+.alert .t{font-weight:900;color:#A8303E;margin:0 0 8px}
+.alert ul{margin:0 0 10px;padding-left:1.2em}
+.alert p{margin:0 0 10px;font-size:15px}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 24px}
+.cards div{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:12px 12px 10px}
+.cards b{display:block;color:var(--navy);font-size:15px;margin-bottom:4px}
+.cards b i{font-style:normal;display:table;background:var(--gold);color:var(--navy);border-radius:6px;font-size:12px;padding:1px 8px;margin:0 0 5px}
+.cards span{display:block;font-size:14px;line-height:1.65;color:#3E4352}
+.tbl{overflow-x:auto;margin:0 0 24px}
+.tbl table{width:100%;border-collapse:collapse;background:var(--white);border-radius:12px;overflow:hidden;font-size:14px;line-height:1.6}
+.tbl th,.tbl td{border-bottom:1px solid var(--line);padding:10px 10px;text-align:left;vertical-align:top}
+.tbl thead th{background:var(--navy);color:var(--on-navy);font-size:13px;font-weight:700}
+.tbl tbody th{white-space:nowrap;color:var(--navy)}
+.tbl caption{caption-side:bottom;font-size:13px;color:var(--muted);padding-top:8px;text-align:left}
 </style>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "包皮がきついと感じたら｜まず知っておきたい基本と相談の目安", "description": "包皮がきつい・狭いと感じる方に向けて、きつさを感じやすい場面、無理をしないための注意点、日常の清潔の保ち方、泌尿器科に相談する目安をまとめました。", "datePublished": "2026-09-30", "dateModified": "2026-09-30", "mainEntityOfPage": "https://luca-bloom.com/column/hohi-kitsui.html", "image": "https://luca-bloom.com/og.png", "author": {"@type": "Organization", "name": "Luca Bloom"}, "publisher": {"@type": "Organization", "name": "Luca Bloom"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "トップ", "item": "https://luca-bloom.com/"}, {"@type": "ListItem", "position": 2, "name": "コラム", "item": "https://luca-bloom.com/column/"}, {"@type": "ListItem", "position": 3, "name": "包皮がきついと感じたら｜まず知っておきたい基本と相談の目安"}]}</script>
@@ -71,11 +111,13 @@ footer.site a{color:var(--on-navy-muted);margin:0 8px}
 <h1>包皮がきついと感じたら｜まず知っておきたい基本と相談の目安</h1>
 <p class="date"><time datetime="2026-09-30">2026.09.30</time></p>
 <p>「包皮がきつい」「むこうとすると引っかかる」と感じていても、なかなか人には聞けないものです。この記事では、包皮がきついと感じたときにまず知っておきたい一般的なことを、落ち着いて整理します。体の状態の判断が必要なことは、泌尿器科に相談するのがいちばんの近道です。</p>
+<div class="points"><p class="t">この記事のポイント</p><ul><li>力任せにむかない。痛みやつっぱりを感じたら止める</li><li>ぬるま湯でやさしく洗い、よく乾かす</li><li>痛み・腫れ・出血・戻らないときは、泌尿器科へ</li></ul></div>
 <h2>包皮がきつい・狭いとはどういう状態か</h2>
 <p>包皮は、亀頭を覆っている皮膚です。包皮の先の出口(包皮口)の広さや、皮膚のつっぱり具合には個人差があります。「きつい」「狭い」と感じるのは、多くの場合、包皮口が亀頭の太さに対して小さく、むこうとすると途中で引っかかったり、つっぱる感じがしたりする状態です。</p>
+<figure class="fig"><svg viewBox="0 0 320 262" role="img" aria-label="包皮口にゆとりがある場合と、包皮口が狭い場合のイメージ図"><rect x="68" y="80" width="44" height="72" rx="3" fill="#F4EEE6" stroke="#B7AFA2" stroke-width="1.2"/><path d="M65,86 C63,58 75,40 90,40 C105,40 117,58 115,86 Q90,92 65,86Z" fill="#F1E2DC" stroke="#B7AFA2" stroke-width="1.2"/><path d="M61,152 L61,86 C59,52 65.0,34 75.0,30 L105.0,30 C115.0,34 121,52 119,86 L119,152Z" fill="#E58E9E" fill-opacity=".55" stroke="#C9707F" stroke-width="1.4"/><ellipse cx="90" cy="30" rx="15.0" ry="2.6" fill="#fff" stroke="#C9707F" stroke-width="1.4"/><rect x="208" y="80" width="44" height="72" rx="3" fill="#F4EEE6" stroke="#B7AFA2" stroke-width="1.2"/><path d="M205,86 C203,58 215,40 230,40 C245,40 257,58 255,86 Q230,92 205,86Z" fill="#F1E2DC" stroke="#B7AFA2" stroke-width="1.2"/><path d="M201,152 L201,86 C199,52 216.0,34 226.0,30 L234.0,30 C244.0,34 261,52 259,86 L259,152Z" fill="#E58E9E" fill-opacity=".55" stroke="#C9707F" stroke-width="1.4"/><ellipse cx="230" cy="30" rx="4.0" ry="2.6" fill="#fff" stroke="#C9707F" stroke-width="1.4"/><line x1="18" y1="112" x2="60" y2="112" stroke="#686D7D" stroke-width="1"/><text x="16" y="107" font-size="13" font-weight="700" fill="#C9707F" text-anchor="start">包皮</text><line x1="104" y1="30" x2="150" y2="14" stroke="#686D7D" stroke-width="1"/><text x="152" y="18" font-size="13" font-weight="700" fill="#686D7D" text-anchor="start">包皮口</text><circle cx="90" cy="186" r="11" fill="#3E9B6E"/><circle cx="90" cy="186" r="5.5" fill="none" stroke="#fff" stroke-width="2.2"/><circle cx="230" cy="186" r="11" fill="#E0A43A"/><text x="230" y="191" font-size="15" font-weight="900" fill="#fff" text-anchor="middle">!</text><text x="90" y="216" font-size="13" font-weight="700" fill="#161A29" text-anchor="middle">包皮口に</text><text x="90" y="233" font-size="13" font-weight="700" fill="#161A29" text-anchor="middle">ゆとりがある</text><text x="230" y="216" font-size="13" font-weight="700" fill="#161A29" text-anchor="middle">包皮口が</text><text x="230" y="233" font-size="13" font-weight="700" fill="#161A29" text-anchor="middle">狭い（きつい）</text><text x="230" y="252" font-size="13" font-weight="700" fill="#C9404F" text-anchor="middle">下げると引っかかりやすい</text></svg><figcaption>包皮口（包皮の先の出口）が狭いと、下げるときに亀頭のいちばん太い部分で引っかかりやすくなります（イメージ図）</figcaption></figure>
 <p>平常時はむけても、状態が変わると引っかかるという人もいれば、平常時から亀頭がほとんど見えないという人もいます。同じ「きつい」という言葉でも、感じ方や状態は人によってかなり違います。</p>
 <h2>きつさを感じやすい場面</h2>
-<ul>
+<ul class="check">
 <li>入浴時に洗おうとして、包皮を下げると途中で止まる</li>
 <li>むいた後に戻すとき、つっぱる感じがある</li>
 <li>下着の中でこすれて、違和感が出やすい</li>
@@ -84,6 +126,7 @@ footer.site a{color:var(--on-navy-muted);margin:0 8px}
 <p>こうした場面が続くと、「自分だけおかしいのでは」と不安になりがちです。ただ、包皮の状態には大きな個人差があり、同じように悩んでいる人は少なくありません。</p>
 <h2>無理にむかないことが大切</h2>
 <p>包皮がきついときにいちばん避けたいのは、力任せに下げることです。狭い包皮口を無理に通すと、皮膚が切れて出血したり、むいた包皮が亀頭の根元で締めつけて戻らなくなったりすることがあります。後者は「カントン包茎」と呼ばれ、時間がたつと腫れて戻しにくくなるため、すぐに医療機関に連絡する必要がある状態です。</p>
+<figure class="fig"><svg viewBox="0 0 320 160" role="img" aria-label="包皮を下げる量の目安。痛みやつっぱりを感じたら止める"><rect x="16" y="58" width="150" height="18" rx="9" fill="#3E9B6E"/><rect x="150" y="58" width="80" height="18" fill="#E0A43A"/><rect x="222" y="58" width="82" height="18" rx="9" fill="#C9404F"/><rect x="222" y="58" width="12" height="18" fill="#C9404F"/><line x1="150" y1="22" x2="150" y2="86" stroke="#161A29" stroke-width="2.4"/><path d="M150,22 L206,22 L198,32 L206,42 L150,42Z" fill="#E3B34E"/><text x="176" y="37" font-size="13" font-weight="900" fill="#161A29" text-anchor="middle">止める</text><text x="83" y="48" font-size="13" font-weight="900" fill="#3E9B6E" text-anchor="middle">洗ってOK</text><text x="83" y="104" font-size="13" font-weight="700" fill="#161A29" text-anchor="middle">痛み・つっぱり</text><text x="83" y="121" font-size="13" font-weight="700" fill="#161A29" text-anchor="middle">なし</text><text x="190" y="104" font-size="13" font-weight="700" fill="#9A6A12" text-anchor="middle">つっぱりを</text><text x="190" y="121" font-size="13" font-weight="700" fill="#9A6A12" text-anchor="middle">感じる</text><text x="263" y="104" font-size="13" font-weight="700" fill="#C9404F" text-anchor="middle">痛い・</text><text x="263" y="121" font-size="13" font-weight="700" fill="#C9404F" text-anchor="middle">力任せ</text><text x="16" y="150" font-size="13" font-weight="400" fill="#686D7D" text-anchor="start">包皮を下げる量 →</text></svg><figcaption>痛みやつっぱりを感じたら、そこで止めます。力任せに下げないことがいちばん大切です</figcaption></figure>
 <p>洗うときも、痛みを感じないところまでで止めてください。「今日はここまで」と自分で線を引けることが、デリケートな部分と長く付き合うための基本です。</p>
 <h2>日常で気をつけたいこと</h2>
 <h3>やさしく洗って、よく乾かす</h3>
@@ -92,7 +135,7 @@ footer.site a{color:var(--on-navy-muted);margin:0 8px}
 <p>締めつけの強い下着や、汗がこもりやすい素材は、蒸れやこすれの原因になります。綿など吸湿性のある素材で、きつすぎないサイズを選ぶと過ごしやすくなります。</p>
 <h2>泌尿器科に相談する目安</h2>
 <p>次のようなことがある場合は、自分で何とかしようとせず、泌尿器科に相談してください。</p>
-<ul>
+<ul class="check">
 <li>痛み、腫れ、赤み、かゆみが続く</li>
 <li>出血した、皮膚が切れた</li>
 <li>むいた包皮が戻らない(この場合はすぐに医療機関へ)</li>

@@ -46,18 +46,58 @@ article li{margin:0 0 6px}
 .product p{margin:0 0 12px}
 .product-label{color:var(--gold);font-weight:700;font-size:13px;letter-spacing:.08em}
 .price{font-weight:700;font-size:18px}
-.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px!important}
-.btn{display:inline-block;background:var(--gold);color:var(--navy);text-decoration:none;font-weight:700;
-padding:10px 20px;border-radius:999px}
-.btn.ghost{background:transparent;color:var(--on-navy);border:1px solid var(--on-navy-muted)}
+.btns{display:grid;gap:10px;margin-top:18px!important}
+.btn{position:relative;display:flex;align-items:center;justify-content:center;min-height:58px;padding:14px 44px;border-radius:14px;
+background:var(--gold);color:var(--navy);text-decoration:none;font-weight:900;font-size:17px;letter-spacing:.06em;
+box-shadow:0 8px 24px rgba(227,179,78,.35),inset 0 -2px 0 rgba(0,0,0,.08)}
+.btn::after{content:"";position:absolute;right:22px;top:50%;width:9px;height:9px;margin-top:-5px;border-right:2.5px solid currentColor;border-top:2.5px solid currentColor;transform:rotate(45deg)}
+.btn:active{transform:translateY(1px)}
+.btn.ghost{min-height:50px;font-size:15px;font-weight:700;background:transparent;color:var(--on-navy);border:1.5px solid var(--on-navy-muted);box-shadow:none}
 .related h2{font-size:18px;border:0;margin:40px 0 10px}
 .list{list-style:none;padding:0;margin:0}
-.list li{border-bottom:1px solid var(--line);padding:16px 0;margin:0}
-.list a{text-decoration:none;font-weight:700;display:block}
+.list li{padding:0;margin:0 0 12px}
+.list a{text-decoration:none;font-weight:700;display:block;position:relative;background:var(--white);border:1px solid var(--line);border-radius:14px;padding:16px 46px 16px 18px;line-height:1.6;box-shadow:0 2px 10px rgba(22,26,41,.05)}
+.list a::after{content:"";position:absolute;right:20px;top:50%;width:9px;height:9px;margin-top:-5px;border-right:2.5px solid var(--gold);border-top:2.5px solid var(--gold);transform:rotate(45deg)}
+.related .list a{padding:14px 44px 14px 16px}
 .list span{display:block;color:var(--muted);font-size:13px;font-weight:400;margin-top:4px}
 footer.site{background:var(--navy);color:var(--on-navy-muted);font-size:13px;padding:24px 20px;text-align:center}
 footer.site a{color:var(--on-navy-muted);margin:0 8px}
 @media(max-width:600px){h1{font-size:22px}article h2{font-size:19px}}
+
+/* ---- 図・要点・チェックリスト ---- */
+.points{background:var(--white);border:2px solid var(--gold);border-radius:14px;padding:16px 18px 10px;margin:0 0 30px}
+.points .t{font-weight:900;font-size:15px;color:var(--navy);margin:0 0 10px;letter-spacing:.04em}
+.points ul{list-style:none;padding:0;margin:0}
+.points li{position:relative;padding-left:30px;margin:0 0 10px;font-weight:700;line-height:1.6}
+.points li::before{content:"";position:absolute;left:0;top:.2em;width:20px;height:20px;border-radius:50%;background:var(--gold)}
+.points li::after{content:"";position:absolute;left:7px;top:calc(.2em + 4px);width:5px;height:9px;border:solid var(--navy);border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+.fig{margin:26px 0 30px;background:var(--white);border:1px solid var(--line);border-radius:14px;padding:18px 14px 14px}
+.fig svg{display:block;width:100%;height:auto;max-width:520px;margin:0 auto;font-family:var(--font-jp)}
+.fig figcaption{margin-top:10px;font-size:13px;color:var(--muted);line-height:1.7;text-align:center}
+ul.check,ul.ng{list-style:none;padding:14px 16px 6px;margin:0 0 20px;background:var(--white);border-radius:14px;border:1px solid var(--line)}
+ul.check li,ul.ng li{position:relative;padding-left:30px;margin:0 0 10px;line-height:1.7}
+ul.check li::before{content:"";position:absolute;left:0;top:.25em;width:20px;height:20px;border-radius:50%;background:var(--navy)}
+ul.check li::after{content:"";position:absolute;left:7px;top:calc(.25em + 4px);width:5px;height:9px;border:solid var(--gold);border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+ul.ng li::before{content:"";position:absolute;left:0;top:.25em;width:20px;height:20px;border-radius:50%;background:#C9404F}
+ul.ng li::after{content:"\00D7";position:absolute;left:0;top:.25em;width:20px;line-height:20px;text-align:center;color:#fff;font-weight:900;font-size:15px}
+ol.steps{list-style:none;counter-reset:st;padding:0;margin:0 0 20px}
+ol.steps li{counter-increment:st;position:relative;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:12px 14px 12px 52px;margin:0 0 10px;line-height:1.7}
+ol.steps li::before{content:counter(st);position:absolute;left:14px;top:12px;width:26px;height:26px;border-radius:50%;background:var(--navy);color:var(--gold);font-family:var(--font-en);font-weight:700;font-size:14px;line-height:26px;text-align:center}
+.alert{background:#FBEDEE;border:1px solid #F0C9CD;border-left:5px solid #C9404F;border-radius:12px;padding:14px 16px 6px;margin:0 0 22px}
+.alert .t{font-weight:900;color:#A8303E;margin:0 0 8px}
+.alert ul{margin:0 0 10px;padding-left:1.2em}
+.alert p{margin:0 0 10px;font-size:15px}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 24px}
+.cards div{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:12px 12px 10px}
+.cards b{display:block;color:var(--navy);font-size:15px;margin-bottom:4px}
+.cards b i{font-style:normal;display:table;background:var(--gold);color:var(--navy);border-radius:6px;font-size:12px;padding:1px 8px;margin:0 0 5px}
+.cards span{display:block;font-size:14px;line-height:1.65;color:#3E4352}
+.tbl{overflow-x:auto;margin:0 0 24px}
+.tbl table{width:100%;border-collapse:collapse;background:var(--white);border-radius:12px;overflow:hidden;font-size:14px;line-height:1.6}
+.tbl th,.tbl td{border-bottom:1px solid var(--line);padding:10px 10px;text-align:left;vertical-align:top}
+.tbl thead th{background:var(--navy);color:var(--on-navy);font-size:13px;font-weight:700}
+.tbl tbody th{white-space:nowrap;color:var(--navy)}
+.tbl caption{caption-side:bottom;font-size:13px;color:var(--muted);padding-top:8px;text-align:left}
 </style>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "仮性包茎でもきつい？｜むけるけど狭いと感じる人の悩み", "description": "仮性包茎でも包皮がきつい・狭いと感じる人は少なくありません。むけるけれど引っかかる、戻すときつっぱるといった悩みと、日常での向き合い方、相談の目安をまとめました。", "datePublished": "2026-09-30", "dateModified": "2026-09-30", "mainEntityOfPage": "https://luca-bloom.com/column/kasei-hokei-kitsui.html", "image": "https://luca-bloom.com/og.png", "author": {"@type": "Organization", "name": "Luca Bloom"}, "publisher": {"@type": "Organization", "name": "Luca Bloom"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "トップ", "item": "https://luca-bloom.com/"}, {"@type": "ListItem", "position": 2, "name": "コラム", "item": "https://luca-bloom.com/column/"}, {"@type": "ListItem", "position": 3, "name": "仮性包茎でもきつい？｜むけるけど狭いと感じる人の悩み"}]}</script>
@@ -71,11 +111,13 @@ footer.site a{color:var(--on-navy-muted);margin:0 8px}
 <h1>仮性包茎でもきつい？｜むけるけど狭いと感じる人の悩み</h1>
 <p class="date"><time datetime="2026-09-30">2026.09.30</time></p>
 <p>「自分は仮性包茎だけれど、包皮がきつい気がする」。そう感じていても、仮性包茎なら問題ないと言われがちで、悩みを口に出しにくいものです。この記事では、仮性包茎でも包皮がきついと感じる人に向けて、よくある悩みと日常での向き合い方をまとめます。</p>
+<div class="points"><p class="t">この記事のポイント</p><ul><li>仮性包茎でも、きつさの感じ方には大きな個人差がある</li><li>「むけるはず」と力を入れて下げない</li><li>痛み・腫れ・戻しにくいときは、泌尿器科へ</li></ul></div>
 <h2>仮性包茎でも「きつい」と感じることはある</h2>
 <p>仮性包茎は、手で包皮を下げれば亀頭を出せる状態を指すのが一般的です。ただ、「出せる」といっても、その出しやすさには大きな個人差があります。すっと下がる人もいれば、途中で引っかかる、つっぱる、戻しにくいと感じる人もいます。</p>
+<figure class="fig"><svg viewBox="0 0 320 244" role="img" aria-label="同じ仮性包茎でも、すっと下がる人、途中で引っかかる人、戻すときにつっぱる人がいるイメージ図"><rect x="33" y="80" width="44" height="72" rx="3" fill="#F4EEE6" stroke="#B7AFA2" stroke-width="1.2"/><path d="M30,86 C28,58 40,40 55,40 C70,40 82,58 80,86 Q55,92 30,86Z" fill="#F1E2DC" stroke="#B7AFA2" stroke-width="1.2"/><path d="M26,152 L26,86 C24,52 30.0,34 40.0,30 L70.0,30 C80.0,34 86,52 84,86 L84,152Z" fill="#E58E9E" fill-opacity=".55" stroke="#C9707F" stroke-width="1.4"/><ellipse cx="55" cy="30" rx="15.0" ry="2.6" fill="#fff" stroke="#C9707F" stroke-width="1.4"/><rect x="138" y="80" width="44" height="72" rx="3" fill="#F4EEE6" stroke="#B7AFA2" stroke-width="1.2"/><path d="M135,86 C133,58 145,40 160,40 C175,40 187,58 185,86 Q160,92 135,86Z" fill="#F1E2DC" stroke="#B7AFA2" stroke-width="1.2"/><path d="M131,152 L131,86 C129,52 143.0,34 153.0,30 L167.0,30 C177.0,34 191,52 189,86 L189,152Z" fill="#E58E9E" fill-opacity=".55" stroke="#C9707F" stroke-width="1.4"/><ellipse cx="160" cy="30" rx="7.0" ry="2.6" fill="#fff" stroke="#C9707F" stroke-width="1.4"/><rect x="243" y="80" width="44" height="72" rx="3" fill="#F4EEE6" stroke="#B7AFA2" stroke-width="1.2"/><path d="M240,86 C238,58 250,40 265,40 C280,40 292,58 290,86 Q265,92 240,86Z" fill="#F1E2DC" stroke="#B7AFA2" stroke-width="1.2"/><rect x="236" y="100" width="58" height="52" fill="#E58E9E" fill-opacity=".55" stroke="#C9707F" stroke-width="1.4"/><ellipse cx="265" cy="100" rx="31" ry="5" fill="#E58E9E" fill-opacity=".8" stroke="#C9707F" stroke-width="1.4"/><path d="M236,112 l-8,-6 M236,120 l-8,6 M294,112 l8,-6 M294,120 l8,6" stroke="#E0A43A" stroke-width="2.4" stroke-linecap="round"/><circle cx="55" cy="186" r="11" fill="#3E9B6E"/><circle cx="55" cy="186" r="5.5" fill="none" stroke="#fff" stroke-width="2.2"/><circle cx="160" cy="186" r="11" fill="#E0A43A"/><text x="160" y="191" font-size="15" font-weight="900" fill="#fff" text-anchor="middle">!</text><circle cx="265" cy="186" r="11" fill="#E0A43A"/><text x="265" y="191" font-size="15" font-weight="900" fill="#fff" text-anchor="middle">!</text><text x="55" y="216" font-size="13" font-weight="700" fill="#161A29" text-anchor="middle">すっと下がる</text><text x="160" y="216" font-size="13" font-weight="700" fill="#161A29" text-anchor="middle">途中で</text><text x="160" y="233" font-size="13" font-weight="700" fill="#161A29" text-anchor="middle">引っかかる</text><text x="265" y="216" font-size="13" font-weight="700" fill="#161A29" text-anchor="middle">戻すときに</text><text x="265" y="233" font-size="13" font-weight="700" fill="#161A29" text-anchor="middle">つっぱる</text></svg><figcaption>同じ「仮性包茎」でも、包皮口の広さやつっぱり具合は人それぞれです（イメージ図）</figcaption></figure>
 <p>同じ仮性包茎という言葉でくくられていても、包皮口の広さや皮膚のつっぱり具合は人それぞれです。「仮性だから気にしなくていい」と一律に考える必要はありません。</p>
 <h2>よくある悩み</h2>
-<ul>
+<ul class="check">
 <li>入浴時に包皮を下げると、途中で引っかかって奥まで洗いにくい</li>
 <li>むいた後に戻すとき、根元がつっぱる感じがある</li>
 <li>状態によって、むけるときとむけにくいときがある</li>
@@ -85,6 +127,7 @@ footer.site a{color:var(--on-navy-muted);margin:0 8px}
 <p>こうした悩みは、見た目にはわかりにくいぶん、一人で抱え込みがちです。けれども、同じように感じている人は決して少なくありません。</p>
 <h2>無理をしないことがいちばん大切</h2>
 <p>「むけるはずだから」と力を入れて下げるのは避けてください。きつい包皮口を無理に通すと、皮膚が切れたり、むいた包皮が亀頭の根元を締めつけて戻らなくなったりすることがあります。戻らなくなった場合は、様子を見ずにすぐ医療機関に連絡してください。</p>
+<figure class="fig"><svg viewBox="0 0 320 160" role="img" aria-label="包皮を下げる量の目安。痛みやつっぱりを感じたら止める"><rect x="16" y="58" width="150" height="18" rx="9" fill="#3E9B6E"/><rect x="150" y="58" width="80" height="18" fill="#E0A43A"/><rect x="222" y="58" width="82" height="18" rx="9" fill="#C9404F"/><rect x="222" y="58" width="12" height="18" fill="#C9404F"/><line x1="150" y1="22" x2="150" y2="86" stroke="#161A29" stroke-width="2.4"/><path d="M150,22 L206,22 L198,32 L206,42 L150,42Z" fill="#E3B34E"/><text x="176" y="37" font-size="13" font-weight="900" fill="#161A29" text-anchor="middle">止める</text><text x="83" y="48" font-size="13" font-weight="900" fill="#3E9B6E" text-anchor="middle">洗ってOK</text><text x="83" y="104" font-size="13" font-weight="700" fill="#161A29" text-anchor="middle">痛み・つっぱり</text><text x="83" y="121" font-size="13" font-weight="700" fill="#161A29" text-anchor="middle">なし</text><text x="190" y="104" font-size="13" font-weight="700" fill="#9A6A12" text-anchor="middle">つっぱりを</text><text x="190" y="121" font-size="13" font-weight="700" fill="#9A6A12" text-anchor="middle">感じる</text><text x="263" y="104" font-size="13" font-weight="700" fill="#C9404F" text-anchor="middle">痛い・</text><text x="263" y="121" font-size="13" font-weight="700" fill="#C9404F" text-anchor="middle">力任せ</text><text x="16" y="150" font-size="13" font-weight="400" fill="#686D7D" text-anchor="start">包皮を下げる量 →</text></svg><figcaption>痛みやつっぱりを感じたら、そこで止めます。力任せに下げないことがいちばん大切です</figcaption></figure>
 <p>洗うときも、つっぱりや痛みを感じたらそこで止めて構いません。届く範囲をやさしく洗い、よく流して乾かすことを優先しましょう。</p>
 <h2>日常でできる工夫</h2>
 <h3>洗い方</h3>

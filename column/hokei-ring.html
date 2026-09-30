@@ -46,18 +46,58 @@ article li{margin:0 0 6px}
 .product p{margin:0 0 12px}
 .product-label{color:var(--gold);font-weight:700;font-size:13px;letter-spacing:.08em}
 .price{font-weight:700;font-size:18px}
-.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px!important}
-.btn{display:inline-block;background:var(--gold);color:var(--navy);text-decoration:none;font-weight:700;
-padding:10px 20px;border-radius:999px}
-.btn.ghost{background:transparent;color:var(--on-navy);border:1px solid var(--on-navy-muted)}
+.btns{display:grid;gap:10px;margin-top:18px!important}
+.btn{position:relative;display:flex;align-items:center;justify-content:center;min-height:58px;padding:14px 44px;border-radius:14px;
+background:var(--gold);color:var(--navy);text-decoration:none;font-weight:900;font-size:17px;letter-spacing:.06em;
+box-shadow:0 8px 24px rgba(227,179,78,.35),inset 0 -2px 0 rgba(0,0,0,.08)}
+.btn::after{content:"";position:absolute;right:22px;top:50%;width:9px;height:9px;margin-top:-5px;border-right:2.5px solid currentColor;border-top:2.5px solid currentColor;transform:rotate(45deg)}
+.btn:active{transform:translateY(1px)}
+.btn.ghost{min-height:50px;font-size:15px;font-weight:700;background:transparent;color:var(--on-navy);border:1.5px solid var(--on-navy-muted);box-shadow:none}
 .related h2{font-size:18px;border:0;margin:40px 0 10px}
 .list{list-style:none;padding:0;margin:0}
-.list li{border-bottom:1px solid var(--line);padding:16px 0;margin:0}
-.list a{text-decoration:none;font-weight:700;display:block}
+.list li{padding:0;margin:0 0 12px}
+.list a{text-decoration:none;font-weight:700;display:block;position:relative;background:var(--white);border:1px solid var(--line);border-radius:14px;padding:16px 46px 16px 18px;line-height:1.6;box-shadow:0 2px 10px rgba(22,26,41,.05)}
+.list a::after{content:"";position:absolute;right:20px;top:50%;width:9px;height:9px;margin-top:-5px;border-right:2.5px solid var(--gold);border-top:2.5px solid var(--gold);transform:rotate(45deg)}
+.related .list a{padding:14px 44px 14px 16px}
 .list span{display:block;color:var(--muted);font-size:13px;font-weight:400;margin-top:4px}
 footer.site{background:var(--navy);color:var(--on-navy-muted);font-size:13px;padding:24px 20px;text-align:center}
 footer.site a{color:var(--on-navy-muted);margin:0 8px}
 @media(max-width:600px){h1{font-size:22px}article h2{font-size:19px}}
+
+/* ---- 図・要点・チェックリスト ---- */
+.points{background:var(--white);border:2px solid var(--gold);border-radius:14px;padding:16px 18px 10px;margin:0 0 30px}
+.points .t{font-weight:900;font-size:15px;color:var(--navy);margin:0 0 10px;letter-spacing:.04em}
+.points ul{list-style:none;padding:0;margin:0}
+.points li{position:relative;padding-left:30px;margin:0 0 10px;font-weight:700;line-height:1.6}
+.points li::before{content:"";position:absolute;left:0;top:.2em;width:20px;height:20px;border-radius:50%;background:var(--gold)}
+.points li::after{content:"";position:absolute;left:7px;top:calc(.2em + 4px);width:5px;height:9px;border:solid var(--navy);border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+.fig{margin:26px 0 30px;background:var(--white);border:1px solid var(--line);border-radius:14px;padding:18px 14px 14px}
+.fig svg{display:block;width:100%;height:auto;max-width:520px;margin:0 auto;font-family:var(--font-jp)}
+.fig figcaption{margin-top:10px;font-size:13px;color:var(--muted);line-height:1.7;text-align:center}
+ul.check,ul.ng{list-style:none;padding:14px 16px 6px;margin:0 0 20px;background:var(--white);border-radius:14px;border:1px solid var(--line)}
+ul.check li,ul.ng li{position:relative;padding-left:30px;margin:0 0 10px;line-height:1.7}
+ul.check li::before{content:"";position:absolute;left:0;top:.25em;width:20px;height:20px;border-radius:50%;background:var(--navy)}
+ul.check li::after{content:"";position:absolute;left:7px;top:calc(.25em + 4px);width:5px;height:9px;border:solid var(--gold);border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+ul.ng li::before{content:"";position:absolute;left:0;top:.25em;width:20px;height:20px;border-radius:50%;background:#C9404F}
+ul.ng li::after{content:"\00D7";position:absolute;left:0;top:.25em;width:20px;line-height:20px;text-align:center;color:#fff;font-weight:900;font-size:15px}
+ol.steps{list-style:none;counter-reset:st;padding:0;margin:0 0 20px}
+ol.steps li{counter-increment:st;position:relative;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:12px 14px 12px 52px;margin:0 0 10px;line-height:1.7}
+ol.steps li::before{content:counter(st);position:absolute;left:14px;top:12px;width:26px;height:26px;border-radius:50%;background:var(--navy);color:var(--gold);font-family:var(--font-en);font-weight:700;font-size:14px;line-height:26px;text-align:center}
+.alert{background:#FBEDEE;border:1px solid #F0C9CD;border-left:5px solid #C9404F;border-radius:12px;padding:14px 16px 6px;margin:0 0 22px}
+.alert .t{font-weight:900;color:#A8303E;margin:0 0 8px}
+.alert ul{margin:0 0 10px;padding-left:1.2em}
+.alert p{margin:0 0 10px;font-size:15px}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 24px}
+.cards div{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:12px 12px 10px}
+.cards b{display:block;color:var(--navy);font-size:15px;margin-bottom:4px}
+.cards b i{font-style:normal;display:table;background:var(--gold);color:var(--navy);border-radius:6px;font-size:12px;padding:1px 8px;margin:0 0 5px}
+.cards span{display:block;font-size:14px;line-height:1.65;color:#3E4352}
+.tbl{overflow-x:auto;margin:0 0 24px}
+.tbl table{width:100%;border-collapse:collapse;background:var(--white);border-radius:12px;overflow:hidden;font-size:14px;line-height:1.6}
+.tbl th,.tbl td{border-bottom:1px solid var(--line);padding:10px 10px;text-align:left;vertical-align:top}
+.tbl thead th{background:var(--navy);color:var(--on-navy);font-size:13px;font-weight:700}
+.tbl tbody th{white-space:nowrap;color:var(--navy)}
+.tbl caption{caption-side:bottom;font-size:13px;color:var(--muted);padding-top:8px;text-align:left}
 </style>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "包茎リングが合わない・つけられない方へ｜知っておきたいこと", "description": "包茎リングが合わない、つけられないと感じる方に向けて、リングの一般的な仕組み、合わないと感じやすい理由、使うときの注意点、泌尿器科に相談する目安をまとめました。", "datePublished": "2026-09-30", "dateModified": "2026-09-30", "mainEntityOfPage": "https://luca-bloom.com/column/hokei-ring.html", "image": "https://luca-bloom.com/og.png", "author": {"@type": "Organization", "name": "Luca Bloom"}, "publisher": {"@type": "Organization", "name": "Luca Bloom"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "トップ", "item": "https://luca-bloom.com/"}, {"@type": "ListItem", "position": 2, "name": "コラム", "item": "https://luca-bloom.com/column/"}, {"@type": "ListItem", "position": 3, "name": "包茎リングが合わない・つけられない方へ｜知っておきたいこと"}]}</script>
@@ -71,8 +111,10 @@ footer.site a{color:var(--on-navy-muted);margin:0 8px}
 <h1>包茎リングが合わない・つけられない方へ｜知っておきたいこと</h1>
 <p class="date"><time datetime="2026-09-30">2026.09.30</time></p>
 <p>包茎リングを試してみたものの、「つけられなかった」「痛くて外した」という人もいます。自分に合わなかったからといって、自分の体がおかしいわけではありません。この記事では、包茎リングの一般的な仕組みと、合わないと感じやすい理由、使うときの注意点をまとめます。記事の内容は、特定の商品を使うことを前提にしたものではありません。</p>
+<div class="points"><p class="t">この記事のポイント</p><ul><li>包茎リングは、包皮を下げて亀頭を出せることが前提</li><li>包皮口が狭い人がつけにくいのは自然なこと</li><li>痛み・しびれ・色の変化・腫れがあれば、すぐに外す</li></ul></div>
 <h2>包茎リングとは</h2>
 <p>包茎リングは、包皮を下げて亀頭を出した状態で、包皮を根元側にとどめておくための輪です。シリコンや樹脂などでできたものが多く、見た目の状態を保つ目的で使われています。つまり、使う前提として、包皮を下げて亀頭を出せることが必要になります。</p>
+<figure class="fig"><svg viewBox="0 0 320 254" role="img" aria-label="包茎リングは、包皮を下げて亀頭を出せることが前提"><rect x="40" y="80" width="44" height="72" rx="3" fill="#F4EEE6" stroke="#B7AFA2" stroke-width="1.2"/><path d="M37,86 C35,58 47,40 62,40 C77,40 89,58 87,86 Q62,92 37,86Z" fill="#F1E2DC" stroke="#B7AFA2" stroke-width="1.2"/><path d="M33,152 L33,86 C31,52 41.0,34 51.0,30 L73.0,30 C83.0,34 93,52 91,86 L91,152Z" fill="#E58E9E" fill-opacity=".55" stroke="#C9707F" stroke-width="1.4"/><ellipse cx="62" cy="30" rx="11.0" ry="2.6" fill="#fff" stroke="#C9707F" stroke-width="1.4"/><rect x="236" y="80" width="44" height="72" rx="3" fill="#F4EEE6" stroke="#B7AFA2" stroke-width="1.2"/><path d="M233,86 C231,58 243,40 258,40 C273,40 285,58 283,86 Q258,92 233,86Z" fill="#F1E2DC" stroke="#B7AFA2" stroke-width="1.2"/><rect x="229" y="100" width="58" height="52" fill="#E58E9E" fill-opacity=".55" stroke="#C9707F" stroke-width="1.4"/><ellipse cx="258" cy="100" rx="31" ry="5" fill="#E58E9E" fill-opacity=".8" stroke="#C9707F" stroke-width="1.4"/><rect x="225" y="108" width="66" height="8" rx="4" fill="#8A93A8" stroke="#5E6780" stroke-width="1"/><line x1="112" y1="96" x2="202" y2="96" stroke="#161A29" stroke-width="2.4" stroke-linecap="round"/><path d="M202.0,96.0 L195.9,99.4 L195.9,92.6Z" fill="#161A29"/><text x="157" y="84" font-size="13" font-weight="700" fill="#161A29" text-anchor="middle">下げて</text><text x="157" y="122" font-size="13" font-weight="700" fill="#161A29" text-anchor="middle">亀頭を出す</text><text x="62" y="184" font-size="14" font-weight="900" fill="#161A29" text-anchor="middle">①包皮を下げる</text><text x="258" y="184" font-size="13" font-weight="900" fill="#161A29" text-anchor="middle">②リングでとどめる</text><rect x="6" y="200" width="140" height="46" rx="10" fill="#FBEDEE" stroke="#C9404F" stroke-width="1.4"/><text x="76" y="219" font-size="13" font-weight="700" fill="#C9404F" text-anchor="middle">包皮口が狭いと、</text><text x="76" y="237" font-size="13" font-weight="700" fill="#C9404F" text-anchor="middle">ここでつまずく</text><text x="258" y="226" font-size="13" font-weight="400" fill="#686D7D" text-anchor="middle">根元側にとどめる輪</text></svg><figcaption>包茎リングは「包皮を下げて亀頭を出せる」ことが前提の道具です（イメージ図）</figcaption></figure>
 <h2>合わない・つけられないと感じやすい理由</h2>
 <h3>包皮口が狭く、そもそも亀頭を出しにくい</h3>
 <p>包皮がきつい、狭いと感じる人は、リングをつける前の段階、つまり包皮を下げて亀頭を出すところで引っかかってしまいます。この場合、リングの形や素材を変えても、つけにくさは変わりにくいと考えられます。</p>
@@ -81,7 +123,7 @@ footer.site a{color:var(--on-navy-muted);margin:0 8px}
 <h3>違和感や痛みがある</h3>
 <p>リングが当たる部分がこすれて痛い、長時間つけていると違和感がある、と感じることがあります。皮膚が敏感な人ほど、違和感を覚えやすい傾向があります。</p>
 <h2>使うときの注意点</h2>
-<ul>
+<ul class="check">
 <li>包皮を無理に下げてまでつけようとしない</li>
 <li>痛み・しびれ・色の変化・腫れを感じたら、すぐに外す(外せない場合は無理に引っ張らず、すぐに医療機関へ連絡する)</li>
 <li>就寝中など、状態を確認できない時間はつけたままにしない</li>

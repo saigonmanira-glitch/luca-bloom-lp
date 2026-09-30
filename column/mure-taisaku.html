@@ -46,18 +46,58 @@ article li{margin:0 0 6px}
 .product p{margin:0 0 12px}
 .product-label{color:var(--gold);font-weight:700;font-size:13px;letter-spacing:.08em}
 .price{font-weight:700;font-size:18px}
-.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px!important}
-.btn{display:inline-block;background:var(--gold);color:var(--navy);text-decoration:none;font-weight:700;
-padding:10px 20px;border-radius:999px}
-.btn.ghost{background:transparent;color:var(--on-navy);border:1px solid var(--on-navy-muted)}
+.btns{display:grid;gap:10px;margin-top:18px!important}
+.btn{position:relative;display:flex;align-items:center;justify-content:center;min-height:58px;padding:14px 44px;border-radius:14px;
+background:var(--gold);color:var(--navy);text-decoration:none;font-weight:900;font-size:17px;letter-spacing:.06em;
+box-shadow:0 8px 24px rgba(227,179,78,.35),inset 0 -2px 0 rgba(0,0,0,.08)}
+.btn::after{content:"";position:absolute;right:22px;top:50%;width:9px;height:9px;margin-top:-5px;border-right:2.5px solid currentColor;border-top:2.5px solid currentColor;transform:rotate(45deg)}
+.btn:active{transform:translateY(1px)}
+.btn.ghost{min-height:50px;font-size:15px;font-weight:700;background:transparent;color:var(--on-navy);border:1.5px solid var(--on-navy-muted);box-shadow:none}
 .related h2{font-size:18px;border:0;margin:40px 0 10px}
 .list{list-style:none;padding:0;margin:0}
-.list li{border-bottom:1px solid var(--line);padding:16px 0;margin:0}
-.list a{text-decoration:none;font-weight:700;display:block}
+.list li{padding:0;margin:0 0 12px}
+.list a{text-decoration:none;font-weight:700;display:block;position:relative;background:var(--white);border:1px solid var(--line);border-radius:14px;padding:16px 46px 16px 18px;line-height:1.6;box-shadow:0 2px 10px rgba(22,26,41,.05)}
+.list a::after{content:"";position:absolute;right:20px;top:50%;width:9px;height:9px;margin-top:-5px;border-right:2.5px solid var(--gold);border-top:2.5px solid var(--gold);transform:rotate(45deg)}
+.related .list a{padding:14px 44px 14px 16px}
 .list span{display:block;color:var(--muted);font-size:13px;font-weight:400;margin-top:4px}
 footer.site{background:var(--navy);color:var(--on-navy-muted);font-size:13px;padding:24px 20px;text-align:center}
 footer.site a{color:var(--on-navy-muted);margin:0 8px}
 @media(max-width:600px){h1{font-size:22px}article h2{font-size:19px}}
+
+/* ---- 図・要点・チェックリスト ---- */
+.points{background:var(--white);border:2px solid var(--gold);border-radius:14px;padding:16px 18px 10px;margin:0 0 30px}
+.points .t{font-weight:900;font-size:15px;color:var(--navy);margin:0 0 10px;letter-spacing:.04em}
+.points ul{list-style:none;padding:0;margin:0}
+.points li{position:relative;padding-left:30px;margin:0 0 10px;font-weight:700;line-height:1.6}
+.points li::before{content:"";position:absolute;left:0;top:.2em;width:20px;height:20px;border-radius:50%;background:var(--gold)}
+.points li::after{content:"";position:absolute;left:7px;top:calc(.2em + 4px);width:5px;height:9px;border:solid var(--navy);border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+.fig{margin:26px 0 30px;background:var(--white);border:1px solid var(--line);border-radius:14px;padding:18px 14px 14px}
+.fig svg{display:block;width:100%;height:auto;max-width:520px;margin:0 auto;font-family:var(--font-jp)}
+.fig figcaption{margin-top:10px;font-size:13px;color:var(--muted);line-height:1.7;text-align:center}
+ul.check,ul.ng{list-style:none;padding:14px 16px 6px;margin:0 0 20px;background:var(--white);border-radius:14px;border:1px solid var(--line)}
+ul.check li,ul.ng li{position:relative;padding-left:30px;margin:0 0 10px;line-height:1.7}
+ul.check li::before{content:"";position:absolute;left:0;top:.25em;width:20px;height:20px;border-radius:50%;background:var(--navy)}
+ul.check li::after{content:"";position:absolute;left:7px;top:calc(.25em + 4px);width:5px;height:9px;border:solid var(--gold);border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+ul.ng li::before{content:"";position:absolute;left:0;top:.25em;width:20px;height:20px;border-radius:50%;background:#C9404F}
+ul.ng li::after{content:"\00D7";position:absolute;left:0;top:.25em;width:20px;line-height:20px;text-align:center;color:#fff;font-weight:900;font-size:15px}
+ol.steps{list-style:none;counter-reset:st;padding:0;margin:0 0 20px}
+ol.steps li{counter-increment:st;position:relative;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:12px 14px 12px 52px;margin:0 0 10px;line-height:1.7}
+ol.steps li::before{content:counter(st);position:absolute;left:14px;top:12px;width:26px;height:26px;border-radius:50%;background:var(--navy);color:var(--gold);font-family:var(--font-en);font-weight:700;font-size:14px;line-height:26px;text-align:center}
+.alert{background:#FBEDEE;border:1px solid #F0C9CD;border-left:5px solid #C9404F;border-radius:12px;padding:14px 16px 6px;margin:0 0 22px}
+.alert .t{font-weight:900;color:#A8303E;margin:0 0 8px}
+.alert ul{margin:0 0 10px;padding-left:1.2em}
+.alert p{margin:0 0 10px;font-size:15px}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 24px}
+.cards div{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:12px 12px 10px}
+.cards b{display:block;color:var(--navy);font-size:15px;margin-bottom:4px}
+.cards b i{font-style:normal;display:table;background:var(--gold);color:var(--navy);border-radius:6px;font-size:12px;padding:1px 8px;margin:0 0 5px}
+.cards span{display:block;font-size:14px;line-height:1.65;color:#3E4352}
+.tbl{overflow-x:auto;margin:0 0 24px}
+.tbl table{width:100%;border-collapse:collapse;background:var(--white);border-radius:12px;overflow:hidden;font-size:14px;line-height:1.6}
+.tbl th,.tbl td{border-bottom:1px solid var(--line);padding:10px 10px;text-align:left;vertical-align:top}
+.tbl thead th{background:var(--navy);color:var(--on-navy);font-size:13px;font-weight:700}
+.tbl tbody th{white-space:nowrap;color:var(--navy)}
+.tbl caption{caption-side:bottom;font-size:13px;color:var(--muted);padding-top:8px;text-align:left}
 </style>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "男性のデリケートゾーンの蒸れ対策｜下着選びと日常の工夫", "description": "男性のデリケートゾーンの蒸れが気になる方に向けて、蒸れやすい理由、下着の素材とサイズの選び方、夏場や長時間の座り仕事で役立つ日常の工夫をまとめました。", "datePublished": "2026-09-30", "dateModified": "2026-09-30", "mainEntityOfPage": "https://luca-bloom.com/column/mure-taisaku.html", "image": "https://luca-bloom.com/og.png", "author": {"@type": "Organization", "name": "Luca Bloom"}, "publisher": {"@type": "Organization", "name": "Luca Bloom"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "トップ", "item": "https://luca-bloom.com/"}, {"@type": "ListItem", "position": 2, "name": "コラム", "item": "https://luca-bloom.com/column/"}, {"@type": "ListItem", "position": 3, "name": "男性のデリケートゾーンの蒸れ対策｜下着選びと日常の工夫"}]}</script>
@@ -71,19 +111,23 @@ footer.site a{color:var(--on-navy-muted);margin:0 8px}
 <h1>男性のデリケートゾーンの蒸れ対策｜下着選びと日常の工夫</h1>
 <p class="date"><time datetime="2026-09-30">2026.09.30</time></p>
 <p>夏場や長時間の座り仕事で、デリケートゾーンが蒸れて不快に感じることはよくあります。蒸れは、においやかゆみ、こすれの原因にもなります。この記事では、男性のデリケートゾーンが蒸れやすい理由と、下着選びや日常でできる工夫をまとめます。</p>
+<div class="points"><p class="t">この記事のポイント</p><ul><li>綿など汗を吸う素材で、締めつけないサイズを選ぶ</li><li>長時間座るときは、1時間に1回程度立つ</li><li>汗をかいたら着替え、入浴後はよく乾かす</li></ul></div>
 <h2>デリケートゾーンが蒸れやすい理由</h2>
 <p>股の部分は、太ももと体に挟まれていて風が通りにくく、汗腺も多い場所です。さらに下着やズボンで覆われているため、汗や湿気がこもりやすくなります。包皮に覆われている部分は、特に湿った状態が続きやすく、においや不快感につながりやすいのが特徴です。</p>
+<figure class="fig"><svg viewBox="0 0 320 200" role="img" aria-label="デリケートゾーンが蒸れやすい3つの理由"><rect x="8" y="12" width="96" height="58" rx="10" fill="#fff" stroke="#161A29" stroke-width="1.4"/><text x="56" y="36" font-size="13" font-weight="700" fill="#161A29" text-anchor="middle">風が</text><text x="56" y="54" font-size="13" font-weight="700" fill="#161A29" text-anchor="middle">通りにくい</text><rect x="112" y="12" width="96" height="58" rx="10" fill="#fff" stroke="#161A29" stroke-width="1.4"/><text x="160" y="36" font-size="13" font-weight="700" fill="#161A29" text-anchor="middle">汗腺が</text><text x="160" y="54" font-size="13" font-weight="700" fill="#161A29" text-anchor="middle">多い</text><rect x="216" y="12" width="96" height="58" rx="10" fill="#fff" stroke="#161A29" stroke-width="1.4"/><text x="264" y="36" font-size="13" font-weight="700" fill="#161A29" text-anchor="middle">下着やズボン</text><text x="264" y="54" font-size="13" font-weight="700" fill="#161A29" text-anchor="middle">で覆われる</text><line x1="56" y1="74" x2="130" y2="116" stroke="#686D7D" stroke-width="2" stroke-linecap="round"/><path d="M130.0,116.0 L123.0,115.9 L126.3,110.0Z" fill="#686D7D"/><line x1="160" y1="74" x2="160" y2="112" stroke="#686D7D" stroke-width="2" stroke-linecap="round"/><path d="M160.0,112.0 L156.6,105.9 L163.4,105.9Z" fill="#686D7D"/><line x1="264" y1="74" x2="190" y2="116" stroke="#686D7D" stroke-width="2" stroke-linecap="round"/><path d="M190.0,116.0 L193.7,110.0 L197.0,115.9Z" fill="#686D7D"/><rect x="100" y="118" width="120" height="44" rx="10" fill="#FBEDEE" stroke="#C9404F" stroke-width="1.4"/><text x="160" y="146" font-size="15" font-weight="900" fill="#C9404F" text-anchor="middle">蒸れやすい</text><text x="160" y="190" font-size="13" font-weight="400" fill="#686D7D" text-anchor="middle">包皮に覆われた部分は、特に湿りやすい</text></svg><figcaption>デリケートゾーンが蒸れやすい3つの理由</figcaption></figure>
 <h2>下着の選び方</h2>
 <h3>素材</h3>
 <p>綿は汗を吸いやすく、肌ざわりもやわらかいため、日常使いに向いています。運動時など汗を多くかく場面では、汗を素早く逃がす機能性素材を選ぶのも一つの方法です。どちらの場合も、自分の肌に合うかどうかを優先してください。</p>
+<div class="tbl"><table><thead><tr><th>素材</th><th>特長</th><th>向いている場面</th></tr></thead><tbody><tr><th>綿</th><td>汗を吸いやすく、肌ざわりがやわらかい</td><td>日常使い</td></tr><tr><th>機能性素材</th><td>汗を素早く逃がす</td><td>運動時など、汗を多くかく場面</td></tr></tbody></table></div>
 <h3>サイズと形</h3>
-<ul>
+<ul class="check">
 <li>締めつけの強すぎないサイズを選ぶ</li>
 <li>ゴムの跡が強く残るものは避ける</li>
 <li>ブリーフ・ボクサー・トランクスなど、自分が蒸れにくい形を試してみる</li>
 </ul>
 <p>形によって、通気性や密着感は大きく違います。季節や過ごし方に合わせて使い分けるのもよい方法です。</p>
 <h2>日常でできる工夫</h2>
+<figure class="fig"><svg viewBox="0 0 320 106" role="img" aria-label="1時間に1回程度立ち上がる"><rect x="16" y="40" width="84" height="22" rx="6" fill="#DCE6F2" stroke="#8FA3BF"/><text x="58" y="56" font-size="13" font-weight="700" fill="#161A29" text-anchor="middle">座る60分</text><circle cx="108" cy="26" r="4.5" fill="#E3B34E"/><path d="M108,31 V50 M108,38 l-6,6 M108,38 l6,6 M108,50 l-5,11 M108,50 l5,11" stroke="#E3B34E" stroke-width="3" stroke-linecap="round"/><rect x="116" y="40" width="84" height="22" rx="6" fill="#DCE6F2" stroke="#8FA3BF"/><text x="158" y="56" font-size="13" font-weight="700" fill="#161A29" text-anchor="middle">座る60分</text><circle cx="208" cy="26" r="4.5" fill="#E3B34E"/><path d="M208,31 V50 M208,38 l-6,6 M208,38 l6,6 M208,50 l-5,11 M208,50 l5,11" stroke="#E3B34E" stroke-width="3" stroke-linecap="round"/><rect x="216" y="40" width="84" height="22" rx="6" fill="#DCE6F2" stroke="#8FA3BF"/><text x="258" y="56" font-size="13" font-weight="700" fill="#161A29" text-anchor="middle">座る60分</text><circle cx="308" cy="26" r="4.5" fill="#E3B34E"/><path d="M308,31 V50 M308,38 l-6,6 M308,38 l6,6 M308,50 l-5,11 M308,50 l5,11" stroke="#E3B34E" stroke-width="3" stroke-linecap="round"/><text x="160" y="96" font-size="14" font-weight="700" fill="#161A29" text-anchor="middle">1時間に1回程度、立ち上がって体を動かす</text></svg><figcaption>こもった熱や湿気を逃がす、座り仕事や運転のときの工夫</figcaption></figure>
 <h3>長時間座るときは、ときどき立つ</h3>
 <p>デスクワークや車の運転で座りっぱなしだと、股の部分に熱がこもります。1時間に1回程度立ち上がって体を動かすだけでも、こもった熱や湿気を逃がせます。</p>
 <h3>汗をかいたら着替える</h3>
@@ -95,6 +139,7 @@ footer.site a{color:var(--on-navy-muted);margin:0 8px}
 <h2>泌尿器科や皮膚科に相談する目安</h2>
 <p>蒸れに気をつけていても、かゆみや赤みが続く、皮膚がただれる、痛みがある、においが強いといった場合は、皮膚の炎症などが関係していることがあります。自己流の対策で済ませず、泌尿器科や皮膚科に相談してください。</p>
 <h2>季節ごとの注意点</h2>
+<div class="cards"><div><b><i>夏</i>いちばん蒸れやすい</b><span>替えの下着を持ち歩く、昼休みに汗を拭く</span></div><div><b><i>梅雨</i>生乾きに注意</b><span>部屋干しは風を当てて、しっかり乾かしてからはく</span></div><div><b><i>冬</i>厚着に注意</b><span>暖房の効いた室内では、重ね着を調整する</span></div><div><b><i>運動時</i>汗を逃がす</b><span>運動用の下着を選び、運動後は早めにシャワーと着替え</span></div></div>
 <h3>夏</h3>
 <p>気温と湿度が高い夏は、1年でいちばん蒸れやすい季節です。通勤や外回りで汗をかく人は、替えの下着を持ち歩く、昼休みに汗を拭くなど、こまめな対策が役立ちます。</p>
 <h3>冬</h3>

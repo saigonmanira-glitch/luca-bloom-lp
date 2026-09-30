@@ -46,18 +46,58 @@ article li{margin:0 0 6px}
 .product p{margin:0 0 12px}
 .product-label{color:var(--gold);font-weight:700;font-size:13px;letter-spacing:.08em}
 .price{font-weight:700;font-size:18px}
-.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px!important}
-.btn{display:inline-block;background:var(--gold);color:var(--navy);text-decoration:none;font-weight:700;
-padding:10px 20px;border-radius:999px}
-.btn.ghost{background:transparent;color:var(--on-navy);border:1px solid var(--on-navy-muted)}
+.btns{display:grid;gap:10px;margin-top:18px!important}
+.btn{position:relative;display:flex;align-items:center;justify-content:center;min-height:58px;padding:14px 44px;border-radius:14px;
+background:var(--gold);color:var(--navy);text-decoration:none;font-weight:900;font-size:17px;letter-spacing:.06em;
+box-shadow:0 8px 24px rgba(227,179,78,.35),inset 0 -2px 0 rgba(0,0,0,.08)}
+.btn::after{content:"";position:absolute;right:22px;top:50%;width:9px;height:9px;margin-top:-5px;border-right:2.5px solid currentColor;border-top:2.5px solid currentColor;transform:rotate(45deg)}
+.btn:active{transform:translateY(1px)}
+.btn.ghost{min-height:50px;font-size:15px;font-weight:700;background:transparent;color:var(--on-navy);border:1.5px solid var(--on-navy-muted);box-shadow:none}
 .related h2{font-size:18px;border:0;margin:40px 0 10px}
 .list{list-style:none;padding:0;margin:0}
-.list li{border-bottom:1px solid var(--line);padding:16px 0;margin:0}
-.list a{text-decoration:none;font-weight:700;display:block}
+.list li{padding:0;margin:0 0 12px}
+.list a{text-decoration:none;font-weight:700;display:block;position:relative;background:var(--white);border:1px solid var(--line);border-radius:14px;padding:16px 46px 16px 18px;line-height:1.6;box-shadow:0 2px 10px rgba(22,26,41,.05)}
+.list a::after{content:"";position:absolute;right:20px;top:50%;width:9px;height:9px;margin-top:-5px;border-right:2.5px solid var(--gold);border-top:2.5px solid var(--gold);transform:rotate(45deg)}
+.related .list a{padding:14px 44px 14px 16px}
 .list span{display:block;color:var(--muted);font-size:13px;font-weight:400;margin-top:4px}
 footer.site{background:var(--navy);color:var(--on-navy-muted);font-size:13px;padding:24px 20px;text-align:center}
 footer.site a{color:var(--on-navy-muted);margin:0 8px}
 @media(max-width:600px){h1{font-size:22px}article h2{font-size:19px}}
+
+/* ---- 図・要点・チェックリスト ---- */
+.points{background:var(--white);border:2px solid var(--gold);border-radius:14px;padding:16px 18px 10px;margin:0 0 30px}
+.points .t{font-weight:900;font-size:15px;color:var(--navy);margin:0 0 10px;letter-spacing:.04em}
+.points ul{list-style:none;padding:0;margin:0}
+.points li{position:relative;padding-left:30px;margin:0 0 10px;font-weight:700;line-height:1.6}
+.points li::before{content:"";position:absolute;left:0;top:.2em;width:20px;height:20px;border-radius:50%;background:var(--gold)}
+.points li::after{content:"";position:absolute;left:7px;top:calc(.2em + 4px);width:5px;height:9px;border:solid var(--navy);border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+.fig{margin:26px 0 30px;background:var(--white);border:1px solid var(--line);border-radius:14px;padding:18px 14px 14px}
+.fig svg{display:block;width:100%;height:auto;max-width:520px;margin:0 auto;font-family:var(--font-jp)}
+.fig figcaption{margin-top:10px;font-size:13px;color:var(--muted);line-height:1.7;text-align:center}
+ul.check,ul.ng{list-style:none;padding:14px 16px 6px;margin:0 0 20px;background:var(--white);border-radius:14px;border:1px solid var(--line)}
+ul.check li,ul.ng li{position:relative;padding-left:30px;margin:0 0 10px;line-height:1.7}
+ul.check li::before{content:"";position:absolute;left:0;top:.25em;width:20px;height:20px;border-radius:50%;background:var(--navy)}
+ul.check li::after{content:"";position:absolute;left:7px;top:calc(.25em + 4px);width:5px;height:9px;border:solid var(--gold);border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+ul.ng li::before{content:"";position:absolute;left:0;top:.25em;width:20px;height:20px;border-radius:50%;background:#C9404F}
+ul.ng li::after{content:"\00D7";position:absolute;left:0;top:.25em;width:20px;line-height:20px;text-align:center;color:#fff;font-weight:900;font-size:15px}
+ol.steps{list-style:none;counter-reset:st;padding:0;margin:0 0 20px}
+ol.steps li{counter-increment:st;position:relative;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:12px 14px 12px 52px;margin:0 0 10px;line-height:1.7}
+ol.steps li::before{content:counter(st);position:absolute;left:14px;top:12px;width:26px;height:26px;border-radius:50%;background:var(--navy);color:var(--gold);font-family:var(--font-en);font-weight:700;font-size:14px;line-height:26px;text-align:center}
+.alert{background:#FBEDEE;border:1px solid #F0C9CD;border-left:5px solid #C9404F;border-radius:12px;padding:14px 16px 6px;margin:0 0 22px}
+.alert .t{font-weight:900;color:#A8303E;margin:0 0 8px}
+.alert ul{margin:0 0 10px;padding-left:1.2em}
+.alert p{margin:0 0 10px;font-size:15px}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 24px}
+.cards div{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:12px 12px 10px}
+.cards b{display:block;color:var(--navy);font-size:15px;margin-bottom:4px}
+.cards b i{font-style:normal;display:table;background:var(--gold);color:var(--navy);border-radius:6px;font-size:12px;padding:1px 8px;margin:0 0 5px}
+.cards span{display:block;font-size:14px;line-height:1.65;color:#3E4352}
+.tbl{overflow-x:auto;margin:0 0 24px}
+.tbl table{width:100%;border-collapse:collapse;background:var(--white);border-radius:12px;overflow:hidden;font-size:14px;line-height:1.6}
+.tbl th,.tbl td{border-bottom:1px solid var(--line);padding:10px 10px;text-align:left;vertical-align:top}
+.tbl thead th{background:var(--navy);color:var(--on-navy);font-size:13px;font-weight:700}
+.tbl tbody th{white-space:nowrap;color:var(--navy)}
+.tbl caption{caption-side:bottom;font-size:13px;color:var(--muted);padding-top:8px;text-align:left}
 </style>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "泌尿器科が恥ずかしい方へ｜受診の流れと気持ちの整え方", "description": "包皮のことで泌尿器科に行くのが恥ずかしい方に向けて、予約から問診・診察までの一般的な流れと、恥ずかしさを和らげる考え方、受診前の準備をまとめました。", "datePublished": "2026-09-30", "dateModified": "2026-09-30", "mainEntityOfPage": "https://luca-bloom.com/column/jushin-nagare.html", "image": "https://luca-bloom.com/og.png", "author": {"@type": "Organization", "name": "Luca Bloom"}, "publisher": {"@type": "Organization", "name": "Luca Bloom"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "トップ", "item": "https://luca-bloom.com/"}, {"@type": "ListItem", "position": 2, "name": "コラム", "item": "https://luca-bloom.com/column/"}, {"@type": "ListItem", "position": 3, "name": "泌尿器科が恥ずかしい方へ｜受診の流れと気持ちの整え方"}]}</script>
@@ -71,9 +111,11 @@ footer.site a{color:var(--on-navy-muted);margin:0 8px}
 <h1>泌尿器科が恥ずかしい方へ｜受診の流れと気持ちの整え方</h1>
 <p class="date"><time datetime="2026-09-30">2026.09.30</time></p>
 <p>包皮のことが気になっていても、「泌尿器科に行くのは恥ずかしい」と感じて、受診をためらう人は少なくありません。何をされるのかわからないことが、恥ずかしさや不安を大きくしている面もあります。この記事では、泌尿器科の一般的な受診の流れと、気持ちを整えるための考え方をまとめます。</p>
+<div class="points"><p class="t">この記事のポイント</p><ul><li>受診は「予約→問診票→会話→診察→説明」の流れが一般的</li><li>言いにくいことは、問診票やメモで伝えられる</li><li>医師にとって、包皮の相談は日常的なこと</li></ul></div>
 <h2>恥ずかしいと感じるのは自然なこと</h2>
 <p>デリケートな部分を人に見せることに抵抗を感じるのは、ごく自然なことです。ただ、泌尿器科の医師や看護師にとって、包皮や性器の相談は毎日の仕事の一部です。あなたが思っているほど、相手は特別なこととして受け止めていません。</p>
 <h2>受診の一般的な流れ</h2>
+<figure class="fig"><svg viewBox="0 0 320 276" role="img" aria-label="泌尿器科の受診の流れ5ステップ"><line x1="30" y1="24" x2="30" y2="256" stroke="#E3B34E" stroke-width="3"/><circle cx="30" cy="24" r="15" fill="#161A29"/><text x="30" y="29" font-size="14" font-weight="700" fill="#E3B34E" text-anchor="middle">1</text><text x="56" y="22" font-size="15" font-weight="900" fill="#161A29" text-anchor="start">予約</text><text x="56" y="41" font-size="13" font-weight="400" fill="#3E4352" text-anchor="start">電話は「包皮のことで相談」で十分</text><circle cx="30" cy="82" r="15" fill="#161A29"/><text x="30" y="87" font-size="14" font-weight="700" fill="#E3B34E" text-anchor="middle">2</text><text x="56" y="80" font-size="15" font-weight="900" fill="#161A29" text-anchor="start">受付・問診票</text><text x="56" y="99" font-size="13" font-weight="400" fill="#3E4352" text-anchor="start">言いにくいことは問診票に書く</text><circle cx="30" cy="140" r="15" fill="#161A29"/><text x="30" y="145" font-size="14" font-weight="700" fill="#E3B34E" text-anchor="middle">3</text><text x="56" y="138" font-size="15" font-weight="900" fill="#161A29" text-anchor="start">医師との会話</text><text x="56" y="157" font-size="13" font-weight="400" fill="#3E4352" text-anchor="start">困っていることをそのまま伝える</text><circle cx="30" cy="198" r="15" fill="#161A29"/><text x="30" y="203" font-size="14" font-weight="700" fill="#E3B34E" text-anchor="middle">4</text><text x="56" y="196" font-size="15" font-weight="900" fill="#161A29" text-anchor="start">診察</text><text x="56" y="215" font-size="13" font-weight="400" fill="#3E4352" text-anchor="start">必要に応じて目で確認。短時間が多い</text><circle cx="30" cy="256" r="15" fill="#161A29"/><text x="30" y="261" font-size="14" font-weight="700" fill="#E3B34E" text-anchor="middle">5</text><text x="56" y="254" font-size="15" font-weight="900" fill="#161A29" text-anchor="start">説明・会計</text><text x="56" y="273" font-size="13" font-weight="400" fill="#3E4352" text-anchor="start">わからないことは遠慮せず聞き返す</text></svg><figcaption>泌尿器科の一般的な受診の流れ</figcaption></figure>
 <h3>1. 病院を探して予約する</h3>
 <p>自宅や職場から通いやすい泌尿器科を探します。ホームページで診療内容や予約方法を確認し、予約制の場合は電話やウェブで予約します。電話で症状を細かく話す必要はなく、「包皮のことで相談したい」と伝えれば十分です。</p>
 <h3>2. 受付と問診票</h3>
@@ -85,7 +127,7 @@ footer.site a{color:var(--on-navy-muted);margin:0 8px}
 <h3>5. 説明と会計</h3>
 <p>診察の後、今の状態と、日常で気をつけること、必要な対応について説明があります。わからないことは遠慮せず聞き返しましょう。費用は内容によって異なるため、気になる場合は事前に病院へ確認しておくと安心です。</p>
 <h2>恥ずかしさを和らげる考え方</h2>
-<ul>
+<ul class="check">
 <li>医師にとっては日常的な相談だと知っておく</li>
 <li>言いにくいことは問診票やメモで伝える</li>
 <li>男性医師が安心な場合は、病院のホームページで医師を確認する</li>
@@ -94,6 +136,7 @@ footer.site a{color:var(--on-navy-muted);margin:0 8px}
 <p>受診をためらって不安を抱え続けるより、一度相談して自分の状態を知るほうが、気持ちはずっと楽になります。</p>
 <h2>受診前の準備</h2>
 <p>マイナ保険証(または資格確認書)、気になっていることのメモ、普段の洗い方や試したことを簡単にまとめておきましょう。受診当日は、いつも通り入浴して清潔にしておけば十分です。</p>
+<div class="cards"><div><b><i>持ち物</i>保険証</b><span>マイナ保険証、または資格確認書</span></div><div><b><i>持ち物</i>メモ</b><span>いつから、どんなことが気になっているか</span></div><div><b><i>メモ</i>普段のこと</b><span>いつもの洗い方や、これまで試したこと</span></div><div><b><i>当日</i>いつも通り</b><span>いつも通り入浴して、清潔にしておけば十分</span></div></div>
 <h2>受診した人が感じやすいこと</h2>
 <p>実際に相談してみると、思っていたより短い時間で終わったと感じる人もいます。長い間ひとりで抱えていた不安が、医師のひと言で軽くなることもあります。</p>
 <p>もちろん、診察の内容や説明は人によって異なります。説明を聞いてもよくわからなかった場合は、遠慮せずにもう一度聞いてください。持ち帰って考えたいことがあれば、次の受診のときに質問してもかまいません。</p>

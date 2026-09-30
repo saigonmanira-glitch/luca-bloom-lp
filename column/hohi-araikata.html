@@ -46,18 +46,58 @@ article li{margin:0 0 6px}
 .product p{margin:0 0 12px}
 .product-label{color:var(--gold);font-weight:700;font-size:13px;letter-spacing:.08em}
 .price{font-weight:700;font-size:18px}
-.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px!important}
-.btn{display:inline-block;background:var(--gold);color:var(--navy);text-decoration:none;font-weight:700;
-padding:10px 20px;border-radius:999px}
-.btn.ghost{background:transparent;color:var(--on-navy);border:1px solid var(--on-navy-muted)}
+.btns{display:grid;gap:10px;margin-top:18px!important}
+.btn{position:relative;display:flex;align-items:center;justify-content:center;min-height:58px;padding:14px 44px;border-radius:14px;
+background:var(--gold);color:var(--navy);text-decoration:none;font-weight:900;font-size:17px;letter-spacing:.06em;
+box-shadow:0 8px 24px rgba(227,179,78,.35),inset 0 -2px 0 rgba(0,0,0,.08)}
+.btn::after{content:"";position:absolute;right:22px;top:50%;width:9px;height:9px;margin-top:-5px;border-right:2.5px solid currentColor;border-top:2.5px solid currentColor;transform:rotate(45deg)}
+.btn:active{transform:translateY(1px)}
+.btn.ghost{min-height:50px;font-size:15px;font-weight:700;background:transparent;color:var(--on-navy);border:1.5px solid var(--on-navy-muted);box-shadow:none}
 .related h2{font-size:18px;border:0;margin:40px 0 10px}
 .list{list-style:none;padding:0;margin:0}
-.list li{border-bottom:1px solid var(--line);padding:16px 0;margin:0}
-.list a{text-decoration:none;font-weight:700;display:block}
+.list li{padding:0;margin:0 0 12px}
+.list a{text-decoration:none;font-weight:700;display:block;position:relative;background:var(--white);border:1px solid var(--line);border-radius:14px;padding:16px 46px 16px 18px;line-height:1.6;box-shadow:0 2px 10px rgba(22,26,41,.05)}
+.list a::after{content:"";position:absolute;right:20px;top:50%;width:9px;height:9px;margin-top:-5px;border-right:2.5px solid var(--gold);border-top:2.5px solid var(--gold);transform:rotate(45deg)}
+.related .list a{padding:14px 44px 14px 16px}
 .list span{display:block;color:var(--muted);font-size:13px;font-weight:400;margin-top:4px}
 footer.site{background:var(--navy);color:var(--on-navy-muted);font-size:13px;padding:24px 20px;text-align:center}
 footer.site a{color:var(--on-navy-muted);margin:0 8px}
 @media(max-width:600px){h1{font-size:22px}article h2{font-size:19px}}
+
+/* ---- 図・要点・チェックリスト ---- */
+.points{background:var(--white);border:2px solid var(--gold);border-radius:14px;padding:16px 18px 10px;margin:0 0 30px}
+.points .t{font-weight:900;font-size:15px;color:var(--navy);margin:0 0 10px;letter-spacing:.04em}
+.points ul{list-style:none;padding:0;margin:0}
+.points li{position:relative;padding-left:30px;margin:0 0 10px;font-weight:700;line-height:1.6}
+.points li::before{content:"";position:absolute;left:0;top:.2em;width:20px;height:20px;border-radius:50%;background:var(--gold)}
+.points li::after{content:"";position:absolute;left:7px;top:calc(.2em + 4px);width:5px;height:9px;border:solid var(--navy);border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+.fig{margin:26px 0 30px;background:var(--white);border:1px solid var(--line);border-radius:14px;padding:18px 14px 14px}
+.fig svg{display:block;width:100%;height:auto;max-width:520px;margin:0 auto;font-family:var(--font-jp)}
+.fig figcaption{margin-top:10px;font-size:13px;color:var(--muted);line-height:1.7;text-align:center}
+ul.check,ul.ng{list-style:none;padding:14px 16px 6px;margin:0 0 20px;background:var(--white);border-radius:14px;border:1px solid var(--line)}
+ul.check li,ul.ng li{position:relative;padding-left:30px;margin:0 0 10px;line-height:1.7}
+ul.check li::before{content:"";position:absolute;left:0;top:.25em;width:20px;height:20px;border-radius:50%;background:var(--navy)}
+ul.check li::after{content:"";position:absolute;left:7px;top:calc(.25em + 4px);width:5px;height:9px;border:solid var(--gold);border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+ul.ng li::before{content:"";position:absolute;left:0;top:.25em;width:20px;height:20px;border-radius:50%;background:#C9404F}
+ul.ng li::after{content:"\00D7";position:absolute;left:0;top:.25em;width:20px;line-height:20px;text-align:center;color:#fff;font-weight:900;font-size:15px}
+ol.steps{list-style:none;counter-reset:st;padding:0;margin:0 0 20px}
+ol.steps li{counter-increment:st;position:relative;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:12px 14px 12px 52px;margin:0 0 10px;line-height:1.7}
+ol.steps li::before{content:counter(st);position:absolute;left:14px;top:12px;width:26px;height:26px;border-radius:50%;background:var(--navy);color:var(--gold);font-family:var(--font-en);font-weight:700;font-size:14px;line-height:26px;text-align:center}
+.alert{background:#FBEDEE;border:1px solid #F0C9CD;border-left:5px solid #C9404F;border-radius:12px;padding:14px 16px 6px;margin:0 0 22px}
+.alert .t{font-weight:900;color:#A8303E;margin:0 0 8px}
+.alert ul{margin:0 0 10px;padding-left:1.2em}
+.alert p{margin:0 0 10px;font-size:15px}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 24px}
+.cards div{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:12px 12px 10px}
+.cards b{display:block;color:var(--navy);font-size:15px;margin-bottom:4px}
+.cards b i{font-style:normal;display:table;background:var(--gold);color:var(--navy);border-radius:6px;font-size:12px;padding:1px 8px;margin:0 0 5px}
+.cards span{display:block;font-size:14px;line-height:1.65;color:#3E4352}
+.tbl{overflow-x:auto;margin:0 0 24px}
+.tbl table{width:100%;border-collapse:collapse;background:var(--white);border-radius:12px;overflow:hidden;font-size:14px;line-height:1.6}
+.tbl th,.tbl td{border-bottom:1px solid var(--line);padding:10px 10px;text-align:left;vertical-align:top}
+.tbl thead th{background:var(--navy);color:var(--on-navy);font-size:13px;font-weight:700}
+.tbl tbody th{white-space:nowrap;color:var(--navy)}
+.tbl caption{caption-side:bottom;font-size:13px;color:var(--muted);padding-top:8px;text-align:left}
 </style>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "包皮が狭い人の洗い方｜毎日できる清潔の保ち方", "description": "包皮が狭い・きついと感じる方に向けて、毎日の入浴でできるやさしい洗い方、石けんの選び方、洗った後の乾かし方、洗うときに避けたいことをまとめました。", "datePublished": "2026-09-30", "dateModified": "2026-09-30", "mainEntityOfPage": "https://luca-bloom.com/column/hohi-araikata.html", "image": "https://luca-bloom.com/og.png", "author": {"@type": "Organization", "name": "Luca Bloom"}, "publisher": {"@type": "Organization", "name": "Luca Bloom"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "トップ", "item": "https://luca-bloom.com/"}, {"@type": "ListItem", "position": 2, "name": "コラム", "item": "https://luca-bloom.com/column/"}, {"@type": "ListItem", "position": 3, "name": "包皮が狭い人の洗い方｜毎日できる清潔の保ち方"}]}</script>
@@ -71,10 +111,11 @@ footer.site a{color:var(--on-navy-muted);margin:0 8px}
 <h1>包皮が狭い人の洗い方｜毎日できる清潔の保ち方</h1>
 <p class="date"><time datetime="2026-09-30">2026.09.30</time></p>
 <p>包皮が狭いと、奥まで洗いにくく、においや汚れが気になりやすいものです。けれども、清潔を保とうとして強くこすったり、無理に包皮を下げたりすると、かえって皮膚を傷めてしまいます。この記事では、包皮が狭い人が毎日の入浴でできる、やさしい洗い方をまとめます。</p>
+<div class="points"><p class="t">この記事のポイント</p><ul><li>包皮は痛みを感じないところまでだけ下げる</li><li>指の腹でやさしく洗い、泡を残さず流す</li><li>押さえて乾かし、最後に包皮を元に戻す</li></ul></div>
 <h2>なぜ包皮が狭いと洗いにくいのか</h2>
 <p>包皮の内側には、皮脂や古い角質、尿の成分などがたまりやすく、白いかすのような汚れ(恥垢)になることがあります。包皮口が狭いと、包皮を下げられる範囲が限られるため、内側まで水やお湯が届きにくく、汚れが残りやすくなります。</p>
 <h2>毎日の洗い方の手順</h2>
-<ol>
+<ol class="steps">
 <li>まず全体をぬるま湯でよく流します。熱すぎるお湯は皮膚の刺激になるので避けます。</li>
 <li>包皮を、痛みやつっぱりを感じないところまでだけ、ゆっくり下げます。</li>
 <li>見えている部分と包皮の内側を、指の腹でやさしくなでるように洗います。</li>
@@ -86,8 +127,9 @@ footer.site a{color:var(--on-navy-muted);margin:0 8px}
 <p>デリケートな部分なので、香料や洗浄力の強い石けんより、低刺激のものが向いています。また、毎回たっぷり石けんを使う必要はありません。ぬるま湯で流すだけの日があってもよく、赤みやかゆみが出るときは石けんの量を減らしてみてください。</p>
 <h2>洗った後の乾かし方</h2>
 <p>洗った後は、清潔なタオルで押さえるように水気を取ります。ごしごし拭くと皮膚がこすれるので避けます。湿ったまま下着をはくと蒸れやすくなるため、少し時間をおいてから下着をはくのもよい方法です。</p>
+<figure class="fig"><svg viewBox="0 0 320 188" role="img" aria-label="タオルで押さえて水気を取るのは良い、ごしごし拭くのは避ける"><rect x="38" y="46" width="88" height="54" rx="8" fill="#DCE6F2" stroke="#8FA3BF" stroke-width="1.4"/><path d="M38,60 H126 M38,86 H126" stroke="#B9C8DC" stroke-width="3"/><rect x="194" y="46" width="88" height="54" rx="8" fill="#DCE6F2" stroke="#8FA3BF" stroke-width="1.4"/><path d="M194,60 H282 M194,86 H282" stroke="#B9C8DC" stroke-width="3"/><line x1="62" y1="16" x2="62" y2="40" stroke="#161A29" stroke-width="2" stroke-linecap="round"/><path d="M62.0,40.0 L58.6,33.9 L65.4,33.9Z" fill="#161A29"/><line x1="82" y1="16" x2="82" y2="40" stroke="#161A29" stroke-width="2" stroke-linecap="round"/><path d="M82.0,40.0 L78.6,33.9 L85.4,33.9Z" fill="#161A29"/><line x1="102" y1="16" x2="102" y2="40" stroke="#161A29" stroke-width="2" stroke-linecap="round"/><path d="M102.0,40.0 L98.6,33.9 L105.4,33.9Z" fill="#161A29"/><path d="M200,26 l12,-10 l12,10 l12,-10 l12,10 l12,-10" fill="none" stroke="#C9404F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><line x1="262" y1="22" x2="280" y2="22" stroke="#C9404F" stroke-width="2" stroke-linecap="round"/><path d="M280.0,22.0 L273.9,25.4 L273.9,18.6Z" fill="#C9404F"/><circle cx="82" cy="128" r="11" fill="#3E9B6E"/><circle cx="82" cy="128" r="5.5" fill="none" stroke="#fff" stroke-width="2.2"/><circle cx="238" cy="128" r="11" fill="#C9404F"/><path d="M233.5,123.5L242.5,132.5M242.5,123.5L233.5,132.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><text x="82" y="160" font-size="13" font-weight="700" fill="#161A29" text-anchor="middle">タオルで押さえて</text><text x="82" y="177" font-size="13" font-weight="700" fill="#161A29" text-anchor="middle">水気を取る</text><text x="238" y="160" font-size="13" font-weight="700" fill="#161A29" text-anchor="middle">ごしごし拭くと</text><text x="238" y="177" font-size="13" font-weight="700" fill="#C9404F" text-anchor="middle">皮膚がこすれる</text></svg><figcaption>洗った後は押さえるように水気を取り、少し時間をおいてから下着をはきます</figcaption></figure>
 <h2>洗うときに避けたいこと</h2>
-<ul>
+<ul class="ng">
 <li>痛みを感じるところまで包皮を下げる</li>
 <li>ナイロンタオルやブラシでこする</li>
 <li>アルコールを含むシートや消毒液を日常的に使う</li>

@@ -46,18 +46,58 @@ article li{margin:0 0 6px}
 .product p{margin:0 0 12px}
 .product-label{color:var(--gold);font-weight:700;font-size:13px;letter-spacing:.08em}
 .price{font-weight:700;font-size:18px}
-.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px!important}
-.btn{display:inline-block;background:var(--gold);color:var(--navy);text-decoration:none;font-weight:700;
-padding:10px 20px;border-radius:999px}
-.btn.ghost{background:transparent;color:var(--on-navy);border:1px solid var(--on-navy-muted)}
+.btns{display:grid;gap:10px;margin-top:18px!important}
+.btn{position:relative;display:flex;align-items:center;justify-content:center;min-height:58px;padding:14px 44px;border-radius:14px;
+background:var(--gold);color:var(--navy);text-decoration:none;font-weight:900;font-size:17px;letter-spacing:.06em;
+box-shadow:0 8px 24px rgba(227,179,78,.35),inset 0 -2px 0 rgba(0,0,0,.08)}
+.btn::after{content:"";position:absolute;right:22px;top:50%;width:9px;height:9px;margin-top:-5px;border-right:2.5px solid currentColor;border-top:2.5px solid currentColor;transform:rotate(45deg)}
+.btn:active{transform:translateY(1px)}
+.btn.ghost{min-height:50px;font-size:15px;font-weight:700;background:transparent;color:var(--on-navy);border:1.5px solid var(--on-navy-muted);box-shadow:none}
 .related h2{font-size:18px;border:0;margin:40px 0 10px}
 .list{list-style:none;padding:0;margin:0}
-.list li{border-bottom:1px solid var(--line);padding:16px 0;margin:0}
-.list a{text-decoration:none;font-weight:700;display:block}
+.list li{padding:0;margin:0 0 12px}
+.list a{text-decoration:none;font-weight:700;display:block;position:relative;background:var(--white);border:1px solid var(--line);border-radius:14px;padding:16px 46px 16px 18px;line-height:1.6;box-shadow:0 2px 10px rgba(22,26,41,.05)}
+.list a::after{content:"";position:absolute;right:20px;top:50%;width:9px;height:9px;margin-top:-5px;border-right:2.5px solid var(--gold);border-top:2.5px solid var(--gold);transform:rotate(45deg)}
+.related .list a{padding:14px 44px 14px 16px}
 .list span{display:block;color:var(--muted);font-size:13px;font-weight:400;margin-top:4px}
 footer.site{background:var(--navy);color:var(--on-navy-muted);font-size:13px;padding:24px 20px;text-align:center}
 footer.site a{color:var(--on-navy-muted);margin:0 8px}
 @media(max-width:600px){h1{font-size:22px}article h2{font-size:19px}}
+
+/* ---- 図・要点・チェックリスト ---- */
+.points{background:var(--white);border:2px solid var(--gold);border-radius:14px;padding:16px 18px 10px;margin:0 0 30px}
+.points .t{font-weight:900;font-size:15px;color:var(--navy);margin:0 0 10px;letter-spacing:.04em}
+.points ul{list-style:none;padding:0;margin:0}
+.points li{position:relative;padding-left:30px;margin:0 0 10px;font-weight:700;line-height:1.6}
+.points li::before{content:"";position:absolute;left:0;top:.2em;width:20px;height:20px;border-radius:50%;background:var(--gold)}
+.points li::after{content:"";position:absolute;left:7px;top:calc(.2em + 4px);width:5px;height:9px;border:solid var(--navy);border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+.fig{margin:26px 0 30px;background:var(--white);border:1px solid var(--line);border-radius:14px;padding:18px 14px 14px}
+.fig svg{display:block;width:100%;height:auto;max-width:520px;margin:0 auto;font-family:var(--font-jp)}
+.fig figcaption{margin-top:10px;font-size:13px;color:var(--muted);line-height:1.7;text-align:center}
+ul.check,ul.ng{list-style:none;padding:14px 16px 6px;margin:0 0 20px;background:var(--white);border-radius:14px;border:1px solid var(--line)}
+ul.check li,ul.ng li{position:relative;padding-left:30px;margin:0 0 10px;line-height:1.7}
+ul.check li::before{content:"";position:absolute;left:0;top:.25em;width:20px;height:20px;border-radius:50%;background:var(--navy)}
+ul.check li::after{content:"";position:absolute;left:7px;top:calc(.25em + 4px);width:5px;height:9px;border:solid var(--gold);border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+ul.ng li::before{content:"";position:absolute;left:0;top:.25em;width:20px;height:20px;border-radius:50%;background:#C9404F}
+ul.ng li::after{content:"\00D7";position:absolute;left:0;top:.25em;width:20px;line-height:20px;text-align:center;color:#fff;font-weight:900;font-size:15px}
+ol.steps{list-style:none;counter-reset:st;padding:0;margin:0 0 20px}
+ol.steps li{counter-increment:st;position:relative;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:12px 14px 12px 52px;margin:0 0 10px;line-height:1.7}
+ol.steps li::before{content:counter(st);position:absolute;left:14px;top:12px;width:26px;height:26px;border-radius:50%;background:var(--navy);color:var(--gold);font-family:var(--font-en);font-weight:700;font-size:14px;line-height:26px;text-align:center}
+.alert{background:#FBEDEE;border:1px solid #F0C9CD;border-left:5px solid #C9404F;border-radius:12px;padding:14px 16px 6px;margin:0 0 22px}
+.alert .t{font-weight:900;color:#A8303E;margin:0 0 8px}
+.alert ul{margin:0 0 10px;padding-left:1.2em}
+.alert p{margin:0 0 10px;font-size:15px}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 24px}
+.cards div{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:12px 12px 10px}
+.cards b{display:block;color:var(--navy);font-size:15px;margin-bottom:4px}
+.cards b i{font-style:normal;display:table;background:var(--gold);color:var(--navy);border-radius:6px;font-size:12px;padding:1px 8px;margin:0 0 5px}
+.cards span{display:block;font-size:14px;line-height:1.65;color:#3E4352}
+.tbl{overflow-x:auto;margin:0 0 24px}
+.tbl table{width:100%;border-collapse:collapse;background:var(--white);border-radius:12px;overflow:hidden;font-size:14px;line-height:1.6}
+.tbl th,.tbl td{border-bottom:1px solid var(--line);padding:10px 10px;text-align:left;vertical-align:top}
+.tbl thead th{background:var(--navy);color:var(--on-navy);font-size:13px;font-weight:700}
+.tbl tbody th{white-space:nowrap;color:var(--navy)}
+.tbl caption{caption-side:bottom;font-size:13px;color:var(--muted);padding-top:8px;text-align:left}
 </style>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "包茎の相談は何科？｜泌尿器科に相談する目安とタイミング", "description": "包茎や包皮のことで病院に相談したいとき、何科にかかればよいかをまとめました。泌尿器科に相談する目安、皮膚科との使い分け、すぐに医療機関に連絡すべき状態も紹介します。", "datePublished": "2026-09-30", "dateModified": "2026-09-30", "mainEntityOfPage": "https://luca-bloom.com/column/hinyoukika-soudan.html", "image": "https://luca-bloom.com/og.png", "author": {"@type": "Organization", "name": "Luca Bloom"}, "publisher": {"@type": "Organization", "name": "Luca Bloom"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "トップ", "item": "https://luca-bloom.com/"}, {"@type": "ListItem", "position": 2, "name": "コラム", "item": "https://luca-bloom.com/column/"}, {"@type": "ListItem", "position": 3, "name": "包茎の相談は何科？｜泌尿器科に相談する目安とタイミング"}]}</script>
@@ -71,14 +111,17 @@ footer.site a{color:var(--on-navy-muted);margin:0 8px}
 <h1>包茎の相談は何科？｜泌尿器科に相談する目安とタイミング</h1>
 <p class="date"><time datetime="2026-09-30">2026.09.30</time></p>
 <p>包皮がきつい、においやかゆみが気になる。そう思っても、「何科に行けばいいのかわからない」「この程度で受診していいのか」と迷って、そのままにしてしまう人は多いものです。この記事では、包茎や包皮のことで相談するときの診療科と、受診の目安をまとめます。</p>
+<div class="points"><p class="t">この記事のポイント</p><ul><li>包皮のことの相談は、基本は泌尿器科</li><li>皮膚の表面のトラブルが中心なら、皮膚科も選択肢</li><li>戻らない・急に腫れたときは、すぐ病院へ連絡</li></ul></div>
 <h2>基本は泌尿器科</h2>
 <p>包茎や包皮の状態についての相談は、泌尿器科が基本です。泌尿器科は、腎臓・膀胱・尿道などの尿の通り道と、男性の性器を専門に診る診療科です。包皮の状態を見てもらい、今の状態で気をつけることや、必要な対応について説明を受けられます。</p>
+<figure class="fig"><svg viewBox="0 0 320 334" role="img" aria-label="包皮のことで相談する診療科を選ぶフローチャート"><rect x="40" y="6" width="240" height="34" rx="10" fill="#161A29" stroke="#161A29" stroke-width="1.4"/><text x="160" y="28" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">包皮のことで気になることがある</text><line x1="160" y1="42" x2="160" y2="58" stroke="#686D7D" stroke-width="2" stroke-linecap="round"/><path d="M160.0,58.0 L156.6,51.9 L163.4,51.9Z" fill="#686D7D"/><rect x="20" y="60" width="280" height="52" rx="10" fill="#fff" stroke="#161A29" stroke-width="1.4"/><text x="160" y="82" font-size="13" font-weight="700" fill="#161A29" text-anchor="middle">むいた包皮が戻らない・急に腫れた・</text><text x="160" y="100" font-size="13" font-weight="700" fill="#161A29" text-anchor="middle">強い痛みがある</text><line x1="160" y1="114" x2="160" y2="134" stroke="#C9404F" stroke-width="2" stroke-linecap="round"/><path d="M160.0,134.0 L156.6,127.9 L163.4,127.9Z" fill="#C9404F"/><text x="172" y="129" font-size="13" font-weight="700" fill="#C9404F" text-anchor="start">はい</text><rect x="20" y="136" width="280" height="52" rx="10" fill="#FBEDEE" stroke="#C9404F" stroke-width="1.4"/><text x="160" y="158" font-size="14" font-weight="900" fill="#C9404F" text-anchor="middle">すぐ病院へ連絡</text><text x="160" y="177" font-size="13" font-weight="400" fill="#C9404F" text-anchor="middle">夜間・休日は #7119 などで受診先を確認</text><path d="M300,86 H312 V214 H240" fill="none" stroke="#686D7D" stroke-width="2"/><path d="M236.0,214.0 L242.1,210.6 L242.1,217.4Z" fill="#686D7D"/><text x="308" y="124" font-size="13" font-weight="700" fill="#686D7D" text-anchor="end">いいえ</text><rect x="20" y="198" width="216" height="52" rx="10" fill="#fff" stroke="#161A29" stroke-width="1.4"/><text x="128" y="220" font-size="13" font-weight="700" fill="#161A29" text-anchor="middle">赤み・かゆみなど、皮膚の</text><text x="128" y="238" font-size="13" font-weight="700" fill="#161A29" text-anchor="middle">表面のトラブルが中心</text><line x1="80" y1="252" x2="80" y2="272" stroke="#161A29" stroke-width="2" stroke-linecap="round"/><path d="M80.0,272.0 L76.6,265.9 L83.4,265.9Z" fill="#161A29"/><text x="90" y="267" font-size="13" font-weight="700" fill="#161A29" text-anchor="start">はい</text><line x1="206" y1="252" x2="206" y2="272" stroke="#161A29" stroke-width="2" stroke-linecap="round"/><path d="M206.0,272.0 L202.6,265.9 L209.4,265.9Z" fill="#161A29"/><text x="216" y="267" font-size="13" font-weight="700" fill="#161A29" text-anchor="start">いいえ</text><rect x="10" y="274" width="140" height="52" rx="10" fill="#fff" stroke="#E3B34E" stroke-width="2"/><text x="80" y="296" font-size="13" font-weight="900" fill="#161A29" text-anchor="middle">皮膚科も選択肢</text><text x="80" y="315" font-size="13" font-weight="400" fill="#686D7D" text-anchor="middle">迷ったら泌尿器科</text><rect x="160" y="274" width="150" height="52" rx="10" fill="#E3B34E" stroke="#E3B34E" stroke-width="1.4"/><text x="235" y="305" font-size="14" font-weight="900" fill="#161A29" text-anchor="middle">泌尿器科に相談</text></svg><figcaption>相談先の選び方の目安。迷ったときは泌尿器科に相談すれば、必要に応じて紹介してもらえます</figcaption></figure>
 <p>「泌尿器科は年配の人が行くところ」というイメージを持つ人もいますが、若い世代の相談も日常的に受けています。包皮のことで相談するのは、決して特別なことではありません。</p>
 <h2>皮膚科との使い分け</h2>
 <p>赤み、かゆみ、湿疹、ただれなど、皮膚の表面のトラブルが中心の場合は、皮膚科で相談することもできます。一方で、包皮のきつさや、むけ具合、排尿に関することは泌尿器科の領域です。迷った場合は泌尿器科に相談し、必要があれば紹介してもらうと安心です。</p>
+<div class="tbl"><table><thead><tr><th>診療科</th><th>主な相談内容</th></tr></thead><tbody><tr><th>泌尿器科</th><td>包皮のきつさ、むけ具合、排尿に関すること、包皮の状態全般</td></tr><tr><th>皮膚科</th><td>赤み、かゆみ、湿疹、ただれなど、皮膚の表面のトラブル</td></tr></tbody></table></div>
 <h2>相談する目安</h2>
 <p>次のようなことがあれば、泌尿器科への相談を考えてください。</p>
-<ul>
+<ul class="check">
 <li>包皮を下げると痛みがある、または下げられない</li>
 <li>赤み・腫れ・かゆみが続く、または繰り返す</li>
 <li>包皮の内側から膿のようなものが出る</li>
@@ -91,7 +134,7 @@ footer.site a{color:var(--on-navy-muted);margin:0 8px}
 <h2>すぐに医療機関に連絡すべき状態</h2>
 <p>むいた包皮が亀頭の根元で締めつけて戻らない、亀頭や包皮が急に腫れてきた、強い痛みがある、といった場合は、様子を見ずにすぐ医療機関に連絡してください。夜間や休日であれば、救急安心センター(#7119、実施地域のみ)などの相談窓口に電話して受診先を確認してください。</p>
 <h2>受診前に準備しておくとよいこと</h2>
-<ul>
+<ul class="check">
 <li>いつから、どんなことが気になっているか</li>
 <li>痛み・かゆみ・においなど、具体的な困りごと</li>
 <li>普段の洗い方や、これまで自分で試したこと</li>

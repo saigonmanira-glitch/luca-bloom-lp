@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>真性包茎と仮性包茎の違い｜言葉の意味をやさしく整理｜Luca Bloom</title>
-<meta name="description" content="真性包茎と仮性包茎の違いを、図がなくてもわかるように言葉で整理しました。カントン包茎との違い、自己判断で気をつけたいこと、泌尿器科に相談する目安も紹介します。">
+<meta name="description" content="真性包茎と仮性包茎の違いを、図と表でやさしく整理しました。カントン包茎との違い、自己判断で気をつけたいこと、泌尿器科に相談する目安も紹介します。">
 <link rel="canonical" href="https://luca-bloom.com/column/shinsei-kasei-chigai.html">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="theme-color" content="#161A29">
@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="Luca Bloom">
 <meta property="og:locale" content="ja_JP">
 <meta property="og:title" content="真性包茎と仮性包茎の違い｜言葉の意味をやさしく整理｜Luca Bloom">
-<meta property="og:description" content="真性包茎と仮性包茎の違いを、図がなくてもわかるように言葉で整理しました。カントン包茎との違い、自己判断で気をつけたいこと、泌尿器科に相談する目安も紹介します。">
+<meta property="og:description" content="真性包茎と仮性包茎の違いを、図と表でやさしく整理しました。カントン包茎との違い、自己判断で気をつけたいこと、泌尿器科に相談する目安も紹介します。">
 <meta property="og:url" content="https://luca-bloom.com/column/shinsei-kasei-chigai.html">
 <meta property="og:image" content="https://luca-bloom.com/og.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -46,20 +46,60 @@ article li{margin:0 0 6px}
 .product p{margin:0 0 12px}
 .product-label{color:var(--gold);font-weight:700;font-size:13px;letter-spacing:.08em}
 .price{font-weight:700;font-size:18px}
-.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px!important}
-.btn{display:inline-block;background:var(--gold);color:var(--navy);text-decoration:none;font-weight:700;
-padding:10px 20px;border-radius:999px}
-.btn.ghost{background:transparent;color:var(--on-navy);border:1px solid var(--on-navy-muted)}
+.btns{display:grid;gap:10px;margin-top:18px!important}
+.btn{position:relative;display:flex;align-items:center;justify-content:center;min-height:58px;padding:14px 44px;border-radius:14px;
+background:var(--gold);color:var(--navy);text-decoration:none;font-weight:900;font-size:17px;letter-spacing:.06em;
+box-shadow:0 8px 24px rgba(227,179,78,.35),inset 0 -2px 0 rgba(0,0,0,.08)}
+.btn::after{content:"";position:absolute;right:22px;top:50%;width:9px;height:9px;margin-top:-5px;border-right:2.5px solid currentColor;border-top:2.5px solid currentColor;transform:rotate(45deg)}
+.btn:active{transform:translateY(1px)}
+.btn.ghost{min-height:50px;font-size:15px;font-weight:700;background:transparent;color:var(--on-navy);border:1.5px solid var(--on-navy-muted);box-shadow:none}
 .related h2{font-size:18px;border:0;margin:40px 0 10px}
 .list{list-style:none;padding:0;margin:0}
-.list li{border-bottom:1px solid var(--line);padding:16px 0;margin:0}
-.list a{text-decoration:none;font-weight:700;display:block}
+.list li{padding:0;margin:0 0 12px}
+.list a{text-decoration:none;font-weight:700;display:block;position:relative;background:var(--white);border:1px solid var(--line);border-radius:14px;padding:16px 46px 16px 18px;line-height:1.6;box-shadow:0 2px 10px rgba(22,26,41,.05)}
+.list a::after{content:"";position:absolute;right:20px;top:50%;width:9px;height:9px;margin-top:-5px;border-right:2.5px solid var(--gold);border-top:2.5px solid var(--gold);transform:rotate(45deg)}
+.related .list a{padding:14px 44px 14px 16px}
 .list span{display:block;color:var(--muted);font-size:13px;font-weight:400;margin-top:4px}
 footer.site{background:var(--navy);color:var(--on-navy-muted);font-size:13px;padding:24px 20px;text-align:center}
 footer.site a{color:var(--on-navy-muted);margin:0 8px}
 @media(max-width:600px){h1{font-size:22px}article h2{font-size:19px}}
+
+/* ---- 図・要点・チェックリスト ---- */
+.points{background:var(--white);border:2px solid var(--gold);border-radius:14px;padding:16px 18px 10px;margin:0 0 30px}
+.points .t{font-weight:900;font-size:15px;color:var(--navy);margin:0 0 10px;letter-spacing:.04em}
+.points ul{list-style:none;padding:0;margin:0}
+.points li{position:relative;padding-left:30px;margin:0 0 10px;font-weight:700;line-height:1.6}
+.points li::before{content:"";position:absolute;left:0;top:.2em;width:20px;height:20px;border-radius:50%;background:var(--gold)}
+.points li::after{content:"";position:absolute;left:7px;top:calc(.2em + 4px);width:5px;height:9px;border:solid var(--navy);border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+.fig{margin:26px 0 30px;background:var(--white);border:1px solid var(--line);border-radius:14px;padding:18px 14px 14px}
+.fig svg{display:block;width:100%;height:auto;max-width:520px;margin:0 auto;font-family:var(--font-jp)}
+.fig figcaption{margin-top:10px;font-size:13px;color:var(--muted);line-height:1.7;text-align:center}
+ul.check,ul.ng{list-style:none;padding:14px 16px 6px;margin:0 0 20px;background:var(--white);border-radius:14px;border:1px solid var(--line)}
+ul.check li,ul.ng li{position:relative;padding-left:30px;margin:0 0 10px;line-height:1.7}
+ul.check li::before{content:"";position:absolute;left:0;top:.25em;width:20px;height:20px;border-radius:50%;background:var(--navy)}
+ul.check li::after{content:"";position:absolute;left:7px;top:calc(.25em + 4px);width:5px;height:9px;border:solid var(--gold);border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+ul.ng li::before{content:"";position:absolute;left:0;top:.25em;width:20px;height:20px;border-radius:50%;background:#C9404F}
+ul.ng li::after{content:"\00D7";position:absolute;left:0;top:.25em;width:20px;line-height:20px;text-align:center;color:#fff;font-weight:900;font-size:15px}
+ol.steps{list-style:none;counter-reset:st;padding:0;margin:0 0 20px}
+ol.steps li{counter-increment:st;position:relative;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:12px 14px 12px 52px;margin:0 0 10px;line-height:1.7}
+ol.steps li::before{content:counter(st);position:absolute;left:14px;top:12px;width:26px;height:26px;border-radius:50%;background:var(--navy);color:var(--gold);font-family:var(--font-en);font-weight:700;font-size:14px;line-height:26px;text-align:center}
+.alert{background:#FBEDEE;border:1px solid #F0C9CD;border-left:5px solid #C9404F;border-radius:12px;padding:14px 16px 6px;margin:0 0 22px}
+.alert .t{font-weight:900;color:#A8303E;margin:0 0 8px}
+.alert ul{margin:0 0 10px;padding-left:1.2em}
+.alert p{margin:0 0 10px;font-size:15px}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 24px}
+.cards div{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:12px 12px 10px}
+.cards b{display:block;color:var(--navy);font-size:15px;margin-bottom:4px}
+.cards b i{font-style:normal;display:table;background:var(--gold);color:var(--navy);border-radius:6px;font-size:12px;padding:1px 8px;margin:0 0 5px}
+.cards span{display:block;font-size:14px;line-height:1.65;color:#3E4352}
+.tbl{overflow-x:auto;margin:0 0 24px}
+.tbl table{width:100%;border-collapse:collapse;background:var(--white);border-radius:12px;overflow:hidden;font-size:14px;line-height:1.6}
+.tbl th,.tbl td{border-bottom:1px solid var(--line);padding:10px 10px;text-align:left;vertical-align:top}
+.tbl thead th{background:var(--navy);color:var(--on-navy);font-size:13px;font-weight:700}
+.tbl tbody th{white-space:nowrap;color:var(--navy)}
+.tbl caption{caption-side:bottom;font-size:13px;color:var(--muted);padding-top:8px;text-align:left}
 </style>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "真性包茎と仮性包茎の違い｜言葉の意味をやさしく整理", "description": "真性包茎と仮性包茎の違いを、図がなくてもわかるように言葉で整理しました。カントン包茎との違い、自己判断で気をつけたいこと、泌尿器科に相談する目安も紹介します。", "datePublished": "2026-09-30", "dateModified": "2026-09-30", "mainEntityOfPage": "https://luca-bloom.com/column/shinsei-kasei-chigai.html", "image": "https://luca-bloom.com/og.png", "author": {"@type": "Organization", "name": "Luca Bloom"}, "publisher": {"@type": "Organization", "name": "Luca Bloom"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "真性包茎と仮性包茎の違い｜言葉の意味をやさしく整理", "description": "真性包茎と仮性包茎の違いを、図と表でやさしく整理しました。カントン包茎との違い、自己判断で気をつけたいこと、泌尿器科に相談する目安も紹介します。", "datePublished": "2026-09-30", "dateModified": "2026-09-30", "mainEntityOfPage": "https://luca-bloom.com/column/shinsei-kasei-chigai.html", "image": "https://luca-bloom.com/og.png", "author": {"@type": "Organization", "name": "Luca Bloom"}, "publisher": {"@type": "Organization", "name": "Luca Bloom"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "トップ", "item": "https://luca-bloom.com/"}, {"@type": "ListItem", "position": 2, "name": "コラム", "item": "https://luca-bloom.com/column/"}, {"@type": "ListItem", "position": 3, "name": "真性包茎と仮性包茎の違い｜言葉の意味をやさしく整理"}]}</script>
 </head>
 <body>
@@ -70,9 +110,11 @@ footer.site a{color:var(--on-navy-muted);margin:0 8px}
 <article>
 <h1>真性包茎と仮性包茎の違い｜言葉の意味をやさしく整理</h1>
 <p class="date"><time datetime="2026-09-30">2026.09.30</time></p>
-<p>「真性包茎」「仮性包茎」という言葉はよく目にしますが、違いをきちんと説明できる人は多くありません。この記事では、図を使わずに言葉だけで、それぞれの一般的な意味を整理します。自分の状態がどれに当たるかの判断は、泌尿器科で相談するのがいちばんの近道です。</p>
+<p>「真性包茎」「仮性包茎」という言葉はよく目にしますが、違いをきちんと説明できる人は多くありません。この記事では、図と表を使って、それぞれの一般的な意味を整理します。自分の状態がどれに当たるかの判断は、泌尿器科で相談するのがいちばんの近道です。</p>
+<div class="points"><p class="t">この記事のポイント</p><ul><li>仮性：手で下げれば亀頭を出せる</li><li>真性：手で下げても亀頭を出せない</li><li>カントン：むいた包皮が戻らない。すぐ病院へ</li></ul></div>
 <h2>包茎とは何を指す言葉か</h2>
 <p>包茎は、亀頭が包皮に覆われている状態を指す言葉です。平常時に亀頭が包皮に覆われていること自体は、大人の男性でもよく見られることで、それだけで問題があるわけではありません。分類の目安になるのは、「手で包皮を下げたときに、亀頭を出せるかどうか」です。</p>
+<figure class="fig"><svg viewBox="0 0 320 266" role="img" aria-label="仮性包茎・真性包茎・カントン包茎の違いのイメージ図"><rect x="33" y="80" width="44" height="72" rx="3" fill="#F4EEE6" stroke="#B7AFA2" stroke-width="1.2"/><path d="M30,86 C28,58 40,40 55,40 C70,40 82,58 80,86 Q55,92 30,86Z" fill="#F1E2DC" stroke="#B7AFA2" stroke-width="1.2"/><path d="M26,152 L26,86 C24,52 32.0,34 42.0,30 L68.0,30 C78.0,34 86,52 84,86 L84,152Z" fill="#E58E9E" fill-opacity=".55" stroke="#C9707F" stroke-width="1.4"/><ellipse cx="55" cy="30" rx="13.0" ry="2.6" fill="#fff" stroke="#C9707F" stroke-width="1.4"/><rect x="138" y="80" width="44" height="72" rx="3" fill="#F4EEE6" stroke="#B7AFA2" stroke-width="1.2"/><path d="M135,86 C133,58 145,40 160,40 C175,40 187,58 185,86 Q160,92 135,86Z" fill="#F1E2DC" stroke="#B7AFA2" stroke-width="1.2"/><path d="M131,152 L131,86 C129,52 147.0,34 157.0,30 L163.0,30 C173.0,34 191,52 189,86 L189,152Z" fill="#E58E9E" fill-opacity=".55" stroke="#C9707F" stroke-width="1.4"/><ellipse cx="160" cy="30" rx="3.0" ry="2.6" fill="#fff" stroke="#C9707F" stroke-width="1.4"/><rect x="243" y="80" width="44" height="72" rx="3" fill="#F4EEE6" stroke="#B7AFA2" stroke-width="1.2"/><path d="M238.0,86 C236.0,58 248.8,40 265,40 C281.2,40 294.0,58 292.0,86 Q265,92 238.0,86Z" fill="#F2C7C7" stroke="#B7AFA2" stroke-width="1.2"/><rect x="236" y="100" width="58" height="52" fill="#E58E9E" fill-opacity=".55" stroke="#C9707F" stroke-width="1.4"/><ellipse cx="265" cy="100" rx="31" ry="7" fill="#E58E9E" fill-opacity=".8" stroke="#C9707F" stroke-width="1.4"/><path d="M234,98 Q265,105 296,98" fill="none" stroke="#C9404F" stroke-width="3"/><text x="55" y="180" font-size="15" font-weight="900" fill="#161A29" text-anchor="middle">仮性包茎</text><text x="160" y="180" font-size="15" font-weight="900" fill="#161A29" text-anchor="middle">真性包茎</text><text x="265" y="180" font-size="15" font-weight="900" fill="#161A29" text-anchor="middle">カントン包茎</text><text x="55" y="202" font-size="13" font-weight="400" fill="#3E4352" text-anchor="middle">手で下げると</text><text x="55" y="219" font-size="13" font-weight="700" fill="#161A29" text-anchor="middle">亀頭を出せる</text><text x="160" y="202" font-size="13" font-weight="400" fill="#3E4352" text-anchor="middle">手で下げても</text><text x="160" y="219" font-size="13" font-weight="700" fill="#161A29" text-anchor="middle">亀頭を出せない</text><text x="265" y="202" font-size="13" font-weight="400" fill="#3E4352" text-anchor="middle">むいた包皮が</text><text x="265" y="219" font-size="13" font-weight="700" fill="#C9404F" text-anchor="middle">戻らない</text><rect x="214" y="232" width="102" height="26" rx="13" fill="#C9404F" stroke="#C9404F" stroke-width="1.4"/><text x="265" y="250" font-size="13" font-weight="900" fill="#fff" text-anchor="middle">すぐ病院へ</text><line x1="106" y1="10" x2="106" y2="222" stroke="#E3E0D8" stroke-width="1"/><line x1="213" y1="10" x2="213" y2="222" stroke="#E3E0D8" stroke-width="1"/></svg><figcaption>3つの言葉の一般的な整理（イメージ図）。自分がどれに当たるかは、泌尿器科で確認できます</figcaption></figure>
 <h2>仮性包茎とは</h2>
 <p>仮性包茎は、平常時は亀頭が包皮に覆われているものの、手で包皮を下げれば亀頭を出せる状態を指すのが一般的です。入浴時に包皮を下げて洗える人の多くは、この状態に当たります。</p>
 <p>ただし、仮性包茎といっても包皮口の広さには個人差があります。「むけるけれど、途中できつい」「戻すときにつっぱる」と感じる人もいて、同じ言葉でくくられていても悩みの中身はさまざまです。</p>
@@ -81,8 +123,10 @@ footer.site a{color:var(--on-navy-muted);margin:0 8px}
 <p>亀頭を出せないため、包皮の内側を洗いにくく、汚れやにおいがたまりやすいと感じる人が多いのも特徴です。排尿のときに包皮がふくらむ、赤みやかゆみを繰り返すといったことがあれば、泌尿器科に相談してください。</p>
 <h2>カントン包茎との違い</h2>
 <p>もう一つよく聞く言葉が、カントン包茎です。これは、むいた包皮が亀頭の根元を締めつけてしまい、元に戻らなくなった状態を指します。包皮口が狭いのに無理に下げたときや、むいた後に戻し忘れたときに起こりやすいとされています。締めつけによって腫れが進むことがあるため、戻らないときは様子を見ずに、すぐ医療機関に連絡することが大切です。</p>
+<h2>3つの言葉を表で整理</h2>
+<div class="tbl"><table><thead><tr><th>言葉</th><th>一般的な意味</th><th>気をつけたいこと</th></tr></thead><tbody><tr><th>仮性包茎</th><td>平常時は包皮に覆われているが、手で下げれば亀頭を出せる</td><td>出しやすさには個人差がある。無理に下げない</td></tr><tr><th>真性包茎</th><td>手で包皮を下げても、亀頭を出せない</td><td>内側を洗いにくい。気になることは泌尿器科へ</td></tr><tr><th>カントン包茎</th><td>むいた包皮が亀頭の根元を締めつけ、戻らない</td><td>様子を見ずに、すぐ病院へ連絡する</td></tr></tbody></table></div>
 <h2>自己判断で気をつけたいこと</h2>
-<ul>
+<ul class="check">
 <li>ネットの説明だけで「自分は大丈夫」「自分は重い」と決めつけない</li>
 <li>確かめようとして、力任せに包皮を下げない</li>
 <li>痛み・腫れ・出血があるときは触らず、早めに受診する</li>
