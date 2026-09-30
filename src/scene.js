@@ -1,6 +1,7 @@
 // Luca Bloom LP：3D表示（ヒーローの本体モデル・化粧箱モデル）
 // three.js r186。旧版（r128）と同じ見た目になるよう、色の扱いと光の強さを合わせている。
 import {
+  ACESFilmicToneMapping,
   BoxGeometry,
   BufferAttribute,
   BufferGeometry,
@@ -18,7 +19,6 @@ import {
   Mesh,
   MeshBasicMaterial,
   MeshPhysicalMaterial,
-  NeutralToneMapping,
   MeshStandardMaterial,
   Path,
   PCFShadowMap,
@@ -102,19 +102,16 @@ function addDrag(el, onMove) {
 }
 
 // ---------- 形状の部品 ----------
-// POM樹脂（ナチュラル）：乳白色の白。sheen（蝋のような柔らかい反射）でPOM特有のしっとりした表面を、
-// clearcoat で薄い艶を表現する。
+// POM樹脂（ナチュラル）：磁器のような白。clearcoat（薄い艶の層）と、ヒーローの環境光の映り込み・
+// ACESトーンマッピング（白の階調をやわらかくする明るさ補正）で、原案に近い樹脂の質感を出す。
 // ※ transmission（光の透過計算）は描画が約6倍重くなるため使わない（2026-09-30 計測）
 const pom = (extra) =>
   new MeshPhysicalMaterial({
-    color: 0xe2ddd2, // 透過計算なしで以前の明るさに合わせた色
-    roughness: 0.38,
+    color: 0xf3f1ea,
+    roughness: 0.42,
     metalness: 0,
-    sheen: 0.4,
-    sheenRoughness: 0.6,
-    sheenColor: 0xffffff,
-    clearcoat: 0.2,
-    clearcoatRoughness: 0.4,
+    clearcoat: 0.35,
+    clearcoatRoughness: 0.5,
     side: DoubleSide,
     ...extra,
   });
@@ -264,21 +261,23 @@ function buildDevice() {
   };
 
   // 本体 85×20×20：上面に78×13の開口、底面に69×6のスリット、底板3.5
+  // 角は R1 の丸み（3分割）。成形品らしい柔らかいハイライトが角に出る
   {
+    const R = 1;
     const s = new Shape();
-    roundRect(s, -42, -9.5, 84, 19, 0.3, false);
-    roundRect(s, -39.5, -7, 79, 14, 1.5, true);
+    roundRect(s, -42.5 + R, -10 + R, 85 - 2 * R, 20 - 2 * R, 0.3, false);
+    roundRect(s, -39 - R, -6.5 - R, 78 + 2 * R, 13 + 2 * R, 1.5, true);
     add(
       upright(
         new ExtrudeGeometry(s, {
-          depth: 19,
+          depth: 20 - 2 * R,
           bevelEnabled: true,
-          bevelThickness: 0.5,
-          bevelSize: 0.5,
-          bevelSegments: 1,
+          bevelThickness: R,
+          bevelSize: R,
+          bevelSegments: 3,
           curveSegments: 6,
         }),
-        0.5,
+        R,
       ),
       housing,
     );
@@ -601,8 +600,8 @@ function initHero(state) {
   const fallback = document.getElementById('fb');
   const renderer = createRenderer(stage);
   if (!renderer) return;
-  renderer.toneMapping = NeutralToneMapping; // 白の階調（半透明の白の陰影）を白飛びさせずに残す
-  renderer.toneMappingExposure = 0.95;
+  renderer.toneMapping = ACESFilmicToneMapping; // 白の階調をやわらかく（磁器のような白） // 白の階調（半透明の白の陰影）を白飛びさせずに残す
+  renderer.toneMappingExposure = 1.0;
 
   const scene = new Scene();
   const camera = new PerspectiveCamera(24, 1, 1, 2000);
@@ -611,10 +610,10 @@ function initHero(state) {
   // 周囲の映り込み（室内を模した環境光）。艶と陰影の立体感を出す
   const pmrem = new PMREMGenerator(renderer);
   scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
-  scene.environmentIntensity = 0.1;
+  scene.environmentIntensity = 0.6;
   pmrem.dispose();
-  scene.add(new HemisphereLight(0xffffff, 0x3a4160, 0.35 * LIGHT));
-  const key = new DirectionalLight(0xffffff, 0.85 * LIGHT);
+  scene.add(new HemisphereLight(0xffffff, 0x3a4160, 0.15 * LIGHT));
+  const key = new DirectionalLight(0xffffff, 0.6 * LIGHT);
   key.position.set(-40, 160, 120);
   key.castShadow = true;
   key.shadow.mapSize.set(1024, 1024);
@@ -622,7 +621,7 @@ function initHero(state) {
   key.shadow.normalBias = 0.25;
   Object.assign(key.shadow.camera, { left: -100, right: 100, top: 100, bottom: -100, near: 10, far: 450 });
   scene.add(key);
-  const fill = new DirectionalLight(0xdfe4ff, 0.35 * LIGHT);
+  const fill = new DirectionalLight(0xdfe4ff, 0.25 * LIGHT);
   fill.position.set(120, 40, 60);
   scene.add(fill);
   const rim = new DirectionalLight(0xc6d0ff, 0.45 * LIGHT);
