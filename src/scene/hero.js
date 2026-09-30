@@ -16,6 +16,7 @@ import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment
 import { LIGHT, addDrag, createRenderer, onContextLost, prefersReducedMotion, whenCompiled } from './common.js';
 import { buildDevice } from './device.js';
 import { buildSleeve } from './sleeve.js';
+import { createTour } from './tour.js';
 
 // ================= 外箱の透過（内部の送りねじ・ナットを見せる） =================
 // 時間で自動的に「不透明 → 透過 → 不透明」を繰り返す（回転の向きとは無関係）。
@@ -26,8 +27,9 @@ function createSeeThrough(device) {
   const ss = (x) => x * x * (3 - 2 * x);
   let t = 0;
   let prev = -1;
-  // dt 秒ぶん時間を進めて透過度を反映する。reduce（動きを減らす設定）では不透明のまま
-  return (dt, reduce) => {
+  // dt 秒ぶん時間を進めて透過度を反映する。reduce（動きを減らす設定）では不透明のまま。
+  // force（0〜1）：スクロールの場面2で強制的に透過させる強さ
+  return (dt, reduce, force = 0) => {
     if (!reduce) t = (t + dt) % SEE.period;
     let xv = 0; // 0 = 不透明、1 = 透過
     if (!reduce) {
@@ -38,6 +40,7 @@ function createSeeThrough(device) {
       else if (t >= b && t < c) xv = 1;
       else if (t >= c) xv = 1 - ss((t - c) / SEE.fade);
     }
+    xv = Math.max(xv, force);
     if (xv === prev) return;
     prev = xv;
     const see = xv > 0.001;
@@ -60,13 +63,17 @@ export function initHero(state) {
   if (!stage) return;
   const fallback = document.getElementById('fb');
   const renderer = createRenderer(stage);
-  if (!renderer) return;
+  if (!renderer) {
+    document.getElementById('tour')?.classList.add('tour-off'); // 3Dなしでは固定表示の空き領域を消す
+    return;
+  }
   renderer.toneMapping = ACESFilmicToneMapping; // 白の階調をやわらかく（磁器のような白）
   renderer.toneMappingExposure = 1.0;
 
   const scene = new Scene();
   const camera = new PerspectiveCamera(24, 1, 1, 2000);
   const LOOK = new Vector3(0, -14, 0);
+  const base = { look: LOOK, dist: 268 }; // スクロール連動カメラの基準（場面1＝従来の構図）
 
   // 周囲の映り込み（室内を模した環境光）。艶と陰影の立体感を出す
   const pmrem = new PMREMGenerator(renderer);
@@ -140,7 +147,8 @@ export function initHero(state) {
     const dt = Math.min(0.1, last ? (now - last) / 1000 : 0);
     last = now;
     const anim = !reduce;
-    if (anim && !drag.on) spin += SPIN * dt;
+    if (anim && !drag.on && !(tour && tour.holding)) spin += SPIN * dt;
+    if (tour) spin = tour.spin(spin, dt);
 
     if (!state.demo) {
       // 手動：スライダーの値へ最大10mm/秒で追従
@@ -179,8 +187,9 @@ export function initHero(state) {
     }
 
     model.rotation.y = spin;
-    seeThrough(dt, reduce);
+    seeThrough(dt, reduce, tour ? tour.see : 0);
     place();
+    if (tour) tour.update(dt, camera, device);
     renderer.render(scene, camera);
     if (visible && !document.hidden && (anim || state.current !== state.target)) {
       requestAnimationFrame(frame);
@@ -204,17 +213,32 @@ export function initHero(state) {
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
     const d = w / h < 1.1 ? 268 : 246;
+    base.dist = d;
     camera.position.set(LOOK.x - d * 0.3, LOOK.y + d * 0.36, d * 0.88);
     camera.lookAt(LOOK);
     camera.updateProjectionMatrix();
-    seeThrough(0, reduce);
+    seeThrough(0, reduce, tour ? tour.see : 0);
     place();
+    if (tour) {
+      tour.resize(w, h);
+      tour.update(0, camera, device);
+    }
     renderer.render(scene, camera);
     if (fallback) fallback.style.display = 'none'; // 3Dの描画が始まったら静止画を隠す
     state.kick();
   }
 
-  onContextLost(renderer, () => { alive = false; }, fallback);
+  // スクロール連動カメラ（「動きを減らす」設定では使わない）
+  const tour = reduce ? null : createTour(stage, base);
+
+  onContextLost(
+    renderer,
+    () => {
+      alive = false;
+      if (tour) tour.disable();
+    },
+    fallback,
+  );
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden) state.kick(); // タブが非表示の間は描画を止め、戻ったら再開
   });

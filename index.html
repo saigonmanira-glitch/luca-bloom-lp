@@ -97,6 +97,31 @@ small.gl{font-size:12px;color:var(--muted);font-weight:400}
 .js .stage .fb-img{display:block}
 .stage noscript .fb-img{display:block}
 .stage .fb-img[hidden]{display:none}
+/* スクロール連動カメラ：3D表示ブロックを画面に固定し、下の空き領域（1.5画面分）のスクロールで場面を切り替える */
+.tour-space{display:none}
+.tour-cap{position:absolute;right:0;bottom:6px;text-align:right;margin:0;padding:0;list-style:none;pointer-events:none;display:none}
+.tour-cap li{display:none;background:rgba(22,26,41,.78);border-radius:10px;padding:6px 10px;font-size:13px;font-weight:700;letter-spacing:.08em;color:var(--on-navy);max-width:15em;line-height:1.5}
+.tour-cap li.on{display:block;animation:capin .4s ease}
+.tour-cap b{font-family:var(--font-en);color:var(--gold);margin-right:8px}
+.tour-cap span{display:block;margin-top:4px;font-size:11.5px;font-weight:400;letter-spacing:.03em;color:var(--on-navy-muted)}
+@keyframes capin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.cos{position:absolute;inset:0;pointer-events:none;display:none}
+.co{position:absolute;left:0;top:0;opacity:0;will-change:transform}
+.co::before{content:"";position:absolute;left:-4px;top:-4px;width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 3px rgba(227,179,78,.3)}
+.co::after{content:"";position:absolute;left:-.5px;width:1px;height:30px;background:var(--gold)}
+.co.up::after{bottom:4px}
+.co.down::after{top:4px}
+.co b{position:absolute;left:0;transform:translateX(-50%);white-space:nowrap;font-size:12px;font-weight:700;color:var(--navy);background:var(--gold);border-radius:99px;padding:2px 10px;line-height:1.6}
+.co.up b{bottom:34px}
+.co.left b{transform:translateX(calc(-100% + 14px))}
+.co.down b{top:34px}
+.tour-on .tour-cap,.tour-on .cos{display:block}
+@media (prefers-reduced-motion:no-preference){@supports (overflow:clip){
+.hero{overflow:clip}
+.js .tour-sticky{position:sticky;top:0;z-index:1}
+.js .tour-space{display:block;height:150vh}
+.js .tour-off .tour-space{display:none}
+}}
 .stage-note{margin:0 0 12px;font-size:12.5px;line-height:1.6;color:var(--on-navy-muted);text-align:center}
 .stage-note i{display:inline-block;width:10px;height:10px;border-radius:50%;background:#E58E9E;opacity:.8;margin-right:5px;vertical-align:-1px}
 .meter{display:grid;gap:6px;background:var(--navy-2);border:1px solid var(--navy-line);border-radius:16px;padding:14px 16px 12px}
@@ -270,15 +295,30 @@ footer p{margin-top:8px}
     <h1 id="top"><span class="for">包皮がきつい方へ</span><span class="catch"><span>誰にも言えない</span><span>悩みを、</span><br><span>自分の手で、</span><span>少しずつ。</span></span></h1>
     <p class="lead">ハンドルを回すだけ。ずれにくく、手を離しても戻らない。最大70mmまで、あなたのペースで広げられます。</p>
 
-    <div class="stage" id="stage" role="img" aria-label="Luca Bloomの3Dモデル。ピンクの膜（狭い穴のイメージ）の口を、アームが内側から広げます。横にドラッグすると回転します。">
-      <img class="fb-img" id="fb" src="hero-fallback.webp" srcset="hero-fallback-800.webp 800w, hero-fallback.webp 1200w" sizes="(min-width: 600px) 520px, calc(100vw - 40px)" alt="Luca Bloom 本体の図" width="1200" height="630" fetchpriority="high" decoding="async">
-      <noscript><img class="fb-img" src="hero-fallback.webp" alt="Luca Bloom 本体の図" width="1200" height="630"></noscript>
-    </div>
-    <p class="stage-note"><i aria-hidden="true"></i><span class="nb">ピンクの膜は狭い穴のイメージ。</span><span class="nb">閉じたアームを入れ、</span><span class="nb">ハンドルで内側から</span><span class="nb">ゆっくり広げます。</span></p>
-    <div class="meter">
-      <div class="meter-row"><span>ハンドルで開き幅を調整</span><b id="gapv">全閉</b></div>
-      <input id="gap" type="range" min="10" max="70" step="1" value="10" aria-label="開き幅">
-      <div class="ends"><span>全閉</span><span>MAX 70mm</span></div>
+    <div class="tour" id="tour">
+      <div class="tour-sticky">
+        <div class="stage" id="stage" role="img" aria-label="Luca Bloomの3Dモデル。ピンクの膜（狭い穴のイメージ）の口を、アームが内側から広げます。横にドラッグすると回転します。">
+          <img class="fb-img" id="fb" src="hero-fallback.webp" srcset="hero-fallback-800.webp 800w, hero-fallback.webp 1200w" sizes="(min-width: 600px) 520px, calc(100vw - 40px)" alt="Luca Bloom 本体の図" width="1200" height="630" fetchpriority="high" decoding="async">
+          <noscript><img class="fb-img" src="hero-fallback.webp" alt="Luca Bloom 本体の図" width="1200" height="630"></noscript>
+          <ol class="tour-cap" aria-hidden="true">
+            <li><b>01</b>全景<span>本体85×20×20mm。ハンドルを回すとアームが開閉します。</span></li>
+            <li><b>02</b>内部構造<span>送りねじが回転をまっすぐな動きに変え、手を離してもその位置で止まります。</span></li>
+            <li><b>03</b>開き幅<span>全閉から最大70mmまで、無段階で調整できます。</span></li>
+          </ol>
+          <div class="cos" aria-hidden="true">
+            <span class="co down" data-k="screw"><b>送りねじ</b></span>
+            <span class="co up left" data-k="plate"><b>リリースプレート</b></span>
+            <span class="co down" data-k="arm"><b>アーム</b></span>
+          </div>
+        </div>
+        <p class="stage-note"><i aria-hidden="true"></i><span class="nb">ピンクの膜は狭い穴のイメージ。</span><span class="nb">閉じたアームを入れ、</span><span class="nb">ハンドルで内側から</span><span class="nb">ゆっくり広げます。</span></p>
+        <div class="meter">
+          <div class="meter-row"><span>ハンドルで開き幅を調整</span><b id="gapv">全閉</b></div>
+          <input id="gap" type="range" min="10" max="70" step="1" value="10" aria-label="開き幅">
+          <div class="ends"><span>全閉</span><span>MAX 70mm</span></div>
+        </div>
+      </div>
+      <div class="tour-space" aria-hidden="true"></div>
     </div>
 
     <ul class="badges">

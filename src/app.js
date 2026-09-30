@@ -81,7 +81,9 @@ function initBuyBar() {
 function loadScene(state) {
   import('./scene.js')
     .then((m) => m.initScenes(state))
-    .catch(() => {});
+    .catch(() => {
+      document.getElementById('tour')?.classList.add('tour-off');
+    });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
