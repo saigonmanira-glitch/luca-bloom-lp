@@ -17,11 +17,13 @@ import {
   HemisphereLight,
   Mesh,
   MeshBasicMaterial,
+  MeshPhysicalMaterial,
   MeshStandardMaterial,
   Path,
   PCFShadowMap,
   PerspectiveCamera,
   PlaneGeometry,
+  PMREMGenerator,
   Scene,
   Shape,
   ShadowMaterial,
@@ -30,6 +32,7 @@ import {
   Vector3,
   WebGLRenderer,
 } from 'three';
+import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 
 // ---------- 旧版（r128）との見た目合わせ ----------
 // ・r128 は色指定（0xe8e4da など）を変換せずに使っていた → 色の自動変換を切る
@@ -98,14 +101,19 @@ function addDrag(el, onMove) {
 }
 
 // ---------- 形状の部品 ----------
-const POM = new MeshStandardMaterial({ color: 0xe8e4da, roughness: 0.5, metalness: 0, side: DoubleSide });
-const POM_FLAT = new MeshStandardMaterial({
-  color: 0xe8e4da,
-  roughness: 0.5,
-  metalness: 0,
-  side: DoubleSide,
-  flatShading: true,
-});
+// POM樹脂：わずかな艶（クリアコート）を重ね、周囲の映り込みで樹脂らしい質感を出す
+const pom = (extra) =>
+  new MeshPhysicalMaterial({
+    color: 0xe8e4da,
+    roughness: 0.42,
+    metalness: 0,
+    clearcoat: 0.6,
+    clearcoatRoughness: 0.3,
+    side: DoubleSide,
+    ...extra,
+  });
+const POM = pom();
+const POM_FLAT = pom({ flatShading: true });
 
 // 角丸長方形をシェイプ（または穴）として追加
 function roundRect(shape, x, y, w, h, r, hole) {
@@ -240,6 +248,7 @@ function armGeometry(dir, top, fillet) {
 // ---------- 本体一式（本体・シャフト・留め具・固定アーム・駆動アーム）。ヒーローと箱の中で共用 ----------
 function buildDevice() {
   const dev = new Group();
+  const housing = POM.clone(); // 本体の外箱。内部構造を見せる時に透明にする
   const add = (g, mat, parent) => {
     const m = new Mesh(g, mat || POM);
     m.castShadow = true;
@@ -265,14 +274,16 @@ function buildDevice() {
         }),
         0.5,
       ),
+      housing,
     );
     const b = new Shape();
     roundRect(b, -39.5, -7, 79, 14, 1, false);
     roundRect(b, -34.5, -3, 69, 6, 2.9, true);
-    add(upright(new ExtrudeGeometry(b, { depth: 3.5, bevelEnabled: false, curveSegments: 8 }), 0));
+    add(upright(new ExtrudeGeometry(b, { depth: 3.5, bevelEnabled: false, curveSegments: 8 }), 0), housing);
   }
 
   // 刻印「↓CLOSE」（側面2か所）。キャンバス 1mm=20px、範囲：本体左端から x 3〜15mm、下面から y 1〜19mm
+  let decal;
   {
     const c = document.createElement('canvas');
     c.width = 240;
@@ -303,14 +314,14 @@ function buildDevice() {
     g.lineWidth = 5;
     g.strokeText('CLOSE', 0, 0);
     g.restore();
-    const mat = new MeshBasicMaterial({
+    decal = new MeshBasicMaterial({
       map: new CanvasTexture(c),
       transparent: true,
       depthWrite: false,
       polygonOffset: true,
       polygonOffsetFactor: -2,
     });
-    const p1 = new Mesh(new PlaneGeometry(12, 18), mat);
+    const p1 = new Mesh(new PlaneGeometry(12, 18), decal);
     p1.position.set(-42.5 + 9, 10, 10.02);
     dev.add(p1);
     const p2 = p1.clone();
@@ -406,6 +417,8 @@ function buildDevice() {
     dev,
     mover,
     shaft,
+    housing,
+    decal,
     width(y) {
       const sp = spanAt(outline, y);
       return sp ? sp[1] : 0;
@@ -513,6 +526,115 @@ function buildSleeve(device) {
   };
 }
 
+// ================= 内部を見る（X線表示）と図面風の引出線 =================
+// ボタンで本体の外箱を半透明にし、送りねじ・ナットの動きを見せる。部品名を引出線で示す。
+function createXray(stage, device, camera, onChange) {
+  const NS = 'http://www.w3.org/2000/svg';
+  const wrap = document.createElement('div');
+  wrap.className = 'stage-wrap';
+  stage.before(wrap);
+  wrap.appendChild(stage);
+
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'xray-btn';
+  btn.setAttribute('aria-pressed', 'false');
+  btn.textContent = '内部を見る';
+  wrap.appendChild(btn);
+
+  const layer = document.createElement('div');
+  layer.className = 'callouts';
+  layer.setAttribute('aria-hidden', 'true');
+  const svg = document.createElementNS(NS, 'svg');
+  layer.appendChild(svg);
+  wrap.appendChild(layer);
+
+  // 引出線の位置（本体の座標、mm）と、ラベルをずらす量（px）
+  const INNER = -34.5;
+  const items = [
+    { text: '送りねじ Tr8×2', obj: device.dev, p: new Vector3(-20, 10, 3.4), dx: 72, dy: -50 },
+    { text: 'ハンドル 1回転＝2mm', obj: device.dev, p: new Vector3(-51, 12, 9), dx: -6, dy: -56 },
+    { text: 'ナットとアームが一緒に動く', obj: device.mover, p: new Vector3(INNER + 6, 5, 6), dx: 64, dy: 58 },
+  ].map((it) => {
+    const line = document.createElementNS(NS, 'line');
+    const dot = document.createElementNS(NS, 'circle');
+    dot.setAttribute('r', '3.5');
+    svg.append(line, dot);
+    const chip = document.createElement('span');
+    chip.className = 'co';
+    chip.textContent = it.text;
+    layer.appendChild(chip);
+    return { ...it, line, dot, chip };
+  });
+
+  let on = false;
+  let xv = 0; // 0 = 外観、1 = 内部表示
+  btn.addEventListener('click', () => {
+    on = !on;
+    btn.setAttribute('aria-pressed', String(on));
+    btn.textContent = on ? '外観に戻す' : '内部を見る';
+    onChange();
+  });
+
+  const { housing, decal } = device;
+  function apply() {
+    const see = xv > 0.001;
+    if (housing.transparent !== see) {
+      housing.transparent = see;
+      housing.needsUpdate = true;
+    }
+    housing.opacity = 1 - 0.86 * xv;
+    housing.depthWrite = xv < 0.5;
+    decal.opacity = 1 - xv;
+  }
+
+  const v = new Vector3();
+  return {
+    get on() {
+      return on;
+    },
+    busy: () => xv !== (on ? 1 : 0),
+    // dt 秒ぶん進める。reduce（動きを減らす設定）では即座に切り替える
+    step(dt, reduce) {
+      const goal = on ? 1 : 0;
+      const d = goal - xv;
+      const stepv = reduce ? 1 : dt / 0.4;
+      xv = Math.abs(d) <= stepv ? goal : xv + Math.sign(d) * stepv;
+      apply();
+    },
+    // 引出線を描く。正面付近を向いている時だけ表示
+    layout(facing) {
+      const show = xv > 0.6 && facing;
+      layer.classList.toggle('on', show);
+      if (!show) return;
+      const w = stage.clientWidth;
+      const h = stage.clientHeight;
+      const W = wrap.clientWidth;
+      const ox = stage.offsetLeft;
+      const oy = stage.offsetTop;
+      svg.setAttribute('viewBox', `0 0 ${W} ${wrap.clientHeight}`);
+      items.forEach((it) => {
+        v.copy(it.p);
+        it.obj.localToWorld(v);
+        v.project(camera);
+        const ax = ox + (v.x * 0.5 + 0.5) * w;
+        const ay = oy + (-v.y * 0.5 + 0.5) * h;
+        const cw = it.chip.offsetWidth;
+        const cx = Math.min(Math.max(ax + it.dx, cw / 2 + 4), W - cw / 2 - 4);
+        const cy = ay + it.dy;
+        it.line.setAttribute('x1', ax);
+        it.line.setAttribute('y1', ay);
+        it.line.setAttribute('x2', cx);
+        it.line.setAttribute('y2', cy);
+        it.dot.setAttribute('cx', ax);
+        it.dot.setAttribute('cy', ay);
+        it.chip.style.left = `${cx}px`;
+        it.chip.style.top = `${cy}px`;
+      });
+    },
+  };
+}
+
 // ================= ヒーロー：本体モデル =================
 // ・本体は40秒で1周のペースでゆっくり回転（横ドラッグで向きを変えられる）
 // ・アームは全閉⇄最大(70mm)を自動で往復。ハンドルは1回転=2mmなので、
@@ -528,7 +650,12 @@ function initHero(state) {
   const camera = new PerspectiveCamera(24, 1, 1, 2000);
   const LOOK = new Vector3(0, -14, 0);
 
-  scene.add(new HemisphereLight(0xffffff, 0x3a4160, 0.6 * LIGHT));
+  // 周囲の映り込み（室内を模した環境光）。艶と陰影の立体感を出す
+  const pmrem = new PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+  scene.environmentIntensity = 0.15;
+  pmrem.dispose();
+  scene.add(new HemisphereLight(0xffffff, 0x3a4160, 0.35 * LIGHT));
   const key = new DirectionalLight(0xffffff, 0.85 * LIGHT);
   key.position.set(-40, 160, 120);
   key.castShadow = true;
@@ -553,6 +680,7 @@ function initHero(state) {
   device.dev.position.x = 4; // 全体の中心を回転軸に合わせる
   model.add(device.dev);
   const updateSleeve = buildSleeve(device);
+  const xray = createXray(stage, device, camera, () => state.kick());
 
   // 1回転(2π)=2mm。閉じる向き＝側面の矢印が下へ動く向き
   const place = () => {
@@ -591,7 +719,14 @@ function initHero(state) {
     const dt = Math.min(0.1, last ? (now - last) / 1000 : 0);
     last = now;
     const anim = !reduce;
-    if (anim && !drag.on) spin += SPIN * dt;
+    xray.step(dt, reduce);
+    if (xray.on && !drag.on) {
+      // 内部表示中は回転を止め、正面に戻す
+      const front = Math.round(spin / (Math.PI * 2)) * Math.PI * 2;
+      spin = reduce || Math.abs(front - spin) < 0.001 ? front : spin + (front - spin) * (1 - Math.pow(0.02, dt));
+    } else if (anim && !drag.on) {
+      spin += SPIN * dt;
+    }
 
     if (!state.demo) {
       // 手動：スライダーの値へ最大10mm/秒で追従
@@ -632,7 +767,9 @@ function initHero(state) {
     model.rotation.y = spin;
     place();
     renderer.render(scene, camera);
-    if (visible && !document.hidden && (anim || state.current !== state.target)) {
+    xray.layout(Math.cos(spin) > 0.88);
+    const settling = xray.busy() || (xray.on && Math.abs(Math.cos(spin) - 1) > 1e-6);
+    if (visible && !document.hidden && (anim || settling || state.current !== state.target)) {
       requestAnimationFrame(frame);
     } else {
       running = false;
@@ -659,6 +796,7 @@ function initHero(state) {
     camera.updateProjectionMatrix();
     place();
     renderer.render(scene, camera);
+    xray.layout(Math.cos(spin) > 0.88);
     if (fallback) fallback.style.display = 'none'; // 3Dの描画が始まったら静止画を隠す
     state.kick();
   }
