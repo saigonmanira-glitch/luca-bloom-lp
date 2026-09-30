@@ -3,20 +3,28 @@ name: CI
 on:
   push:
   pull_request:
+# 最小権限：リポジトリの読み取りのみ（万一ビルド中に不正なコードが動いても、書き込み・公開はできない）
+permissions:
+  contents: read
 jobs:
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      # 外部の部品はバージョン名ではなくコミットID（書き換え不可）で固定する
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: 依存パッケージの既知の脆弱性チェック
+        run: npm audit --audit-level=moderate
       - name: 文法チェック（ESLint・HTML）
         run: npm run lint
-      - name: リンク・メタ情報・sitemap のチェック
+      - name: リンク・メタ情報・sitemap・CSP のチェック
         run: npm run check
       - name: ビルド結果が src/ と一致しているか
         run: |

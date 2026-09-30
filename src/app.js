@@ -3,8 +3,8 @@
 
 // ---------- アクセス解析（Google アナリティクス 4） ----------
 // 測定ID（G-から始まる文字列）を入れると計測が始まる。空欄の間は何も読み込まない。
-// 有効にする際は privacy.html の「5. アクセス解析ツール・外部サービス」と、index.html の
-// Content-Security-Policy（script-src / connect-src / img-src に https://*.googletagmanager.com 等）も更新すること。
+// 有効にする際は privacy.html の「5. アクセス解析ツール・外部サービス」と、tools/build-csp.mjs の
+// CSP（Google のドメインの許可・Trusted Types の解除。ファイル冒頭の説明を参照）も更新すること。
 const GA_ID = '';
 
 function initAnalytics() {
