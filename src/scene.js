@@ -18,6 +18,7 @@ import {
   Mesh,
   MeshBasicMaterial,
   MeshPhysicalMaterial,
+  NeutralToneMapping,
   MeshStandardMaterial,
   Path,
   PCFShadowMap,
@@ -101,14 +102,24 @@ function addDrag(el, onMove) {
 }
 
 // ---------- 形状の部品 ----------
-// POM樹脂：わずかな艶（クリアコート）を重ね、周囲の映り込みで樹脂らしい質感を出す
+// POM樹脂（ナチュラル）：乳白色で、薄い部分ほど光が少し透ける半透明の白。
+// transmission で光の透過を、attenuation で厚い部分ほど白く濁る様子を、clearcoat で薄い艶を表現する
+// sheen（布や蝋のような柔らかい反射）で、POM特有のしっとりした表面を出す
 const pom = (extra) =>
   new MeshPhysicalMaterial({
-    color: 0xe8e4da,
-    roughness: 0.42,
+    color: 0xebe7df,
+    roughness: 0.38,
     metalness: 0,
-    clearcoat: 0.6,
-    clearcoatRoughness: 0.3,
+    transmission: 0.55,
+    thickness: 2.5,
+    ior: 1.48,
+    attenuationColor: 0xe4dccb,
+    attenuationDistance: 3.5,
+    sheen: 0.4,
+    sheenRoughness: 0.6,
+    sheenColor: 0xffffff,
+    clearcoat: 0.2,
+    clearcoatRoughness: 0.4,
     side: DoubleSide,
     ...extra,
   });
@@ -382,24 +393,49 @@ function buildDevice() {
     add(kg, POM_FLAT, shaft);
   }
 
-  // キーホール留め具：10.5×14.25 長円、厚み1.75（右端）
+  // リリースプレート（キーホール留め具）：図面（尺度5:1）どおり。
+  // 外形 10.5×14.25 の長円、厚み1.75。鍵穴形の抜き＝幅4mmのスロット（送りねじの溝 φ4 にはまる）と φ6.5 の穴を R0.5 でつなぐ。
+  // 穴のふちは両面とも C0.5 の面取り（表裏0.5mmの層は穴を0.5mm大きく、中央0.75mmの層は図面の寸法）。
+  // 組付け：スロットの端が送りねじの中心（y=10）に来る向き（大きい穴が下）。
   {
-    const s = new Shape();
-    s.moveTo(-5.25, 5.25);
-    s.absarc(0, 5.25, 5.25, Math.PI, 2 * Math.PI, false);
-    s.lineTo(5.25, 9);
-    s.absarc(0, 9, 5.25, 0, Math.PI, false);
-    s.lineTo(-5.25, 5.25);
-    const g = new ExtrudeGeometry(s, {
-      depth: 1.75,
-      bevelEnabled: true,
-      bevelThickness: 0.3,
-      bevelSize: 0.3,
-      bevelSegments: 1,
-      curveSegments: 24,
-    });
-    g.rotateY(Math.PI / 2);
-    add(g).position.set(42.8, -0.25, 0);
+    const AXIS = 10; // 送りねじの中心の高さ
+    const outline = () => {
+      const s = new Shape();
+      s.moveTo(-5.25, 5);
+      s.absarc(0, 5, 5.25, Math.PI, 2 * Math.PI, false);
+      s.lineTo(5.25, 8.75);
+      s.absarc(0, 8.75, 5.25, 0, Math.PI, false);
+      s.lineTo(-5.25, 5);
+      return s;
+    };
+    // 鍵穴：スロット半幅 rs（先端は半円）、大きい穴の半径 rb（中心 y=5）、つなぎの丸み rf
+    const keyhole = (rs, rb, rf) => {
+      const h = new Path();
+      const yc = 5 + Math.sqrt((rb + rf) ** 2 - (rs + rf) ** 2); // つなぎの円の中心の高さ
+      const ang = Math.atan2(5 - yc, rs + rf); // つなぎの円から大きい穴への接点方向
+      h.absarc(0, AXIS, rs, 0, Math.PI, false); // スロットの先端（上）
+      h.lineTo(-rs, yc);
+      h.absarc(-(rs + rf), yc, rf, 0, ang, true);
+      const tl = Math.atan2(yc + rf * Math.sin(ang) - 5, -(rs + rf) + rf * Math.cos(ang));
+      h.absarc(0, 5, rb, tl, Math.PI - tl + 2 * Math.PI, false); // 大きい穴（下側をぐるりと）
+      h.absarc(rs + rf, yc, rf, Math.PI - ang, Math.PI, true);
+      h.lineTo(rs, AXIS);
+      return h;
+    };
+    const layer = (hole, z0, depth) => {
+      const s = outline();
+      s.holes.push(hole);
+      const g = new ExtrudeGeometry(s, { depth, bevelEnabled: false, curveSegments: 32 });
+      g.translate(0, 0, z0);
+      g.rotateY(Math.PI / 2);
+      return g;
+    };
+    const plate = new Group();
+    plate.position.set(42.8, 0, 0);
+    dev.add(plate);
+    add(layer(keyhole(2.5, 3.75, 1), 0, 0.5), POM, plate); // 本体側の面（面取り分だけ穴が大きい）
+    add(layer(keyhole(2, 3.25, 0.5), 0.5, 0.75), POM, plate); // 中央（図面の寸法）
+    add(layer(keyhole(2.5, 3.75, 1), 1.25, 0.5), POM, plate); // 外側の面
   }
 
   // アーム
@@ -526,112 +562,25 @@ function buildSleeve(device) {
   };
 }
 
-// ================= 内部を見る（X線表示）と図面風の引出線 =================
-// ボタンで本体の外箱を半透明にし、送りねじ・ナットの動きを見せる。部品名を引出線で示す。
-function createXray(stage, device, camera, onChange) {
-  const NS = 'http://www.w3.org/2000/svg';
-  const wrap = document.createElement('div');
-  wrap.className = 'stage-wrap';
-  stage.before(wrap);
-  wrap.appendChild(stage);
-
-  const btn = document.createElement('button');
-  btn.type = 'button';
-  btn.className = 'xray-btn';
-  btn.setAttribute('aria-pressed', 'false');
-  btn.textContent = '内部を見る';
-  wrap.appendChild(btn);
-
-  const layer = document.createElement('div');
-  layer.className = 'callouts';
-  layer.setAttribute('aria-hidden', 'true');
-  const svg = document.createElementNS(NS, 'svg');
-  layer.appendChild(svg);
-  wrap.appendChild(layer);
-
-  // 引出線の位置（本体の座標、mm）と、ラベルをずらす量（px）
-  const INNER = -34.5;
-  const items = [
-    { text: '送りねじ Tr8×2', obj: device.dev, p: new Vector3(-20, 10, 3.4), dx: 72, dy: -50 },
-    { text: 'ハンドル 1回転＝2mm', obj: device.dev, p: new Vector3(-51, 12, 9), dx: -6, dy: -56 },
-    { text: 'ナットとアームが一緒に動く', obj: device.mover, p: new Vector3(INNER + 6, 5, 6), dx: 64, dy: 58 },
-  ].map((it) => {
-    const line = document.createElementNS(NS, 'line');
-    const dot = document.createElementNS(NS, 'circle');
-    dot.setAttribute('r', '3.5');
-    svg.append(line, dot);
-    const chip = document.createElement('span');
-    chip.className = 'co';
-    chip.textContent = it.text;
-    layer.appendChild(chip);
-    return { ...it, line, dot, chip };
-  });
-
-  let on = false;
-  let xv = 0; // 0 = 外観、1 = 内部表示
-  btn.addEventListener('click', () => {
-    on = !on;
-    btn.setAttribute('aria-pressed', String(on));
-    btn.textContent = on ? '外観に戻す' : '内部を見る';
-    onChange();
-  });
-
+// ================= 外箱の透過（内部の送りねじ・ナットを見せる） =================
+// 回転に合わせて自動で「不透明 → 透過 → 不透明」を繰り返す。
+// 正面・背面を向いている時は不透明、横を向いている時（長い側面が見える時）に透過する。1回転で2往復。
+function createSeeThrough(device) {
   const { housing, decal } = device;
-  function apply() {
+  const ss = (a, b, x) => {
+    const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
+    return t * t * (3 - 2 * t);
+  };
+  return (spin) => {
+    const xv = ss(0.25, 0.85, (1 - Math.cos(2 * spin)) / 2); // 0 = 不透明、1 = 透過
     const see = xv > 0.001;
     if (housing.transparent !== see) {
       housing.transparent = see;
       housing.needsUpdate = true;
     }
-    housing.opacity = 1 - 0.86 * xv;
+    housing.opacity = 1 - 0.8 * xv;
     housing.depthWrite = xv < 0.5;
     decal.opacity = 1 - xv;
-  }
-
-  const v = new Vector3();
-  return {
-    get on() {
-      return on;
-    },
-    busy: () => xv !== (on ? 1 : 0),
-    // dt 秒ぶん進める。reduce（動きを減らす設定）では即座に切り替える
-    step(dt, reduce) {
-      const goal = on ? 1 : 0;
-      const d = goal - xv;
-      const stepv = reduce ? 1 : dt / 0.4;
-      xv = Math.abs(d) <= stepv ? goal : xv + Math.sign(d) * stepv;
-      apply();
-    },
-    // 引出線を描く。正面付近を向いている時だけ表示
-    layout(facing) {
-      const show = xv > 0.6 && facing;
-      layer.classList.toggle('on', show);
-      if (!show) return;
-      const w = stage.clientWidth;
-      const h = stage.clientHeight;
-      const W = wrap.clientWidth;
-      const ox = stage.offsetLeft;
-      const oy = stage.offsetTop;
-      svg.setAttribute('viewBox', `0 0 ${W} ${wrap.clientHeight}`);
-      items.forEach((it) => {
-        v.copy(it.p);
-        it.obj.localToWorld(v);
-        v.project(camera);
-        const ax = ox + (v.x * 0.5 + 0.5) * w;
-        const ay = oy + (-v.y * 0.5 + 0.5) * h;
-        const cw = it.chip.offsetWidth;
-        const cx = Math.min(Math.max(ax + it.dx, cw / 2 + 4), W - cw / 2 - 4);
-        const cy = ay + it.dy;
-        it.line.setAttribute('x1', ax);
-        it.line.setAttribute('y1', ay);
-        it.line.setAttribute('x2', cx);
-        it.line.setAttribute('y2', cy);
-        it.dot.setAttribute('cx', ax);
-        it.dot.setAttribute('cy', ay);
-        it.chip.style.left = `${cx}px`;
-        it.chip.style.top = `${cy}px`;
-      });
-    },
   };
 }
 
@@ -645,6 +594,8 @@ function initHero(state) {
   const fallback = document.getElementById('fb');
   const renderer = createRenderer(stage);
   if (!renderer) return;
+  renderer.toneMapping = NeutralToneMapping; // 白の階調（半透明の白の陰影）を白飛びさせずに残す
+  renderer.toneMappingExposure = 1.05;
 
   const scene = new Scene();
   const camera = new PerspectiveCamera(24, 1, 1, 2000);
@@ -660,6 +611,8 @@ function initHero(state) {
   key.position.set(-40, 160, 120);
   key.castShadow = true;
   key.shadow.mapSize.set(1024, 1024);
+  key.shadow.bias = -0.0004; // 面に出る細かい縞（影の計算誤差）を防ぐ
+  key.shadow.normalBias = 0.25;
   Object.assign(key.shadow.camera, { left: -100, right: 100, top: 100, bottom: -100, near: 10, far: 450 });
   scene.add(key);
   const fill = new DirectionalLight(0xdfe4ff, 0.35 * LIGHT);
@@ -680,7 +633,7 @@ function initHero(state) {
   device.dev.position.x = 4; // 全体の中心を回転軸に合わせる
   model.add(device.dev);
   const updateSleeve = buildSleeve(device);
-  const xray = createXray(stage, device, camera, () => state.kick());
+  const seeThrough = createSeeThrough(device);
 
   // 1回転(2π)=2mm。閉じる向き＝側面の矢印が下へ動く向き
   const place = () => {
@@ -719,14 +672,7 @@ function initHero(state) {
     const dt = Math.min(0.1, last ? (now - last) / 1000 : 0);
     last = now;
     const anim = !reduce;
-    xray.step(dt, reduce);
-    if (xray.on && !drag.on) {
-      // 内部表示中は回転を止め、正面に戻す
-      const front = Math.round(spin / (Math.PI * 2)) * Math.PI * 2;
-      spin = reduce || Math.abs(front - spin) < 0.001 ? front : spin + (front - spin) * (1 - Math.pow(0.02, dt));
-    } else if (anim && !drag.on) {
-      spin += SPIN * dt;
-    }
+    if (anim && !drag.on) spin += SPIN * dt;
 
     if (!state.demo) {
       // 手動：スライダーの値へ最大10mm/秒で追従
@@ -765,11 +711,10 @@ function initHero(state) {
     }
 
     model.rotation.y = spin;
+    seeThrough(spin);
     place();
     renderer.render(scene, camera);
-    xray.layout(Math.cos(spin) > 0.88);
-    const settling = xray.busy() || (xray.on && Math.abs(Math.cos(spin) - 1) > 1e-6);
-    if (visible && !document.hidden && (anim || settling || state.current !== state.target)) {
+    if (visible && !document.hidden && (anim || state.current !== state.target)) {
       requestAnimationFrame(frame);
     } else {
       running = false;
@@ -794,9 +739,9 @@ function initHero(state) {
     camera.position.set(LOOK.x - d * 0.3, LOOK.y + d * 0.36, d * 0.88);
     camera.lookAt(LOOK);
     camera.updateProjectionMatrix();
+    seeThrough(spin);
     place();
     renderer.render(scene, camera);
-    xray.layout(Math.cos(spin) > 0.88);
     if (fallback) fallback.style.display = 'none'; // 3Dの描画が始まったら静止画を隠す
     state.kick();
   }
@@ -834,6 +779,8 @@ function initBox() {
   key.position.set(-120, 260, 200);
   key.castShadow = true;
   key.shadow.mapSize.set(1024, 1024);
+  key.shadow.bias = -0.0004; // 面に出る細かい縞（影の計算誤差）を防ぐ
+  key.shadow.normalBias = 0.25;
   Object.assign(key.shadow.camera, { left: -170, right: 170, top: 170, bottom: -170, near: 10, far: 800 });
   scene.add(key);
   const fill = new DirectionalLight(0xdfe6ff, 0.35 * LIGHT);
