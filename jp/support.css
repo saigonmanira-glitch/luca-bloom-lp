@@ -60,3 +60,4 @@ main{padding-block:28px 64px}
 .foot a{color:var(--on-navy-muted)}
 .skip{position:absolute;left:-9999px;top:0;z-index:100;background:var(--gold);color:var(--navy);font-weight:700;font-size:14px;padding:8px 14px;border-radius:8px;text-decoration:none}
 .skip:focus-visible{left:8px;top:8px}
+.on-navy{color:#EEF0F6}

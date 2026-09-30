@@ -120,6 +120,8 @@ async function charsByWeight() {
       const page = await browser.newPage({ viewport: { width, height: 900 }, javaScriptEnabled: false });
       for (const f of pages) {
         await page.goto(base + '/' + path.relative(ROOT, f).split(path.sep).join('/'));
+        // この関数はブラウザ内で実行される（document などはブラウザの変数）
+        /* global document, NodeFilter, getComputedStyle */
         const res = await page.evaluate((JP) => {
           const out = { 400: '', 700: '', 900: '' };
           const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);

@@ -1,0 +1,28 @@
+# 自動チェック：push のたびに、文法・リンク・ビルド結果・ブラウザでの動作を確認する
+name: CI
+on:
+  push:
+  pull_request:
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: 文法チェック（ESLint・HTML）
+        run: npm run lint
+      - name: リンク・メタ情報・sitemap のチェック
+        run: npm run check
+      - name: ビルド結果が src/ と一致しているか
+        run: |
+          npm run build:js
+          git diff --exit-code -- assets/js
+      - name: ブラウザ（Chromium）の準備
+        run: npx playwright install --with-deps chromium
+      - name: ブラウザでの動作テスト
+        run: npm test

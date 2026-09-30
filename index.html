@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="utf-8">
@@ -147,13 +147,15 @@ small.gl{font-size:12px;color:var(--muted);font-weight:400}
 .types-note{margin-top:14px;font-size:13.5px;color:var(--muted);line-height:1.75}
 .sec .h2-next{margin-top:52px}
 .cmp{margin-top:18px;background:var(--white);border-radius:16px;overflow:hidden;font-size:13.5px;line-height:1.55}
-.cmp .r{display:grid;grid-template-columns:84px 1fr 1fr;border-top:1px solid var(--line)}
-.cmp .r:first-child{border-top:0}
-.cmp span{padding:12px 10px}
-.cmp [role=rowheader]{font-weight:700;font-size:12.5px;color:var(--muted)}
-.cmp span:last-child{background:#FBF4E2;font-weight:700;color:var(--navy)}
-.cmp .h span{font-size:12px;font-weight:700;color:var(--muted);padding-block:10px}
-.cmp .h span:last-child{color:var(--navy)}
+.cmp table{width:100%;border-collapse:collapse;table-layout:fixed}
+.cmp tr{border-top:1px solid var(--line)}
+.cmp thead tr{border-top:0}
+.cmp th,.cmp td{padding:12px 10px;text-align:left;vertical-align:top;font-weight:400}
+.cmp thead td{width:84px}
+.cmp th[scope=row]{font-weight:700;font-size:12.5px;color:var(--muted)}
+.cmp tr>:last-child{background:#FBF4E2;font-weight:700;color:var(--navy)}
+.cmp thead th,.cmp thead td{font-size:12px;font-weight:700;color:var(--muted);padding-block:10px}
+.cmp thead th:last-child{color:var(--navy)}
 
 /* ---------- PRIVACY ---------- */
 .boxstage{position:relative;width:100%;aspect-ratio:1/0.9;margin-top:22px;touch-action:pan-y}
@@ -234,11 +236,12 @@ footer p{margin-top:8px}
 .bar .p small{display:block;font-family:var(--font-jp);font-size:12px;font-weight:400;color:var(--on-navy-muted)}
 .bar .cta{min-height:48px;font-size:15px;flex:1;white-space:nowrap;letter-spacing:.02em}
 @media (prefers-reduced-motion:reduce){.bar{transition:none}summary::after{transition:none}}
+.sprite{position:absolute}.ib{display:inline-block}.sec.pt0{padding-top:0}sup.s12{font-size:12px}.c-inherit{color:inherit}.nw{white-space:nowrap}
 </style>
 </head>
 <body>
 <a class="skip" href="#main">本文へ移動</a>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+<svg class="sprite" width="0" height="0" aria-hidden="true" focusable="false">
   <defs>
     <!-- 駆動アーム／固定アームの側面形状（DXF図面の輪郭線から抽出・単位mm、本体下面が y=0、内側の直線面が x=0） -->
     <path id="lb-arm" d="M0 0V39A1 1 0 0 0 1 40H1.394A2 2 0 0 0 2.504 39.664L3.664 38.891L4.387 38.211A3 3 0 0 0 5 36.394V35.475A20 20 0 0 0 4.784 32.541L2.522 17.293A2 2 0 0 1 4.5 15H7A1 1 0 0 0 8 14V0Z"/>
@@ -298,7 +301,7 @@ footer p{margin-top:8px}
 <section class="sec">
   <div class="wrap">
     <p class="label">Your worries</p>
-    <h2>こんなお悩み、<br>ひとりで<span style="display:inline-block">抱えていませんか？</span></h2>
+    <h2>こんなお悩み、<br>ひとりで<span class="ib">抱えていませんか？</span></h2>
     <ul class="worry">
       <li><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="#161A29"/><path d="M6.5 11.2l3 3 6-6.4" fill="none" stroke="#E3B34E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>包皮の口が狭くて困っている。</li>
       <li><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="#161A29"/><path d="M6.5 11.2l3 3 6-6.4" fill="none" stroke="#E3B34E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>誰かに相談するのは、正直恥ずかしい。</li>
@@ -314,7 +317,7 @@ footer p{margin-top:8px}
 </section>
 
 <!-- ================= REASONS ================= -->
-<section class="sec" style="padding-top:0">
+<section class="sec pt0">
   <div class="wrap">
     <p class="label">4 reasons</p>
     <h2>Luca Bloomが<br>選ばれる4つの理由</h2>
@@ -430,7 +433,7 @@ footer p{margin-top:8px}
         <div class="body">
           <p class="no">REASON 04</p>
           <p class="big">70<small>mm</small></p>
-          <h3>業界最大<sup style="font-size:12px">※</sup>の開き幅</h3>
+          <h3>業界最大<sup class="s12">※</sup>の開き幅</h3>
           <p>1台で最大70mmまで、ご自身に合った幅を選べます。2本のアームは最後まで平行のまま開き、根元から先端まで均等に広げます。</p>
           <p class="claim-note">※当社調べ（2026年9月時点、国内販売品2製品と比較）</p>
         </div>
@@ -440,7 +443,7 @@ footer p{margin-top:8px}
 </section>
 
 <!-- ================= 真性・仮性包茎／包茎リングとの違い ================= -->
-<section class="sec" id="houkei" style="padding-top:0">
+<section class="sec pt0" id="houkei">
   <div class="wrap">
     <p class="label">About</p>
     <h2>包茎の種類</h2>
@@ -453,11 +456,15 @@ footer p{margin-top:8px}
 
     <h2 class="h2-next"><span class="nb">仮性包茎リング</span><span class="nb">との違い</span></h2>
     <p class="sub">仮性包茎リング（包茎リング）は、むいた包皮を根元側に留めておくための輪です。リングをつけられない方のためのLuca Bloomです。</p>
-    <div class="cmp" role="table" aria-label="包茎リングとLuca Bloomの比較">
-      <div class="r h" role="row"><span role="columnheader"></span><span role="columnheader">包茎リング</span><span role="columnheader">Luca Bloom</span></div>
-      <div class="r" role="row"><span role="rowheader">目的</span><span role="cell">むいた状態を保つ</span><span role="cell">狭い口を広げる</span></div>
-      <div class="r" role="row"><span role="rowheader">向いている方</span><span role="cell">手でむける方</span><span role="cell">包皮がきつい方</span></div>
-      <div class="r" role="row"><span role="rowheader">サイズ</span><span role="cell">輪の大きさを選ぶ</span><span role="cell">1台で最大70mmまで無段階</span></div>
+    <div class="cmp">
+      <table aria-label="包茎リングとLuca Bloomの比較">
+        <thead><tr><td></td><th scope="col">包茎リング</th><th scope="col">Luca Bloom</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">目的</th><td>むいた状態を保つ</td><td>狭い口を広げる</td></tr>
+          <tr><th scope="row">向いている方</th><td>手でむける方</td><td>包皮がきつい方</td></tr>
+          <tr><th scope="row">サイズ</th><td>輪の大きさを選ぶ</td><td>1台で最大70mmまで無段階</td></tr>
+        </tbody>
+      </table>
     </div>
     <p class="types-note">「リングを使いたいけれど、そもそもむけない」という方の、最初の一歩に。</p>
   </div>
@@ -511,7 +518,7 @@ footer p{margin-top:8px}
 </section>
 
 <!-- ================= TRUST ================= -->
-<section class="sec" style="padding-top:0">
+<section class="sec pt0">
   <div class="wrap">
     <p class="label">Quality</p>
     <h2>毎日使うものだから、<br>安心できる品質を。</h2>
@@ -533,7 +540,7 @@ footer p{margin-top:8px}
 </section>
 
 <!-- ================= FAQ ================= -->
-<section class="sec" style="padding-top:0">
+<section class="sec pt0">
   <div class="wrap">
     <p class="label">FAQ</p>
     <h2>よくある質問</h2>
@@ -550,7 +557,7 @@ footer p{margin-top:8px}
 </section>
 
 <!-- ================= SUPPORT ================= -->
-<section class="sec" id="support" style="padding-top:0">
+<section class="sec pt0" id="support">
   <div class="wrap">
     <p class="label">Support</p>
     <h2>ご使用マニュアル・<br>免責事項</h2>
@@ -563,7 +570,7 @@ footer p{margin-top:8px}
 </section>
 
 <!-- ================= COLUMN ================= -->
-<section class="sec" id="column" style="padding-top:0">
+<section class="sec pt0" id="column">
   <div class="wrap">
     <a class="col-link" href="column/"><span class="k">COLUMN</span><b>コラムを読む</b><span class="d">包皮がきついときの基本、洗い方、泌尿器科に相談する目安など、図解つきの10本</span></a>
   </div>
@@ -587,9 +594,9 @@ footer p{margin-top:8px}
 <footer>
   <div class="wrap">
     <span class="logo">Luca Bloom</span>
-    <p>本製品は雑貨であり、医療機器ではありません。治療に関していかなる表明も行いません。想定使用年齢：18歳以上。製造国：中国（検品・洗浄・組立：日本）。詳しい注意事項・使用方法は、同梱のQRコード、または<a href="jp/" style="color:inherit">サポートページ</a>からご確認ください。</p>
+    <p>本製品は雑貨であり、医療機器ではありません。治療に関していかなる表明も行いません。想定使用年齢：18歳以上。製造国：中国（検品・洗浄・組立：日本）。詳しい注意事項・使用方法は、同梱のQRコード、または<a class="c-inherit" href="jp/">サポートページ</a>からご確認ください。</p>
     <nav aria-label="サポート"><a href="jp/manual.html">ご使用マニュアル</a><a href="jp/disclaimer.pdf" target="_blank" rel="noopener">取扱説明書 兼 免責事項（PDF）</a><a href="column/">コラム</a><a href="privacy.html">プライバシーポリシー</a></nav>
-    <p class="op">運営：Luca Bloom（佐藤渓）<br>所在地：〒106-0032 東京都港区六本木2-1-19 <span style="white-space:nowrap">S-Building 3F</span><br>お問い合わせ：<a href="mailto:lucabloom65@gmail.com">lucabloom65@gmail.com</a></p>
+    <p class="op">運営：Luca Bloom（佐藤渓）<br>所在地：〒106-0032 東京都港区六本木2-1-19 <span class="nw">S-Building 3F</span><br>お問い合わせ：<a href="mailto:lucabloom65@gmail.com">lucabloom65@gmail.com</a></p>
     <p>ページ内の製品画像は3Dモデル・イラストです。</p>
     <p>© Luca Bloom</p>
   </div>

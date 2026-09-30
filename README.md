@@ -7,7 +7,9 @@ https://luca-bloom.com/ のソース一式です。静的サイトで、GitHub P
 | パス | 内容 |
 |---|---|
 | `index.html` | 販売用ランディングページ（スマホ優先）。CSS はこのファイル内 |
-| `src/` | トップページの JavaScript のソース（`app.js`：スライダー・購入バー・アクセス解析、`scene.js`：3D） |
+| `src/` | トップページの JavaScript のソース（`app.js`：スライダー・購入バー・アクセス解析、`scene.js`：3Dの入口。3Dの部品は `src/scene/`：`common.js` 共通処理・`device.js` 本体の形状と素材・`sleeve.js` 膜・`hero.js` ヒーロー・`box.js` 化粧箱・`box-foam.js` 梱包材の図面座標） |
+| `tests/` / `tools/check-site.mjs` / `tools/serve.mjs` | 自動テスト（ブラウザ動作テスト・リンク等の静的チェック・テスト用サーバー） |
+| `.github/workflows/ci.yml` | push のたびに自動テストを実行する設定（GitHub Actions） |
 | `assets/js/` | `src/` をビルドした公開用ファイル（three.js r186 を含み、自サイトから配信） |
 | `assets/fonts/` | サイトで使う文字だけを収録した Web フォント（`tools/build-fonts.mjs` が生成） |
 | `tools/` | ビルド用スクリプト |
@@ -21,7 +23,6 @@ https://luca-bloom.com/ のソース一式です。静的サイトで、GitHub P
 | `column/` | コラム。`index.html`＝一覧、各記事は `*.html`、`column.css`＝全記事共通のスタイル |
 | `robots.txt` / `sitemap.xml` | 検索エンジン向け |
 | `CNAME` / `.nojekyll` | GitHub Pages のカスタムドメイン設定と、Jekyll 処理の無効化 |
-| `index.backup.html` | 2026年9月29日の価格表示追加前のトップページ（`robots.txt` で検索対象外） |
 
 - ヒーローの3Dモデルは、時間で自動的に外箱が透けて（10秒周期：不透明4秒→1秒で透過→透過4秒→1秒で戻る。回転の向きとは無関係）、送りねじ・ナットの動きが見えます。「動きを減らす」設定では不透明のまま。POM樹脂の質感は、薄いクリアコート・環境光の映り込み・ACESトーンマッピングで原案に近い磁器のような白を表現し、本体の角はR1の丸みにしています（transmission＝光の透過計算は描画が重くなるため不使用）。描画解像度は端末の1.5倍までに制限。リリースプレートは図面どおりの鍵穴形（スロット幅4mm・穴φ6.5・面取りC0.5）です。
 ## トップページの仕組み
@@ -41,6 +42,15 @@ https://luca-bloom.com/ のソース一式です。静的サイトで、GitHub P
 - `npm run build` は JavaScript とフォントの両方を作ります（個別には `npm run build:js` / `npm run build:fonts`）。**ページの文章を変えたら、必ず `npm run build:fonts` を実行して `assets/fonts/` と各ページをコミットしてください**（新しい文字がフォントに入らず、その文字だけ別の書体で表示されるのを防ぐため）。
 - `build:fonts` は Playwright があると、ページを実際に表示して太さごとに必要な文字だけを収録します（無い場合は全ての文字を全ての太さに収録）。
 - Google アナリティクス 4 は `src/app.js` の `GA_ID` に測定ID（G- から始まる文字列）を入れてビルドすると有効になります。有効にする際は `privacy.html` の「5. アクセス解析ツール・外部サービス」も書き換えてください。
+
+## 自動テスト
+
+- `npm run verify` で、次のすべてを実行します（GitHub では push のたびに自動実行。結果はリポジトリの「Actions」タブで確認できます）。
+  - `npm run lint`：ESLint（JavaScript）と html-validate（HTML）の文法チェック
+  - `npm run check`：サイト内リンク・画像等の参照先・title/description/canonical・sitemap.xml の確認
+  - `npm test`：ブラウザ（Chromium）での動作テスト 22項目（全ページの表示とエラー、404、3Dの描画、スライダー、WebGL強制終了・非対応時の静止画、化粧箱の遅延読み込み、購入ボタンのリンク、購入バー）
+- GitHub Actions では、`src/` からビルドした結果が `assets/js/` と一致するかも確認します（ビルド忘れの防止）。
+- 初回のみ `npx playwright install chromium` が必要です。
 
 ## コラムの追加手順
 
