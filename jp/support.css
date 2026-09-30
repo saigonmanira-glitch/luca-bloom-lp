@@ -1,7 +1,7 @@
 :root{
   --navy:#161A29;--navy-2:#1F2437;--navy-line:#2E3550;--ivory:#F5F3EE;--white:#FFFFFF;
   --ink:#1A1E2C;--muted:#5F6474;--on-navy:#EEF0F6;--on-navy-muted:#A3AAC0;--silver:#C3CADB;
-  --gold:#E3B34E;--line:#E3E0D8;--warn:#B3261E;--warn-bg:#FBEDEC;
+  --gold:#E3B34E;--gold-ink:#8A6010;--line:#E3E0D8;--warn:#B3261E;--warn-bg:#FBEDEC;
   --font-jp:"Zen Kaku Gothic New","Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",Meiryo,sans-serif;
   --font-en:"Quicksand","Avenir Next","Helvetica Neue",Arial,sans-serif;
   color-scheme:light;
@@ -45,7 +45,7 @@ main{padding-block:28px 64px}
 .step figure{margin:0;background:#FFF;padding:14px 14px 0;display:flex;justify-content:center}
 .step figure img{max-width:300px;width:100%}
 .step .tx{padding:14px 18px 20px}
-.step .n{font-family:var(--font-en);font-weight:700;font-size:12.5px;letter-spacing:.12em;color:var(--gold)}
+.step .n{font-family:var(--font-en);font-weight:700;font-size:12.5px;letter-spacing:.12em;color:var(--gold-ink)}
 .step h2{font-size:19px;font-weight:900;margin-top:2px}
 .step p{margin-top:8px;font-size:14.5px;color:#3E4352}
 .step .warn{margin-top:10px;background:var(--warn-bg);border-radius:10px;padding:10px 12px;font-size:13.5px}

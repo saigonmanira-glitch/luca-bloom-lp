@@ -10,6 +10,11 @@ export default [
     languageOptions: { ecmaVersion: 2022, sourceType: 'module', globals: globals.browser },
   },
   {
+    // サポートページ用のスクリプト（ビルドせずそのまま配信する通常のスクリプト）
+    files: ['jp/**/*.js'],
+    languageOptions: { ecmaVersion: 2020, sourceType: 'script', globals: globals.browser },
+  },
+  {
     files: ['tools/**/*.mjs', '*.config.mjs'],
     languageOptions: { ecmaVersion: 2022, sourceType: 'module', globals: globals.node },
   },

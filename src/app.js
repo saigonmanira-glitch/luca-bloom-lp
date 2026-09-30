@@ -3,7 +3,8 @@
 
 // ---------- アクセス解析（Google アナリティクス 4） ----------
 // 測定ID（G-から始まる文字列）を入れると計測が始まる。空欄の間は何も読み込まない。
-// 有効にする際は privacy.html の「5. アクセス解析ツール・外部サービス」も更新すること。
+// 有効にする際は privacy.html の「5. アクセス解析ツール・外部サービス」と、index.html の
+// Content-Security-Policy（script-src / connect-src / img-src に https://*.googletagmanager.com 等）も更新すること。
 const GA_ID = '';
 
 function initAnalytics() {
@@ -41,6 +42,7 @@ function createState() {
     kick() {},
     show(travel) {
       const v = Math.round(10 + travel); // 表示は1mm刻み
+      slider.setAttribute('aria-valuetext', v <= 10 ? '全閉' : `開き幅 ${v}ミリ`); // 読み上げ用
       if (v <= 10) {
         out.textContent = '全閉';
       } else {

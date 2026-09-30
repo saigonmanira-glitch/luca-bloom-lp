@@ -93,11 +93,16 @@ for (const c of jsChars) all.add(c);
 // ---------- 2. 実際に表示して、太さごとの文字を調べる（Playwright がある場合） ----------
 async function charsByWeight() {
   let chromium;
-  try {
-    ({ chromium } = createRequire(import.meta.url)('playwright'));
-  } catch {
-    return null;
+  const req = createRequire(import.meta.url);
+  for (const mod of ['playwright', '@playwright/test']) {
+    try {
+      ({ chromium } = req(mod));
+      break;
+    } catch {
+      /* 次の候補を試す */
+    }
   }
+  if (!chromium) return null;
   const TYPES = { '.html': 'text/html; charset=utf-8', '.css': 'text/css', '.js': 'text/javascript', '.svg': 'image/svg+xml', '.webp': 'image/webp', '.png': 'image/png', '.woff2': 'font/woff2' };
   const server = createServer(async (req, res) => {
     let p = decodeURIComponent(req.url.split('?')[0]);
@@ -113,7 +118,11 @@ async function charsByWeight() {
   });
   await new Promise((r) => server.listen(0, '127.0.0.1', r));
   const base = `http://127.0.0.1:${server.address().port}`;
-  const browser = await chromium.launch({ args: ['--proxy-server=direct://', '--proxy-bypass-list=*'] });
+  // CHROMIUM_PATH があればそのブラウザを使う（テストと同じ。playwright.config.mjs 参照）
+  const browser = await chromium.launch({
+    args: ['--proxy-server=direct://', '--proxy-bypass-list=*'],
+    ...(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {}),
+  });
   const found = { 400: new Set(), 700: new Set(), 900: new Set() };
   try {
     for (const width of [375, 1280]) {

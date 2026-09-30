@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>ご使用マニュアル・免責事項｜Luca Bloom</title>
 <meta name="description" content="Luca Bloom（ルカブルーム）のご使用マニュアル（図解の使い方・お手入れ・緊急時の外し方）と、取扱説明書 兼 免責事項のご案内ページです。">
 <link rel="canonical" href="https://luca-bloom.com/jp/">
@@ -17,6 +19,7 @@
 <meta name="theme-color" content="#161A29">
 <link rel="icon" href="../favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"トップ","item":"https://luca-bloom.com/"},{"@type":"ListItem","position":2,"name":"ご使用マニュアル・免責事項"}]}</script>
 <!-- fonts:start （tools/build-fonts.mjs が生成。手で編集しない） -->
 <style>@font-face{font-family:"Zen Kaku Gothic New";font-style:normal;font-weight:400;font-display:swap;src:url(/assets/fonts/zenkaku-400.woff2) format("woff2")}@font-face{font-family:"Zen Kaku Gothic New";font-style:normal;font-weight:700;font-display:swap;src:url(/assets/fonts/zenkaku-700.woff2) format("woff2")}@font-face{font-family:"Zen Kaku Gothic New";font-style:normal;font-weight:900;font-display:swap;src:url(/assets/fonts/zenkaku-900.woff2) format("woff2")}@font-face{font-family:"Quicksand";font-style:normal;font-weight:500 700;font-display:swap;src:url(/assets/fonts/quicksand.woff2) format("woff2")}@font-face{font-family:"Montserrat";font-style:normal;font-weight:200;font-display:swap;src:url(/assets/fonts/montserrat-200.woff2) format("woff2")}</style>
 <!-- fonts:end -->
@@ -24,12 +27,14 @@
 </head>
 <body>
 <a class="skip" href="#main">本文へ移動</a>
-<header class="head"><div class="wrap"><a class="logo" href="../">Luca Bloom</a><nav><a href="../">製品ページ</a></nav></div></header>
-<section class="hero"><div class="wrap">
+<header>
+<div class="head"><div class="wrap"><a class="logo" href="../">Luca Bloom</a><nav><a href="../">製品ページ</a></nav></div></div>
+<div class="hero"><div class="wrap">
   <p class="label">Support</p>
   <h1>ご使用の前に、<br>必ずお読みください</h1>
   <p>ご覧になりたい内容を選んでください。</p>
-</div></section>
+</div></div>
+</header>
 
 <main id="main"><div class="wrap">
   <div class="choices">
@@ -47,15 +52,10 @@
 
   <p class="notice"><b>本体が外せなくなったとき</b><br>無理に引っ張らず、<a href="manual.html#emergency">緊急時の外し方</a>をご確認ください。痛み・うっ血・腫れ・しびれなどの異常がある場合は、直ちに使用を中止し、医療機関を受診してください。</p>
 
-  <p class="contact">お問い合わせ：<code>lucabloom65@gmail.com</code><br>ご購入いただいた販売プラットフォームの取引メッセージからもご連絡いただけます。</p>
+  <p class="contact">お問い合わせ：<a href="mailto:lucabloom65@gmail.com">lucabloom65@gmail.com</a><br>ご購入いただいた販売プラットフォームの取引メッセージからもご連絡いただけます。</p>
 </div></main>
 
 <footer class="foot"><div class="wrap">© Luca Bloom（ルカ・ブルーム）｜本製品は雑貨であり、医療機器ではありません。</div></footer>
-<script>
-  // 前のページのスクロール位置を引き継がず、常にページ先頭から表示（#付きリンクのときだけその位置へ）
-  if('scrollRestoration' in history) history.scrollRestoration='manual';
-  function toTop(){ if(!location.hash) window.scrollTo(0,0); }
-  toTop(); window.addEventListener('pageshow',toTop); window.addEventListener('load',toTop);
-</script>
+<script src="support.js"></script>
 </body>
 </html>
