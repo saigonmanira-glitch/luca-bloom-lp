@@ -1,0 +1,93 @@
+// Luca Bloom LP：ページ全体の動き（スライダー表示・購入バー・3Dの読み込み・アクセス解析）
+// ビルド：npm run build（esbuild で assets/js/ に出力）
+
+// ---------- アクセス解析（Google アナリティクス 4） ----------
+// 測定ID（G-から始まる文字列）を入れると計測が始まる。空欄の間は何も読み込まない。
+// 有効にする際は privacy.html の「5. アクセス解析ツール・外部サービス」も更新すること。
+const GA_ID = '';
+
+function initAnalytics() {
+  if (!GA_ID) return;
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function gtag() {
+    window.dataLayer.push(arguments);
+  };
+  window.gtag('js', new Date());
+  window.gtag('config', GA_ID);
+  const s = document.createElement('script');
+  s.async = true;
+  s.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
+  document.head.appendChild(s);
+
+  // 「Amazonで購入する」のクリックを計測（どのボタンか location で区別）
+  document.querySelectorAll('a[href*="amazon.co.jp"]').forEach((a, i) => {
+    a.addEventListener('click', () => {
+      const where = a.closest('#bar') ? 'sticky_bar' : `button_${i + 1}`;
+      window.gtag('event', 'click_buy', { location: where, transport_type: 'beacon' });
+    });
+  });
+}
+
+// ---------- 開き幅スライダー ----------
+// target / current = アームの移動量(mm) 0〜60。開き幅 = 10 + 移動量
+function createState() {
+  const slider = document.getElementById('gap');
+  const out = document.getElementById('gapv');
+  const state = {
+    slider,
+    target: 0,
+    current: 0,
+    demo: true,
+    kick() {},
+    show(travel) {
+      const v = Math.round(10 + travel); // 表示は1mm刻み
+      if (v <= 10) {
+        out.textContent = '全閉';
+      } else {
+        out.textContent = String(v);
+        const unit = document.createElement('small');
+        unit.textContent = 'mm';
+        out.appendChild(unit);
+      }
+    },
+  };
+  slider.addEventListener('input', () => {
+    state.demo = false;
+    state.target = parseFloat(slider.value) - 10;
+    state.show(state.target);
+    state.kick();
+  });
+  return state;
+}
+
+// ---------- 画面下の購入バー：購入ボタンが見えている間は隠す ----------
+function initBuyBar() {
+  const bar = document.getElementById('bar');
+  if (!bar || !('IntersectionObserver' in window)) return;
+  const visible = new Set();
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) visible.add(e.target);
+      else visible.delete(e.target);
+    });
+    bar.classList.toggle('hide', visible.size > 0);
+  });
+  document.querySelectorAll('.js-buy').forEach((el) => io.observe(el));
+}
+
+// ---------- 3D（three.js）の読み込み ----------
+// 3Dはページ最上部にあるため、ページの読み込み完了（load）後に読み込む。
+// 読み込みに失敗した場合・WebGLが使えない場合は静止画のまま。
+function loadScene(state) {
+  import('./scene.js')
+    .then((m) => m.initScenes(state))
+    .catch(() => {});
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const state = createState();
+  initBuyBar();
+  initAnalytics();
+  if (document.readyState === 'complete') loadScene(state);
+  else window.addEventListener('load', () => loadScene(state), { once: true });
+});

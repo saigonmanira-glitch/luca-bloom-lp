@@ -1,0 +1,24 @@
+{
+  "name": "luca-bloom-lp",
+  "version": "1.0.0",
+  "description": "Luca Bloom LP",
+  "scripts": {
+    "build": "rm -rf assets/js && esbuild src/app.js --bundle --splitting --format=esm --minify --target=es2020 --outdir=assets/js --chunk-names=chunks/[name]-[hash] --legal-comments=eof"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saigonmanira-glitch/luca-bloom-lp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/saigonmanira-glitch/luca-bloom-lp/issues"
+  },
+  "homepage": "https://github.com/saigonmanira-glitch/luca-bloom-lp#readme",
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "three": "^0.186.1"
+  },
+  "private": true
+}
