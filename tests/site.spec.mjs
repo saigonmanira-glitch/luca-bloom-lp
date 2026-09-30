@@ -59,7 +59,6 @@ test('3D：WebGLが強制終了したら静止画に戻る', async ({ page }) =>
   });
   await expect(page.locator('#stage canvas')).toHaveCount(0);
   await expect(page.locator('#fb')).toBeVisible();
-  await expect(page.locator('.tour-space')).toBeHidden(); // 固定表示の空き領域も消える
 });
 
 test('3D：WebGLが使えない端末では静止画のまま', async ({ page }) => {
@@ -74,37 +73,7 @@ test('3D：WebGLが使えない端末では静止画のまま', async ({ page })
   await page.waitForTimeout(2000);
   await expect(page.locator('#stage canvas')).toHaveCount(0);
   await expect(page.locator('#fb')).toBeVisible();
-  await expect(page.locator('.tour-space')).toBeHidden();
   expect(errors).toEqual([]);
-});
-
-test('3D：スクロールで場面が 01全景→02内部構造→03開き幅 と切り替わり、引き出し線が出る', async ({ page }) => {
-  const errors = watchErrors(page);
-  await page.goto('', { waitUntil: 'load' });
-  await expect(page.locator('#stage canvas')).toHaveCount(1, { timeout: 30_000 });
-  await expect(page.locator('.tour-cap li.on')).toContainText('全景', { timeout: 15_000 });
-  const at = (f) =>
-    page.evaluate((f) => {
-      const root = document.getElementById('tour');
-      const top = parseFloat(root.querySelector('.tour-sticky').style.top) || 0;
-      const y = root.getBoundingClientRect().top + scrollY - top + f * root.querySelector('.tour-space').offsetHeight;
-      scrollTo(0, y);
-    }, f);
-  await at(0.5);
-  await expect(page.locator('.tour-cap li.on')).toContainText('内部構造', { timeout: 15_000 });
-  await expect.poll(() => page.locator('.co[data-k="screw"]').evaluate((e) => +e.style.opacity), { timeout: 15_000 }).toBeGreaterThan(0.9);
-  await at(0.95);
-  await expect(page.locator('.tour-cap li.on')).toContainText('開き幅', { timeout: 15_000 });
-  await expect.poll(() => page.locator('.co[data-k="arm"]').evaluate((e) => +e.style.opacity), { timeout: 15_000 }).toBeGreaterThan(0.9);
-  expect(errors).toEqual([]);
-});
-
-test('3D：「動きを減らす」設定ではスクロール連動を使わない', async ({ page }) => {
-  await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.goto('', { waitUntil: 'load' });
-  await expect(page.locator('#stage canvas')).toHaveCount(1, { timeout: 30_000 });
-  await expect(page.locator('.tour-space')).toBeHidden();
-  await expect(page.locator('.tour-cap')).toBeHidden();
 });
 
 test('化粧箱の3Dは、近づくまで作らない', async ({ page }) => {

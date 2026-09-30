@@ -113,10 +113,7 @@ async function charsByWeight() {
   });
   await new Promise((r) => server.listen(0, '127.0.0.1', r));
   const base = `http://127.0.0.1:${server.address().port}`;
-  const browser = await chromium.launch({
-    args: ['--proxy-server=direct://', '--proxy-bypass-list=*'],
-    ...(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {}),
-  });
+  const browser = await chromium.launch({ args: ['--proxy-server=direct://', '--proxy-bypass-list=*'] });
   const found = { 400: new Set(), 700: new Set(), 900: new Set() };
   try {
     for (const width of [375, 1280]) {
