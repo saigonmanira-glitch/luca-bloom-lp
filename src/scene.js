@@ -58,7 +58,7 @@ function createRenderer(container) {
   } catch (e) {
     return null;
   }
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5)); // 1.5倍を上限に（2倍比で描画量を44%削減）
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = PCFShadowMap;
   renderer.outputColorSpace = SRGBColorSpace;
@@ -102,19 +102,14 @@ function addDrag(el, onMove) {
 }
 
 // ---------- 形状の部品 ----------
-// POM樹脂（ナチュラル）：乳白色で、薄い部分ほど光が少し透ける半透明の白。
-// transmission で光の透過を、attenuation で厚い部分ほど白く濁る様子を、clearcoat で薄い艶を表現する
-// sheen（布や蝋のような柔らかい反射）で、POM特有のしっとりした表面を出す
+// POM樹脂（ナチュラル）：乳白色の白。sheen（蝋のような柔らかい反射）でPOM特有のしっとりした表面を、
+// clearcoat で薄い艶を表現する。
+// ※ transmission（光の透過計算）は描画が約6倍重くなるため使わない（2026-09-30 計測）
 const pom = (extra) =>
   new MeshPhysicalMaterial({
-    color: 0xebe7df,
+    color: 0xe2ddd2, // 透過計算なしで以前の明るさに合わせた色
     roughness: 0.38,
     metalness: 0,
-    transmission: 0.55,
-    thickness: 2.5,
-    ior: 1.48,
-    attenuationColor: 0xe4dccb,
-    attenuationDistance: 3.5,
     sheen: 0.4,
     sheenRoughness: 0.6,
     sheenColor: 0xffffff,
@@ -563,16 +558,28 @@ function buildSleeve(device) {
 }
 
 // ================= 外箱の透過（内部の送りねじ・ナットを見せる） =================
-// 回転に合わせて自動で「不透明 → 透過 → 不透明」を繰り返す。
-// 正面・背面を向いている時は不透明、横を向いている時（長い側面が見える時）に透過する。1回転で2往復。
+// 時間で自動的に「不透明 → 透過 → 不透明」を繰り返す（回転の向きとは無関係）。
+// 1周期 10秒：不透明 4秒 → 1秒で透ける → 透過 4秒 → 1秒で戻る。
+const SEE = { period: 10, opaque: 4, fade: 1, clear: 4 };
 function createSeeThrough(device) {
   const { housing, decal } = device;
-  const ss = (a, b, x) => {
-    const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
-    return t * t * (3 - 2 * t);
-  };
-  return (spin) => {
-    const xv = ss(0.25, 0.85, (1 - Math.cos(2 * spin)) / 2); // 0 = 不透明、1 = 透過
+  const ss = (x) => x * x * (3 - 2 * x);
+  let t = 0;
+  let prev = -1;
+  // dt 秒ぶん時間を進めて透過度を反映する。reduce（動きを減らす設定）では不透明のまま
+  return (dt, reduce) => {
+    if (!reduce) t = (t + dt) % SEE.period;
+    let xv = 0; // 0 = 不透明、1 = 透過
+    if (!reduce) {
+      const a = SEE.opaque;
+      const b = a + SEE.fade;
+      const c = b + SEE.clear;
+      if (t >= a && t < b) xv = ss((t - a) / SEE.fade);
+      else if (t >= b && t < c) xv = 1;
+      else if (t >= c) xv = 1 - ss((t - c) / SEE.fade);
+    }
+    if (xv === prev) return;
+    prev = xv;
     const see = xv > 0.001;
     if (housing.transparent !== see) {
       housing.transparent = see;
@@ -595,7 +602,7 @@ function initHero(state) {
   const renderer = createRenderer(stage);
   if (!renderer) return;
   renderer.toneMapping = NeutralToneMapping; // 白の階調（半透明の白の陰影）を白飛びさせずに残す
-  renderer.toneMappingExposure = 1.05;
+  renderer.toneMappingExposure = 0.95;
 
   const scene = new Scene();
   const camera = new PerspectiveCamera(24, 1, 1, 2000);
@@ -604,7 +611,7 @@ function initHero(state) {
   // 周囲の映り込み（室内を模した環境光）。艶と陰影の立体感を出す
   const pmrem = new PMREMGenerator(renderer);
   scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
-  scene.environmentIntensity = 0.15;
+  scene.environmentIntensity = 0.1;
   pmrem.dispose();
   scene.add(new HemisphereLight(0xffffff, 0x3a4160, 0.35 * LIGHT));
   const key = new DirectionalLight(0xffffff, 0.85 * LIGHT);
@@ -711,7 +718,7 @@ function initHero(state) {
     }
 
     model.rotation.y = spin;
-    seeThrough(spin);
+    seeThrough(dt, reduce);
     place();
     renderer.render(scene, camera);
     if (visible && !document.hidden && (anim || state.current !== state.target)) {
@@ -739,7 +746,7 @@ function initHero(state) {
     camera.position.set(LOOK.x - d * 0.3, LOOK.y + d * 0.36, d * 0.88);
     camera.lookAt(LOOK);
     camera.updateProjectionMatrix();
-    seeThrough(spin);
+    seeThrough(0, reduce);
     place();
     renderer.render(scene, camera);
     if (fallback) fallback.style.display = 'none'; // 3Dの描画が始まったら静止画を隠す
