@@ -9,6 +9,8 @@ https://luca-bloom.com/ のソース一式です。静的サイトで、GitHub P
 | `index.html` | 販売用ランディングページ（スマホ優先）。CSS はこのファイル内 |
 | `src/` | トップページの JavaScript のソース（`app.js`：スライダー・購入バー・アクセス解析、`scene.js`：3D） |
 | `assets/js/` | `src/` をビルドした公開用ファイル（three.js r186 を含み、自サイトから配信） |
+| `assets/fonts/` | サイトで使う文字だけを収録した Web フォント（`tools/build-fonts.mjs` が生成） |
+| `tools/` | ビルド用スクリプト |
 | `package.json` | ビルド設定（esbuild） |
 | `hero-fallback.webp` | 3D が表示されるまで／表示できない端末で出す静止画（29KB） |
 | `og.png` | SNS 共有用画像（1200×630） |
@@ -25,15 +27,19 @@ https://luca-bloom.com/ のソース一式です。静的サイトで、GitHub P
 ## トップページの仕組み
 
 - **3D（three.js r186）**：製品の DXF 図面から作った形状。スライダーで開き幅（全閉〜70mm、1mm刻み）を操作できます。
-  - three.js はページの読み込み完了（load）後に読み込みます。
+  - three.js はページの読み込み完了（load）後に読み込みます。化粧箱の3Dは、表示領域が画面の400px手前に来てから作ります。
+  - シェーダーは並行コンパイル（`compileAsync`）してから描画を始め、読み込み時に画面が固まらないようにしています。
+  - 本体の回転は200°（ハンドルが奥側に回り込んだ向き）から始まります。
   - 3D が描画されるまで、また WebGL が使えない・three.js を読み込めない場合は `hero-fallback.webp` を表示します。
   - タブが非表示の間と、3D が画面外にある間は描画を止めます。
-- **フォント**：Google Fonts（Zen Kaku Gothic New / Quicksand）は表示を止めない方式で読み込みます。化粧箱の背面ロゴ用の Montserrat は「Luca Bloom」の文字だけを読み込みます。
+- **フォント**：Zen Kaku Gothic New（400/700/900）・Quicksand・Montserrat（化粧箱ロゴ用）を自サイトから配信します（外部サービスへの接続なし）。各太さには、実際にその太さで表示される文字だけを収録しています（合計約240KB）。`font-display: swap` のため、フォントの読み込み中も文字は先に表示されます。
 - **構造化データ**：Product（価格 5,800円・税込）、FAQPage、WebPage。FAQ の文言を変えるときは、画面の FAQ と JSON-LD の両方を直してください。
 
 ## JavaScript のビルド
 
 - 編集は `src/` で行い、`npm install`（初回のみ）→ `npm run build` を実行して、`assets/js/` もコミットします。
+- `npm run build` は JavaScript とフォントの両方を作ります（個別には `npm run build:js` / `npm run build:fonts`）。**ページの文章を変えたら、必ず `npm run build:fonts` を実行して `assets/fonts/` と各ページをコミットしてください**（新しい文字がフォントに入らず、その文字だけ別の書体で表示されるのを防ぐため）。
+- `build:fonts` は Playwright があると、ページを実際に表示して太さごとに必要な文字だけを収録します（無い場合は全ての文字を全ての太さに収録）。
 - Google アナリティクス 4 は `src/app.js` の `GA_ID` に測定ID（G- から始まる文字列）を入れてビルドすると有効になります。有効にする際は `privacy.html` の「5. アクセス解析ツール・外部サービス」も書き換えてください。
 
 ## コラムの追加手順

@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Luca Bloom LP",
   "scripts": {
-    "build": "rm -rf assets/js && esbuild src/app.js --bundle --splitting --format=esm --minify --target=es2020 --outdir=assets/js --chunk-names=chunks/[name]-[hash] --legal-comments=eof"
+    "build": "npm run build:js && npm run build:fonts",
+    "build:js": "rm -rf assets/js && esbuild src/app.js --bundle --splitting --format=esm --minify --target=es2020 --outdir=assets/js --chunk-names=chunks/[name]-[hash] --legal-comments=eof",
+    "build:fonts": "node tools/build-fonts.mjs"
   },
   "repository": {
     "type": "git",
@@ -18,6 +20,7 @@
   "homepage": "https://github.com/saigonmanira-glitch/luca-bloom-lp#readme",
   "devDependencies": {
     "esbuild": "^0.28.2",
+    "subset-font": "^2.9.0",
     "three": "^0.186.1"
   },
   "private": true

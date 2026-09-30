@@ -50,8 +50,23 @@ function smoothstep(a, b, x) {
   return t * t * (3 - 2 * t);
 }
 
+// WebGL が使えるかを事前に確認（使えない端末で three.js がコンソールにエラーを出すのを防ぐ）
+let webglOK;
+function hasWebGL() {
+  if (webglOK === undefined) {
+    try {
+      const c = document.createElement('canvas');
+      webglOK = !!(window.WebGLRenderingContext && (c.getContext('webgl2') || c.getContext('webgl')));
+    } catch (e) {
+      webglOK = false;
+    }
+  }
+  return webglOK;
+}
+
 // WebGL の描画器を作る。使えない端末では null
 function createRenderer(container) {
+  if (!hasWebGL()) return null;
   let renderer;
   try {
     renderer = new WebGLRenderer({ antialias: true, alpha: true });
@@ -64,6 +79,12 @@ function createRenderer(container) {
   renderer.outputColorSpace = SRGBColorSpace;
   container.appendChild(renderer.domElement);
   return renderer;
+}
+
+// シェーダーを並行コンパイル（KHR_parallel_shader_compile）してから描画を始める。
+// 最初の描画で画面が固まる時間を減らす。未対応のブラウザではすぐに進む
+function whenCompiled(renderer, scene, camera) {
+  return renderer.compileAsync ? renderer.compileAsync(scene, camera).catch(() => {}) : Promise.resolve();
 }
 
 // WebGL が強制終了された時（メモリ不足など）に、描画を止めて静止画に戻す
@@ -600,7 +621,7 @@ function initHero(state) {
   const fallback = document.getElementById('fb');
   const renderer = createRenderer(stage);
   if (!renderer) return;
-  renderer.toneMapping = ACESFilmicToneMapping; // 白の階調をやわらかく（磁器のような白） // 白の階調（半透明の白の陰影）を白飛びさせずに残す
+  renderer.toneMapping = ACESFilmicToneMapping; // 白の階調をやわらかく（磁器のような白）
   renderer.toneMappingExposure = 1.0;
 
   const scene = new Scene();
@@ -654,7 +675,8 @@ function initHero(state) {
   const HOLD = 2;
   const USERV = 10;
   const reduce = prefersReducedMotion();
-  let spin = 0;
+  // 回転の開始位置：200°（ハンドルが本体の奥側に回り込んだ向き）から始める
+  let spin = (200 * Math.PI) / 180;
   let dir = 1;
   let vel = 0;
   let hold = 1;
@@ -756,15 +778,18 @@ function initHero(state) {
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden) state.kick(); // タブが非表示の間は描画を止め、戻ったら再開
   });
-  if ('ResizeObserver' in window) new ResizeObserver(resize).observe(stage);
-  else window.addEventListener('resize', resize);
-  if ('IntersectionObserver' in window) {
-    new IntersectionObserver((es) => {
-      visible = es[0].isIntersecting;
-      if (visible) state.kick();
-    }).observe(stage);
-  }
-  resize();
+  whenCompiled(renderer, scene, camera).then(() => {
+    if (!alive) return;
+    if ('ResizeObserver' in window) new ResizeObserver(resize).observe(stage);
+    else window.addEventListener('resize', resize);
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver((es) => {
+        visible = es[0].isIntersecting;
+        if (visible) state.kick();
+      }).observe(stage);
+    }
+    resize();
+  });
 }
 
 // ================= 化粧箱（boxA・packageA図面）：内寸122×91×32、PANTONE 289 C、文字 Cool Gray 1 C =================
@@ -775,7 +800,7 @@ function initBox() {
   const fallback = document.getElementById('boxfb');
   const renderer = createRenderer(st);
   if (!renderer) return;
-  if (fallback) fallback.style.display = 'none';
+  renderer.domElement.style.display = 'none'; // 最初の描画までは図（SVG）を表示したまま
 
   const scene = new Scene();
   const cam = new PerspectiveCamera(28, 1, 1, 3000);
@@ -951,6 +976,8 @@ function initBox() {
     cam.updateProjectionMatrix();
     pose();
     renderer.render(scene, cam);
+    renderer.domElement.style.display = '';
+    if (fallback) fallback.style.display = 'none'; // 3Dの描画が始まったら図を隠す
     go();
   }
 
@@ -958,20 +985,39 @@ function initBox() {
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden) go();
   });
-  if ('ResizeObserver' in window) new ResizeObserver(resize).observe(st);
-  else window.addEventListener('resize', resize);
-  if ('IntersectionObserver' in window) {
-    new IntersectionObserver((es) => {
-      visible = es[0].isIntersecting;
-      if (visible) go();
-    }).observe(st);
-  }
-  resize();
+  whenCompiled(renderer, scene, cam).then(() => {
+    if (!alive) return;
+    if ('ResizeObserver' in window) new ResizeObserver(resize).observe(st);
+    else window.addEventListener('resize', resize);
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver((es) => {
+        visible = es[0].isIntersecting;
+        if (visible) go();
+      }).observe(st);
+    }
+    resize();
+  });
 }
 
+// ヒーローはすぐに、化粧箱は表示領域が画面に近づいてから（400px手前）作る。
+// 読み込み直後の処理量とGPUメモリを減らし、操作への反応（INP）を妨げない
 export function initScenes(state) {
   initHero(state);
-  initBox();
+  const st = document.getElementById('boxstage');
+  if (!st) return;
+  if (!('IntersectionObserver' in window)) {
+    initBox();
+    return;
+  }
+  const io = new IntersectionObserver(
+    (es) => {
+      if (!es.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      initBox();
+    },
+    { rootMargin: '400px 0px' },
+  );
+  io.observe(st);
 }
 
 // 梱包材のくり抜き形状（図面座標、mm）
