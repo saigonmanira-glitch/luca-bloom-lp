@@ -41,29 +41,35 @@ https://luca-bloom.com/ のソース一式です。静的サイトで、GitHub P
 - 編集は `src/` で行い、`npm install`（初回のみ）→ `npm run build` を実行して、`assets/js/` もコミットします。
 - `npm run build` は JavaScript とフォントの両方を作ります（個別には `npm run build:js` / `npm run build:fonts`）。**ページの文章を変えたら、必ず `npm run build:fonts` を実行して `assets/fonts/` と各ページをコミットしてください**（新しい文字がフォントに入らず、その文字だけ別の書体で表示されるのを防ぐため）。
 - `build:fonts` は Playwright があると、ページを実際に表示して太さごとに必要な文字だけを収録します（無い場合は全ての文字を全ての太さに収録）。
-- Google アナリティクス 4 は `src/app.js` の `GA_ID` に測定ID（G- から始まる文字列）を入れてビルドすると有効になります。有効にする際は `privacy.html` の「5. アクセス解析ツール・外部サービス」と、全ページの CSP（下記）も書き換えてください。
+- Google アナリティクス 4 は `src/app.js` の `GA_ID` に測定ID（G- から始まる文字列）を入れてビルドすると有効になります。有効にする際は `privacy.html` の「5. アクセス解析ツール・外部サービス」と、`tools/build-csp.mjs` の CSP（下記）も書き換えてください。
 
 ## 自動テスト
 
 - `npm run verify` で、次のすべてを実行します（GitHub では push のたびに自動実行。結果はリポジトリの「Actions」タブで確認できます）。
   - `npm run lint`：ESLint（JavaScript）と html-validate（HTML）の文法チェック
-  - `npm run check`：サイト内リンク・画像等の参照先・title/description/canonical・sitemap.xml の確認
-  - `npm test`：ブラウザ（Chromium）でのテスト 57項目
+  - `npm run check`：サイト内リンク・画像等の参照先・title/description/canonical・sitemap.xml・CSP が最新かの確認
+  - `npm test`：ブラウザ（Chromium）でのテスト 59項目
     - 動作（`tests/site.spec.mjs`）：全ページの表示とエラー、404、3Dの描画、スライダー、WebGL強制終了・非対応時の静止画、化粧箱の遅延読み込み、購入ボタンのリンク、購入バー
     - 品質（`tests/quality.spec.mjs`）：
       - アクセシビリティ：axe-core で WCAG 2.1 A/AA と推奨事項（best-practice）の違反が全ページで0件
       - フォントの抜け字：表示される文字が、その太さのフォントに全て入っているか（`npm run build:fonts` 忘れの検出）
       - 表示の軽さ：トップページは3D表示まで含めて圧縮後500KB以内、外部サーバーに接続しない、レイアウトのずれ（CLS）0.05未満
       - 構造化データ：全ページの JSON-LD が正しく読めること、価格・FAQ が画面の表示と一致すること
-      - セキュリティ：CSP（Content-Security-Policy）に違反する読み込み・実行が全ページで0件
+      - セキュリティ：CSP（Content-Security-Policy）に違反する読み込み・実行が全ページで0件、CSP に危険な許可（unsafe-inline・外部ドメインなど）がない、security.txt が有効期限内
+  - `npm audit`：依存パッケージの既知の脆弱性チェック（`npm run verify` と CI で実行）
 - GitHub Actions では、`src/` からビルドした結果が `assets/js/` と一致するかも確認します（ビルド忘れの防止）。
 - 初回のみ `npx playwright install chromium` が必要です。インストール済みの Chromium を使う場合は、環境変数 `CHROMIUM_PATH` にその場所を指定します（`npm test`・`npm run build:fonts` 共通）。
 
-## セキュリティ設定（CSP）
+## セキュリティ設定
 
-- 全ページの `<head>` に Content-Security-Policy を設定し、スクリプト・フォント・画像などの読み込みを自サイトのファイルに限定しています（外部サイトのスクリプトを埋め込まれる被害を防ぐ）。
+- 全ページの `<head>` に Content-Security-Policy（CSP：ページが読み込み・実行してよいものの許可リスト）を設定し、スクリプト・フォント・画像などの読み込みを自サイトのファイルに限定しています（外部サイトのスクリプトを埋め込まれる被害を防ぐ）。CSP は `tools/build-csp.mjs` が全ページに書き込みます（`npm run build` に含まれます）。
+- ページ内の `<style>` は、中身の SHA-256 ハッシュ（指紋）で1つずつ許可しています（`'unsafe-inline'` は使いません）。**CSS を1文字でも変えたら `npm run build` を実行**してください。忘れると `npm run check` と CI が失敗します。
+- Trusted Types：`innerHTML` などへの文字列の直接代入を禁止し、DOM 経由の攻撃（XSS）を防ぎます。
 - そのため、ページ内に直接 `<script>…</script>` を書くと動きません。スクリプトは別ファイル（`src/` または `jp/support.js`）に書いてください。構造化データ（`application/ld+json`）は対象外です。
 - Google アナリティクスなど外部サービスを追加する場合は、CSP にそのドメインを追加してください（追加しないと `npm test` のセキュリティテストで検出されます）。
+- `.well-known/security.txt`：脆弱性の連絡先（RFC 9116）。有効期限（Expires）の30日前になるとテストが失敗するので、日付を1年先に更新してください。
+- CI（GitHub Actions）：権限は読み取りのみ、外部の部品（actions）はコミットIDで固定。`.github/dependabot.yml` により、依存パッケージの更新が毎週自動で提案されます。
+- GitHub Pages では HTTP ヘッダー（HSTS・`frame-ancestors` など）を設定できません。設定する場合は Cloudflare のプロキシ（オレンジの雲）とレスポンスヘッダーの変換ルールを使います。
 
 ## コラムの追加手順
 

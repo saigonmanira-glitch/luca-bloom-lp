@@ -3,13 +3,14 @@
   "version": "1.0.0",
   "description": "Luca Bloom LP",
   "scripts": {
-    "build": "npm run build:js && npm run build:fonts",
+    "build": "npm run build:js && npm run build:fonts && npm run build:csp",
     "build:js": "rm -rf assets/js && esbuild src/app.js --bundle --splitting --format=esm --minify --target=es2020 --outdir=assets/js --chunk-names=chunks/[name]-[hash] --legal-comments=eof",
     "build:fonts": "node tools/build-fonts.mjs",
+    "build:csp": "node tools/build-csp.mjs",
     "lint": "eslint . && html-validate index.html privacy.html 404.html \"jp/*.html\" \"column/*.html\"",
-    "check": "node tools/check-site.mjs",
+    "check": "node tools/check-site.mjs && node tools/build-csp.mjs --check",
     "test": "playwright test",
-    "verify": "npm run lint && npm run check && npm run test",
+    "verify": "npm run lint && npm run check && npm audit --audit-level=moderate && npm run test",
     "serve": "node tools/serve.mjs"
   },
   "repository": {
