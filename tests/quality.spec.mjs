@@ -128,3 +128,25 @@ for (const p of [...pages, 'no-such-page']) {
     expect(await page.evaluate(() => window.__csp)).toEqual([]);
   });
 }
+
+// ---------- セキュリティ：CSP の中身（危険な許可がないこと）と、脆弱性の連絡先（security.txt） ----------
+test('セキュリティ：全ページの CSP に unsafe-inline・unsafe-eval・外部ドメインの許可がない', async () => {
+  const bad = [];
+  for (const f of [...pages.map((p) => (p === '' || p.endsWith('/') ? `${p}index.html` : p)), '404.html']) {
+    const html = fs.readFileSync(new URL(f, ROOT), 'utf8');
+    const csp = (html.match(/http-equiv="Content-Security-Policy" content="([^"]*)"/) || [])[1] || '';
+    if (!csp.startsWith("default-src 'none'")) bad.push(`${f}：default-src 'none' ではない`);
+    if (/unsafe-|https?:|\*|data:|blob:/.test(csp)) bad.push(`${f}：危険な許可 ${csp.match(/unsafe-[a-z-]+|https?:\S*|\*|data:|blob:/)[0]}`);
+    if (!csp.includes("require-trusted-types-for 'script'")) bad.push(`${f}：Trusted Types なし`);
+  }
+  expect(bad).toEqual([]);
+});
+
+test('セキュリティ：security.txt（脆弱性の連絡先）が有効期限内で公開されている', async ({ request }) => {
+  const res = await request.get('.well-known/security.txt');
+  expect(res.status()).toBe(200);
+  const body = await res.text();
+  expect(body).toMatch(/^Contact: mailto:\S+@\S+$/m);
+  const exp = new Date(body.match(/^Expires: (.+)$/m)[1]);
+  expect(exp.getTime()).toBeGreaterThan(Date.now() + 30 * 24 * 3600 * 1000); // 期限切れの30日前に失敗して更新を促す
+});

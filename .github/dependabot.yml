@@ -1,0 +1,14 @@
+# 依存パッケージと GitHub Actions の更新を、毎週自動で提案する（セキュリティ修正を取り込みやすくする）
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      dev:
+        patterns: ['*']
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly

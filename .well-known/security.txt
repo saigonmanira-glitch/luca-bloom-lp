@@ -1,0 +1,4 @@
+Contact: mailto:lucabloom65@gmail.com
+Expires: 2027-09-30T15:00:00.000Z
+Preferred-Languages: ja, en
+Canonical: https://luca-bloom.com/.well-known/security.txt

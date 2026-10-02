@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'sha256-jr+99oMVcAtKtIUlC/3aKn5EhZTkRbJaXBN0lEQV9qo=' 'sha256-TT/tbT92qH6UzA/f+xUOgWA0x57Y7BPZlE8Y8ElzfiY=' 'sha256-5aZYNPzRRsR9m2kinjH2kpvJfSk5aog2h1YXvugQzPk='; img-src 'self'; font-src 'self'; connect-src 'self'; manifest-src 'self'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests; require-trusted-types-for 'script'; trusted-types 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>包皮がきつい方へ｜包茎の種類と包茎リングとの違い｜Luca Bloom</title>
 <meta name="description" content="包皮がきつい方へ。Luca Bloom（ルカブルーム）は、包皮が狭い方や匂いが気になる方のためのセルフケアツール。ハンドルを回してアームの間隔を最大70mmまで無段階に調整でき、手を離してもその幅で止まるセルフロック構造。真性包茎・仮性包茎など包茎の種類や、包茎リングとの違いも紹介。実用新案出願済み。">
@@ -139,6 +139,16 @@ small.gl{font-size:12px;color:var(--muted);font-weight:400}
 .reason .big small{font-size:22px}
 .reason .note-s{margin-top:8px;font-size:12px;color:var(--muted)}
 
+/* ---------- VOICE ---------- */
+.voices{display:grid;gap:12px;margin-top:22px}
+.voice{margin:0;background:var(--white);border-radius:16px;padding:18px 18px 16px}
+.voice .rate{display:flex;align-items:center;gap:8px}
+.voice .rate svg{width:96px;height:18px}
+.voice .rate b{font-family:var(--font-en);font-size:15px;color:var(--navy)}
+.voice .rate b small{font-size:12px;color:var(--muted);margin-left:1px}
+.voice blockquote{margin:10px 0 0;font-size:15px;line-height:1.8;color:#3E4352}
+.voice figcaption{margin-top:10px;font-size:12.5px;color:var(--muted)}
+
 /* ---------- TYPES / RING ---------- */
 .types{display:grid;gap:10px;margin-top:22px}
 .types>div{background:var(--white);border-radius:16px;padding:16px 18px;display:grid;gap:4px}
@@ -245,6 +255,8 @@ footer p{margin-top:8px}
   <defs>
     <!-- 駆動アーム／固定アームの側面形状（DXF図面の輪郭線から抽出・単位mm、本体下面が y=0、内側の直線面が x=0） -->
     <path id="lb-arm" d="M0 0V39A1 1 0 0 0 1 40H1.394A2 2 0 0 0 2.504 39.664L3.664 38.891L4.387 38.211A3 3 0 0 0 5 36.394V35.475A20 20 0 0 0 4.784 32.541L2.522 17.293A2 2 0 0 1 4.5 15H7A1 1 0 0 0 8 14V0Z"/>
+    <!-- 評価の星（1辺18） -->
+    <path id="lb-star" d="M9 1.2l2.35 4.9 5.35.7-3.9 3.7 1 5.3L9 13.2l-4.8 2.6 1-5.3-3.9-3.7 5.35-.7z"/>
     <!-- 正面図：ハンドル＋本体＋キーホール留め具（本体左上が原点） -->
     <g id="lb-body">
       <rect x="-11.5" y="1" width="10" height="18"/>
@@ -438,6 +450,27 @@ footer p{margin-top:8px}
           <p class="claim-note">※当社調べ（2026年9月時点、国内販売品2製品と比較）</p>
         </div>
       </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= VOICE ================= -->
+<section class="sec pt0" id="voice">
+  <div class="wrap">
+    <p class="label">Voice</p>
+    <h2>モニターの声</h2>
+    <p class="sub">モニター2名の使用感です。効果を示すものではありません。</p>
+    <div class="voices">
+      <figure class="voice">
+        <p class="rate" role="img" aria-label="5段階中4"><svg viewBox="0 0 96 18" aria-hidden="true"><use href="#lb-star" x="0" fill="#E3B34E"/><use href="#lb-star" x="19.5" fill="#E3B34E"/><use href="#lb-star" x="39" fill="#E3B34E"/><use href="#lb-star" x="58.5" fill="#E3B34E"/><use href="#lb-star" x="78" fill="#E3E0D8"/></svg><b>4<small>/5</small></b></p>
+        <blockquote>使い方になれるまで大変だったけど、数日使ううちに勝手がわかるようになって、とても使いやすかったと思います。ただ、後ろの緊急解除のプレートはなくしやすそうだと思いました。</blockquote>
+        <figcaption>19歳｜使用期間 2ヶ月</figcaption>
+      </figure>
+      <figure class="voice">
+        <p class="rate" role="img" aria-label="5段階中5"><svg viewBox="0 0 96 18" aria-hidden="true"><use href="#lb-star" x="0" fill="#E3B34E"/><use href="#lb-star" x="19.5" fill="#E3B34E"/><use href="#lb-star" x="39" fill="#E3B34E"/><use href="#lb-star" x="58.5" fill="#E3B34E"/><use href="#lb-star" x="78" fill="#E3B34E"/></svg><b>5<small>/5</small></b></p>
+        <blockquote>いろいろな器具を探していたところ、新商品の開発に携われるということで提供してくれました。ネットには沢山情報があり、使いにくかった、諦めてしまったとかありましたが、全然そんなことなく、使うのがめちゃくちゃ楽しかったです！思ったより長い期間使いましたが、最高です笑</blockquote>
+        <figcaption>20歳・大学生｜使用期間 1ヶ月半</figcaption>
+      </figure>
     </div>
   </div>
 </section>
