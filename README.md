@@ -73,7 +73,8 @@ https://luca-bloom.com/ のソース一式です。静的サイトで、GitHub P
 
 ## Amazon 商品動画
 
-- `npm run video` で `out/luca-bloom-amazon.mp4`（1920×1080・30fps・H.264・52秒・無音）とサムネイル `out/luca-bloom-thumbnail.jpg` を作ります。3Dモデルはトップページと同じ `src/scene/` の部品を使うため、形状を直すと動画にも反映されます。
+- `npm run video` で `out/luca-bloom-amazon.mp4`（1920×1080・30fps・H.264・52秒・無音）とサムネイル `out/luca-bloom-thumbnail.jpg` を作ります。
+- 続けて `python3 tools/video/audio.py` を実行すると、同じ動画にナレーションとBGMが入ります（音量は -16 LUFS にそろえます。BGMだけの `out/bgm.wav` も出力）。ナレーションは音声合成モデル Kokoro（Apache-2.0：商用利用可・クレジット表記不要）、BGMはスクリプト内で一から合成した音（既存曲を使わないので著作権の問題なし）。原稿と開始秒は `audio.py` の `NARRATION`、声は環境変数 `VOICE`（女性 `jf_alpha`／男性 `jm_kumo`）で変えられます。必要なパッケージは `audio.py` の先頭に記載。3Dモデルはトップページと同じ `src/scene/` の部品を使うため、形状を直すと動画にも反映されます。
 - 構成と動きは `tools/video/timeline.mjs`、文字は `tools/video/render.mjs` の HTML、カメラ・描画は `tools/video/scene.js`。`npm run video -- --stills 8,23` で指定した秒の静止画だけ書き出して確認できます。
 - 必要なもの：ffmpeg（場所は環境変数 `FFMPEG` で指定可）、Playwright の Chromium、フォントの元ファイル（`npm run build:fonts` で `.cache/fonts` に自動ダウンロード）。
 - Amazon の動画規約に合わせ、価格・限定表示・URL・連絡先・「業界最大」などの比較表現は入れていません。
