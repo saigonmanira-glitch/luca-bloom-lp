@@ -55,6 +55,84 @@ export function initBox() {
   ground.receiveShadow = true;
   scene.add(ground);
 
+  const { grp, pivot } = buildBox();
+  scene.add(grp);
+
+  // 動き
+  const reduce = prefersReducedMotion();
+  let ang = Math.PI * 0.8;
+  let running = false;
+  let visible = true;
+  let alive = true;
+  let last = 0;
+
+  const pose = () => {
+    grp.rotation.y = ang;
+    pivot.rotation.x = -1.85 * smoothstep(0.2, 0.8, Math.cos(ang));
+  };
+  const drag = addDrag(st, (dx) => {
+    ang += dx * 0.012;
+    go();
+  });
+
+  function frame(now) {
+    if (!alive) return;
+    const dt = Math.min(0.1, last ? (now - last) / 1000 : 0);
+    last = now;
+    if (!reduce && !drag.on) ang += ((Math.PI * 2) / 36) * dt;
+    pose();
+    renderer.render(scene, cam);
+    if (visible && !reduce && !document.hidden) {
+      requestAnimationFrame(frame);
+    } else {
+      running = false;
+      last = 0;
+    }
+  }
+  function go() {
+    if (alive && !running && visible && !document.hidden) {
+      running = true;
+      requestAnimationFrame(frame);
+    }
+  }
+  function resize() {
+    if (!alive) return;
+    const w = st.clientWidth;
+    const h = st.clientHeight;
+    renderer.setSize(w, h, false);
+    cam.aspect = w / h;
+    const d = w / h < 1.15 ? 400 : 370;
+    cam.position.set(0, LK.y + d * 0.36, d * 0.93);
+    cam.lookAt(LK);
+    cam.updateProjectionMatrix();
+    pose();
+    renderer.render(scene, cam);
+    renderer.domElement.style.display = '';
+    if (fallback) fallback.style.display = 'none'; // 3Dの描画が始まったら図を隠す
+    go();
+  }
+
+  onContextLost(renderer, () => { alive = false; }, fallback);
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) go();
+  });
+  whenCompiled(renderer, scene, cam).then(() => {
+    if (!alive) return;
+    if ('ResizeObserver' in window) new ResizeObserver(resize).observe(st);
+    else window.addEventListener('resize', resize);
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver((es) => {
+        visible = es[0].isIntersecting;
+        if (visible) go();
+      }).observe(st);
+    }
+    resize();
+  });
+}
+
+// 化粧箱一式（箱・梱包材・収納した本体・フタ・背面の文字）。LP と Amazon 用動画（tools/video）で共用。
+// grp の原点は箱の底面中央。pivot.rotation.x を負にするとフタが開く
+export function buildBox() {
   const NAVY = new MeshStandardMaterial({ color: 0x0c2340, roughness: 0.72, metalness: 0.02 }); // PANTONE 289 C
   const NAVY_IN = new MeshStandardMaterial({ color: 0x0e2747, roughness: 0.85 });
   const NOTCH = new MeshStandardMaterial({ color: 0x061429, roughness: 0.9 });
@@ -62,7 +140,6 @@ export function initBox() {
   [NAVY, NAVY_IN, NOTCH, FOAM].forEach((m) => m.color.convertSRGBToLinear()); // 指定色をsRGBとして扱う
 
   const grp = new Group();
-  scene.add(grp);
   const box = (w, h, d, x, y, z, m, parent) => {
     const me = new Mesh(new BoxGeometry(w, h, d), m);
     me.position.set(x, y, z);
@@ -157,74 +234,5 @@ export function initBox() {
   label.position.set(0, 18, -DP / 2 - 0.08);
   grp.add(label);
 
-  // 動き
-  const reduce = prefersReducedMotion();
-  let ang = Math.PI * 0.8;
-  let running = false;
-  let visible = true;
-  let alive = true;
-  let last = 0;
-
-  const pose = () => {
-    grp.rotation.y = ang;
-    pivot.rotation.x = -1.85 * smoothstep(0.2, 0.8, Math.cos(ang));
-  };
-  const drag = addDrag(st, (dx) => {
-    ang += dx * 0.012;
-    go();
-  });
-
-  function frame(now) {
-    if (!alive) return;
-    const dt = Math.min(0.1, last ? (now - last) / 1000 : 0);
-    last = now;
-    if (!reduce && !drag.on) ang += ((Math.PI * 2) / 36) * dt;
-    pose();
-    renderer.render(scene, cam);
-    if (visible && !reduce && !document.hidden) {
-      requestAnimationFrame(frame);
-    } else {
-      running = false;
-      last = 0;
-    }
-  }
-  function go() {
-    if (alive && !running && visible && !document.hidden) {
-      running = true;
-      requestAnimationFrame(frame);
-    }
-  }
-  function resize() {
-    if (!alive) return;
-    const w = st.clientWidth;
-    const h = st.clientHeight;
-    renderer.setSize(w, h, false);
-    cam.aspect = w / h;
-    const d = w / h < 1.15 ? 400 : 370;
-    cam.position.set(0, LK.y + d * 0.36, d * 0.93);
-    cam.lookAt(LK);
-    cam.updateProjectionMatrix();
-    pose();
-    renderer.render(scene, cam);
-    renderer.domElement.style.display = '';
-    if (fallback) fallback.style.display = 'none'; // 3Dの描画が始まったら図を隠す
-    go();
-  }
-
-  onContextLost(renderer, () => { alive = false; }, fallback);
-  document.addEventListener('visibilitychange', () => {
-    if (!document.hidden) go();
-  });
-  whenCompiled(renderer, scene, cam).then(() => {
-    if (!alive) return;
-    if ('ResizeObserver' in window) new ResizeObserver(resize).observe(st);
-    else window.addEventListener('resize', resize);
-    if ('IntersectionObserver' in window) {
-      new IntersectionObserver((es) => {
-        visible = es[0].isIntersecting;
-        if (visible) go();
-      }).observe(st);
-    }
-    resize();
-  });
+  return { grp, pivot };
 }

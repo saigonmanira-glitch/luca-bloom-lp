@@ -65,6 +65,13 @@ https://luca-bloom.com/ のソース一式です。静的サイトで、GitHub P
 - そのため、ページ内に直接 `<script>…</script>` を書くと動きません。スクリプトは別ファイル（`src/` または `jp/support.js`）に書いてください。構造化データ（`application/ld+json`）は対象外です。
 - Google アナリティクスなど外部サービスを追加する場合は、CSP にそのドメインを追加してください（追加しないと `npm test` のセキュリティテストで検出されます）。
 
+## Amazon 商品動画
+
+- `npm run video` で `out/luca-bloom-amazon.mp4`（1920×1080・30fps・H.264・52秒・無音）とサムネイル `out/luca-bloom-thumbnail.jpg` を作ります。3Dモデルはトップページと同じ `src/scene/` の部品を使うため、形状を直すと動画にも反映されます。
+- 構成と動きは `tools/video/timeline.mjs`、文字は `tools/video/render.mjs` の HTML、カメラ・描画は `tools/video/scene.js`。`npm run video -- --stills 8,23` で指定した秒の静止画だけ書き出して確認できます。
+- 必要なもの：ffmpeg（場所は環境変数 `FFMPEG` で指定可）、Playwright の Chromium、フォントの元ファイル（`npm run build:fonts` で `.cache/fonts` に自動ダウンロード）。
+- Amazon の動画規約に合わせ、価格・限定表示・URL・連絡先・「業界最大」などの比較表現は入れていません。
+
 ## コラムの追加手順
 
 1. 既存の記事（例：`column/hohi-kitsui.html`）を複製し、タイトル・description・canonical・og:url・JSON-LD（Article / BreadcrumbList）・本文を書き換えます。

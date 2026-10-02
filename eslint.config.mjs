@@ -15,12 +15,17 @@ export default [
     languageOptions: { ecmaVersion: 2020, sourceType: 'script', globals: globals.browser },
   },
   {
+    // Amazon 用動画の描画（ブラウザ内で実行）
+    files: ['tools/video/scene.js'],
+    languageOptions: { ecmaVersion: 2022, sourceType: 'module', globals: globals.browser },
+  },
+  {
     files: ['tools/**/*.mjs', '*.config.mjs'],
     languageOptions: { ecmaVersion: 2022, sourceType: 'module', globals: globals.node },
   },
   {
-    // テストはブラウザ内で実行するコードも含む
-    files: ['tests/**/*.mjs'],
+    // テストと動画の書き出しは、ブラウザ内で実行するコードも含む
+    files: ['tests/**/*.mjs', 'tools/video/render.mjs'],
     languageOptions: { ecmaVersion: 2022, sourceType: 'module', globals: { ...globals.node, ...globals.browser } },
   },
 ];

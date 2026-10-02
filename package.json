@@ -10,7 +10,8 @@
     "check": "node tools/check-site.mjs",
     "test": "playwright test",
     "verify": "npm run lint && npm run check && npm run test",
-    "serve": "node tools/serve.mjs"
+    "serve": "node tools/serve.mjs",
+    "video": "node tools/video/render.mjs"
   },
   "repository": {
     "type": "git",
