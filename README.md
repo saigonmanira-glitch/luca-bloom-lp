@@ -74,7 +74,7 @@ https://luca-bloom.com/ のソース一式です。静的サイトで、GitHub P
 ## Amazon 商品動画
 
 - `npm run video` で `out/luca-bloom-amazon.mp4`（1920×1080・30fps・H.264・52秒・無音）とサムネイル `out/luca-bloom-thumbnail.jpg` を作ります。
-- 続けて `python3 tools/video/audio.py` を実行すると、同じ動画にBGMが入ります（ナレーションなし。音量は -16 LUFS にそろえ、BGMだけの `out/bgm.wav` も出力）。曲はスクリプト内で一から合成した明るい曲（ニ長調・116BPM・長調のコードのみ。ウクレレ風ストローク・鉄琴のメロディ・ベース・手拍子）で、既存曲を使わないため著作権の問題はありません。必要なのは numpy・soundfile・ffmpeg。
+- 続けて `python3 tools/video/audio.py` を実行すると、同じ動画にBGMが入ります（ナレーションなし。音量は約 -15 LUFS、BGMだけの `out/bgm.wav` も出力）。楽器はすべて実際の楽器を録音した音源（VCSL と VSCO 2 CE。どちらも CC0＝権利放棄で、商用利用可・クレジット表記不要）：スタインウェイのグランドピアノ、弦楽器のピチカートと持続音、コントラバス、鉄琴、カホン、手拍子、シェイカー、タンバリン、シンバル。曲はニ長調・110BPMで、映像の場面に合わせてイントロ→Aメロ→サビ（外箱が透ける場面）→落ち着く（化粧箱）→最後の和音（エンディング）と展開します。録音ごとの音程のずれは自動で測って補正します。音源は初回に `.cache/samples` へ必要な分だけダウンロード（約1.9GB、git が必要）。必要な Python パッケージは numpy・scipy・soundfile。
 - 構成と動きは `tools/video/timeline.mjs`、文字は `tools/video/render.mjs` の HTML、カメラ・描画は `tools/video/scene.js`。`npm run video -- --stills 8,23` で指定した秒の静止画だけ書き出して確認できます。
 - 必要なもの：ffmpeg（場所は環境変数 `FFMPEG` で指定可）、Playwright の Chromium、フォントの元ファイル（`npm run build:fonts` で `.cache/fonts` に自動ダウンロード）。
 - Amazon の動画規約に合わせ、価格・限定表示・URL・連絡先・「業界最大」などの比較表現は入れていません。
