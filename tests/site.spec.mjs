@@ -299,7 +299,8 @@ for (const { L, articles } of COLUMN_SETS) {
       await page.goto(`${L.dir}column/${a.slug}.html`);
       await expect(page.locator('.points li')).toHaveCount(3);
       expect(await page.locator('figure.fig svg').count(), a.slug).toBeGreaterThanOrEqual(1);
-      // 図の文字が、図の外や囲み（四角）からはみ出していない
+      // 図の文字が、図の外や囲み（四角）からはみ出していない（文字幅はウェブフォントの読み込み後に測る）
+      await page.evaluate(() => document.fonts.ready);
       const overflow = await page.locator('figure.fig svg').evaluateAll((svgs) =>
         svgs.flatMap((svg) => {
           const vb = svg.viewBox.baseVal;

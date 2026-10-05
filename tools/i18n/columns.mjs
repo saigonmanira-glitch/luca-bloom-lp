@@ -35,7 +35,7 @@ const CARE = {
     afterHours: 'After hours: urgent care or 911',
   },
   'en-CA': {
-    gpBox: 'See your family doctor', // 図の最後の箱（短く）
+    gpBox: 'Your family doctor', // 図の最後の箱（短く）
     gp: 'family doctor', gpA: 'a family doctor',
     emergency: 'In an emergency, call 911 or go to the nearest emergency department. For health advice, most provinces offer 811.',
     afterHours: 'After hours: 811 or 911',
