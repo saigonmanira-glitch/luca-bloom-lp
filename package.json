@@ -8,7 +8,7 @@
     "build:fonts": "node tools/build-fonts.mjs",
     "build:csp": "node tools/build-csp.mjs",
     "lint": "eslint . && html-validate index.html privacy.html 404.html \"jp/*.html\" \"en/*.html\" \"column/*.html\"",
-    "check": "node tools/check-site.mjs && node tools/build-csp.mjs --check",
+    "check": "node tools/check-site.mjs && node tools/build-csp.mjs --check && node tools/sns-check.mjs",
     "test": "playwright test",
     "verify": "npm run lint && npm run check && npm audit --audit-level=moderate && npm run test",
     "serve": "node tools/serve.mjs",

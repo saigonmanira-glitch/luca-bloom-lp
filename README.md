@@ -21,6 +21,7 @@ https://luca-bloom.com/ のソース一式です。静的サイトで、GitHub P
 | `404.html` | 存在しない URL を開いたときのページ（GitHub Pages が自動で使用） |
 | `jp/` | 同梱カードの QR コード（`https://luca-bloom.com/jp`）の飛び先。`index.html`＝選択画面、`manual.html`＝ご使用マニュアル（画像は `jp/img/`）、`disclaimer.pdf`＝取扱説明書 兼 免責事項、`support.css`＝共通スタイル |
 | `en/` | 英国・オーストラリア向けの英語版（`index.html`＝商品ページ、`privacy.html`＝英語のプライバシーポリシー、`og.png`・`hero-fallback*.webp`＝英語の共有画像・静止画）。日本語版と `hreflang`（検索エンジンに言語違いのページを伝えるタグ）で相互に結んでいる |
+| `sns/en/` | 英国・豪州向けSNS自動投稿キット（投稿30本・AI用プロンプト・画像の指示書。詳細は `sns/en/README.md`）。投稿前に `node tools/sns-check.mjs` で禁止語と文字数を確認（`npm run check` にも含む） |
 | `column/` | コラム。`index.html`＝一覧、各記事は `*.html`、`column.css`＝全記事共通のスタイル |
 | `robots.txt` / `sitemap.xml` | 検索エンジン向け |
 | `CNAME` / `.nojekyll` | GitHub Pages のカスタムドメイン設定と、Jekyll 処理の無効化 |

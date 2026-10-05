@@ -1,6 +1,7 @@
 // ブラウザ動作テスト：全ページの表示とエラー、3D・スライダー・購入導線・異常時の静止画
 import { test, expect } from '@playwright/test';
 import fs from 'node:fs';
+import { findBanned } from '../tools/claims-en.mjs';
 
 const pages = ['', 'privacy.html', 'jp/', 'jp/manual.html', 'en/', 'en/privacy.html', 'column/'].concat(
   fs
@@ -146,12 +147,10 @@ test('英語版：日本語版と英語版が hreflang で相互に指し合っ�
 
 // 英国（MHRA・ASA）・豪州（TGA）の規制を踏まえ、病名・治療・効果をうたう語を英語版に入れない
 test('英語版：病名・治療・効果をうたう語を使っていない', async ({ page }) => {
-  const banned = /\b(phimosis|paraphimosis|circumcision|treat(s|ment)?|cure[sd]?|heal|correct(s|ion)?|improve[sd]?|prevent(s|ion)?|clinically|doctor[- ]recommended|guarantee[sd]?|best|no\.? ?1|number one|industry[- ]leading|widest|largest)\b/i;
-  const allowed = /not intended to diagnose, treat or prevent|receiving treatment for the area/gi; // 否定・注意書きとしての使用は可
   for (const p of ['en/']) { // 商品を紹介するページが対象（プライバシーポリシーの「訂正の請求」などは対象外）
     await page.goto(p);
     const text = (await page.locator('body').innerText()) + (await page.title()) + (await page.locator('meta[name="description"]').getAttribute('content'));
-    const hit = text.replace(allowed, '').match(banned);
-    expect(hit, `/${p} に「${hit && hit[0]}」`).toBeNull();
+    const hit = findBanned(text); // 禁止語の一覧は tools/claims-en.mjs（海外SNSのチェックと共用）
+    expect(hit, `/${p} に「${hit}」`).toBeNull();
   }
 });
