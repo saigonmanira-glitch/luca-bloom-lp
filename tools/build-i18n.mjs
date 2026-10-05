@@ -10,6 +10,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { LOCALES, SITE, alternates, alternateTags } from './i18n/site.mjs';
 import { lpHtml, docHtml, langMenu } from './i18n/page.mjs';
+import { COUNTRIES, selectorHtml, hubHtml, manualHtml, supportAlternateTags, supportAlternates, SUPPORT_PDFS, SUPPORT_EXTRA_CSS } from './i18n/support.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const check = process.argv.includes('--check');
@@ -37,6 +38,15 @@ for (const L of LOCALES) {
   if (L.legal) files.set(L.dir + L.legal.file, carry(L.dir + L.legal.file, docHtml(L, L.legal, L.legal.file, null)));
 }
 
+// ---------- サポートページ（QR コードの読み込み先 /intl/） ----------
+files.set('intl/index.html', carry('intl/index.html', selectorHtml()));
+for (const c of COUNTRIES) {
+  files.set(`${c.dir}index.html`, carry(`${c.dir}index.html`, hubHtml(c)));
+  files.set(`${c.dir}manual.html`, carry(`${c.dir}manual.html`, manualHtml(c)));
+}
+// 見た目は日本語版のサポートページと共通（jp/support.css に国選択ページ用を足す）
+files.set('intl/support.css', `/* tools/build-i18n.mjs が jp/support.css から作る。手で編集しない */\n${fs.readFileSync(path.join(ROOT, 'jp/support.css'), 'utf8')}${SUPPORT_EXTRA_CSS}`);
+
 // ---------- 日本語版：目印の間だけを書き換える ----------
 function patch(rel, marker, content) {
   const src = files.get(rel) ?? fs.readFileSync(path.join(ROOT, rel), 'utf8');
@@ -48,6 +58,8 @@ const JA = { lang: 'ja', t: { langLabel: 'Language' } };
 patch('index.html', 'hreflang', alternateTags('lp'));
 patch('index.html', 'langs', langMenu(JA, 'lp'));
 patch('privacy.html', 'hreflang', alternateTags('privacy'));
+patch('jp/index.html', 'hreflang', supportAlternateTags('hub'));
+patch('jp/manual.html', 'hreflang', supportAlternateTags('manual'));
 
 // ---------- sitemap.xml：多言語ページの部分 ----------
 const xmlAlt = (kind) => alternates(kind).map(([h, u]) => `<xhtml:link rel="alternate" hreflang="${h}" href="${u}"/>`).join('');
@@ -70,6 +82,18 @@ for (const kind of ['lp', 'privacy']) {
 for (const L of LOCALES.filter((x) => x.legal)) {
   const u = SITE + L.dir + L.legal.file;
   urls.push(`  <url><loc>${u}</loc><lastmod>${lastmod(u)}</lastmod></url>`);
+}
+// サポートページ：入口・マニュアルは hreflang の組、国の選択ページと PDF は単独
+for (const kind of ['hub', 'manual']) {
+  const alt = supportAlternates(kind).map(([h, u]) => `<xhtml:link rel="alternate" hreflang="${h}" href="${u}"/>`).join('');
+  for (const [h, u] of supportAlternates(kind)) {
+    if (h === 'ja') continue; // 日本語版は sitemap.xml の手作業の部分に載っている
+    urls.push(`  <url><loc>${u}</loc><lastmod>${lastmod(u)}</lastmod>${alt}</url>`);
+  }
+}
+for (const pdf of SUPPORT_PDFS) {
+  const u = SITE + pdf;
+  urls.push(`  <url><loc>${u}</loc><lastmod>${(oldMap.match(new RegExp(`<loc>${u.replace(/[.?]/g, '\\$&')}</loc><lastmod>([^<]+)</lastmod>`)) || [])[1] || today}</lastmod></url>`);
 }
 patch('sitemap.xml', 'i18n', urls.join('\n'));
 

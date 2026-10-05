@@ -386,7 +386,7 @@ ${t.faq.map(([q, a]) => `      <details><summary>${q}</summary><p>${a}</p></deta
     <h2>${t.supportH2}</h2>
     <p class="sub">${t.supportSub}</p>
     <div class="support-links">
-      <a href="/jp/manual.html" hreflang="ja"><b>${t.manual[0]}</b><span>${t.manual[1]}</span></a>
+      <a href="${L.support}"><b>${t.manual[0]}</b><span>${t.manual[1]}</span></a>
     </div>
   </div>
 </section>

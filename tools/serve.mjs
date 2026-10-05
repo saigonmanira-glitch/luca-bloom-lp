@@ -21,6 +21,13 @@ const TYPES = {
 http
   .createServer((req, res) => {
     let p = decodeURIComponent(new URL(req.url, 'http://x').pathname);
+    // GitHub Pages と同じく、フォルダ名で終わる URL（/intl など）は末尾に / を付けた URL へ転送する
+    const dir = path.join(ROOT, path.normalize(p));
+    if (!p.endsWith('/') && dir.startsWith(ROOT) && fs.existsSync(dir) && fs.statSync(dir).isDirectory()) {
+      res.writeHead(301, { Location: `${p}/` });
+      res.end();
+      return;
+    }
     if (p.endsWith('/')) p += 'index.html';
     const file = path.join(ROOT, path.normalize(p));
     const ok = file.startsWith(ROOT) && fs.existsSync(file) && fs.statSync(file).isFile();

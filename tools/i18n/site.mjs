@@ -5,14 +5,16 @@ import enUS from './locales/en-US.mjs';
 import enCA from './locales/en-CA.mjs';
 import frCA from './locales/fr-CA.mjs';
 import esMX from './locales/es-MX.mjs';
+import { SUPPORT_PAGES } from './support.mjs';
 
 export const SITE = 'https://luca-bloom.com/';
 
 // 生成するページの言語（日本語版は手作業で管理しているため含めない）
 export const LOCALES = [enGB, enUS, enCA, frCA, esMX];
 
-// 生成されるページ（テスト・サイトの検査で使う）。商品ページと、その国のプライバシーポリシー
-export const INTL_PAGES = LOCALES.flatMap((L) => [L.dir, `${L.dir}privacy.html`]);
+// 生成されるページ（テスト・サイトの検査で使う）。商品ページと、その国のプライバシーポリシー、
+// 同梱カードの QR コードから開くサポートページ（国の選択・マニュアル。tools/i18n/support.mjs）
+export const INTL_PAGES = [...LOCALES.flatMap((L) => [L.dir, `${L.dir}privacy.html`]), ...SUPPORT_PAGES];
 
 // 言語メニューに並べる順番と表示名（各言語で、その言語自身の名前を書く）
 export const MENU = [

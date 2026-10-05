@@ -9,6 +9,7 @@ export default {
   lang: 'es-MX',
   dir: 'mx/',
   ogLocale: 'es_MX',
+  support: '/intl/mx/', // マニュアル・免責事項（QR コードと同じサポートページ）
   claims: 'es',
   stores: [{ href: `https://www.amazon.com.mx/dp/${ASIN}`, cta: 'Comprar en Amazon México', short: 'Comprar en Amazon' }],
   og: { for: 'Cuidado del prepucio', lines: ['Una preocupación íntima,', 'en tus manos.'], chips: ['Abre hasta <b>70 mm</b>', 'Ajuste continuo', 'No se mueve'] },
@@ -147,7 +148,7 @@ export default {
     supportLabel: 'Soporte',
     supportH2: 'Dudas y soporte',
     supportSub: 'Escríbenos a <a class="c-inherit" href="mailto:lucabloom65@gmail.com">lucabloom65@gmail.com</a>. También puedes contactarnos por los mensajes del pedido en Amazon.',
-    manual: ['Manual de uso ilustrado', 'Paso a paso con imágenes (texto en japonés)'],
+    manual: ['Guía ilustrada e información de seguridad', 'Paso a paso con imágenes, cuidado, liberación de emergencia y condiciones (PDF)'],
     finalH2: 'Empieza hoy, <span class="ib">a tu ritmo.</span>',
     finalSub: 'Privado, discreto y totalmente a tu manera.',
     footer: 'Luca Bloom es un producto de cuidado personal de uso general, no es un dispositivo médico y no afirma ningún efecto médico ni terapéutico. Solo para mayores de 18 años. Hecho en China; revisado, limpiado y ensamblado en Japón.',

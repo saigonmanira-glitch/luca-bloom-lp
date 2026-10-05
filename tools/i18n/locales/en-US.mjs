@@ -26,6 +26,7 @@ export default {
   lang: 'en-US',
   dir: 'us/',
   ogLocale: 'en_US',
+  support: '/intl/us/', // マニュアル・免責事項（QR コードと同じサポートページ）
   claims: 'en',
   stores: [{ href: `https://www.amazon.com/dp/${ASIN}`, cta: 'Buy on Amazon', short: 'Buy on Amazon' }],
   og: { for: 'Foreskin care tool', lines: ['A private concern,', 'in your own hands.'], chips: ['Opens up to <b>70 mm</b>', 'Stepless', 'Stays where you stop'] },
