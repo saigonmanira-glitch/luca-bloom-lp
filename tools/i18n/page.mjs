@@ -4,6 +4,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { MENU, SITE, alternateTags } from './site.mjs';
+import { COUNTRIES } from './support.mjs';
 
 const DIR = import.meta.dirname;
 const read = (f) => fs.readFileSync(path.join(DIR, f), 'utf8');
@@ -386,7 +387,7 @@ ${t.faq.map(([q, a]) => `      <details><summary>${q}</summary><p>${a}</p></deta
     <h2>${t.supportH2}</h2>
     <p class="sub">${t.supportSub}</p>
     <div class="support-links">
-      <a href="${L.support}"><b>${t.manual[0]}</b><span>${t.manual[1]}</span></a>
+${supportLinks(L)}
     </div>
   </div>
 </section>
@@ -417,6 +418,20 @@ ${footer(L, '')}
 </body>
 </html>
 `;
+}
+
+// サポート欄：日本語版と同じく、ご使用マニュアルと免責事項（PDF）へ直接リンクする。
+// 英国・豪州版のように1ページで複数の国を扱うときは、国ごとに並べる
+function supportLinks(L) {
+  const list = COUNTRIES.filter((c) => c.lp === L.dir);
+  const name = (c) => (list.length > 1 ? ` – ${c.name}` : '');
+  return list
+    .map((c) => {
+      const pdf = new URL(c.pdf, SITE + c.dir).pathname;
+      return `      <a href="/${c.dir}manual.html"><b>${L.t.manual[0]}${name(c)}</b><span>${L.t.manual[1]}</span></a>
+      <a href="${pdf}" target="_blank" rel="noopener"><b>${L.t.pdf[0]}${name(c)}</b><span>${L.t.pdf[1]}</span></a>`;
+    })
+    .join('\n');
 }
 
 function footer(L, prefix) {

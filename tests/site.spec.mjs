@@ -160,6 +160,18 @@ for (const L of LOCALE_TESTS) {
     expect(hit, `/${L.dir} に「${hit}」`).toBeNull();
   });
 
+  // 日本語版と同じく、サポート欄からご使用マニュアルと免責事項（PDF）を直接開ける
+  test(`${L.lang}：サポート欄にご使用マニュアルと免責事項のPDFがある`, async ({ page, request }) => {
+    await page.goto(L.dir);
+    const links = page.locator('#support .support-links a');
+    const hrefs = await links.evaluateAll((as) => as.map((a) => a.getAttribute('href')));
+    const pdfs = hrefs.filter((h) => h.endsWith('.pdf'));
+    expect(hrefs.filter((h) => h.endsWith('/manual.html')).length).toBeGreaterThanOrEqual(1);
+    expect(pdfs.length).toBeGreaterThanOrEqual(1);
+    for (const h of hrefs) expect((await request.get(h)).status(), h).toBe(200);
+    for (const h of pdfs) expect((await request.get(h)).headers()['content-type'], h).toBe('application/pdf');
+  });
+
   test(`${L.lang}：言語メニューから全言語のページへ移動できる`, async ({ page, request }) => {
     await page.goto(L.dir);
     const menu = page.locator('header details.langs');

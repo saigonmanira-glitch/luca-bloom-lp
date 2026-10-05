@@ -25,7 +25,6 @@ export default {
   lang: 'en-CA',
   dir: 'ca/',
   ogLocale: 'en_CA',
-  support: '/intl/ca/', // マニュアル・免責事項（QR コードと同じサポートページ）
   claims: 'en',
   stores: [{ href: `https://www.amazon.ca/dp/${ASIN}`, cta: 'Buy on Amazon.ca', short: 'Buy on Amazon' }],
   og: base.og,

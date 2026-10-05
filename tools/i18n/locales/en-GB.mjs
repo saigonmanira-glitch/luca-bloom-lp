@@ -7,7 +7,6 @@ export default {
   lang: 'en-GB',
   dir: 'en/',
   ogLocale: 'en_GB',
-  support: '/intl/', // マニュアル・免責事項（QR コードと同じサポートページ）
   claims: 'en',
   stores: [
     { href: `https://www.amazon.co.uk/dp/${ASIN}`, cta: 'Buy on Amazon UK', short: 'UK' },
@@ -147,9 +146,10 @@ export default {
       ['Where can I buy it?', 'Luca Bloom is available on Amazon UK and Amazon Australia.'],
     ],
     supportLabel: 'Support',
-    supportH2: 'Questions and support',
-    supportSub: 'Email us at <a class="c-inherit" href="mailto:lucabloom65@gmail.com">lucabloom65@gmail.com</a>. You can also contact us through the order messages on Amazon.',
-    manual: ['User manual and disclaimer', 'Illustrated how-to, care, emergency removal and the disclaimer (PDF)'],
+    supportH2: 'User manual and disclaimer',
+    supportSub: 'You can also open these from the QR code on the card in the box. Please read them before use. Questions: <a class="c-inherit" href="mailto:lucabloom65@gmail.com">lucabloom65@gmail.com</a>',
+    manual: ['User manual', 'Illustrated how-to, care and storage, who must not use it, emergency release'],
+    pdf: ['Disclaimer (PDF)', 'Instructions for use, safety warnings and terms of sale'],
     finalH2: 'Start today, <span class="ib">at your own pace.</span>',
     finalSub: 'Private, discreet and entirely up to you.',
     footer: 'Luca Bloom is a general personal care product, not a medical device, and it makes no medical or therapeutic claims. For adults aged 18 and over. Made in China; inspected, cleaned and assembled in Japan.',
