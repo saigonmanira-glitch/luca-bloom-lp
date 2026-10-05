@@ -3,15 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'sha256-jr+99oMVcAtKtIUlC/3aKn5EhZTkRbJaXBN0lEQV9qo=' 'sha256-TT/tbT92qH6UzA/f+xUOgWA0x57Y7BPZlE8Y8ElzfiY=' 'sha256-Khqt0OdKLyb8Vuo5rFbW1eveCEBOCW4TrzTNcu3XRZM='; img-src 'self'; font-src 'self'; connect-src 'self'; manifest-src 'self'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests; require-trusted-types-for 'script'; trusted-types 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'sha256-jr+99oMVcAtKtIUlC/3aKn5EhZTkRbJaXBN0lEQV9qo=' 'sha256-TT/tbT92qH6UzA/f+xUOgWA0x57Y7BPZlE8Y8ElzfiY=' 'sha256-JWj2RQr1NO5eDZ5FLv/Kt2A5GGIKrSQ+f02dKerJhxc='; img-src 'self'; font-src 'self'; connect-src 'self'; manifest-src 'self'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests; require-trusted-types-for 'script'; trusted-types 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>包皮がきつい方へ｜包茎の種類と包茎リングとの違い｜Luca Bloom</title>
 <meta name="description" content="包皮がきつい方へ。Luca Bloom（ルカブルーム）は、包皮が狭い方や匂いが気になる方のためのセルフケアツール。ハンドルを回してアームの間隔を最大70mmまで無段階に調整でき、手を離してもその幅で止まるセルフロック構造。真性包茎・仮性包茎など包茎の種類や、包茎リングとの違いも紹介。実用新案出願済み。">
 <link rel="canonical" href="https://luca-bloom.com/">
+<!-- hreflang:start -->
 <link rel="alternate" hreflang="ja" href="https://luca-bloom.com/">
 <link rel="alternate" hreflang="en-GB" href="https://luca-bloom.com/en/">
 <link rel="alternate" hreflang="en-AU" href="https://luca-bloom.com/en/">
+<link rel="alternate" hreflang="en-US" href="https://luca-bloom.com/us/">
+<link rel="alternate" hreflang="es-MX" href="https://luca-bloom.com/mx/">
+<link rel="alternate" hreflang="fr-FR" href="https://luca-bloom.com/fr/">
 <link rel="alternate" hreflang="x-default" href="https://luca-bloom.com/en/">
+<!-- hreflang:end -->
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="theme-color" content="#161A29">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -91,8 +96,10 @@ small.gl{font-size:12px;color:var(--muted);font-weight:400}
   radial-gradient(120% 60% at 50% 42%,#2A3150 0%,rgba(42,49,80,0) 60%),var(--navy);color:var(--on-navy);padding-bottom:40px}
 .top{display:flex;align-items:center;justify-content:space-between;padding-block:16px}
 .logo{font-family:var(--font-en);font-weight:600;font-size:22px;letter-spacing:.06em;color:var(--silver);text-decoration:none}
-.top-r{display:flex;align-items:center;gap:12px}
-.top .lang{font-family:var(--font-en);font-weight:600;font-size:13px;color:var(--on-navy);text-decoration:none;border-bottom:1px solid var(--gold)}
+.top-r{display:flex;align-items:center;gap:10px}
+.top .logo{white-space:nowrap}
+.top .pill{white-space:nowrap}
+@media (max-width:420px){.top .pill{display:none}}   /* 狭い画面では言語メニューを優先（実用新案の表示は品質の欄にもある） */
 .top .pill{font-size:12px;color:var(--on-navy-muted);border:1px solid var(--navy-line);border-radius:99px;padding:3px 10px}
 .hero .for{margin-top:18px;font-size:13px;color:var(--gold);font-weight:700;letter-spacing:.1em}
 .hero h1 .catch span{display:inline-block}
@@ -252,6 +259,16 @@ footer p{margin-top:8px}
 .bar .p small{display:block;font-family:var(--font-jp);font-size:12px;font-weight:400;color:var(--on-navy-muted)}
 .bar .cta{min-height:48px;font-size:15px;flex:1;white-space:nowrap;letter-spacing:.02em}
 @media (prefers-reduced-motion:reduce){.bar{transition:none}summary::after{transition:none}}
+.langs{position:relative;background:none;margin:0;border-radius:0}
+.langs summary{list-style:none;cursor:pointer;padding:4px 26px 4px 12px;font-family:var(--font-en);font-weight:600;font-size:12.5px;line-height:1.6;color:var(--on-navy);border:1px solid var(--navy-line);border-radius:99px;position:relative}
+.langs summary::-webkit-details-marker{display:none}
+.langs summary::before{content:none}
+.langs summary::after{content:"";position:absolute;right:11px;top:50%;width:6px;height:6px;margin-top:-5px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg);transition:none}
+.langs[open] summary::after{transform:rotate(-135deg);margin-top:-1px;top:50%}
+.langs ul{position:absolute;right:0;top:calc(100% + 8px);z-index:40;margin:0;padding:6px;list-style:none;background:var(--white);border-radius:12px;box-shadow:0 14px 34px rgba(0,0,0,.35);min-width:220px}
+.langs a{display:block;padding:9px 12px;border-radius:8px;color:var(--ink);text-decoration:none;font-size:14px;line-height:1.4;font-family:var(--font-jp)}
+.langs a:hover{background:var(--ivory)}
+.langs a[aria-current]{font-weight:700;background:#F1EEE6}
 .sprite{position:absolute}.ib{display:inline-block}.sec.pt0{padding-top:0}sup.s12{font-size:12px}.c-inherit{color:inherit}.nw{white-space:nowrap}
 </style>
 </head>
@@ -283,7 +300,9 @@ footer p{margin-top:8px}
   <div class="wrap">
     <div class="top">
       <a class="logo" href="#top">Luca Bloom</a>
-      <span class="top-r"><span class="pill">実用新案出願済み</span><a class="lang" href="en/" hreflang="en" lang="en">English</a></span>
+      <div class="top-r"><span class="pill">実用新案出願済み</span><!-- langs:start -->
+<details class="langs"><summary>Language</summary><ul><li><a href="/" hreflang="ja" lang="ja" aria-current="page">日本語</a></li><li><a href="/en/" hreflang="en-GB" lang="en-GB">English (UK · Australia)</a></li><li><a href="/us/" hreflang="en-US" lang="en-US">English (United States)</a></li><li><a href="/mx/" hreflang="es-MX" lang="es-MX">Español (México)</a></li><li><a href="/fr/" hreflang="fr-FR" lang="fr-FR">Français (France)</a></li></ul></details>
+<!-- langs:end --></div>
     </div>
     <h1 id="top"><span class="for">包皮がきつい方へ</span><span class="catch"><span>誰にも言えない</span><span>悩みを、</span><br><span>自分の手で、</span><span>少しずつ。</span></span></h1>
     <p class="lead">ハンドルを回すだけ。ずれにくく、手を離しても戻らない。最大70mmまで、あなたのペースで広げられます。</p>

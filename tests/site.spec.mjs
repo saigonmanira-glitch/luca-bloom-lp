@@ -1,9 +1,12 @@
 // ブラウザ動作テスト：全ページの表示とエラー、3D・スライダー・購入導線・異常時の静止画
 import { test, expect } from '@playwright/test';
 import fs from 'node:fs';
-import { findBanned } from '../tools/claims-en.mjs';
+import { findBanned } from '../tools/claims.mjs';
+import { MENU, alternates } from '../tools/i18n/site.mjs';
 
-const pages = ['', 'privacy.html', 'jp/', 'jp/manual.html', 'en/', 'en/privacy.html', 'column/'].concat(
+// 海外向けページ（tools/build-i18n.mjs が生成）
+const INTL = ['en/', 'en/privacy.html', 'us/', 'us/privacy.html', 'mx/', 'mx/privacy.html', 'fr/', 'fr/privacy.html', 'fr/mentions-legales.html'];
+const pages = ['', 'privacy.html', 'jp/', 'jp/manual.html', ...INTL, 'column/'].concat(
   fs
     .readdirSync(new URL('../column/', import.meta.url))
     .filter((f) => f.endsWith('.html') && f !== 'index.html')
@@ -105,52 +108,80 @@ test('画面下の購入バー：購入ボタンが見えている間は隠れ�
   await expect(page.locator('#bar')).not.toHaveClass(/hide/);
 });
 
-// ---------- 英語版（/en/）：英国・豪州向け ----------
-test('英語版：スライダーの表示が英語になる', async ({ page }) => {
-  const errors = watchErrors(page);
-  await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.goto('en/', { waitUntil: 'load' });
-  await expect(page.locator('#stage canvas')).toHaveCount(1, { timeout: 30_000 });
-  await expect(page.locator('#gapv')).toHaveText('Closed');
-  await page.locator('#gap').fill('45');
-  await expect(page.locator('#gapv')).toHaveText('45mm');
-  await expect(page.locator('#gap')).toHaveAttribute('aria-valuetext', 'Opening width 45 millimetres');
-  expect(errors).toEqual([]);
-});
+// ---------- 海外向けページ（英国・豪州／米国／メキシコ／フランス） ----------
+const LOCALE_TESTS = [
+  { dir: 'en/', lang: 'en-GB', claims: 'en', closed: 'Closed', v45: 'Opening width 45 millimetres', hosts: ['www.amazon.co.uk', 'www.amazon.com.au'] },
+  { dir: 'us/', lang: 'en-US', claims: 'en', closed: 'Closed', v45: 'Opening width 45 millimeters', hosts: ['www.amazon.com'] },
+  { dir: 'mx/', lang: 'es-MX', claims: 'es', closed: 'Cerrado', v45: 'Apertura de 45 milímetros', hosts: ['www.amazon.com.mx'] },
+  { dir: 'fr/', lang: 'fr-FR', claims: 'fr', closed: 'Fermé', v45: 'Écartement de 45 millimètres', hosts: ['www.amazon.fr'] },
+];
 
-test('英語版：購入ボタンは Amazon UK と Amazon Australia へ、別タブ・sponsored付き', async ({ page }) => {
-  await page.goto('en/');
-  const links = page.locator('a[href*="www.amazon."]');
-  const hrefs = await links.evaluateAll((as) => as.map((a) => new URL(a.href).hostname));
-  expect(new Set(hrefs)).toEqual(new Set(['www.amazon.co.uk', 'www.amazon.com.au']));
-  expect(await page.locator('a[href*="amazon.co.jp"]').count()).toBe(0);
-  for (const a of await links.all()) {
-    await expect(a).toHaveAttribute('target', '_blank');
-    await expect(a).toHaveAttribute('rel', /noopener/);
-    await expect(a).toHaveAttribute('rel', /sponsored/);
-  }
-});
+for (const L of LOCALE_TESTS) {
+  test(`${L.lang}：言語の指定・スライダーの表示がその言語になる`, async ({ page }) => {
+    const errors = watchErrors(page);
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto(L.dir, { waitUntil: 'load' });
+    await expect(page.locator('html')).toHaveAttribute('lang', L.lang);
+    await expect(page.locator('#stage canvas')).toHaveCount(1, { timeout: 30_000 });
+    await expect(page.locator('#gapv')).toHaveText(L.closed);
+    await page.locator('#gap').fill('55');
+    await expect(page.locator('#gapv')).toHaveText('55mm');
+    await page.locator('#gap').fill('45');
+    await expect(page.locator('#gap')).toHaveAttribute('aria-valuetext', L.v45);
+    expect(errors).toEqual([]);
+  });
 
-test('英語版：日本語版と英語版が hreflang で相互に指し合っている', async ({ page }) => {
-  const pairs = [['', 'en/'], ['privacy.html', 'en/privacy.html']];
-  const site = 'https://luca-bloom.com/';
-  for (const [ja, en] of pairs) {
-    for (const p of [ja, en]) {
+  test(`${L.lang}：購入ボタンはその国の Amazon へ、別タブ・sponsored付き`, async ({ page }) => {
+    await page.goto(L.dir);
+    const links = page.locator('a[href*="www.amazon."]');
+    const hosts = await links.evaluateAll((as) => as.map((a) => new URL(a.href).hostname));
+    expect(new Set(hosts)).toEqual(new Set(L.hosts));
+    expect(hosts.length).toBeGreaterThanOrEqual(3); // ヒーロー・最後・下部バー
+    for (const a of await links.all()) {
+      await expect(a).toHaveAttribute('target', '_blank');
+      await expect(a).toHaveAttribute('rel', /noopener/);
+      await expect(a).toHaveAttribute('rel', /sponsored/);
+    }
+  });
+
+  // 各国の規制（英国 MHRA・ASA、豪州 TGA、米国 FDA・FTC、メキシコ COFEPRIS、フランス ANSM）を踏まえ、
+  // 病名・治療・効果・比較をうたう語を商品ページに入れない（一覧は tools/claims.mjs）
+  test(`${L.lang}：病名・治療・効果をうたう語を使っていない`, async ({ page }) => {
+    await page.goto(L.dir);
+    const text = [
+      await page.locator('body').innerText(),
+      await page.title(),
+      await page.locator('meta[name="description"]').getAttribute('content'),
+      ...(await page.locator('script[type="application/ld+json"]').allTextContents()),
+    ].join('\n');
+    const hit = findBanned(text, L.claims);
+    expect(hit, `/${L.dir} に「${hit}」`).toBeNull();
+  });
+
+  test(`${L.lang}：言語メニューから全言語のページへ移動できる`, async ({ page, request }) => {
+    await page.goto(L.dir);
+    const menu = page.locator('header details.langs');
+    await menu.locator('summary').click();
+    const links = menu.locator('a');
+    await expect(links).toHaveCount(MENU.length);
+    await expect(menu.locator('a[aria-current="page"]')).toHaveAttribute('lang', L.lang);
+    for (const href of await links.evaluateAll((as) => as.map((a) => a.getAttribute('href')))) {
+      expect((await request.get(href.replace(/^\//, ''))).status(), href).toBe(200);
+    }
+  });
+}
+
+test('多言語：全言語のページが hreflang で同じ組を相互に指し合っている', async ({ page }) => {
+  const groups = { lp: ['', 'en/', 'us/', 'mx/', 'fr/'], privacy: ['privacy.html', 'en/privacy.html', 'us/privacy.html', 'mx/privacy.html', 'fr/privacy.html'] };
+  for (const [kind, list] of Object.entries(groups)) {
+    const expected = Object.fromEntries(alternates(kind));
+    for (const p of list) {
       await page.goto(p);
       const alt = Object.fromEntries(
         await page.locator('link[rel="alternate"][hreflang]').evaluateAll((ls) => ls.map((l) => [l.hreflang, l.href])),
       );
-      expect(alt).toEqual({ ja: site + ja, 'en-GB': site + en, 'en-AU': site + en, 'x-default': site + en });
+      expect(alt, `/${p}`).toEqual(expected);
+      expect(Object.values(alt), `/${p} が自分自身を含まない`).toContain(await page.locator('link[rel="canonical"]').getAttribute('href'));
     }
-  }
-});
-
-// 英国（MHRA・ASA）・豪州（TGA）の規制を踏まえ、病名・治療・効果をうたう語を英語版に入れない
-test('英語版：病名・治療・効果をうたう語を使っていない', async ({ page }) => {
-  for (const p of ['en/']) { // 商品を紹介するページが対象（プライバシーポリシーの「訂正の請求」などは対象外）
-    await page.goto(p);
-    const text = (await page.locator('body').innerText()) + (await page.title()) + (await page.locator('meta[name="description"]').getAttribute('content'));
-    const hit = findBanned(text); // 禁止語の一覧は tools/claims-en.mjs（海外SNSのチェックと共用）
-    expect(hit, `/${p} に「${hit}」`).toBeNull();
   }
 });

@@ -1,10 +1,10 @@
 // 海外向けSNS投稿（sns/en/posts.json、またはAIが出力したJSON）の自動チェック。投稿前に実行する。
 //   node tools/sns-check.mjs                 … sns/en/posts.json を確認
 //   node tools/sns-check.mjs output.json     … AIの出力（1件のオブジェクト、配列、{ posts: [...] } のどれでも可）を確認
-// 確認内容：禁止語（tools/claims-en.mjs）・文字数（X は X の数え方）・ハッシュタグ・必須項目・日本語訳の有無
+// 確認内容：禁止語（tools/claims.mjs）・文字数（X は X の数え方）・ハッシュタグ・必須項目・日本語訳の有無
 import fs from 'node:fs';
 import path from 'node:path';
-import { findBanned } from './claims-en.mjs';
+import { findBanned } from './claims.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const file = process.argv[2] || path.join(ROOT, 'sns/en/posts.json');

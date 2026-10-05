@@ -6,7 +6,9 @@ import zlib from 'node:zlib';
 import * as fontkit from 'fontkit';
 
 const ROOT = new URL('../', import.meta.url);
-const pages = ['', 'privacy.html', 'jp/', 'jp/manual.html', 'en/', 'en/privacy.html', 'column/'].concat(
+const INTL = ['en/', 'en/privacy.html', 'us/', 'us/privacy.html', 'mx/', 'mx/privacy.html', 'fr/', 'fr/privacy.html', 'fr/mentions-legales.html'];
+const LP = ['', 'en/', 'us/', 'mx/', 'fr/']; // 3D のある商品ページ
+const pages = ['', 'privacy.html', 'jp/', 'jp/manual.html', ...INTL, 'column/'].concat(
   fs
     .readdirSync(new URL('column/', ROOT))
     .filter((f) => f.endsWith('.html') && f !== 'index.html')
@@ -95,8 +97,9 @@ test('軽さ：トップページは3D表示まで含めて500KB以内（圧縮�
 
 // ---------- 構造化データ：全ページの JSON-LD が正しく、商品情報と FAQ が画面と一致 ----------
 test('構造化データ：JSON-LD が読み込めて、価格と FAQ が画面の表示と一致する', async ({ page }) => {
+  test.setTimeout(180_000); // 全25ページを順に開くため
   for (const p of pages) {
-    await page.goto(p);
+    await page.goto(p, { waitUntil: 'domcontentloaded' }); // 構造化データは HTML に直接書かれているため、画像や3Dの読み込みは待たない
     const blocks = await page.locator('script[type="application/ld+json"]').allTextContents();
     expect(blocks.length, `/${p} に構造化データがありません`).toBeGreaterThan(0);
     for (const b of blocks) expect(() => JSON.parse(b), `/${p} の JSON-LD が壊れています`).not.toThrow();
@@ -107,14 +110,16 @@ test('構造化データ：JSON-LD が読み込めて、価格と FAQ が画面�
   expect(product.offers).toMatchObject({ price: '5800', priceCurrency: 'JPY' });
   await expect(page.locator('.price').first()).toContainText('5,800円');
   const faq = ld.find((x) => x['@type'] === 'FAQPage');
-  const shown = await page.locator('details summary').allTextContents();
+  const shown = await page.locator('.faq details summary').allTextContents();
   expect(faq.mainEntity.map((q) => q.name)).toEqual(shown.map((s) => s.trim()));
-  // 英語版も FAQ が画面と一致すること
-  await page.goto('en/');
-  const ldEn = (await page.locator('script[type="application/ld+json"]').allTextContents()).map((b) => JSON.parse(b));
-  const faqEn = ldEn.find((x) => x['@type'] === 'FAQPage');
-  const shownEn = await page.locator('details summary').allTextContents();
-  expect(faqEn.mainEntity.map((q) => q.name)).toEqual(shownEn.map((s) => s.trim()));
+  // 海外向けページも FAQ が画面と一致すること（言語メニューの details は除く）
+  for (const p of LP.slice(1)) {
+    await page.goto(p, { waitUntil: 'domcontentloaded' });
+    const ldL = (await page.locator('script[type="application/ld+json"]').allTextContents()).map((b) => JSON.parse(b));
+    const faqL = ldL.find((x) => x['@type'] === 'FAQPage');
+    const shownL = await page.locator('.faq details summary').allTextContents();
+    expect(faqL.mainEntity.map((q) => q.name), `/${p}`).toEqual(shownL.map((s) => s.trim()));
+  }
 });
 
 // ---------- セキュリティ：CSP（読み込みを自サイトに限定）に違反する読み込み・実行がないこと ----------
@@ -126,7 +131,7 @@ for (const p of [...pages, 'no-such-page']) {
     });
     await page.goto(p, { waitUntil: 'load' });
     await expect(page.locator('meta[http-equiv="Content-Security-Policy"]')).toHaveCount(1);
-    if (p === '' || p === 'en/') {
+    if (LP.includes(p)) {
       await expect(page.locator('#stage canvas')).toHaveCount(1, { timeout: 30_000 });
       await page.locator('#boxstage').scrollIntoViewIfNeeded();
       await expect(page.locator('#boxstage canvas')).toHaveCount(1, { timeout: 30_000 });

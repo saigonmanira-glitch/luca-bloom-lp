@@ -31,10 +31,15 @@ function initAnalytics() {
 
 // ---------- 開き幅スライダー ----------
 // target / current = アームの移動量(mm) 0〜60。開き幅 = 10 + 移動量
-// 表示の言葉はページの言語（<html lang>）で切り替える（日本語：/、英語：/en/）
-const TEXT = document.documentElement.lang.startsWith('en')
-  ? { closed: 'Closed', value: (v) => `Opening width ${v} millimetres` }
-  : { closed: '全閉', value: (v) => `開き幅 ${v}ミリ` };
+// 表示の言葉はページの言語（<html lang>）で切り替える。全閉の表示はページ内の初期表示（#gapv）と同じ語にする
+const LANG = document.documentElement.lang;
+const TEXT = {
+  ja: { closed: '全閉', value: (v) => `開き幅 ${v}ミリ` },
+  'en-GB': { closed: 'Closed', value: (v) => `Opening width ${v} millimetres` },
+  'en-US': { closed: 'Closed', value: (v) => `Opening width ${v} millimeters` },
+  'es-MX': { closed: 'Cerrado', value: (v) => `Apertura de ${v} milímetros` },
+  'fr-FR': { closed: 'Fermé', value: (v) => `Écartement de ${v} millimètres` },
+}[LANG] || { closed: 'Closed', value: (v) => `Opening width ${v} millimetres` };
 
 function createState() {
   const slider = document.getElementById('gap');

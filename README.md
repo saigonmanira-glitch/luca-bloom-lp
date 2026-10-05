@@ -20,7 +20,7 @@ https://luca-bloom.com/ のソース一式です。静的サイトで、GitHub P
 | `privacy.html` | プライバシーポリシー |
 | `404.html` | 存在しない URL を開いたときのページ（GitHub Pages が自動で使用） |
 | `jp/` | 同梱カードの QR コード（`https://luca-bloom.com/jp`）の飛び先。`index.html`＝選択画面、`manual.html`＝ご使用マニュアル（画像は `jp/img/`）、`disclaimer.pdf`＝取扱説明書 兼 免責事項、`support.css`＝共通スタイル |
-| `en/` | 英国・オーストラリア向けの英語版（`index.html`＝商品ページ、`privacy.html`＝英語のプライバシーポリシー、`og.png`・`hero-fallback*.webp`＝英語の共有画像・静止画）。日本語版と `hreflang`（検索エンジンに言語違いのページを伝えるタグ）で相互に結んでいる |
+| `en/`・`us/`・`mx/`・`fr/` | 海外向けページ（英国・豪州／米国／メキシコ／フランス）。各 `index.html`（商品ページ）・`privacy.html`（その国の法律に合わせたプライバシーポリシー）、フランスは `mentions-legales.html`（法定表示）も。**手で編集せず**、`tools/i18n/` の言語ファイルから `npm run build` で生成する。共有画像・静止画（`og.png`・`hero-fallback*.webp`）は `npm run build:og` で生成 |
 | `sns/en/` | 英国・豪州向けSNS自動投稿キット（投稿30本・AI用プロンプト・画像の指示書。詳細は `sns/en/README.md`）。投稿前に `node tools/sns-check.mjs` で禁止語と文字数を確認（`npm run check` にも含む） |
 | `column/` | コラム。`index.html`＝一覧、各記事は `*.html`、`column.css`＝全記事共通のスタイル |
 | `robots.txt` / `sitemap.xml` | 検索エンジン向け |
@@ -95,12 +95,26 @@ https://luca-bloom.com/ のソース一式です。静的サイトで、GitHub P
 - 状態を解説する記事（真性と仮性の違い・カントン包茎・何科・受診の流れ・包茎リング）には、購入ボタンと価格を置きません。
 - 価格は「初期ロット100個限定価格 5,800円（税込）」のみを表示し、元値と比べる表示（二重価格表示）はしません。
 
-### 英語版（英国・オーストラリア）の表現の決まり
+## 海外向けページ（多言語）
 
-- 英国（MHRA・ASA）と豪州（TGA）では、治療目的をうたうと医療機器として登録が必要になるため、製品は「Foreskin care tool」と表記し、病名（phimosis など）や treat / cure / correct / improve / prevent / clinically などの語を使わない（`npm test` の「英語版：病名・治療・効果をうたう語を使っていない」で検出）。
-- 比較表現（widest・best など）、価格、日本向けの「初期ロット限定」は入れない。
-- 購入ボタンは Amazon UK（amazon.co.uk）と Amazon Australia（amazon.com.au）。商品ページの URL が変わったら `en/index.html` の6か所（ヒーロー・最後・下部バー×各2）を直す。
-- ご使用マニュアルは日本語のみのため、英語版には安全上の注意（Safety）をページ内に載せている。
+| URL | 国 | 言語 | 購入先 |
+|---|---|---|---|
+| `/en/` | 英国・オーストラリア | 英語（英国式） | Amazon UK・Amazon Australia |
+| `/us/` | 米国 | 英語（米国式、mm にインチ併記） | Amazon.com |
+| `/mx/` | メキシコ | スペイン語 | Amazon México |
+| `/fr/` | フランス | フランス語 | Amazon.fr |
+
+- **文章を直すとき**：`tools/i18n/locales/<言語>.mjs` を編集して `npm run build`。デザイン・構成は `tools/i18n/page.mjs`（全言語共通）、CSS は `tools/i18n/lp.css`・`doc.css`。生成されたHTMLを直接直すと、`npm run check` が「最新ではない」として失敗します。
+- **言語を追加するとき**：`tools/i18n/locales/` にファイルを足し、`tools/i18n/site.mjs` の `LOCALES`・`MENU`・`HREFLANG` に加える。日本語版の hreflang・言語メニュー、`sitemap.xml` の多言語部分も自動で更新されます（目印 `<!-- hreflang:start -->` などの間）。
+- **共有画像・静止画**：言語ファイルの `og`（見出し・特長）を変えたら `npm run build:og`。
+- **購入ボタンのURL**：各言語ファイルの `stores`。現在は日本と同じASIN（B0HHXQ1X4C）で仮に設定。
+- 自動テスト：各言語で、ページの言語・スライダーの表示・購入先・言語メニュー・禁止語・FAQ と構造化データの一致・CSP・アクセシビリティ・フォントの抜け字を確認。全ページの hreflang が同じ組を相互に指し合っていることも確認。
+
+### 海外向けの表現の決まり
+
+- 各国の規制（英国 MHRA・ASA、豪州 TGA、米国 FDA・FTC、メキシコ COFEPRIS・PROFECO、フランス ANSM・DGCCRF）では、治療目的をうたうと医療機器としての登録が必要になるため、製品は「包皮ケアツール」（Foreskin care tool／Herramienta para el cuidado del prepucio／Outil de soin du prépuce）と表記し、病名（phimosis・fimosis など）や治療・改善・予防の語を使わない。禁止語の一覧は `tools/claims.mjs`（英語・スペイン語・フランス語）で、`npm test` が各言語の商品ページを検査する。
+- 比較表現（best・el mejor・le meilleur など）、価格、日本向けの「初期ロット限定」、体験談は入れない。
+- ご使用マニュアルは日本語のみのため、各言語の商品ページ内に安全上の注意を載せている。
 
 ## 公開（GitHub Pages）
 

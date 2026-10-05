@@ -72,7 +72,7 @@ UK & Australia ↓
 
 ## 規制上のルール（要点）
 
-詳しくは `prompts/system.md`。自動チェックの禁止語は `tools/claims-en.mjs`（英語版LPのテストと共用）。
+詳しくは `prompts/system.md`。自動チェックの禁止語は `tools/claims.mjs`（多言語LPのテストと共用）。
 
 - 治療・改善・予防などの効果をうたわない。病名（phimosis など）を書かない
 - 比較・最上級（best・widest など）、価格、「限定」、体験談を入れない
