@@ -1,5 +1,7 @@
 <svg class="sprite" width="0" height="0" aria-hidden="true" focusable="false">
   <defs>
+    <!-- Star for the monitor ratings -->
+    <path id="lb-star" d="M9 1.2l2.35 4.9 5.35.7-3.9 3.7 1 5.3L9 13.2l-4.8 2.6 1-5.3-3.9-3.7 5.35-.7z"/>
     <!-- Arm side profile (from the DXF drawing, mm; y=0 is the underside of the body, x=0 the inner flat face) -->
     <path id="lb-arm" d="M0 0V39A1 1 0 0 0 1 40H1.394A2 2 0 0 0 2.504 39.664L3.664 38.891L4.387 38.211A3 3 0 0 0 5 36.394V35.475A20 20 0 0 0 4.784 32.541L2.522 17.293A2 2 0 0 1 4.5 15H7A1 1 0 0 0 8 14V0Z"/>
     <!-- Front view: handle + body + release plate (origin at the top left of the body) -->

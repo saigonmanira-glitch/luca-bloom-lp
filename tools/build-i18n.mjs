@@ -10,6 +10,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { LOCALES, SITE, alternates, alternateTags } from './i18n/site.mjs';
 import { lpHtml, docHtml, langMenu } from './i18n/page.mjs';
+import { COLUMN_SETS, JP_TO_SLUG, articleHtml, indexHtml, columnAlternateTags, columnAlternates } from './i18n/columns.mjs';
 import { COUNTRIES, selectorHtml, hubHtml, manualHtml, supportAlternateTags, supportAlternates, SUPPORT_PDFS, SUPPORT_EXTRA_CSS } from './i18n/support.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
@@ -47,6 +48,13 @@ for (const c of COUNTRIES) {
 // 見た目は日本語版のサポートページと共通（jp/support.css に国選択ページ用を足す）
 files.set('intl/support.css', `/* tools/build-i18n.mjs が jp/support.css から作る。手で編集しない */\n${fs.readFileSync(path.join(ROOT, 'jp/support.css'), 'utf8')}${SUPPORT_EXTRA_CSS}`);
 
+// ---------- コラム（/{言語}/column/） ----------
+for (const set of COLUMN_SETS) {
+  const dir = `${set.L.dir}column/`;
+  files.set(`${dir}index.html`, carry(`${dir}index.html`, indexHtml(set)));
+  for (const a of set.articles) files.set(`${dir}${a.slug}.html`, carry(`${dir}${a.slug}.html`, articleHtml(set, a)));
+}
+
 // ---------- 日本語版：目印の間だけを書き換える ----------
 function patch(rel, marker, content) {
   const src = files.get(rel) ?? fs.readFileSync(path.join(ROOT, rel), 'utf8');
@@ -59,6 +67,9 @@ patch('index.html', 'hreflang', alternateTags('lp'));
 patch('index.html', 'langs', langMenu(JA, 'lp'));
 patch('privacy.html', 'hreflang', alternateTags('privacy'));
 patch('jp/index.html', 'hreflang', supportAlternateTags('hub'));
+// 日本語版コラムにも、同じ記事の海外版への hreflang を入れる（一覧と、海外版がある記事）
+patch('column/index.html', 'hreflang', columnAlternateTags(null, null));
+for (const [jp, slug] of Object.entries(JP_TO_SLUG)) patch(`column/${jp}.html`, 'hreflang', columnAlternateTags(slug, jp));
 patch('jp/manual.html', 'hreflang', supportAlternateTags('manual'));
 
 // ---------- sitemap.xml：多言語ページの部分 ----------
@@ -89,6 +100,17 @@ for (const kind of ['hub', 'manual']) {
   const seen = new Set();
   for (const [h, u] of supportAlternates(kind)) {
     if (h === 'ja' || seen.has(u)) continue; // 日本語版は sitemap.xml の手作業の部分に載っている。カナダは英仏で同じ URL
+    seen.add(u);
+    urls.push(`  <url><loc>${u}</loc><lastmod>${lastmod(u)}</lastmod>${alt}</url>`);
+  }
+}
+// コラム：一覧と各記事は hreflang の組（日本語版は手作業の部分に載っている）
+for (const [slug, jp] of [[null, null], ...COLUMN_SETS[0].articles.map((x) => [x.slug, x.jp])]) {
+  const alts = columnAlternates(slug, jp);
+  const alt = alts.map(([h, u]) => `<xhtml:link rel="alternate" hreflang="${h}" href="${u}"/>`).join('');
+  const seen = new Set();
+  for (const [h, u] of alts) {
+    if (h === 'ja' || seen.has(u)) continue;
     seen.add(u);
     urls.push(`  <url><loc>${u}</loc><lastmod>${lastmod(u)}</lastmod>${alt}</url>`);
   }

@@ -3,11 +3,12 @@ import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import fs from 'node:fs';
 import { INTL_PAGES, LOCALES } from '../tools/i18n/site.mjs';
+import { COLUMN_PAGES } from '../tools/i18n/columns.mjs';
 import zlib from 'node:zlib';
 import * as fontkit from 'fontkit';
 
 const ROOT = new URL('../', import.meta.url);
-const INTL = INTL_PAGES;
+const INTL = [...INTL_PAGES, ...COLUMN_PAGES];
 const LP = ['', ...LOCALES.map((L) => L.dir)]; // 3D のある商品ページ
 const pages = ['', 'privacy.html', 'jp/', 'jp/manual.html', ...INTL, 'column/'].concat(
   fs

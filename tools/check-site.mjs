@@ -5,12 +5,13 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { INTL_PAGES } from './i18n/site.mjs';
+import { COLUMN_PAGES } from './i18n/columns.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const SITE = 'https://luca-bloom.com/';
 const pages = ['index.html', 'privacy.html', '404.html']
   .concat(fs.readdirSync(path.join(ROOT, 'jp')).filter((f) => f.endsWith('.html')).map((f) => `jp/${f}`))
-  .concat(INTL_PAGES.map((p) => (p.endsWith('/') ? `${p}index.html` : p))) // 海外向けページ（tools/i18n/site.mjs）
+  .concat([...INTL_PAGES, ...COLUMN_PAGES].map((p) => (p.endsWith('/') ? `${p}index.html` : p))) // 海外向けページ（tools/i18n/site.mjs・columns.mjs）
   .concat(fs.readdirSync(path.join(ROOT, 'column')).filter((f) => f.endsWith('.html')).map((f) => `column/${f}`));
 
 const errors = [];

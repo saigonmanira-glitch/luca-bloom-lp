@@ -5,6 +5,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { MENU, SITE, alternateTags } from './site.mjs';
 import { COUNTRIES, supportLink } from './support.mjs';
+import { columnLink } from './columns.mjs';
 
 const DIR = import.meta.dirname;
 const read = (f) => fs.readFileSync(path.join(DIR, f), 'utf8');
@@ -292,6 +293,22 @@ ${t.worries.map((w) => `      <li>${check22}${w}</li>`).join('\n')}
   </div>
 </section>
 
+<!-- ================= VOICE ================= -->
+<section class="sec pt0" id="voice">
+  <div class="wrap">
+    <p class="label">${t.voiceLabel}</p>
+    <h2>${t.voiceH2}</h2>
+    <p class="sub">${t.voiceSub}</p>
+    <div class="voices">
+${t.voices.map(([n, q, who]) => `      <figure class="voice">
+        <p class="rate" role="img" aria-label="${esc(t.rateLabel(n))}"><svg viewBox="0 0 96 18" aria-hidden="true">${[0, 1, 2, 3, 4].map((i) => `<use href="#lb-star" x="${i * 19.5}" fill="${i < n ? '#E3B34E' : '#E3E0D8'}"/>`).join('')}</svg><b>${n}<small>/5</small></b></p>
+        <blockquote>${q}</blockquote>
+        <figcaption>${who}</figcaption>
+      </figure>`).join('\n')}
+    </div>
+  </div>
+</section>
+
 <!-- ================= PRIVACY ================= -->
 <section class="sec dark">
   <div class="wrap">
@@ -389,6 +406,13 @@ ${t.faq.map(([q, a]) => `      <details><summary>${q}</summary><p>${a}</p></deta
     <div class="support-links">
 ${supportLinks(L)}
     </div>
+  </div>
+</section>
+
+<!-- ================= COLUMN ================= -->
+<section class="sec pt0" id="column">
+  <div class="wrap">
+    ${columnLink(L)}
   </div>
 </section>
 

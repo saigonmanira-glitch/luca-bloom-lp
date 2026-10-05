@@ -4,9 +4,10 @@ import fs from 'node:fs';
 import { findBanned } from '../tools/claims.mjs';
 import { MENU, INTL_PAGES, LOCALES, alternates } from '../tools/i18n/site.mjs';
 import { COUNTRIES, supportAlternates } from '../tools/i18n/support.mjs';
+import { COLUMN_SETS, COLUMN_PAGES, columnAlternates } from '../tools/i18n/columns.mjs';
 
 // 海外向けページ（tools/build-i18n.mjs が生成）
-const INTL = INTL_PAGES;
+const INTL = [...INTL_PAGES, ...COLUMN_PAGES];
 const pages = ['', 'privacy.html', 'jp/', 'jp/manual.html', ...INTL, 'column/'].concat(
   fs
     .readdirSync(new URL('../column/', import.meta.url))
@@ -279,6 +280,64 @@ test('サポート：入口・マニュアルの hreflang が日本語版を含�
       );
       expect(alt, `/${p}`).toEqual(expected);
       expect(Object.values(alt), `/${p} が自分自身を含まない`).toContain(await page.locator('link[rel="canonical"]').getAttribute('href'));
+    }
+  }
+});
+
+// ---------- コラム（日本語版と同じ構成。海外の規制に合わせて病名を使わない） ----------
+for (const { L, articles } of COLUMN_SETS) {
+  test(`コラム /${L.dir}column/：商品ページから開け、全記事に図と要点があり、病名・治療・効果をうたう語を使っていない`, async ({ page }) => {
+    test.setTimeout(180_000);
+    const errors = watchErrors(page);
+    await page.goto(L.dir, { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('#column a.col-link')).toHaveAttribute('href', `/${L.dir}column/`);
+    await page.goto(`${L.dir}column/`);
+    await expect(page.locator('html')).toHaveAttribute('lang', L.lang);
+    await expect(page.locator('main .list a')).toHaveCount(articles.length);
+    const overflowAll = [];
+    for (const a of articles) {
+      await page.goto(`${L.dir}column/${a.slug}.html`);
+      await expect(page.locator('.points li')).toHaveCount(3);
+      expect(await page.locator('figure.fig svg').count(), a.slug).toBeGreaterThanOrEqual(1);
+      // 図の文字が、図の外や囲み（四角）からはみ出していない
+      const overflow = await page.locator('figure.fig svg').evaluateAll((svgs) =>
+        svgs.flatMap((svg) => {
+          const vb = svg.viewBox.baseVal;
+          const boxes = [...svg.querySelectorAll('rect')].map((r) => r.getBBox()).filter((r) => r.width > 40 && r.height > 20);
+          return [...svg.querySelectorAll('text')].filter((t) => {
+            const b = t.getBBox();
+            if (b.x < vb.x - 1 || b.x + b.width > vb.x + vb.width + 1) return true;
+            const cx = b.x + b.width / 2;
+            const cy = b.y + b.height / 2;
+            // 文字の中心を含むいちばん小さい囲み
+            const box = boxes.filter((r) => cx > r.x && cx < r.x + r.width && cy > r.y && cy < r.y + r.height).sort((p, q) => p.width * p.height - q.width * q.height)[0];
+            return box ? b.x < box.x + 2 || b.x + b.width > box.x + box.width - 2 : false;
+          }).map((t) => t.textContent);
+        }),
+      );
+      overflowAll.push(...overflow.map((x) => `${a.slug}: ${x}`));
+      const text = [await page.locator('body').innerText(), await page.title(), await page.locator('meta[name="description"]').getAttribute('content')].join('\n');
+      const hit = findBanned(text, L.claims);
+      expect(hit, `/${L.dir}column/${a.slug}.html に「${hit}」`).toBeNull();
+      for (const s of L.stores) await expect(page.locator(`.product a[href="${s.href}"]`)).toHaveAttribute('rel', /sponsored/);
+    }
+    expect(overflowAll).toEqual([]);
+    expect(errors).toEqual([]);
+  });
+}
+
+test('コラム：各記事の hreflang が日本語版を含めて相互に指し合っている', async ({ page }) => {
+  await noScripts(page);
+  const groups = [[null, null], ...COLUMN_SETS[0].articles.map((a) => [a.slug, a.jp])];
+  for (const [slug, jp] of groups) {
+    const expected = Object.fromEntries(columnAlternates(slug, jp));
+    for (const url of new Set(Object.values(expected))) {
+      const p = url.replace('https://luca-bloom.com/', '');
+      await page.goto(p, { waitUntil: 'domcontentloaded' });
+      const alt = Object.fromEntries(
+        await page.locator('link[rel="alternate"][hreflang]').evaluateAll((ls) => ls.map((l) => [l.hreflang, l.href])),
+      );
+      expect(alt, `/${p}`).toEqual(expected);
     }
   }
 });
