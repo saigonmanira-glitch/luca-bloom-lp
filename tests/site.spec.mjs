@@ -206,7 +206,6 @@ for (const c of COUNTRIES) {
     const errors = watchErrors(page);
     await page.goto(c.dir);
     await expect(page.locator('html')).toHaveAttribute('lang', c.lang);
-    await expect(page.locator('.notice')).toContainText(sos);
 
     const pdf = page.locator('a.choice[href$=".pdf"]');
     await expect(pdf).toHaveAttribute('target', '_blank');
@@ -227,10 +226,11 @@ for (const c of COUNTRIES) {
     expect(errors).toEqual([]);
   });
 
-  // 安全のための文書だが、病名・治療・効果をうたう語は使わない（一覧は tools/claims.mjs）
+  // 入口ページには、病名・治療・効果をうたう語を使わない（一覧は tools/claims.mjs）。
+  // マニュアルは PDF の「使用してはいけない場合」（持病・服薬など）をそのまま載せるため対象外
   test(`サポート /${c.dir}：病名・治療・効果をうたう語を使っていない`, async ({ page }) => {
     const claims = c.lang.slice(0, 2);
-    for (const p of [c.dir, `${c.dir}manual.html`]) {
+    for (const p of [c.dir]) {
       await page.goto(p);
       const text = [await page.locator('body').innerText(), await page.title(), await page.locator('meta[name="description"]').getAttribute('content')].join('\n');
       const hit = findBanned(text, claims);

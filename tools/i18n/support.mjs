@@ -1,104 +1,118 @@
 // 同梱カードの QR コード（https://luca-bloom.com/intl）から開く、海外向けサポートページ。
-//   /intl/              … 国の選択（英語・フランス語・スペイン語・日本語を併記）
-//   /intl/{国}/         … その国のマニュアルと免責事項（PDF）の入口・緊急時の連絡先
-//   /intl/{国}/manual.html … 図解のマニュアル（図は日本語版 /jp/img/ と共通。図中の文字は英単語とアイコンのみ）
-// 文章は各国の PDF（Instructions for Use, Safety Warnings & Terms of Sale）と同じ言葉づかいにそろえる
-// （CLOSE の矢印・リリースプレートを下へ押す・1回30分以内・24時間で合計1時間以内・尿道に入れない など）。
-// PDF を差し替えるときは、COUNTRIES の pages（ページ数）も直す。
+//   /intl/                 … 国の選択
+//   /intl/{国}/            … ご使用マニュアル と 免責事項（PDF）の選択（日本語版 /jp/ を参考にした入口）
+//   /intl/{国}/manual.html … ご使用マニュアル。各国の PDF（Instructions for Use, Safety Warnings & Terms of Sale）の
+//                            使い方・禁忌・安全ルール・お手入れの内容を、図（/jp/img/ と共用）と合わせてまとめたもの
+// 免責事項は各国の PDF（intl/{国}/terms.pdf）。PDF を差し替えたら、ここの文章と COUNTRIES の pages（ページ数）も合わせる。
 import { SITE } from './site.mjs';
 
 const MAIL = '<a href="mailto:lucabloom65@gmail.com">lucabloom65@gmail.com</a>';
 
-// ---------------- 英語（英国式のつづりを基本に、米国・カナダ向けは置き換える） ----------------
-const EN = {
+// ---------------- 英語：英国・豪州・米国・カナダの PDF は同じ文面（医師の呼び方・つづり・緊急連絡先・年齢だけが違う） ----------------
+// doc：PDF での医師の呼び方（英国・豪州 a medical practitioner／米国・カナダ a physician）
+const en = (doc) => ({
   skip: 'Skip to content',
-  langName: 'English',
-  label: 'Support',
-  hubTitle: 'User guide and safety information',
-  hubDescription: (n) => `Luca Bloom support for ${n}: the illustrated user guide, the Instructions for Use, Safety Warnings & Terms of Sale (PDF) and what to do if the device will not come off.`,
+  hubTitle: 'User Manual & Disclaimer',
+  hubDescription: (n) => `Luca Bloom user manual (how to use it, care, who must not use it, emergency release) and disclaimer (PDF) for ${n}.`,
+  productLink: 'Product page',
   h1: 'Please read before use',
   lead: 'Choose what you would like to see.',
-  manualCard: ['Illustrated user guide', 'Step-by-step use, care and storage, and emergency release'],
-  pdfTitle: 'Instructions for Use, Safety Warnings &amp; Terms of Sale',
-  pdfCard: (n) => `PDF (${n} pages) · age requirement, who should not use it, safety rules, warranty, returns and contact`,
+  manualCard: ['User Manual', 'How to use it, care and storage, who must not use it, and emergency release'],
+  pdfCard: ['Disclaimer (PDF)', (n) => `Instructions for Use, Safety Warnings &amp; Terms of Sale | PDF, ${n} pages`],
   noticeH: 'If the device will not come off',
-  notice: (e) => `Do not pull it. See <a href="manual.html#emergency">emergency release</a>. If you notice pain, congestion, swelling, numbness or a change in colour, stop using it straight away and seek medical care. ${e}`,
-  contact: `Contact: ${MAIL}<br>You can also contact us through the order messages on the platform where you bought it.`,
-  product: 'Product page',
-  change: 'Change country',
-  home: 'Support',
-  manualTitle: 'User guide | Luca Bloom',
-  manualDescription:
-    'Illustrated user guide for Luca Bloom: washing, applying cream and inserting, turning the knob (30 minutes at most per session), removal, storage, no boiling and emergency release.',
-  manualLabel: 'Guide',
-  manualH1: 'User guide',
-  manualLead: (pdf) => `Before use, also read the <a href="${pdf}" target="_blank" rel="noopener" type="application/pdf" class="on-navy">Instructions for Use, Safety Warnings &amp; Terms of Sale (PDF)</a>.`,
-  beforeH: 'Before you start',
-  before: (age) => [
+  notice: (e) => `Do not pull it. First turn the knob in the direction of the CLOSE arrow. If the knob will not turn, see <a href="manual.html#emergency">emergency release</a>. If you notice pain, congestion, swelling, numbness or discolouration, stop using it immediately and consult ${doc} promptly. ${e}`,
+  contact: `Contact: ${MAIL}<br>You can also contact us through the messaging system of the platform where you bought it.`,
+  other: 'Select another country',
+  home: 'Home',
+  support: 'Support',
+  manualTitle: 'User Manual',
+  manualDescription: 'Luca Bloom user manual: where it is used, washing and inspection, inserting, turning the knob (30 minutes at most per session), removal, care, who must not use it and emergency release.',
+  manualLead: (pdf) => `This manual summarises how to use the product and the safety rules in the <a href="${pdf}" target="_blank" rel="noopener" class="on-navy">Instructions for Use, Safety Warnings &amp; Terms of Sale (PDF)</a>. Read the PDF as well before first use.`,
+  areaH: 'Where it is used',
+  area: (age) => [
     age,
-    'For external use on the foreskin only. Never insert the arms into the urethra (the urinary opening).',
-    'Before first use, check the list “Do not use this product if any of the following apply” in the PDF (section 4).',
+    'For external use by adult males on the foreskin only. Never insert the arms into the urethra (the urinary opening).',
+    'Never insert the arms further than needed to make contact with the inner edge of the foreskin opening.',
+    'For use by the original purchaser only. Do not use it on any other part of the body.',
   ],
   steps: [
     {
-      img: 'step1', alt: 'Washing the device with soap and running water',
-      n: '① Before and after use', h: 'Wash with a mild detergent',
+      img: 'step1', alt: 'Washing the device with water and detergent',
+      n: '① Before first use and every use', h: 'Wash and inspect',
       p: [
-        'Before first use (required) and before and after every use, wash it with a mild detergent and water, then dry it completely. To disinfect it, use isopropyl alcohol.',
+        'Machining oil and fine residue from manufacturing may remain on the product. Before first use (required), wash it thoroughly with a mild detergent and water, then dry it completely. Wash and dry it after every use as well. To disinfect it, use isopropyl alcohol.',
         'Before every use, check the product, especially the arms and the release plate, for cracks or damage. Do not use a damaged product.',
       ],
     },
     {
       img: 'step2', alt: 'Applying cream and inserting the tips of the arms',
       n: '②', h: 'Apply cream or oil, then insert the tips',
-      p: ['Apply plenty of cream or oil to the arms and the skin. With the arms closed, slowly insert the tips a short distance into the opening of the foreskin, only as far as needed to touch its inner edge. Take care not to pinch skin or hair.'],
+      p: ['Apply cream or oil to the arms and the skin. With the arms closed, insert the tips of the two arms a short distance into the opening of the foreskin. Take care not to pinch skin or hair.'],
     },
     {
-      img: 'step3', alt: 'Turning the knob to open the arms, with a 30-minute mark and a warning not to open too far',
-      n: '③ 30 minutes at most', h: 'Turn the knob slowly to open',
+      img: 'step3', alt: 'Turning the knob to open the arms, with a 30-minute mark and a warning against opening too far',
+      n: '③ 30 minutes at most', h: 'Turn the knob slowly',
       p: [
-        'Turn the knob slowly to open the arms, and stop well before the point of pain. The arms stay at that width when you let go.',
-        'During use, check the glans and foreskin regularly for a change in colour, such as reddish-purple or darker. Stop straight away if you notice one.',
+        'Turning the knob slowly separates the arms and gently widens the opening. The arms stay at that width when you let go.',
+        'Never expand to a degree that causes significant pain. Stop well before the point of pain.',
+        'During use, check the glans and foreskin regularly for discolouration (reddish-purple, darkening or similar). Stop immediately if any appears.',
       ],
-      warn: '<b>Time limits (for safety)</b> 30 minutes at most per session, and 1 hour at most in total in any 24 hours. Never use it while sleeping.<br><b>Do not open too far</b> Never open it to a point that causes significant pain (bottom right of the picture).',
+      warn: '<b>Prohibited</b> More than 30 minutes in a single session, more than 1 hour in total in any 24 hours, and use while sleeping.',
     },
     {
       img: 'step4', alt: 'Closing the arms and lifting the device off',
       n: '④', h: 'Close the arms, then remove',
-      p: ['Turn the knob in the direction of the CLOSE arrow engraved on the side of the body to close the arms, then remove the device slowly. After use, wash it as in step ①, including any cream left on the lead screw (the threaded rod).'],
+      p: [
+        'Turn the knob in the direction of the arrow marked CLOSE on the side of the body to bring the arms back together, then remove the device slowly.',
+        'After use, wash any residue off the device, particularly from the lead screw. Avoid prolonged contact with strongly acidic preparations, such as exfoliating products containing glycolic or salicylic acid.',
+      ],
     },
     {
       img: 'storage', alt: 'Storing the device away from direct sunlight',
-      n: 'Storage', h: 'Keep away from sunlight, heat and humidity',
-      p: ['Store it at room temperature in a clean place. Keep it out of reach of children.'],
+      n: 'Storage', h: 'Away from sunlight, heat and humidity',
+      p: [
+        'Store it in a clean place at room temperature, away from direct sunlight, heat and humidity. Keep it out of reach of children.',
+        'Do not modify, alter or disassemble the product. Dispose of it according to your local rules for plastic waste.',
+      ],
     },
     {
-      img: 'no-boil', alt: 'No boiling symbol',
-      n: 'Do not', h: 'Do not boil it or use hot water',
-      p: ['Boiling or hot water can deform the product. Disinfect it with isopropyl alcohol instead.'],
+      img: 'no-boil', alt: 'No boiling',
+      n: 'NG', h: 'Do not boil it or use hot water',
+      p: ['Boiling or hot water may deform the product. To disinfect it, use isopropyl alcohol.'],
     },
     {
-      img: 'emergency', alt: 'Emergency: moving the release plate, pulling out the shaft and taking the device apart',
+      img: 'emergency', alt: 'Emergency: operating the release plate, pulling out the shaft and taking the device apart',
       n: 'EMERGENCY', h: 'If it will not come off',
       p: [
-        'Do not pull it.',
-        '<b>If the knob turns:</b> turn it in the direction of the CLOSE arrow. The arms close and the pressure eases; in most cases you can then remove the device as usual.',
-        '<b>If the knob will not turn, or the device still will not come off:</b> do not force it. Slide the release plate (the flat, keyhole-shaped part at the right end of the body) in the direction of the RELEASE arrow shown in the picture, so that the large round opening of the keyhole lines up with the shaft. The shaft passes through and the arms come free.',
+        '<b>Do not pull the device forcefully.</b> Forcing it can cause serious injury.',
+        '<b>1. Turn the knob toward CLOSE.</b> If you feel discomfort, pain, tightness or numbness, first turn the knob in the direction of the CLOSE arrow. This brings the arms together and reduces the pressure. In most cases you can then remove the device normally.',
+        '<b>2. Use the release plate.</b> If the knob will not turn at all, do not force it. If the device still will not come off, use the release plate (the flat, keyhole-shaped part): push it downward so that the large round opening of the keyhole aligns with the shaft. The shaft can then pass through it.',
       ],
-      warn: (e) => `<b>If it still will not come off</b>, do not use any more force. Seek medical attention promptly. ${e}`,
+      warn: (e) => `<b>If it still cannot be removed</b>, do not continue to force it. Seek medical attention promptly. ${e}`,
     },
   ],
-  stopH: 'Stop using it straight away',
-  stop: [
-    'If you notice pain, congestion, swelling, numbness, a change in colour or anything unexpected, stop straight away and seek medical care.',
-    'If you feel discomfort, first turn the knob in the direction of the CLOSE arrow to ease the pressure. Do not pull the device.',
-    'If the foreskin has been drawn back behind the glans and will not return to its normal position, do not leave it: seek emergency medical care immediately.',
-    'If the device breaks during use, stop, remove it and recover all the pieces. If a piece remains in the application area, or you cannot confirm that you have recovered every piece, do not try to remove it yourself: seek medical attention promptly. Do not use a product that has broken.',
-    'If you notice redness, irritation or any other skin reaction, stop using it.',
+  noH: 'Do not use this product if any of the following apply',
+  no: [
+    'You are unable to judge, attach, operate or remove the device safely by yourself.',
+    'You have a severe metal allergy.',
+    'You take anticoagulant (blood-thinning) medication, have any bleeding disorder, or have a severe vascular condition.',
+    'You are undergoing treatment related to the application area, or you have reduced sensation due to a circulatory disorder, peripheral neuropathy, diabetes or a similar condition.',
+    'You have any wound, bleeding, inflammation, infection, discharge, rash or other abnormality on or within the application area.',
+    `The foreskin is already adhered or fused to the glans. Forced expansion can cause severe tearing. Consult ${doc} instead.`,
+    'You are under the influence of alcohol, or have taken pain medication, sleep aids, sedatives or similar substances.',
+    'Children or infants are nearby, or the product would be stored within their reach (choking and injury hazard).',
   ],
-  next: 'Open the Instructions for Use, Safety Warnings &amp; Terms of Sale (PDF)',
-  footer: '© Luca Bloom | Luca Bloom is not a medical device.',
-};
+  stopH: 'Stop immediately and seek medical care',
+  stop: (e) => [
+    `If you experience pain, congestion, swelling, numbness, discolouration or any unexpected problem, stop using the product immediately and consult ${doc} promptly. ${e}`,
+    'Never forcibly retract the foreskin when there is not enough slack. If the retracted foreskin becomes trapped behind the glans and cannot be returned to its normal position, seek emergency medical care immediately.',
+    `If the inner surface of the foreskin is already adhered to the glans, do not try to force it open. Consult ${doc}.`,
+    'If the device breaks during use, stop immediately, remove it and recover all fragments. If a fragment remains in the application area, or you cannot confirm that every fragment has been recovered, do not try to remove it yourself: seek medical attention promptly. Do not use a product that has broken, even if it still seems to work.',
+    'If you notice redness, irritation or any other skin reaction, stop using it immediately. Trace metal residue may be present because the factory also processes metal parts.',
+  ],
+  next: 'Open the Disclaimer (PDF)',
+  footer: '© Luca Bloom | This product is not a medical device.',
+});
 
 // 文字列・関数の戻り値・配列・オブジェクトの中の文章をまとめて置き換える
 const swap = (pairs) => {
@@ -110,228 +124,255 @@ const swap = (pairs) => {
             : v;
   return s;
 };
-const EN_US = swap([[/colour/g, 'color'], [/straight away/g, 'right away']])(EN);
-const EN_CA = swap([[/straight away/g, 'right away']])(EN);
+// 米国・カナダの PDF のつづり（discoloration・summarize）
+const american = swap([[/discolouration/g, 'discoloration'], [/summarises/g, 'summarizes']]);
+const EN_UK = en('a medical practitioner');
+const EN_NA = american(en('a physician'));
 
-// ---------------- フランス語（カナダ）：PDF と同じ用語（molette・plaque de dégagement・vis-mère・tige） ----------------
+// ---------------- フランス語（カナダ）：カナダの PDF（version française）の用語・文面 ----------------
 // 約物：コロンの前と « » の内側に改行しない空白（U+00A0）、? ! ; の前には入れない
 const frPunct = swap([[/ ([?!;])/g, '$1'], [/ :/g, ' :'], [/« /g, '« '], [/ »/g, ' »']]);
 const FR = frPunct({
   skip: 'Aller au contenu',
-  langName: 'Français',
-  label: 'Assistance',
-  hubTitle: 'Guide d’utilisation et sécurité',
-  hubDescription: (n) => `Assistance Luca Bloom pour le ${n} : le guide illustré, le mode d’emploi, avertissements de sécurité et conditions de vente (PDF) et la marche à suivre si le dispositif ne se détache pas.`,
+  hubTitle: 'Mode d’emploi et avis de non-responsabilité',
+  hubDescription: (n) => `Mode d’emploi de Luca Bloom (utilisation, entretien, contre-indications, dégagement d’urgence) et avis de non-responsabilité (PDF) pour le ${n}.`,
+  productLink: 'Page du produit',
   h1: 'À lire avant l’utilisation',
   lead: 'Choisissez ce que vous souhaitez consulter.',
-  manualCard: ['Guide illustré', 'Utilisation étape par étape, entretien et rangement, dégagement d’urgence'],
-  pdfTitle: 'Mode d’emploi, avertissements de sécurité et conditions de vente',
-  pdfCard: (n) => `PDF (${n} pages, en français et en anglais) · exigence d’âge, contre-indications, règles de sécurité, retours et coordonnées`,
+  manualCard: ['Mode d’emploi', 'Utilisation, entretien et rangement, contre-indications et dégagement d’urgence'],
+  pdfCard: ['Avis de non-responsabilité (PDF)', (n) => `Mode d’emploi, avertissements de sécurité et conditions de vente | PDF, ${n} pages (français et anglais)`],
   noticeH: 'Si le dispositif ne se détache pas',
-  notice: (e) => `Ne tirez pas dessus. Consultez la section <a href="manual.html#emergency">Dégagement d’urgence</a>. Si vous ressentez une douleur, une congestion, une enflure, un engourdissement ou remarquez un changement de couleur, cessez immédiatement l’utilisation et consultez un médecin. ${e}`,
+  notice: (e) => `Ne tirez pas dessus. Tournez d’abord la molette dans le sens de la flèche « CLOSE ». Si la molette ne tourne pas, consultez le <a href="manual.html#emergency">dégagement d’urgence</a>. Si vous ressentez une douleur, une congestion, une enflure, un engourdissement ou remarquez une décoloration, cessez immédiatement l’utilisation et consultez rapidement un médecin. ${e}`,
   contact: `Courriel : ${MAIL}<br>Vous pouvez aussi nous écrire par la messagerie de la plateforme où vous avez acheté le produit.`,
-  product: 'Page du produit',
-  change: 'Changer de pays',
-  home: 'Assistance',
-  manualTitle: 'Guide d’utilisation | Luca Bloom',
-  manualDescription:
-    'Guide illustré de Luca Bloom : lavage, application de crème et insertion, rotation de la molette (30 minutes au plus par séance), retrait, rangement, ne pas faire bouillir et dégagement d’urgence.',
-  manualLabel: 'Guide',
-  manualH1: 'Guide d’utilisation',
-  manualLead: (pdf) => `Avant l’utilisation, lisez aussi le <a href="${pdf}" target="_blank" rel="noopener" type="application/pdf" class="on-navy">mode d’emploi, avertissements de sécurité et conditions de vente (PDF)</a>.`,
-  beforeH: 'Avant de commencer',
-  before: (age) => [
+  other: 'Choisir un autre pays',
+  home: 'Accueil',
+  support: 'Assistance',
+  manualTitle: 'Mode d’emploi',
+  manualDescription: 'Mode d’emploi de Luca Bloom : zone d’utilisation, lavage et inspection, insertion, rotation de la molette (30 minutes au plus par séance), retrait, entretien, contre-indications et dégagement d’urgence.',
+  manualLead: (pdf) => `Ce mode d’emploi résume l’utilisation du produit et les règles de sécurité du document <a href="${pdf}" target="_blank" rel="noopener" class="on-navy">Mode d’emploi, avertissements de sécurité et conditions de vente (PDF)</a>. Lisez aussi le PDF avant la première utilisation.`,
+  areaH: 'Zone d’utilisation',
+  area: (age) => [
     age,
-    'Usage externe seulement, sur le prépuce. N’insérez jamais les bras dans l’urètre (l’orifice urinaire).',
-    'Avant la première utilisation, vérifiez la liste « N’utilisez pas ce produit si l’un des cas suivants s’applique » dans le PDF (section 4).',
+    'Usage externe seulement, par des hommes adultes, sur le prépuce. N’insérez jamais les bras dans l’urètre (l’orifice urinaire).',
+    'N’insérez jamais les bras au-delà de ce qui est nécessaire pour entrer en contact avec le bord interne de l’ouverture du prépuce.',
+    'Réservé à l’usage de l’acheteur lui-même. Ne l’utilisez sur aucune autre partie du corps.',
   ],
   steps: [
     {
-      img: 'step1', alt: 'Lavage du dispositif à l’eau courante avec du savon',
-      n: '① Avant et après l’utilisation', h: 'Lavez avec un détergent doux',
+      img: 'step1', alt: 'Lavage du dispositif à l’eau avec un détergent',
+      n: '① Avant la première utilisation et chaque utilisation', h: 'Lavez et inspectez',
       p: [
-        'Avant la première utilisation (obligatoire) ainsi qu’avant et après chaque utilisation, lavez le produit à l’eau avec un détergent doux, puis séchez-le complètement. Pour le désinfecter, utilisez de l’alcool isopropylique.',
+        'De l’huile d’usinage et de fines particules issues de la fabrication peuvent subsister sur le produit. Avant la première utilisation (obligatoire), lavez-le soigneusement à l’eau avec un détergent doux, puis séchez-le complètement. Lavez-le et séchez-le aussi après chaque utilisation. Pour le désinfecter, utilisez de l’alcool isopropylique.',
         'Avant chaque utilisation, inspectez le produit, en particulier les bras et la plaque de dégagement, afin d’y déceler des fissures ou des dommages. N’utilisez pas un produit endommagé.',
       ],
     },
     {
       img: 'step2', alt: 'Application de crème et insertion de l’extrémité des bras',
       n: '②', h: 'Appliquez une crème ou une huile, puis insérez l’extrémité des bras',
-      p: ['Appliquez généreusement une crème ou une huile sur les bras et sur la peau. Bras fermés, insérez lentement l’extrémité des bras sur une courte distance dans l’ouverture du prépuce, seulement jusqu’à toucher son bord interne. Veillez à ne pas pincer la peau ni les poils.'],
+      p: ['Appliquez une crème ou une huile sur les bras et sur la peau. Bras fermés, insérez l’extrémité des deux bras sur une courte distance dans l’ouverture du prépuce. Veillez à ne pas pincer la peau ni les poils.'],
     },
     {
       img: 'step3', alt: 'Rotation de la molette pour écarter les bras, avec un repère de 30 minutes et une mise en garde contre un écartement excessif',
-      n: '③ 30 minutes au plus', h: 'Tournez lentement la molette pour ouvrir',
+      n: '③ 30 minutes au plus', h: 'Tournez lentement la molette',
       p: [
-        'Tournez lentement la molette pour écarter les bras, et arrêtez-vous bien avant le seuil de la douleur. Les bras restent à cet écartement quand vous lâchez la molette.',
-        'Pendant l’utilisation, examinez régulièrement le gland et le prépuce afin de repérer un changement de couleur (rouge violé ou plus foncé). Cessez immédiatement si vous en remarquez un.',
+        'En tournant lentement la molette, les bras s’écartent et élargissent doucement l’ouverture. Les bras restent à cet écartement quand vous lâchez la molette.',
+        'N’écartez jamais au point de provoquer une douleur importante. Arrêtez bien avant le seuil de la douleur.',
+        'Pendant l’utilisation, examinez régulièrement le gland et le prépuce afin de repérer une décoloration (rouge violé, assombrissement ou semblable). Cessez immédiatement si elle apparaît.',
       ],
-      warn: '<b>Durée maximale (par sécurité)</b> 30 minutes au plus par séance, et 1 heure au plus au total par période de 24 heures. N’utilisez jamais le produit pendant le sommeil.<br><b>N’écartez pas trop</b> N’écartez jamais au point de provoquer une douleur importante (en bas à droite de l’image).',
+      warn: '<b>Interdit</b> Plus de 30 minutes par séance, plus d’une heure au total par période de 24 heures, et l’utilisation pendant le sommeil.',
     },
     {
       img: 'step4', alt: 'Fermeture des bras et retrait du dispositif',
       n: '④', h: 'Fermez les bras, puis retirez le dispositif',
-      p: ['Tournez la molette dans le sens de la flèche « CLOSE » (« fermer ») gravée sur le côté du corps pour fermer les bras, puis retirez lentement le dispositif. Après l’utilisation, lavez-le comme à l’étape ①, y compris les restes de crème sur la vis-mère (la tige filetée).'],
+      p: [
+        'Tournez la molette dans le sens de la flèche « CLOSE » (« fermer ») gravée sur le côté du corps pour rapprocher les bras, puis retirez lentement le dispositif.',
+        'Après usage, nettoyez tout résidu sur le dispositif, en particulier sur la vis-mère. Évitez tout contact prolongé avec des produits fortement acides, comme les préparations exfoliantes à base d’acide glycolique ou salicylique.',
+      ],
     },
     {
       img: 'storage', alt: 'Rangement à l’abri de la lumière directe du soleil',
       n: 'Rangement', h: 'À l’abri du soleil, de la chaleur et de l’humidité',
-      p: ['Rangez le produit à température ambiante, dans un endroit propre. Gardez-le hors de la portée des enfants.'],
+      p: [
+        'Rangez le produit à température ambiante, dans un endroit propre, à l’abri de la lumière directe du soleil, de la chaleur et de l’humidité. Gardez-le hors de la portée des enfants.',
+        'Ne modifiez pas, n’altérez pas et ne démontez pas le produit. Éliminez-le conformément à la réglementation sur les déchets de plastique de votre municipalité, province ou territoire.',
+      ],
     },
     {
-      img: 'no-boil', alt: 'Symbole interdisant de faire bouillir',
-      n: 'À éviter', h: 'Ne faites pas bouillir le produit, pas d’eau chaude',
-      p: ['L’eau bouillante ou chaude peut déformer le produit. Désinfectez-le plutôt avec de l’alcool isopropylique.'],
+      img: 'no-boil', alt: 'Ne pas faire bouillir',
+      n: 'NG', h: 'Ne faites pas bouillir le produit, pas d’eau chaude',
+      p: ['L’ébullition ou l’eau chaude pourrait déformer le produit. Pour le désinfecter, utilisez de l’alcool isopropylique.'],
     },
     {
       img: 'emergency', alt: 'Urgence : actionner la plaque de dégagement, retirer la tige et séparer le dispositif',
-      n: 'URGENCE', h: 'S’il ne se détache pas',
+      n: 'EMERGENCY', h: 'S’il ne se détache pas',
       p: [
-        'Ne tirez pas dessus.',
-        '<b>Si la molette tourne :</b> tournez-la dans le sens de la flèche « CLOSE ». Les bras se rapprochent et la pression diminue; dans la plupart des cas, vous pouvez ensuite retirer le dispositif normalement.',
-        '<b>Si la molette ne tourne pas, ou si le dispositif ne se détache toujours pas :</b> ne forcez pas. Faites glisser la plaque de dégagement (la pièce plate en forme de trou de serrure, à l’extrémité droite du corps) dans le sens de la flèche « RELEASE » indiquée sur l’image, afin d’aligner la grande ouverture ronde du trou de serrure avec la tige. La tige passe alors à travers et les bras se libèrent.',
+        '<b>Ne tirez pas sur le dispositif avec force.</b> Le retirer de force peut causer des blessures graves.',
+        '<b>1. Tournez la molette vers « CLOSE ».</b> Si vous ressentez un inconfort, une douleur, un serrement ou un engourdissement, tournez d’abord la molette dans le sens de la flèche « CLOSE ». Les bras se rapprochent et la pression diminue. Dans la plupart des cas, vous pouvez ensuite retirer le dispositif normalement.',
+        '<b>2. Utilisez la plaque de dégagement.</b> Si la molette ne tourne plus du tout, ne forcez pas. Si le dispositif ne se détache toujours pas, utilisez la plaque de dégagement (la pièce plate en forme de trou de serrure) : poussez-la vers le bas de manière à aligner la grande ouverture ronde du trou de serrure avec la tige. La tige peut alors la traverser.',
       ],
-      warn: (e) => `<b>S’il ne se détache toujours pas</b>, n’insistez pas. Consultez rapidement un médecin. ${e}`,
+      warn: (e) => `<b>S’il ne peut toujours pas être retiré</b>, n’insistez pas. Consultez rapidement un médecin. ${e}`,
     },
   ],
-  stopH: 'Cessez immédiatement l’utilisation',
-  stop: [
-    'Si vous ressentez une douleur, une congestion, une enflure, un engourdissement, remarquez un changement de couleur ou tout autre problème imprévu, cessez immédiatement et consultez un médecin.',
-    'En cas d’inconfort, tournez d’abord la molette dans le sens de la flèche « CLOSE » pour réduire la pression. Ne tirez pas sur le dispositif.',
-    'Si le prépuce rétracté reste coincé derrière le gland et ne peut être remis en place, ne le laissez pas ainsi : consultez immédiatement un service d’urgence.',
-    'Si le dispositif se brise pendant l’utilisation, cessez, retirez-le et récupérez tous les fragments. Si un fragment demeure dans la zone d’utilisation, ou si vous ne pouvez pas confirmer que tous les fragments ont été récupérés, n’essayez pas de le retirer vous-même : consultez rapidement un médecin. N’utilisez plus un produit qui s’est brisé.',
-    'Si vous constatez une rougeur, une irritation ou toute autre réaction cutanée, cessez l’utilisation.',
+  noH: 'N’utilisez pas ce produit si l’un des cas suivants s’applique',
+  no: [
+    'Vous n’êtes pas en mesure d’évaluer, de poser, d’utiliser ou de retirer le dispositif de façon autonome et sécuritaire.',
+    'Vous souffrez d’une allergie grave aux métaux.',
+    'Vous prenez un anticoagulant, souffrez d’un trouble de la coagulation ou d’une affection vasculaire grave.',
+    'Vous suivez un traitement lié à la zone d’utilisation, ou votre sensibilité y est diminuée en raison d’un trouble circulatoire, d’une neuropathie périphérique, du diabète ou d’une affection semblable.',
+    'Vous présentez une plaie, un saignement, une inflammation, une infection, un écoulement, une éruption cutanée ou toute autre anomalie sur la zone d’utilisation ou à l’intérieur de celle-ci.',
+    'Le prépuce adhère déjà au gland ou y est soudé. Un écartement forcé peut provoquer une déchirure grave. Consultez plutôt un médecin.',
+    'Vous êtes sous l’effet de l’alcool, ou vous avez pris des analgésiques, des somnifères, des sédatifs ou des substances semblables.',
+    'Des enfants ou des nourrissons se trouvent à proximité, ou le produit serait rangé à leur portée (risque d’étouffement et de blessure).',
   ],
-  next: 'Ouvrir le mode d’emploi, avertissements de sécurité et conditions de vente (PDF)',
-  footer: '© Luca Bloom | Luca Bloom n’est pas un instrument médical.',
+  stopH: 'Cessez immédiatement et consultez un médecin',
+  stop: (e) => [
+    `Si vous ressentez une douleur, une congestion, une enflure, un engourdissement, une décoloration ou tout autre problème imprévu, cessez immédiatement d’utiliser le produit et consultez rapidement un médecin. ${e}`,
+    'Ne rétractez jamais le prépuce de force lorsque le jeu est insuffisant. Si le prépuce rétracté reste coincé derrière le gland et ne peut être remis en place, consultez immédiatement un service d’urgence.',
+    'Si la face interne du prépuce adhère déjà au gland, n’essayez pas de l’ouvrir de force. Consultez un médecin.',
+    'Si le dispositif se brise pendant l’utilisation, cessez immédiatement, retirez-le et récupérez tous les fragments. Si un fragment demeure dans la zone d’utilisation, ou si vous ne pouvez pas confirmer que tous les fragments ont été récupérés, n’essayez pas de le retirer vous-même : consultez rapidement un médecin. N’utilisez plus un produit qui s’est brisé, même s’il semble encore fonctionner.',
+    'Si vous constatez une rougeur, une irritation ou toute autre réaction cutanée, cessez immédiatement l’utilisation. Des traces de résidus métalliques peuvent être présentes, car l’usine traite aussi des composants métalliques.',
+  ],
+  next: 'Ouvrir l’avis de non-responsabilité (PDF)',
+  footer: '© Luca Bloom | Ce produit n’est pas un instrument médical.',
 });
 
-// ---------------- スペイン語（メキシコ）：PDF と同じく「usted」。用語は perilla・placa de liberación・tornillo de avance・eje ----------------
+// ---------------- スペイン語（メキシコ）：メキシコの PDF の用語・文面（usted） ----------------
 const ES = {
   skip: 'Ir al contenido',
-  langName: 'Español',
-  label: 'Soporte',
-  hubTitle: 'Guía de uso e información de seguridad',
-  hubDescription: (n) => `Soporte de Luca Bloom para ${n}: la guía ilustrada, las Instrucciones de uso, advertencias de seguridad y condiciones de venta (PDF) y qué hacer si el dispositivo no sale.`,
+  hubTitle: 'Manual de uso y aviso de responsabilidad',
+  hubDescription: (n) => `Manual de uso de Luca Bloom (uso, cuidado, contraindicaciones y liberación de emergencia) y aviso de responsabilidad (PDF) para ${n}.`,
+  productLink: 'Página del producto',
   h1: 'Lea esto antes de usarlo',
   lead: 'Elija lo que desea consultar.',
-  manualCard: ['Guía ilustrada', 'Uso paso a paso, cuidado y almacenamiento, y liberación de emergencia'],
-  pdfTitle: 'Instrucciones de uso, advertencias de seguridad y condiciones de venta',
-  pdfCard: (n) => `PDF (${n} páginas) · requisito de edad, quién no debe usarlo, reglas de seguridad, devoluciones y contacto`,
+  manualCard: ['Manual de uso', 'Uso, cuidado y almacenamiento, contraindicaciones y liberación de emergencia'],
+  pdfCard: ['Aviso de responsabilidad (PDF)', (n) => `Instrucciones de uso, advertencias de seguridad y condiciones de venta | PDF, ${n} páginas`],
   noticeH: 'Si el dispositivo no sale',
-  notice: (e) => `No lo jale. Consulte la <a href="manual.html#emergency">liberación de emergencia</a>. Si siente dolor, congestión, hinchazón, entumecimiento o nota un cambio de color, deje de usarlo de inmediato y busque atención médica. ${e}`,
-  contact: `Correo electrónico: ${MAIL}<br>También puede contactarnos por el sistema de mensajería de la plataforma donde compró el producto.`,
-  product: 'Página del producto',
-  change: 'Cambiar de país',
-  home: 'Soporte',
-  manualTitle: 'Guía de uso | Luca Bloom',
-  manualDescription:
-    'Guía ilustrada de Luca Bloom: lavado, aplicación de crema e inserción, giro de la perilla (máximo 30 minutos por sesión), retiro, almacenamiento, no hervir y liberación de emergencia.',
-  manualLabel: 'Guía',
-  manualH1: 'Guía de uso',
-  manualLead: (pdf) => `Antes de usarlo, lea también las <a href="${pdf}" target="_blank" rel="noopener" type="application/pdf" class="on-navy">Instrucciones de uso, advertencias de seguridad y condiciones de venta (PDF)</a>.`,
-  beforeH: 'Antes de empezar',
-  before: (age) => [
+  notice: (e) => `No lo jale. Primero gire la perilla en la dirección de la flecha CLOSE. Si la perilla no gira, consulte la <a href="manual.html#emergency">liberación de emergencia</a>. Si siente dolor, congestión, hinchazón, entumecimiento o nota decoloración, deje de usarlo de inmediato y consulte a un médico lo antes posible. ${e}`,
+  contact: `Correo electrónico: ${MAIL}<br>También puede contactarnos a través del sistema de mensajería de la plataforma donde compró este producto.`,
+  other: 'Elegir otro país',
+  home: 'Inicio',
+  support: 'Soporte',
+  manualTitle: 'Manual de uso',
+  manualDescription: 'Manual de uso de Luca Bloom: área de aplicación, lavado e inspección, inserción, giro de la perilla (máximo 30 minutos por sesión), retiro, cuidado, contraindicaciones y liberación de emergencia.',
+  manualLead: (pdf) => `Este manual resume el uso del producto y las reglas de seguridad de las <a href="${pdf}" target="_blank" rel="noopener" class="on-navy">Instrucciones de uso, advertencias de seguridad y condiciones de venta (PDF)</a>. Lea también el PDF antes del primer uso.`,
+  areaH: 'Área de aplicación',
+  area: (age) => [
     age,
-    'Solo para uso externo en el prepucio. Nunca inserte los brazos en la uretra (el orificio urinario).',
-    'Antes del primer uso, revise la lista «No use este producto si se aplica alguno de los siguientes casos» en el PDF (sección 4).',
+    'Solo para uso externo por hombres adultos en el prepucio. Nunca inserte los brazos en la uretra (el orificio urinario).',
+    'Nunca inserte los brazos más allá de lo necesario para hacer contacto con el borde interior de la abertura del prepucio.',
+    'Solo para uso del comprador original. No lo use en ninguna otra parte del cuerpo.',
   ],
   steps: [
     {
-      img: 'step1', alt: 'Lavado del dispositivo con jabón y agua corriente',
-      n: '① Antes y después de usarlo', h: 'Lávelo con un detergente suave',
+      img: 'step1', alt: 'Lavado del dispositivo con agua y detergente',
+      n: '① Antes del primer uso y de cada uso', h: 'Lave e inspeccione',
       p: [
-        'Antes del primer uso (obligatorio) y antes y después de cada uso, lávelo con agua y un detergente suave, y séquelo por completo. Para desinfectarlo, use alcohol isopropílico.',
-        'Antes de cada uso, revise el producto, especialmente los brazos y la placa de liberación, en busca de grietas o daños. No use un producto dañado.',
+        'Puede quedar aceite de maquinado y residuos de partículas finas de la fabricación en el producto. Antes del primer uso (obligatorio), lávelo bien con un detergente suave y agua, y séquelo por completo. Lávelo y séquelo también después de cada uso. Para desinfectarlo, use alcohol isopropílico.',
+        'Antes de cada uso, inspeccione el producto, especialmente los brazos y la placa de liberación, en busca de grietas o daños. No use un producto dañado.',
       ],
     },
     {
       img: 'step2', alt: 'Aplicación de crema e inserción de las puntas de los brazos',
       n: '②', h: 'Aplique crema o aceite e inserte las puntas',
-      p: ['Aplique suficiente crema o aceite en los brazos y en la piel. Con los brazos cerrados, inserte lentamente las puntas una corta distancia en la abertura del prepucio, solo hasta tocar su borde interior. Tenga cuidado de no pellizcar la piel o el vello.'],
+      p: ['Aplique crema o aceite en los brazos y en la piel. Con los brazos cerrados, inserte las puntas de los dos brazos una corta distancia en la abertura del prepucio. Tenga cuidado de no pellizcar la piel o el vello.'],
     },
     {
       img: 'step3', alt: 'Giro de la perilla para separar los brazos, con una marca de 30 minutos y una advertencia de no abrir de más',
-      n: '③ Máximo 30 minutos', h: 'Gire la perilla lentamente para abrir',
+      n: '③ Máximo 30 minutos', h: 'Gire la perilla lentamente',
       p: [
-        'Gire la perilla lentamente para separar los brazos y deténgase mucho antes de sentir dolor. Los brazos se quedan en esa apertura al soltar la perilla.',
-        'Durante el uso, revise regularmente el glande y el prepucio en busca de un cambio de color (rojo violáceo o más oscuro). Deje de usarlo de inmediato si nota alguno.',
+        'Al girar lentamente la perilla, los brazos se separan y ensanchan suavemente la abertura. Los brazos se quedan en esa apertura al soltar la perilla.',
+        'Nunca expanda al grado de causar dolor significativo. Deténgase mucho antes de sentir dolor.',
+        'Durante el uso, revise regularmente el glande y el prepucio en busca de decoloración (rojo violáceo, oscurecimiento o similar). Deje de usarlo de inmediato si aparece.',
       ],
-      warn: '<b>Límites de tiempo (por seguridad)</b> Máximo 30 minutos por sesión y máximo 1 hora en total en cualquier periodo de 24 horas. Nunca lo use mientras duerme.<br><b>No abra de más</b> Nunca abra al grado de causar dolor significativo (abajo a la derecha de la imagen).',
+      warn: '<b>Prohibido</b> Más de 30 minutos en una sola sesión, más de una hora en total en cualquier periodo de 24 horas, y usarlo mientras duerme.',
     },
     {
       img: 'step4', alt: 'Cierre de los brazos y retiro del dispositivo',
       n: '④', h: 'Cierre los brazos y luego retírelo',
-      p: ['Gire la perilla en la dirección de la flecha CLOSE grabada en el costado del cuerpo para cerrar los brazos, y luego retire el dispositivo lentamente. Después de usarlo, lávelo como en el paso ①, incluidos los restos de crema en el tornillo de avance (la varilla roscada).'],
+      p: [
+        'Gire la perilla en la dirección de la flecha marcada CLOSE en el costado del cuerpo para volver a juntar los brazos, y luego retire el dispositivo lentamente.',
+        'Después de usarlo, lave cualquier residuo del dispositivo, especialmente del tornillo de avance. Evite el contacto prolongado con preparaciones fuertemente ácidas, como productos exfoliantes que contengan ácido glicólico o salicílico.',
+      ],
     },
     {
       img: 'storage', alt: 'Almacenamiento lejos de la luz solar directa',
       n: 'Almacenamiento', h: 'Lejos del sol, el calor y la humedad',
-      p: ['Guárdelo a temperatura ambiente en un lugar limpio. Manténgalo fuera del alcance de los niños.'],
-    },
-    {
-      img: 'no-boil', alt: 'Símbolo de prohibido hervir',
-      n: 'No', h: 'No lo hierva ni use agua caliente',
-      p: ['Hervirlo o usar agua caliente puede deformar el producto. Desinféctelo con alcohol isopropílico.'],
-    },
-    {
-      img: 'emergency', alt: 'Emergencia: mover la placa de liberación, sacar el eje y separar el dispositivo',
-      n: 'EMERGENCIA', h: 'Si no sale',
       p: [
-        'No lo jale.',
-        '<b>Si la perilla gira:</b> gírela en la dirección de la flecha CLOSE. Los brazos se juntan y la presión disminuye; en la mayoría de los casos, después podrá retirar el dispositivo normalmente.',
-        '<b>Si la perilla no gira, o el dispositivo sigue sin salir:</b> no lo fuerce. Deslice la placa de liberación (la pieza plana en forma de ojo de cerradura, en el extremo derecho del cuerpo) en la dirección de la flecha RELEASE que muestra la imagen, para alinear la abertura redonda grande del ojo de cerradura con el eje. El eje pasa a través de ella y los brazos se liberan.',
+        'Guárdelo a temperatura ambiente en un lugar limpio, lejos de la luz solar directa, el calor y la humedad. Manténgalo fuera del alcance de los niños.',
+        'No modifique, altere ni desarme el producto. Deséchelo de acuerdo con las regulaciones locales sobre residuos plásticos de su municipio.',
       ],
-      warn: (e) => `<b>Si aun así no sale</b>, no siga forzándolo. Busque atención médica de inmediato. ${e}`,
+    },
+    {
+      img: 'no-boil', alt: 'Prohibido hervir',
+      n: 'NG', h: 'No lo hierva ni use agua caliente',
+      p: ['Hervirlo o exponerlo a agua caliente puede deformar el producto. Para desinfectarlo, use alcohol isopropílico.'],
+    },
+    {
+      img: 'emergency', alt: 'Emergencia: operar la placa de liberación, sacar el eje y separar el dispositivo',
+      n: 'EMERGENCY', h: 'Si no sale',
+      p: [
+        '<b>No jale el dispositivo con fuerza.</b> Forzarlo puede causar lesiones graves.',
+        '<b>1. Gire la perilla hacia CLOSE.</b> Si siente incomodidad, dolor, opresión o entumecimiento, primero gire la perilla en la dirección de la flecha CLOSE. Esto junta los brazos y reduce la presión. En la mayoría de los casos, después podrá retirar el dispositivo normalmente.',
+        '<b>2. Use la placa de liberación.</b> Si la perilla no gira en absoluto, no la fuerce. Si el dispositivo sigue sin salir, use la placa de liberación (la pieza plana en forma de ojo de cerradura): empújela hacia abajo para alinear la abertura redonda grande del ojo de cerradura con el eje. Así el eje puede pasar a través de ella.',
+      ],
+      warn: (e) => `<b>Si aun así no puede retirarse</b>, no continúe forzándolo. Busque atención médica de inmediato. ${e}`,
     },
   ],
-  stopH: 'Deje de usarlo de inmediato',
-  stop: [
-    'Si siente dolor, congestión, hinchazón, entumecimiento, nota un cambio de color o cualquier problema inesperado, deténgase de inmediato y busque atención médica.',
-    'Si siente incomodidad, primero gire la perilla en la dirección de la flecha CLOSE para reducir la presión. No jale el dispositivo.',
-    'Si el prepucio retraído queda atrapado detrás del glande y no puede regresar a su posición normal, no lo deje así: busque atención médica de emergencia de inmediato.',
-    'Si el dispositivo se rompe durante el uso, deténgase, retírelo y recupere todos los fragmentos. Si un fragmento permanece en el área de aplicación, o no puede confirmar que recuperó todos, no intente retirarlo usted mismo: busque atención médica de inmediato. No use un producto que se haya roto.',
-    'Si nota enrojecimiento, irritación o cualquier otra reacción en la piel, deje de usarlo.',
+  noH: 'No use este producto si se aplica alguno de los siguientes casos',
+  no: [
+    'No puede evaluar, colocar, operar o retirar el dispositivo de forma independiente y segura.',
+    'Tiene una alergia grave a los metales.',
+    'Toma medicamentos anticoagulantes, tiene algún trastorno hemorrágico o una afección vascular grave.',
+    'Está recibiendo tratamiento relacionado con el área de aplicación, o tiene sensibilidad reducida debido a un trastorno circulatorio, neuropatía periférica, diabetes o afección similar.',
+    'Tiene alguna herida, sangrado, inflamación, infección, secreción, sarpullido u otra anomalía en o dentro del área de aplicación.',
+    'El prepucio ya está adherido o fusionado al glande. La expansión forzada puede causar desgarros graves. Consulte a un médico en su lugar.',
+    'Está bajo la influencia del alcohol, o ha tomado analgésicos, somníferos, sedantes o sustancias similares.',
+    'Hay niños o bebés cerca, o el producto se guardaría a su alcance (riesgo de asfixia y lesión).',
   ],
-  next: 'Abrir las Instrucciones de uso, advertencias de seguridad y condiciones de venta (PDF)',
-  footer: '© Luca Bloom | Luca Bloom no es un dispositivo médico.',
+  stopH: 'Deje de usarlo de inmediato y busque atención médica',
+  stop: (e) => [
+    `Si experimenta dolor, congestión, hinchazón, entumecimiento, decoloración o cualquier problema inesperado, deje de usar el producto de inmediato y consulte a un médico lo antes posible. ${e}`,
+    'Nunca retraiga el prepucio a la fuerza cuando no haya suficiente holgura. Si el prepucio retraído queda atrapado detrás del glande y no puede regresar a su posición normal, busque atención médica de emergencia de inmediato.',
+    'Si la superficie interna del prepucio ya está adherida al glande, no intente abrirlo a la fuerza. Consulte a un médico.',
+    'Si el dispositivo se rompe durante el uso, deje de usarlo de inmediato, retírelo y recupere todos los fragmentos. Si un fragmento permanece en el área de aplicación, o no puede confirmar que se recuperaron todos, no intente retirarlo usted mismo: busque atención médica de inmediato. No use un producto que se haya roto, aunque parezca seguir funcionando.',
+    'Si nota enrojecimiento, irritación o cualquier otra reacción en la piel, deje de usarlo de inmediato. Puede haber trazas de residuos metálicos, ya que la fábrica también procesa componentes metálicos.',
+  ],
+  next: 'Abrir el aviso de responsabilidad (PDF)',
+  footer: '© Luca Bloom | Este producto no es un dispositivo médico.',
 };
 
 // ---------------- 国の一覧（国選択ページの並び順） ----------------
 // dir：サポートページの場所、lp：その国の商品ページ、pdf：免責事項（dir からの相対パス。カナダは英仏1冊を共有）
-// src：元の PDF（アップロードされたファイル）は intl/{国}/terms.pdf としてコミットしてある
+// age・emergency：各国の PDF（1. 年齢、5. 緊急時の連絡先）の文面
 export const COUNTRIES = [
   {
-    id: 'gb', hreflang: 'en-GB', lang: 'en-GB', name: 'United Kingdom', note: 'English', t: EN, dir: 'intl/gb/', lp: 'en/', pdf: 'terms.pdf', pages: 7,
-    age: 'For adults aged 18 and over only.',
-    emergency: 'In an emergency, call 999 or 112, or go to the nearest A&amp;E department. For urgent advice that is not an emergency, call NHS 111.',
+    id: 'gb', hreflang: 'en-GB', lang: 'en-GB', name: 'United Kingdom', label: 'United Kingdom', t: EN_UK, dir: 'intl/gb/', lp: 'en/', pdf: 'terms.pdf', pages: 7,
+    age: 'You must be at least 18 years of age to use this product.',
+    emergency: 'In an emergency, call 999 or 112, or go to the nearest A&amp;E department. For urgent but non-emergency advice, call NHS 111.',
   },
   {
-    id: 'au', hreflang: 'en-AU', lang: 'en-AU', name: 'Australia', note: 'English', t: EN, dir: 'intl/au/', lp: 'en/', pdf: 'terms.pdf', pages: 6,
-    age: 'For adults aged 18 and over only.',
-    emergency: 'In an emergency, call 000 or go to the nearest hospital emergency department.',
-    // 豪州の PDF に記載の電話（日本語のみ）。英語は メール・購入プラットフォームのメッセージで対応
-    phone: 'Telephone: <a href="tel:+817038426430">+81&nbsp;70&nbsp;3842&nbsp;6430</a> (Japanese only, weekdays 10:00–17:00 Japan time). For enquiries in English, please use email or the platform messages.',
+    id: 'au', hreflang: 'en-AU', lang: 'en-AU', name: 'Australia', label: 'Australia', t: EN_UK, dir: 'intl/au/', lp: 'en/', pdf: 'terms.pdf', pages: 6,
+    age: 'You must be at least 18 years of age to use this product.',
+    emergency: 'In an emergency, call 000, or go to the nearest hospital emergency department.',
   },
   {
-    id: 'us', hreflang: 'en-US', lang: 'en-US', name: 'United States', note: 'English', t: EN_US, dir: 'intl/us/', lp: 'us/', pdf: 'terms.pdf', pages: 6,
-    age: 'For adults only: you must be at least 18, or the age of majority in your state, whichever is greater.',
+    id: 'us', hreflang: 'en-US', lang: 'en-US', name: 'United States', label: 'United States', t: EN_NA, dir: 'intl/us/', lp: 'us/', pdf: 'terms.pdf', pages: 6,
+    age: 'You must be at least 18 years of age, or the age of majority in your state or jurisdiction of residence, whichever is greater.',
     emergency: 'In an emergency, call 911 or go to the nearest emergency room.',
   },
   {
-    id: 'ca', hreflang: 'en-CA', lang: 'en-CA', name: 'Canada', note: 'English', t: EN_CA, dir: 'intl/ca/', lp: 'ca/', pdf: 'terms.pdf', pages: 14,
-    pdfNote: ' (French and English)',
-    age: 'For adults only: you must be at least 18, or the age of majority in your province or territory, whichever is greater.',
+    id: 'ca', hreflang: 'en-CA', lang: 'en-CA', name: 'Canada', label: 'Canada (English)', t: EN_NA, dir: 'intl/ca/', lp: 'ca/', pdf: 'terms.pdf', pages: 14,
+    age: 'You must be at least 18 years of age, or the age of majority in your province or territory of residence, whichever is greater.',
     emergency: 'In an emergency, call 911 or your local emergency number, or go to the nearest emergency department.',
   },
   {
-    id: 'ca-fr', hreflang: 'fr-CA', lang: 'fr-CA', name: 'Canada', note: 'Français', t: FR, dir: 'intl/ca/fr/', lp: 'ca/fr/', pdf: '../terms.pdf', pages: 14,
-    age: frPunct('Réservé aux adultes : vous devez avoir au moins 18 ans, ou l’âge de la majorité dans votre province ou territoire s’il est plus élevé.'),
+    id: 'ca-fr', hreflang: 'fr-CA', lang: 'fr-CA', name: 'Canada', label: 'Canada (Français)', t: FR, dir: 'intl/ca/fr/', lp: 'ca/fr/', pdf: '../terms.pdf', pages: 14,
+    age: 'Vous devez être âgé d’au moins 18 ans, ou avoir atteint l’âge de la majorité dans votre province ou territoire de résidence si celui-ci est plus élevé.',
     emergency: 'En cas d’urgence, composez le 911 ou le numéro d’urgence de votre localité, ou rendez-vous à l’urgence la plus proche.',
   },
   {
-    id: 'mx', hreflang: 'es-MX', lang: 'es-MX', name: 'México', note: 'Español', t: ES, dir: 'intl/mx/', lp: 'mx/', pdf: 'terms.pdf', pages: 7,
-    age: 'Solo para adultos de 18 años o más.',
+    id: 'mx', hreflang: 'es-MX', lang: 'es-MX', name: 'México', label: 'México (Español)', t: ES, dir: 'intl/mx/', lp: 'mx/', pdf: 'terms.pdf', pages: 7,
+    age: 'Debe tener al menos 18 años de edad para usar este producto.',
     emergency: 'En caso de emergencia, llame al 911 o acuda a la sala de urgencias más cercana.',
   },
 ];
@@ -351,7 +392,7 @@ export function supportAlternates(kind) {
 export const supportAlternateTags = (kind) =>
   supportAlternates(kind).map(([h, u]) => `<link rel="alternate" hreflang="${h}" href="${u}">`).join('\n');
 
-// ---------------- HTML ----------------
+// ---------------- HTML（見た目は日本語版 /jp/ と共通） ----------------
 const esc = (s) => String(s).replace(/&(?!amp;|lt;|gt;|quot;|#)/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const plain = (s) => String(s).replace(/<[^>]+>/g, '').replace(/&amp;/g, '&');
 const ld = (o) => `<script type="application/ld+json">${JSON.stringify(o)}</script>`;
@@ -359,7 +400,7 @@ const GO = '<svg class="go" viewBox="0 0 20 20" aria-hidden="true"><path d="M7 4
 const IC_BOOK = '<span class="ic"><svg viewBox="0 0 30 30" aria-hidden="true"><rect x="5" y="3" width="20" height="24" rx="3" fill="none" stroke="#E3B34E" stroke-width="2.2"/><path d="M10 10h10M10 15h10M10 20h6" stroke="#EEF0F6" stroke-width="2.2" stroke-linecap="round"/></svg></span>';
 const IC_SHIELD = '<span class="ic"><svg viewBox="0 0 30 30" aria-hidden="true"><path d="M15 3l10 4v7c0 7-4.5 11-10 13C9.5 25 5 21 5 14V7z" fill="none" stroke="#E3B34E" stroke-width="2.2" stroke-linejoin="round"/><path d="M15 9v7" stroke="#EEF0F6" stroke-width="2.4" stroke-linecap="round"/><circle cx="15" cy="20.5" r="1.5" fill="#EEF0F6"/></svg></span>';
 
-function head({ lang, title, description, canonical, alternates = '', crumbs }) {
+function head({ lang, title, description, canonical, alternates, crumbs }) {
   return `<!DOCTYPE html>
 <html lang="${lang}">
 <head>
@@ -370,7 +411,8 @@ function head({ lang, title, description, canonical, alternates = '', crumbs }) 
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}">
 <link rel="canonical" href="${canonical}">
-${alternates ? alternates + '\n' : ''}<meta property="og:type" content="website">
+${alternates}
+<meta property="og:type" content="website">
 <meta property="og:site_name" content="Luca Bloom">
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(description)}">
@@ -396,13 +438,13 @@ const foot = (text) => `<footer class="foot"><div class="wrap">${text}</div></fo
 // 国の選択ページ（QR コードの読み込み先）
 export function selectorHtml() {
   const items = [
-    ...COUNTRIES.map((c) => ({ href: `/${c.dir}`, lang: c.lang, cc: c.id.slice(0, 2).toUpperCase(), name: c.name, note: c.note })),
-    { href: '/jp/', lang: 'ja', cc: 'JP', name: '日本', note: '日本語' },
+    ...COUNTRIES.map((c) => ({ href: `/${c.dir}`, lang: c.lang, label: c.label })),
+    { href: '/jp/', lang: 'ja', label: '日本（日本語）' },
   ];
   return `${head({
     lang: 'en',
-    title: 'Instructions and safety information | Luca Bloom',
-    description: 'Select your country to read the Luca Bloom illustrated user guide and the Instructions for Use, Safety Warnings & Terms of Sale.',
+    title: 'Select your country | Luca Bloom',
+    description: 'Select your country to read the Luca Bloom user manual and the instructions and disclaimer (PDF).',
     canonical: `${SITE}intl/`,
     alternates: supportAlternateTags('hub'),
     crumbs: [['Luca Bloom', `${SITE}en/`], ['Select your country']],
@@ -414,40 +456,37 @@ export function selectorHtml() {
 <div class="hero"><div class="wrap">
   <p class="label">Support</p>
   <h1>Select your country</h1>
-  <p class="multi"><span lang="fr">Choisissez votre pays</span><span lang="es">Seleccione su país</span><span lang="ja">国を選択してください</span></p>
+  <p>User manual and disclaimer</p>
 </div></div>
 </header>
 
 <main id="main"><div class="wrap">
-  <p class="lead">Instructions for use and safety information · <span lang="fr">Mode d’emploi et sécurité</span> · <span lang="es">Instrucciones y seguridad</span> · <span lang="ja">ご使用マニュアル・免責事項</span></p>
   <ul class="countries">
-${items.map((i) => `    <li><a href="${i.href}" hreflang="${i.lang}" lang="${i.lang}"><span class="cc" aria-hidden="true">${i.cc}</span><span><b>${i.name}</b><span>${i.note}</span></span>${GO}</a></li>`).join('\n')}
+${items.map((i) => `    <li><a href="${i.href}" hreflang="${i.lang}" lang="${i.lang}"><b>${i.label}</b>${GO}</a></li>`).join('\n')}
   </ul>
-  <p class="notice" lang="en"><b>If the device will not come off</b><br>Do not pull it. Open your country’s user guide and follow “If it will not come off”. If you notice pain, swelling, numbness or a change in colour, stop using it and seek medical care.</p>
-  <p class="contact">Contact: ${MAIL}</p>
 </div></main>
 
 ${foot('© Luca Bloom')}`;
 }
 
-// 国ごとの入口ページ（マニュアル・PDF・緊急時）
+// 国ごとの入口ページ（マニュアル・免責事項 PDF・外せないとき・お問い合わせ）
 export function hubHtml(c) {
   const t = c.t;
   const url = SITE + c.dir;
   return `${head({
     lang: c.lang,
-    title: `${t.hubTitle} (${c.name}) | Luca Bloom`,
+    title: `${plain(t.hubTitle)} (${c.name}) | Luca Bloom`,
     description: t.hubDescription(c.name),
     canonical: url,
     alternates: supportAlternateTags('hub'),
-    crumbs: [['Luca Bloom', SITE + c.lp], [plain(t.label), url]],
+    crumbs: [[t.home, SITE + c.lp], [plain(t.hubTitle)]],
   })}
 <body>
 <a class="skip" href="#main">${t.skip}</a>
 <header>
-<div class="head"><div class="wrap"><a class="logo" href="/${c.lp}">Luca Bloom</a><nav><a href="/intl/">${t.change}</a></nav></div></div>
+<div class="head"><div class="wrap"><a class="logo" href="/${c.lp}">Luca Bloom</a><nav><a href="/${c.lp}">${t.productLink}</a></nav></div></div>
 <div class="hero"><div class="wrap">
-  <p class="label">${t.label} · ${c.name}</p>
+  <p class="label">Support · ${c.name}</p>
   <h1>${t.h1}</h1>
   <p>${t.lead}</p>
 </div></div>
@@ -460,50 +499,52 @@ export function hubHtml(c) {
       <span><b>${t.manualCard[0]}</b><span>${t.manualCard[1]}</span></span>
       ${GO}
     </a>
-    <a class="choice" href="${c.pdf}" target="_blank" rel="noopener" type="application/pdf">
+    <a class="choice" href="${c.pdf}" target="_blank" rel="noopener">
       ${IC_SHIELD}
-      <span><b>${t.pdfTitle}</b><span>${t.pdfCard(c.pages)}${c.pdfNote || ''}</span></span>
+      <span><b>${t.pdfCard[0]}</b><span>${t.pdfCard[1](c.pages)}</span></span>
       ${GO}
     </a>
   </div>
 
   <p class="notice"><b>${t.noticeH}</b><br>${t.notice(c.emergency)}</p>
 
-  <p class="contact">${t.contact}${c.phone ? `<br>${c.phone}` : ''}</p>
-  <p class="contact"><a href="/${c.lp}">${t.product}</a> · <a href="/intl/">${t.change}</a></p>
+  <p class="contact">${t.contact}</p>
+  <p class="contact"><a href="/intl/">${t.other}</a></p>
 </div></main>
 
 ${foot(t.footer)}`;
 }
 
-// 国ごとの図解マニュアル
+// 国ごとのご使用マニュアル（その国の PDF の内容）
 export function manualHtml(c) {
   const t = c.t;
   const url = `${SITE}${c.dir}manual.html`;
   const warn = (w) => (typeof w === 'function' ? w(c.emergency) : w);
   return `${head({
     lang: c.lang,
-    title: t.manualTitle.replace(' | ', ` (${c.name}) | `),
+    title: `${t.manualTitle} (${c.name}) | Luca Bloom`,
     description: t.manualDescription,
     canonical: url,
     alternates: supportAlternateTags('manual'),
-    crumbs: [['Luca Bloom', SITE + c.lp], [plain(t.home), SITE + c.dir], [plain(t.manualH1)]],
+    crumbs: [[t.home, SITE + c.lp], [t.support, SITE + c.dir], [t.manualTitle]],
   })}
 <body>
 <a class="skip" href="#main">${t.skip}</a>
 <header>
-<div class="head"><div class="wrap"><a class="logo" href="/${c.lp}">Luca Bloom</a><nav><a href="./">${t.home}</a></nav></div></div>
+<div class="head"><div class="wrap"><a class="logo" href="/${c.lp}">Luca Bloom</a><nav><a href="./">${t.support}</a></nav></div></div>
 <div class="hero"><div class="wrap">
-  <p class="label">${t.manualLabel} · ${c.name}</p>
-  <h1>${t.manualH1}</h1>
+  <p class="label">Manual</p>
+  <h1>${t.manualTitle}</h1>
   <p>${t.manualLead(c.pdf)}</p>
 </div></div>
 </header>
 
 <main id="main"><div class="wrap">
-  <h2 class="sec-h first">${t.beforeH}</h2>
+  <p class="crumb"><a href="/${c.lp}">${t.home}</a> / <a href="./">${t.support}</a> / ${t.manualTitle}</p>
+
+  <h2 class="sec-h first">${t.areaH}</h2>
   <ul class="rules">
-${t.before(c.age).map((r) => `    <li>${r}</li>`).join('\n')}
+${t.area(c.age).map((r) => `    <li>${r}</li>`).join('\n')}
   </ul>
 
   <ol class="steps">
@@ -518,12 +559,17 @@ ${s.p.map((p) => `        <p>${p}</p>`).join('\n')}${s.warn ? `\n        <p clas
   .join('\n')}
   </ol>
 
-  <h2 class="sec-h">${t.stopH}</h2>
+  <h2 class="sec-h">${t.noH}</h2>
   <ul class="rules">
-${t.stop.map((r) => `    <li>${r}</li>`).join('\n')}
+${t.no.map((r) => `    <li>${r}</li>`).join('\n')}
   </ul>
 
-  <a class="next" href="${c.pdf}" target="_blank" rel="noopener" type="application/pdf">${t.next}</a>
+  <h2 class="sec-h">${t.stopH}</h2>
+  <ul class="rules">
+${t.stop(c.emergency).map((r) => `    <li>${r}</li>`).join('\n')}
+  </ul>
+
+  <a class="next" href="${c.pdf}" target="_blank" rel="noopener">${t.next}</a>
 </div></main>
 
 ${foot(t.footer)}`;
@@ -533,14 +579,10 @@ ${foot(t.footer)}`;
 export const SUPPORT_EXTRA_CSS = `
 /* intl（tools/i18n/support.mjs） */
 html:not([lang="ja"]) body{letter-spacing:.01em}
-.hero .multi{display:flex;flex-wrap:wrap;gap:4px 14px}
-.lead{font-size:13.5px;color:var(--muted);margin-bottom:16px}
 .countries{margin:0;padding:0;list-style:none;display:grid;gap:10px}
-.countries a{display:grid;grid-template-columns:48px 1fr 18px;gap:14px;align-items:center;background:var(--white);border:1px solid var(--line);border-radius:16px;padding:14px 16px;text-decoration:none;min-height:72px}
-.countries .cc{width:48px;height:48px;border-radius:12px;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center;font:700 15px/1 var(--font-en);letter-spacing:.08em}
-.countries b{display:block;font-size:17px;font-weight:900;line-height:1.4}
-.countries span span{display:block;font-size:13px;color:var(--muted)}
-.countries .go{width:18px;height:18px}
+.countries a{display:flex;align-items:center;justify-content:space-between;gap:14px;background:var(--white);border:1px solid var(--line);border-radius:16px;padding:18px 18px;text-decoration:none;min-height:64px}
+.countries b{font-size:17px;font-weight:900;line-height:1.4}
+.countries .go{width:18px;height:18px;flex:none}
 .sec-h.first{margin-top:0}
 .rules + .steps{margin-top:28px}
 `;

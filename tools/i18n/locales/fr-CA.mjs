@@ -156,7 +156,7 @@ export default {
     supportLabel: 'Assistance',
     supportH2: 'Questions et assistance',
     supportSub: 'Écrivez-nous à <a class="c-inherit" href="mailto:lucabloom65@gmail.com">lucabloom65@gmail.com</a>. Vous pouvez aussi nous contacter par la messagerie de votre commande Amazon.',
-    manual: ['Guide illustré et sécurité', 'Étapes en images, entretien, dégagement d’urgence et conditions (PDF)'],
+    manual: ['Mode d’emploi et avis de non-responsabilité', 'Utilisation illustrée, entretien, retrait d’urgence et avis de non-responsabilité (PDF)'],
     finalH2: 'Commencez aujourd’hui, <span class="ib">à votre rythme.</span>',
     finalSub: 'Privé, discret, et entièrement à votre main.',
     footer: 'Luca Bloom est un produit de soin personnel courant, et non un dispositif médical ; il ne revendique aucun effet médical ou thérapeutique. Réservé aux adultes de 18 ans et plus. Fabriqué en Chine ; contrôlé, nettoyé et assemblé au Japon.',
