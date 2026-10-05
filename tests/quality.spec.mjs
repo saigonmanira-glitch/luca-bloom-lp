@@ -99,13 +99,15 @@ test('軽さ：トップページは3D表示まで含めて500KB以内（圧縮�
 // ---------- 構造化データ：全ページの JSON-LD が正しく、商品情報と FAQ が画面と一致 ----------
 test('構造化データ：JSON-LD が読み込めて、価格と FAQ が画面の表示と一致する', async ({ page }) => {
   test.setTimeout(180_000); // 全25ページを順に開くため
+  // 構造化データと FAQ は HTML に直接書かれているため、3D などのスクリプトは読み込まない（CI での時間切れ防止）
+  await page.route('**/assets/js/**', (r) => r.abort());
   for (const p of pages) {
     await page.goto(p, { waitUntil: 'domcontentloaded' }); // 構造化データは HTML に直接書かれているため、画像や3Dの読み込みは待たない
     const blocks = await page.locator('script[type="application/ld+json"]').allTextContents();
     expect(blocks.length, `/${p} に構造化データがありません`).toBeGreaterThan(0);
     for (const b of blocks) expect(() => JSON.parse(b), `/${p} の JSON-LD が壊れています`).not.toThrow();
   }
-  await page.goto('');
+  await page.goto('', { waitUntil: 'domcontentloaded' });
   const ld = (await page.locator('script[type="application/ld+json"]').allTextContents()).map((b) => JSON.parse(b));
   const product = ld.find((x) => x['@type'] === 'Product');
   expect(product.offers).toMatchObject({ price: '5800', priceCurrency: 'JPY' });

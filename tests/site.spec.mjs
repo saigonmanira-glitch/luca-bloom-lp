@@ -14,6 +14,12 @@ const pages = ['', 'privacy.html', 'jp/', 'jp/manual.html', ...INTL, 'column/'].
     .map((f) => `column/${f}`),
 );
 
+// HTML に直接書かれた内容（hreflang など）だけを確かめるテストでは、3D などのスクリプトを読み込まない
+// （商品ページを何枚も続けて開くと、CI の遅い環境では3Dの描画だけで時間切れになるため）
+async function noScripts(page) {
+  await page.route('**/assets/js/**', (r) => r.abort());
+}
+
 // ページ内のJavaScriptエラーとコンソールのエラーを集める
 function watchErrors(page) {
   const errors = [];
@@ -186,11 +192,12 @@ for (const L of LOCALE_TESTS) {
 }
 
 test('多言語：全言語のページが hreflang で同じ組を相互に指し合っている', async ({ page }) => {
+  await noScripts(page);
   const groups = { lp: ['', ...LOCALES.map((L) => L.dir)], privacy: ['privacy.html', ...LOCALES.map((L) => `${L.dir}privacy.html`)] };
   for (const [kind, list] of Object.entries(groups)) {
     const expected = Object.fromEntries(alternates(kind));
     for (const p of list) {
-      await page.goto(p);
+      await page.goto(p, { waitUntil: 'domcontentloaded' });
       const alt = Object.fromEntries(
         await page.locator('link[rel="alternate"][hreflang]').evaluateAll((ls) => ls.map((l) => [l.hreflang, l.href])),
       );
@@ -258,6 +265,7 @@ for (const c of COUNTRIES) {
 }
 
 test('サポート：入口・マニュアルの hreflang が日本語版を含めて相互に指し合っている', async ({ page }) => {
+  await noScripts(page);
   const groups = {
     hub: ['jp/', 'intl/', ...COUNTRIES.map((c) => c.dir)],
     manual: ['jp/manual.html', ...COUNTRIES.map((c) => `${c.dir}manual.html`)],
@@ -265,7 +273,7 @@ test('サポート：入口・マニュアルの hreflang が日本語版を含�
   for (const [kind, list] of Object.entries(groups)) {
     const expected = Object.fromEntries(supportAlternates(kind));
     for (const p of list) {
-      await page.goto(p);
+      await page.goto(p, { waitUntil: 'domcontentloaded' });
       const alt = Object.fromEntries(
         await page.locator('link[rel="alternate"][hreflang]').evaluateAll((ls) => ls.map((l) => [l.hreflang, l.href])),
       );
