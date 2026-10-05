@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://luca-bloom.com/</loc><lastmod>2026-09-30</lastmod></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url><loc>https://luca-bloom.com/</loc><lastmod>2026-10-05</lastmod><xhtml:link rel="alternate" hreflang="ja" href="https://luca-bloom.com/"/><xhtml:link rel="alternate" hreflang="en-GB" href="https://luca-bloom.com/en/"/><xhtml:link rel="alternate" hreflang="en-AU" href="https://luca-bloom.com/en/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://luca-bloom.com/en/"/></url>
   <url><loc>https://luca-bloom.com/jp/</loc><lastmod>2026-09-30</lastmod></url>
   <url><loc>https://luca-bloom.com/jp/manual.html</loc><lastmod>2026-09-30</lastmod></url>
   <url><loc>https://luca-bloom.com/jp/disclaimer.pdf</loc><lastmod>2026-09-30</lastmod></url>
-  <url><loc>https://luca-bloom.com/privacy.html</loc><lastmod>2026-09-30</lastmod></url>
+  <url><loc>https://luca-bloom.com/privacy.html</loc><lastmod>2026-10-05</lastmod><xhtml:link rel="alternate" hreflang="ja" href="https://luca-bloom.com/privacy.html"/><xhtml:link rel="alternate" hreflang="en-GB" href="https://luca-bloom.com/en/privacy.html"/><xhtml:link rel="alternate" hreflang="en-AU" href="https://luca-bloom.com/en/privacy.html"/><xhtml:link rel="alternate" hreflang="x-default" href="https://luca-bloom.com/en/privacy.html"/></url>
   <url><loc>https://luca-bloom.com/column/</loc><lastmod>2026-09-30</lastmod></url>
   <url><loc>https://luca-bloom.com/column/hohi-kitsui.html</loc><lastmod>2026-09-30</lastmod></url>
   <url><loc>https://luca-bloom.com/column/shinsei-kasei-chigai.html</loc><lastmod>2026-09-30</lastmod></url>
@@ -16,4 +16,6 @@
   <url><loc>https://luca-bloom.com/column/jushin-nagare.html</loc><lastmod>2026-09-30</lastmod></url>
   <url><loc>https://luca-bloom.com/column/kanton-hokei.html</loc><lastmod>2026-09-30</lastmod></url>
   <url><loc>https://luca-bloom.com/column/hokei-ring.html</loc><lastmod>2026-09-30</lastmod></url>
+  <url><loc>https://luca-bloom.com/en/</loc><lastmod>2026-10-05</lastmod><xhtml:link rel="alternate" hreflang="ja" href="https://luca-bloom.com/"/><xhtml:link rel="alternate" hreflang="en-GB" href="https://luca-bloom.com/en/"/><xhtml:link rel="alternate" hreflang="en-AU" href="https://luca-bloom.com/en/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://luca-bloom.com/en/"/></url>
+  <url><loc>https://luca-bloom.com/en/privacy.html</loc><lastmod>2026-10-05</lastmod><xhtml:link rel="alternate" hreflang="ja" href="https://luca-bloom.com/privacy.html"/><xhtml:link rel="alternate" hreflang="en-GB" href="https://luca-bloom.com/en/privacy.html"/><xhtml:link rel="alternate" hreflang="en-AU" href="https://luca-bloom.com/en/privacy.html"/><xhtml:link rel="alternate" hreflang="x-default" href="https://luca-bloom.com/en/privacy.html"/></url>
 </urlset>

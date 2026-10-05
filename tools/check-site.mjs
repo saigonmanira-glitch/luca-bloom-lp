@@ -9,6 +9,7 @@ const ROOT = path.resolve(import.meta.dirname, '..');
 const SITE = 'https://luca-bloom.com/';
 const pages = ['index.html', 'privacy.html', '404.html']
   .concat(fs.readdirSync(path.join(ROOT, 'jp')).filter((f) => f.endsWith('.html')).map((f) => `jp/${f}`))
+  .concat(fs.readdirSync(path.join(ROOT, 'en')).filter((f) => f.endsWith('.html')).map((f) => `en/${f}`))
   .concat(fs.readdirSync(path.join(ROOT, 'column')).filter((f) => f.endsWith('.html')).map((f) => `column/${f}`));
 
 const errors = [];

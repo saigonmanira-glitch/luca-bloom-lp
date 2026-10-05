@@ -20,6 +20,7 @@ https://luca-bloom.com/ のソース一式です。静的サイトで、GitHub P
 | `privacy.html` | プライバシーポリシー |
 | `404.html` | 存在しない URL を開いたときのページ（GitHub Pages が自動で使用） |
 | `jp/` | 同梱カードの QR コード（`https://luca-bloom.com/jp`）の飛び先。`index.html`＝選択画面、`manual.html`＝ご使用マニュアル（画像は `jp/img/`）、`disclaimer.pdf`＝取扱説明書 兼 免責事項、`support.css`＝共通スタイル |
+| `en/` | 英国・オーストラリア向けの英語版（`index.html`＝商品ページ、`privacy.html`＝英語のプライバシーポリシー、`og.png`・`hero-fallback*.webp`＝英語の共有画像・静止画）。日本語版と `hreflang`（検索エンジンに言語違いのページを伝えるタグ）で相互に結んでいる |
 | `column/` | コラム。`index.html`＝一覧、各記事は `*.html`、`column.css`＝全記事共通のスタイル |
 | `robots.txt` / `sitemap.xml` | 検索エンジン向け |
 | `CNAME` / `.nojekyll` | GitHub Pages のカスタムドメイン設定と、Jekyll 処理の無効化 |
@@ -92,6 +93,13 @@ https://luca-bloom.com/ のソース一式です。静的サイトで、GitHub P
 - 製品紹介では状態名（真性包茎など）を対象として書かず、「包皮が狭い方や匂いが気になる方のためのセルフケアツール」と表記します。
 - 状態を解説する記事（真性と仮性の違い・カントン包茎・何科・受診の流れ・包茎リング）には、購入ボタンと価格を置きません。
 - 価格は「初期ロット100個限定価格 5,800円（税込）」のみを表示し、元値と比べる表示（二重価格表示）はしません。
+
+### 英語版（英国・オーストラリア）の表現の決まり
+
+- 英国（MHRA・ASA）と豪州（TGA）では、治療目的をうたうと医療機器として登録が必要になるため、製品は「Foreskin care tool」と表記し、病名（phimosis など）や treat / cure / correct / improve / prevent / clinically などの語を使わない（`npm test` の「英語版：病名・治療・効果をうたう語を使っていない」で検出）。
+- 比較表現（widest・best など）、価格、日本向けの「初期ロット限定」は入れない。
+- 購入ボタンは Amazon UK（amazon.co.uk）と Amazon Australia（amazon.com.au）。商品ページの URL が変わったら `en/index.html` の6か所（ヒーロー・最後・下部バー×各2）を直す。
+- ご使用マニュアルは日本語のみのため、英語版には安全上の注意（Safety）をページ内に載せている。
 
 ## 公開（GitHub Pages）
 

@@ -6,7 +6,7 @@ import zlib from 'node:zlib';
 import * as fontkit from 'fontkit';
 
 const ROOT = new URL('../', import.meta.url);
-const pages = ['', 'privacy.html', 'jp/', 'jp/manual.html', 'column/'].concat(
+const pages = ['', 'privacy.html', 'jp/', 'jp/manual.html', 'en/', 'en/privacy.html', 'column/'].concat(
   fs
     .readdirSync(new URL('column/', ROOT))
     .filter((f) => f.endsWith('.html') && f !== 'index.html')
@@ -109,6 +109,12 @@ test('構造化データ：JSON-LD が読み込めて、価格と FAQ が画面�
   const faq = ld.find((x) => x['@type'] === 'FAQPage');
   const shown = await page.locator('details summary').allTextContents();
   expect(faq.mainEntity.map((q) => q.name)).toEqual(shown.map((s) => s.trim()));
+  // 英語版も FAQ が画面と一致すること
+  await page.goto('en/');
+  const ldEn = (await page.locator('script[type="application/ld+json"]').allTextContents()).map((b) => JSON.parse(b));
+  const faqEn = ldEn.find((x) => x['@type'] === 'FAQPage');
+  const shownEn = await page.locator('details summary').allTextContents();
+  expect(faqEn.mainEntity.map((q) => q.name)).toEqual(shownEn.map((s) => s.trim()));
 });
 
 // ---------- セキュリティ：CSP（読み込みを自サイトに限定）に違反する読み込み・実行がないこと ----------
@@ -120,7 +126,7 @@ for (const p of [...pages, 'no-such-page']) {
     });
     await page.goto(p, { waitUntil: 'load' });
     await expect(page.locator('meta[http-equiv="Content-Security-Policy"]')).toHaveCount(1);
-    if (p === '') {
+    if (p === '' || p === 'en/') {
       await expect(page.locator('#stage canvas')).toHaveCount(1, { timeout: 30_000 });
       await page.locator('#boxstage').scrollIntoViewIfNeeded();
       await expect(page.locator('#boxstage canvas')).toHaveCount(1, { timeout: 30_000 });

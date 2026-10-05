@@ -20,17 +20,22 @@ function initAnalytics() {
   s.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
   document.head.appendChild(s);
 
-  // 「Amazonで購入する」のクリックを計測（どのボタンか location で区別）
-  document.querySelectorAll('a[href*="amazon.co.jp"]').forEach((a, i) => {
+  // Amazon への購入ボタンのクリックを計測（どのボタンか location で区別。英語版は UK・豪州の2種類）
+  document.querySelectorAll('a[href*="www.amazon."]').forEach((a, i) => {
     a.addEventListener('click', () => {
       const where = a.closest('#bar') ? 'sticky_bar' : `button_${i + 1}`;
-      window.gtag('event', 'click_buy', { location: where, transport_type: 'beacon' });
+      window.gtag('event', 'click_buy', { location: where, store: new URL(a.href).hostname, transport_type: 'beacon' });
     });
   });
 }
 
 // ---------- 開き幅スライダー ----------
 // target / current = アームの移動量(mm) 0〜60。開き幅 = 10 + 移動量
+// 表示の言葉はページの言語（<html lang>）で切り替える（日本語：/、英語：/en/）
+const TEXT = document.documentElement.lang.startsWith('en')
+  ? { closed: 'Closed', value: (v) => `Opening width ${v} millimetres` }
+  : { closed: '全閉', value: (v) => `開き幅 ${v}ミリ` };
+
 function createState() {
   const slider = document.getElementById('gap');
   const out = document.getElementById('gapv');
@@ -42,9 +47,9 @@ function createState() {
     kick() {},
     show(travel) {
       const v = Math.round(10 + travel); // 表示は1mm刻み
-      slider.setAttribute('aria-valuetext', v <= 10 ? '全閉' : `開き幅 ${v}ミリ`); // 読み上げ用
+      slider.setAttribute('aria-valuetext', v <= 10 ? TEXT.closed : TEXT.value(v)); // 読み上げ用
       if (v <= 10) {
-        out.textContent = '全閉';
+        out.textContent = TEXT.closed;
       } else {
         out.textContent = String(v);
         const unit = document.createElement('small');
