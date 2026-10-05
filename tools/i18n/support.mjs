@@ -11,6 +11,7 @@ const MAIL = '<a href="mailto:lucabloom65@gmail.com">lucabloom65@gmail.com</a>';
 // ---------------- 英語：英国・豪州・米国・カナダの PDF は同じ文面（医師の呼び方・つづり・緊急連絡先・年齢だけが違う） ----------------
 // doc：PDF での医師の呼び方（英国・豪州 a medical practitioner／米国・カナダ a physician）
 const en = (doc) => ({
+  langName: 'English',
   skip: 'Skip to content',
   hubTitle: 'User Manual & Disclaimer',
   hubDescription: (n) => `Luca Bloom user manual (how to use it, care, who must not use it, emergency release) and disclaimer (PDF) for ${n}.`,
@@ -133,6 +134,7 @@ const EN_NA = american(en('a physician'));
 // 約物：コロンの前と « » の内側に改行しない空白（U+00A0）、? ! ; の前には入れない
 const frPunct = swap([[/ ([?!;])/g, '$1'], [/ :/g, ' :'], [/« /g, '« '], [/ »/g, ' »']]);
 const FR = frPunct({
+  langName: 'Français',
   skip: 'Aller au contenu',
   hubTitle: 'Mode d’emploi et avis de non-responsabilité',
   hubDescription: (n) => `Mode d’emploi de Luca Bloom (utilisation, entretien, contre-indications, dégagement d’urgence) et avis de non-responsabilité (PDF) pour le ${n}.`,
@@ -238,6 +240,7 @@ const FR = frPunct({
 
 // ---------------- スペイン語（メキシコ）：メキシコの PDF の用語・文面（usted） ----------------
 const ES = {
+  langName: 'Español',
   skip: 'Ir al contenido',
   hubTitle: 'Manual de uso y aviso de responsabilidad',
   hubDescription: (n) => `Manual de uso de Luca Bloom (uso, cuidado, contraindicaciones y liberación de emergencia) y aviso de responsabilidad (PDF) para ${n}.`,
@@ -342,50 +345,73 @@ const ES = {
 };
 
 // ---------------- 国の一覧（国選択ページの並び順） ----------------
-// dir：サポートページの場所、lp：その国の商品ページ、pdf：免責事項（dir からの相対パス。カナダは英仏1冊を共有）
-// age・emergency：各国の PDF（1. 年齢、5. 緊急時の連絡先）の文面
+// dir：サポートページの場所、pdf：免責事項（PDF はアップロードされた各国のファイルをそのまま使う）
+// langs：ページに載せる言語（カナダは PDF と同じく1ページにフランス語→英語の順で両方）。
+//   lp：その言語の商品ページ、age・emergency：その国の PDF（1. 年齢、5. 緊急時の連絡先）の文面
 export const COUNTRIES = [
   {
-    id: 'gb', hreflang: 'en-GB', lang: 'en-GB', name: 'United Kingdom', label: 'United Kingdom', t: EN_UK, dir: 'intl/gb/', lp: 'en/', pdf: 'terms.pdf', pages: 7,
-    age: 'You must be at least 18 years of age to use this product.',
-    emergency: 'In an emergency, call 999 or 112, or go to the nearest A&amp;E department. For urgent but non-emergency advice, call NHS 111.',
+    id: 'gb', name: 'United Kingdom', dir: 'intl/gb/', pdf: 'terms.pdf', pages: 7,
+    langs: [{
+      id: 'en', lang: 'en-GB', t: EN_UK, lp: 'en/',
+      age: 'You must be at least 18 years of age to use this product.',
+      emergency: 'In an emergency, call 999 or 112, or go to the nearest A&amp;E department. For urgent but non-emergency advice, call NHS 111.',
+    }],
   },
   {
-    id: 'au', hreflang: 'en-AU', lang: 'en-AU', name: 'Australia', label: 'Australia', t: EN_UK, dir: 'intl/au/', lp: 'en/', pdf: 'terms.pdf', pages: 6,
-    age: 'You must be at least 18 years of age to use this product.',
-    emergency: 'In an emergency, call 000, or go to the nearest hospital emergency department.',
+    id: 'au', name: 'Australia', dir: 'intl/au/', pdf: 'terms.pdf', pages: 6,
+    langs: [{
+      id: 'en', lang: 'en-AU', t: EN_UK, lp: 'en/',
+      age: 'You must be at least 18 years of age to use this product.',
+      emergency: 'In an emergency, call 000, or go to the nearest hospital emergency department.',
+    }],
   },
   {
-    id: 'us', hreflang: 'en-US', lang: 'en-US', name: 'United States', label: 'United States', t: EN_NA, dir: 'intl/us/', lp: 'us/', pdf: 'terms.pdf', pages: 6,
-    age: 'You must be at least 18 years of age, or the age of majority in your state or jurisdiction of residence, whichever is greater.',
-    emergency: 'In an emergency, call 911 or go to the nearest emergency room.',
+    id: 'us', name: 'United States', dir: 'intl/us/', pdf: 'terms.pdf', pages: 6,
+    langs: [{
+      id: 'en', lang: 'en-US', t: EN_NA, lp: 'us/',
+      age: 'You must be at least 18 years of age, or the age of majority in your state or jurisdiction of residence, whichever is greater.',
+      emergency: 'In an emergency, call 911 or go to the nearest emergency room.',
+    }],
   },
   {
-    id: 'ca', hreflang: 'en-CA', lang: 'en-CA', name: 'Canada', label: 'Canada (English)', t: EN_NA, dir: 'intl/ca/', lp: 'ca/', pdf: 'terms.pdf', pages: 14,
-    age: 'You must be at least 18 years of age, or the age of majority in your province or territory of residence, whichever is greater.',
-    emergency: 'In an emergency, call 911 or your local emergency number, or go to the nearest emergency department.',
+    id: 'ca', name: 'Canada', dir: 'intl/ca/', pdf: 'terms.pdf', pages: 14,
+    langs: [
+      {
+        id: 'fr', lang: 'fr-CA', t: FR, lp: 'ca/fr/',
+        age: 'Vous devez être âgé d’au moins 18 ans, ou avoir atteint l’âge de la majorité dans votre province ou territoire de résidence si celui-ci est plus élevé.',
+        emergency: 'En cas d’urgence, composez le 911 ou le numéro d’urgence de votre localité, ou rendez-vous à l’urgence la plus proche.',
+      },
+      {
+        id: 'en', lang: 'en-CA', t: EN_NA, lp: 'ca/',
+        age: 'You must be at least 18 years of age, or the age of majority in your province or territory of residence, whichever is greater.',
+        emergency: 'In an emergency, call 911 or your local emergency number, or go to the nearest emergency department.',
+      },
+    ],
   },
   {
-    id: 'ca-fr', hreflang: 'fr-CA', lang: 'fr-CA', name: 'Canada', label: 'Canada (Français)', t: FR, dir: 'intl/ca/fr/', lp: 'ca/fr/', pdf: '../terms.pdf', pages: 14,
-    age: 'Vous devez être âgé d’au moins 18 ans, ou avoir atteint l’âge de la majorité dans votre province ou territoire de résidence si celui-ci est plus élevé.',
-    emergency: 'En cas d’urgence, composez le 911 ou le numéro d’urgence de votre localité, ou rendez-vous à l’urgence la plus proche.',
-  },
-  {
-    id: 'mx', hreflang: 'es-MX', lang: 'es-MX', name: 'México', label: 'México (Español)', t: ES, dir: 'intl/mx/', lp: 'mx/', pdf: 'terms.pdf', pages: 7,
-    age: 'Debe tener al menos 18 años de edad para usar este producto.',
-    emergency: 'En caso de emergencia, llame al 911 o acuda a la sala de urgencias más cercana.',
+    id: 'mx', name: 'México', dir: 'intl/mx/', pdf: 'terms.pdf', pages: 7,
+    langs: [{
+      id: 'es', lang: 'es-MX', t: ES, lp: 'mx/',
+      age: 'Debe tener al menos 18 años de edad para usar este producto.',
+      emergency: 'En caso de emergencia, llame al 911 o acuda a la sala de urgencias más cercana.',
+    }],
   },
 ];
 
 // 生成するページ（テスト・サイトの検査で使う）
 export const SUPPORT_PAGES = ['intl/', ...COUNTRIES.flatMap((c) => [c.dir, `${c.dir}manual.html`])];
-// 免責事項の PDF（国ごと。カナダの英仏は同じファイル）
-export const SUPPORT_PDFS = [...new Set(COUNTRIES.map((c) => new URL(c.pdf, `https://x/${c.dir}`).pathname.slice(1)))];
+// 免責事項の PDF（国ごとに1つ）
+export const SUPPORT_PDFS = COUNTRIES.map((c) => c.dir + c.pdf);
+// 複数の言語を載せるページでは、言語ごとの見出しに id（#fr・#en）を付ける
+const anchor = (c, v) => (c.langs.length > 1 ? `#${v.id}` : '');
+const emergencyId = (c, v) => (c.langs.length > 1 ? `emergency-${v.id}` : 'emergency');
+// 商品ページから、その国・その言語のマニュアルと免責事項（PDF）へのリンク先
+export const supportLink = (c, v) => ({ manual: `/${c.dir}manual.html${anchor(c, v)}`, pdf: `/${c.dir}${c.pdf}` });
 
 // hreflang：入口ページ同士・マニュアル同士を相互に指す（日本語版 /jp/ を含む）。入口の x-default は国の選択ページ
 export function supportAlternates(kind) {
   const file = kind === 'manual' ? 'manual.html' : '';
-  const list = [['ja', `${SITE}jp/${file}`], ...COUNTRIES.map((c) => [c.hreflang, SITE + c.dir + file])];
+  const list = [['ja', `${SITE}jp/${file}`], ...COUNTRIES.flatMap((c) => c.langs.map((v) => [v.lang, SITE + c.dir + file]))];
   if (kind === 'hub') list.push(['x-default', `${SITE}intl/`]);
   return list;
 }
@@ -438,7 +464,7 @@ const foot = (text) => `<footer class="foot"><div class="wrap">${text}</div></fo
 // 国の選択ページ（QR コードの読み込み先）
 export function selectorHtml() {
   const items = [
-    ...COUNTRIES.map((c) => ({ href: `/${c.dir}`, lang: c.lang, label: c.label })),
+    ...COUNTRIES.map((c) => ({ href: `/${c.dir}`, lang: c.langs.length > 1 ? '' : c.langs[0].lang, label: c.name })),
     { href: '/jp/', lang: 'ja', label: '日本（日本語）' },
   ];
   return `${head({
@@ -462,95 +488,79 @@ export function selectorHtml() {
 
 <main id="main"><div class="wrap">
   <ul class="countries">
-${items.map((i) => `    <li><a href="${i.href}" hreflang="${i.lang}" lang="${i.lang}"><b>${i.label}</b>${GO}</a></li>`).join('\n')}
+${items.map((i) => `    <li><a href="${i.href}"${i.lang ? ` hreflang="${i.lang}" lang="${i.lang}"` : ''}><b>${i.label}</b>${GO}</a></li>`).join('\n')}
   </ul>
 </div></main>
 
 ${foot('© Luca Bloom')}`;
 }
 
+// 複数の言語を載せるとき、2つ目以降の言語の要素に lang を付ける
+const langAttr = (c, v) => (v === c.langs[0] ? '' : ` lang="${v.lang}"`);
+
 // 国ごとの入口ページ（マニュアル・免責事項 PDF・外せないとき・お問い合わせ）
 export function hubHtml(c) {
-  const t = c.t;
+  const [v0] = c.langs;
+  const t = v0.t;
   const url = SITE + c.dir;
+  const multi = c.langs.length > 1;
+  const both = (f, sep) => c.langs.map((v, i) => (i ? `<span lang="${v.lang}">${f(v.t)}</span>` : f(v.t))).join(sep);
   return `${head({
-    lang: c.lang,
-    title: `${plain(t.hubTitle)} (${c.name}) | Luca Bloom`,
-    description: t.hubDescription(c.name),
+    lang: v0.lang,
+    title: multi ? `${c.langs.map((v) => v.t.manualTitle).join(' · ')} (${c.name}) | Luca Bloom` : `${plain(t.hubTitle)} (${c.name}) | Luca Bloom`,
+    description: c.langs.map((v) => v.t.hubDescription(c.name)).join(' '),
     canonical: url,
     alternates: supportAlternateTags('hub'),
-    crumbs: [[t.home, SITE + c.lp], [plain(t.hubTitle)]],
+    crumbs: [[t.home, SITE + v0.lp], [plain(t.hubTitle)]],
   })}
 <body>
 <a class="skip" href="#main">${t.skip}</a>
 <header>
-<div class="head"><div class="wrap"><a class="logo" href="/${c.lp}">Luca Bloom</a><nav><a href="/${c.lp}">${t.productLink}</a></nav></div></div>
+<div class="head"><div class="wrap"><a class="logo" href="/${v0.lp}">Luca Bloom</a><nav><a href="/${v0.lp}">${t.productLink}</a></nav></div></div>
 <div class="hero"><div class="wrap">
   <p class="label">Support · ${c.name}</p>
-  <h1>${t.h1}</h1>
-  <p>${t.lead}</p>
+  <h1>${both((x) => x.h1, '<br>')}</h1>
+  <p>${both((x) => x.lead, ' / ')}</p>
 </div></div>
 </header>
 
 <main id="main"><div class="wrap">
   <div class="choices">
-    <a class="choice" href="manual.html">
+${c.langs.map((v) => `    <a class="choice" href="manual.html${anchor(c, v)}"${langAttr(c, v)}>
       ${IC_BOOK}
-      <span><b>${t.manualCard[0]}</b><span>${t.manualCard[1]}</span></span>
+      <span><b>${v.t.manualCard[0]}${multi ? ` (${v.t.langName})` : ''}</b><span>${v.t.manualCard[1]}</span></span>
       ${GO}
-    </a>
+    </a>`).join('\n')}
     <a class="choice" href="${c.pdf}" target="_blank" rel="noopener">
       ${IC_SHIELD}
-      <span><b>${t.pdfCard[0]}</b><span>${t.pdfCard[1](c.pages)}</span></span>
+      <span><b>${both((x) => x.pdfCard[0], ' / ')}</b><span>${t.pdfCard[1](c.pages)}</span></span>
       ${GO}
     </a>
   </div>
 
-  <p class="notice"><b>${t.noticeH}</b><br>${t.notice(c.emergency)}</p>
+${c.langs.map((v) => `  <p class="notice"${langAttr(c, v)}><b>${v.t.noticeH}</b><br>${v.t.notice(v.emergency).replace('manual.html#emergency', `manual.html#${emergencyId(c, v)}`)}</p>`).join('\n')}
 
-  <p class="contact">${t.contact}</p>
-  <p class="contact"><a href="/intl/">${t.other}</a></p>
+${c.langs.map((v) => `  <p class="contact"${langAttr(c, v)}>${v.t.contact}</p>`).join('\n')}
+  <p class="contact">${both((x) => `<a href="/intl/">${x.other}</a>`, ' / ')}</p>
 </div></main>
 
-${foot(t.footer)}`;
+${foot(both((x) => x.footer, '<br>'))}`;
 }
 
-// 国ごとのご使用マニュアル（その国の PDF の内容）
-export function manualHtml(c) {
-  const t = c.t;
-  const url = `${SITE}${c.dir}manual.html`;
-  const warn = (w) => (typeof w === 'function' ? w(c.emergency) : w);
-  return `${head({
-    lang: c.lang,
-    title: `${t.manualTitle} (${c.name}) | Luca Bloom`,
-    description: t.manualDescription,
-    canonical: url,
-    alternates: supportAlternateTags('manual'),
-    crumbs: [[t.home, SITE + c.lp], [t.support, SITE + c.dir], [t.manualTitle]],
-  })}
-<body>
-<a class="skip" href="#main">${t.skip}</a>
-<header>
-<div class="head"><div class="wrap"><a class="logo" href="/${c.lp}">Luca Bloom</a><nav><a href="./">${t.support}</a></nav></div></div>
-<div class="hero"><div class="wrap">
-  <p class="label">Manual</p>
-  <h1>${t.manualTitle}</h1>
-  <p>${t.manualLead(c.pdf)}</p>
-</div></div>
-</header>
-
-<main id="main"><div class="wrap">
-  <p class="crumb"><a href="/${c.lp}">${t.home}</a> / <a href="./">${t.support}</a> / ${t.manualTitle}</p>
-
-  <h2 class="sec-h first">${t.areaH}</h2>
+// ご使用マニュアルの本文（1言語分）。その国の PDF の内容
+function manualBody(c, v) {
+  const t = v.t;
+  const multi = c.langs.length > 1;
+  const warn = (w) => (typeof w === 'function' ? w(v.emergency) : w);
+  return `${multi ? `  <h2 class="lang-h" id="${v.id}">${t.langName}</h2>\n` : ''}  <h2 class="sec-h first">${t.areaH}</h2>
   <ul class="rules">
-${t.area(c.age).map((r) => `    <li>${r}</li>`).join('\n')}
+${t.area(v.age).map((r) => `    <li>${r}</li>`).join('\n')}
   </ul>
 
   <ol class="steps">
 ${t.steps
   .map(
-    (s) => `    <li class="step"${s.img === 'emergency' ? ' id="emergency"' : ''}>
+    (s) => `    <li class="step"${s.img === 'emergency' ? ` id="${emergencyId(c, v)}"` : ''}>
       <figure><img src="/jp/img/${s.img}.png" width="${s.img === 'emergency' ? 732 : 730}" height="910" alt="${esc(s.alt)}" loading="lazy"></figure>
       <div class="tx"><p class="n">${s.n}</p><h2>${s.h}</h2>
 ${s.p.map((p) => `        <p>${p}</p>`).join('\n')}${s.warn ? `\n        <p class="warn">${warn(s.warn)}</p>` : ''}</div>
@@ -566,13 +576,44 @@ ${t.no.map((r) => `    <li>${r}</li>`).join('\n')}
 
   <h2 class="sec-h">${t.stopH}</h2>
   <ul class="rules">
-${t.stop(c.emergency).map((r) => `    <li>${r}</li>`).join('\n')}
+${t.stop(v.emergency).map((r) => `    <li>${r}</li>`).join('\n')}
   </ul>
 
-  <a class="next" href="${c.pdf}" target="_blank" rel="noopener">${t.next}</a>
+  <a class="next" href="${c.pdf}" target="_blank" rel="noopener">${t.next}</a>`;
+}
+
+// 国ごとのご使用マニュアル（カナダはフランス語→英語の順に1ページで）
+export function manualHtml(c) {
+  const [v0] = c.langs;
+  const t = v0.t;
+  const url = `${SITE}${c.dir}manual.html`;
+  const multi = c.langs.length > 1;
+  return `${head({
+    lang: v0.lang,
+    title: `${c.langs.map((v) => v.t.manualTitle).join(' · ')} (${c.name}) | Luca Bloom`,
+    description: c.langs.map((v) => v.t.manualDescription).join(' '),
+    canonical: url,
+    alternates: supportAlternateTags('manual'),
+    crumbs: [[t.home, SITE + v0.lp], [t.support, SITE + c.dir], [t.manualTitle]],
+  })}
+<body>
+<a class="skip" href="#main">${t.skip}</a>
+<header>
+<div class="head"><div class="wrap"><a class="logo" href="/${v0.lp}">Luca Bloom</a><nav><a href="./">${t.support}</a></nav></div></div>
+<div class="hero"><div class="wrap">
+  <p class="label">Manual</p>
+  <h1>${c.langs.map((v, i) => (i ? `<span lang="${v.lang}">${v.t.manualTitle}</span>` : v.t.manualTitle)).join('<br>')}</h1>
+${c.langs.map((v) => `  <p${langAttr(c, v)}>${v.t.manualLead(c.pdf)}</p>`).join('\n')}
+</div></div>
+</header>
+
+<main id="main"><div class="wrap">
+  <p class="crumb"><a href="/${v0.lp}">${t.home}</a> / <a href="./">${t.support}</a> / ${t.manualTitle}${multi ? ` | ${c.langs.map((v) => `<a href="#${v.id}"${langAttr(c, v)}>${v.t.langName}</a>`).join(' · ')}` : ''}</p>
+
+${c.langs.map((v) => (v === v0 ? manualBody(c, v) : `  <div lang="${v.lang}">\n${manualBody(c, v)}\n  </div>`)).join('\n\n')}
 </div></main>
 
-${foot(t.footer)}`;
+${foot(c.langs.map((v, i) => (i ? `<span lang="${v.lang}">${v.t.footer}</span>` : v.t.footer)).join('<br>'))}`;
 }
 
 // 日本語版のサポートページの CSS に、国選択ページ用の見た目を足したもの
@@ -585,4 +626,7 @@ html:not([lang="ja"]) body{letter-spacing:.01em}
 .countries .go{width:18px;height:18px;flex:none}
 .sec-h.first{margin-top:0}
 .rules + .steps{margin-top:28px}
+.choice b span{display:inline;font-size:inherit;color:inherit;margin:0;line-height:inherit}
+.lang-h{font-family:var(--font-en);font-size:13px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-ink);margin:0 0 10px;padding-top:8px}
+.next + .lang-h{margin-top:56px;border-top:1px solid var(--line);padding-top:32px}
 `;

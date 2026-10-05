@@ -86,8 +86,10 @@ for (const L of LOCALES.filter((x) => x.legal)) {
 // サポートページ：入口・マニュアルは hreflang の組、国の選択ページと PDF は単独
 for (const kind of ['hub', 'manual']) {
   const alt = supportAlternates(kind).map(([h, u]) => `<xhtml:link rel="alternate" hreflang="${h}" href="${u}"/>`).join('');
+  const seen = new Set();
   for (const [h, u] of supportAlternates(kind)) {
-    if (h === 'ja') continue; // 日本語版は sitemap.xml の手作業の部分に載っている
+    if (h === 'ja' || seen.has(u)) continue; // 日本語版は sitemap.xml の手作業の部分に載っている。カナダは英仏で同じ URL
+    seen.add(u);
     urls.push(`  <url><loc>${u}</loc><lastmod>${lastmod(u)}</lastmod>${alt}</url>`);
   }
 }

@@ -9,7 +9,7 @@
     "build:js": "rm -rf assets/js && esbuild src/app.js --bundle --splitting --format=esm --minify --target=es2020 --outdir=assets/js --chunk-names=chunks/[name]-[hash] --legal-comments=eof",
     "build:fonts": "node tools/build-fonts.mjs",
     "build:csp": "node tools/build-csp.mjs",
-    "lint": "eslint . && html-validate index.html privacy.html 404.html \"jp/*.html\" \"en/*.html\" \"us/*.html\" \"mx/*.html\" \"ca/*.html\" \"ca/fr/*.html\" \"intl/*.html\" \"intl/*/*.html\" \"intl/ca/fr/*.html\" \"column/*.html\"",
+    "lint": "eslint . && html-validate index.html privacy.html 404.html \"jp/*.html\" \"en/*.html\" \"us/*.html\" \"mx/*.html\" \"ca/*.html\" \"ca/fr/*.html\" \"intl/*.html\" \"intl/*/*.html\" \"column/*.html\"",
     "check": "node tools/build-i18n.mjs --check && node tools/check-site.mjs && node tools/build-csp.mjs --check && node tools/sns-check.mjs",
     "test": "playwright test",
     "verify": "npm run lint && npm run check && npm audit --audit-level=moderate && npm run test",

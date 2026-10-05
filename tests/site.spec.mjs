@@ -166,7 +166,7 @@ for (const L of LOCALE_TESTS) {
     const links = page.locator('#support .support-links a');
     const hrefs = await links.evaluateAll((as) => as.map((a) => a.getAttribute('href')));
     const pdfs = hrefs.filter((h) => h.endsWith('.pdf'));
-    expect(hrefs.filter((h) => h.endsWith('/manual.html')).length).toBeGreaterThanOrEqual(1);
+    expect(hrefs.filter((h) => /\/manual\.html(#\w+)?$/.test(h)).length).toBeGreaterThanOrEqual(1);
     expect(pdfs.length).toBeGreaterThanOrEqual(1);
     for (const h of hrefs) expect((await request.get(h)).status(), h).toBe(200);
     for (const h of pdfs) expect((await request.get(h)).headers()['content-type'], h).toBe('application/pdf');
@@ -213,11 +213,12 @@ test('QRコードのURL（/intl）：国の選択ページが開き、全ての�
 });
 
 for (const c of COUNTRIES) {
-  const sos = c.emergency.match(/\b(999|000|911)\b/)[1]; // その国の緊急通報の番号
   test(`サポート /${c.dir}：免責事項のPDFとマニュアルが開き、緊急時の案内がある`, async ({ page, request }) => {
     const errors = watchErrors(page);
     await page.goto(c.dir);
-    await expect(page.locator('html')).toHaveAttribute('lang', c.lang);
+    await expect(page.locator('html')).toHaveAttribute('lang', c.langs[0].lang);
+    // 免責事項の PDF は国ごとに1つ（カナダは英仏併記の1冊）
+    await expect(page.locator('a.choice[href$=".pdf"]')).toHaveCount(1);
 
     const pdf = page.locator('a.choice[href$=".pdf"]');
     await expect(pdf).toHaveAttribute('target', '_blank');
@@ -226,11 +227,17 @@ for (const c of COUNTRIES) {
     expect(r.headers()['content-type']).toBe('application/pdf');
     expect((await r.body()).subarray(0, 5).toString()).toBe('%PDF-');
 
-    await page.locator('a.choice[href="manual.html"]').click();
-    await expect(page).toHaveURL(new RegExp(`/${c.dir}manual\\.html$`));
-    await expect(page.locator('.step')).toHaveCount(7);
-    await expect(page.locator('#emergency')).toContainText('CLOSE');
-    await expect(page.locator('#emergency')).toContainText(sos);
+    await page.locator('a.choice[href^="manual.html"]').first().click();
+    await expect(page).toHaveURL(new RegExp(`/${c.dir}manual\\.html(#\\w+)?$`));
+    // カナダは PDF と同じく、フランス語→英語の順に1ページで両方を載せる
+    await expect(page.locator('.step')).toHaveCount(7 * c.langs.length);
+    const emergency = page.locator('.step[id^="emergency"]');
+    await expect(emergency).toHaveCount(c.langs.length);
+    for (const [i, v] of c.langs.entries()) {
+      const sos = v.emergency.match(/\b(999|000|911)\b/)[1]; // その国の緊急通報の番号
+      await expect(emergency.nth(i)).toContainText('CLOSE');
+      await expect(emergency.nth(i)).toContainText(sos);
+    }
     const broken = await page.locator('.step img').evaluateAll((imgs) =>
       Promise.all(imgs.map(async (i) => { i.loading = 'eager'; await i.decode().catch(() => {}); return i.naturalWidth ? null : i.src; })),
     );
@@ -241,12 +248,11 @@ for (const c of COUNTRIES) {
   // 入口ページには、病名・治療・効果をうたう語を使わない（一覧は tools/claims.mjs）。
   // マニュアルは PDF の「使用してはいけない場合」（持病・服薬など）をそのまま載せるため対象外
   test(`サポート /${c.dir}：病名・治療・効果をうたう語を使っていない`, async ({ page }) => {
-    const claims = c.lang.slice(0, 2);
-    for (const p of [c.dir]) {
-      await page.goto(p);
-      const text = [await page.locator('body').innerText(), await page.title(), await page.locator('meta[name="description"]').getAttribute('content')].join('\n');
-      const hit = findBanned(text, claims);
-      expect(hit, `/${p} に「${hit}」`).toBeNull();
+    await page.goto(c.dir);
+    const text = [await page.locator('body').innerText(), await page.title(), await page.locator('meta[name="description"]').getAttribute('content')].join('\n');
+    for (const v of c.langs) {
+      const hit = findBanned(text, v.lang.slice(0, 2));
+      expect(hit, `/${c.dir} に「${hit}」`).toBeNull();
     }
   });
 }

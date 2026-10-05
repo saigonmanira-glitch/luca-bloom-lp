@@ -71,3 +71,6 @@ html:not([lang="ja"]) body{letter-spacing:.01em}
 .countries .go{width:18px;height:18px;flex:none}
 .sec-h.first{margin-top:0}
 .rules + .steps{margin-top:28px}
+.choice b span{display:inline;font-size:inherit;color:inherit;margin:0;line-height:inherit}
+.lang-h{font-family:var(--font-en);font-size:13px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-ink);margin:0 0 10px;padding-top:8px}
+.next + .lang-h{margin-top:56px;border-top:1px solid var(--line);padding-top:32px}
