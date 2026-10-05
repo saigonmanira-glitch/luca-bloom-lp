@@ -17,7 +17,9 @@
 1. **今ある30本を使う場合**：`posts.json` を番号順に1日1本投稿する（30日分）。
 2. **新しい投稿をAIに書かせる場合**：`prompts/system.md` をシステムプロンプトに、`prompts/caption.md` を依頼文にして生成する。
 3. **投稿前に必ずチェック**：`node tools/sns-check.mjs 出力したファイル.json` を実行し、「OK」のときだけ投稿する（自動投稿の仕組みに組み込むと、規制に触れる文章が誤って投稿されるのを止められます）。
-4. 画像は `https://luca-bloom.com/sns/en/ig/001.jpg` のように公開URLで渡す（Instagram の投稿API は公開URLの画像しか受け付けないため）。**英語版の画像はまだ作っていません**。`prompts/image.md` の指示で作成する予定です。
+4. 画像は `https://luca-bloom.com/sns/en/ig/001.jpg` のように公開URLで渡す（Instagram の投稿API は公開URLの画像しか受け付けないため）。英語版の画像 `sns/en/ig/001〜030.jpg` は、同じ番号の日本語画像と同じ構図で作成済みです。
+
+**自動投稿は luca-bloom-sns リポジトリの `global-post.yml` で動きます**（毎日16:52、英語用の合鍵を登録した媒体だけに投稿）。Claudeが新しく書いた投稿の画像は `sns/en/auto/` に置かれます。
 
 ## 投稿の時間（1つの英語アカウントで両国に届ける）
 
