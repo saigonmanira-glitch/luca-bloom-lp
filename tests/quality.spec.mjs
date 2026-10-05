@@ -2,12 +2,13 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import fs from 'node:fs';
+import { INTL_PAGES, LOCALES } from '../tools/i18n/site.mjs';
 import zlib from 'node:zlib';
 import * as fontkit from 'fontkit';
 
 const ROOT = new URL('../', import.meta.url);
-const INTL = ['en/', 'en/privacy.html', 'us/', 'us/privacy.html', 'mx/', 'mx/privacy.html', 'fr/', 'fr/privacy.html', 'fr/mentions-legales.html'];
-const LP = ['', 'en/', 'us/', 'mx/', 'fr/']; // 3D のある商品ページ
+const INTL = INTL_PAGES;
+const LP = ['', ...LOCALES.map((L) => L.dir)]; // 3D のある商品ページ
 const pages = ['', 'privacy.html', 'jp/', 'jp/manual.html', ...INTL, 'column/'].concat(
   fs
     .readdirSync(new URL('column/', ROOT))

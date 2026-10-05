@@ -37,8 +37,9 @@ const TEXT = {
   ja: { closed: '全閉', value: (v) => `開き幅 ${v}ミリ` },
   'en-GB': { closed: 'Closed', value: (v) => `Opening width ${v} millimetres` },
   'en-US': { closed: 'Closed', value: (v) => `Opening width ${v} millimeters` },
+  'en-CA': { closed: 'Closed', value: (v) => `Opening width ${v} millimetres` },
+  'fr-CA': { closed: 'Fermé', value: (v) => `Écartement de ${v} millimètres` },
   'es-MX': { closed: 'Cerrado', value: (v) => `Apertura de ${v} milímetros` },
-  'fr-FR': { closed: 'Fermé', value: (v) => `Écartement de ${v} millimètres` },
 }[LANG] || { closed: 'Closed', value: (v) => `Opening width ${v} millimetres` };
 
 function createState() {

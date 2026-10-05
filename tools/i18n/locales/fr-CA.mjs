@@ -1,45 +1,29 @@
-// フランス向け（/fr/）。フランス語、丁寧な「vous」で話しかける。
-// 規制：ANSM・公衆衛生法典（医療機器の用途表示）、DGCCRF（広告・消費者保護）、個人情報は RGPD（CNIL）、
-// サイトの法定表示は LCEN（mentions légales）。病名・効果をうたう語は tools/claims.mjs で検出する。
-// フランス語の約物の前（? ! : ; »）と « の後には、細い改行しない空白（U+202F）を自動で入れる。
+// カナダ向けフランス語（/ca/fr/）。ケベック州の法律（フランス語憲章）では、ケベックの消費者向けの商業的な表示に
+// フランス語が必要なため、英語版（/ca/）と対で用意する。丁寧な「vous」で話しかける。
+// 規制：カナダ保健省（医療機器規則：治療目的をうたうと医療機器になる）、競争法（広告）、個人情報は PIPEDA とケベック州法25号。
+// 病名・効果をうたう語は tools/claims.mjs で検出する。
+// カナダのフランス語の約物：コロンの前と « » の内側に改行しない空白（U+00A0）を入れ、? ! ; の前には入れない。
 const ASIN = 'B0HHXQ1X4C';
 const MAIL = '<a href="mailto:lucabloom65@gmail.com">lucabloom65@gmail.com</a>';
 
 const fr = (v) =>
-  typeof v === 'string' ? v.replace(/ ([?!:;»])/g, ' $1').replace(/« /g, '« ')
+  typeof v === 'string' ? v.replace(/ ([?!;])/g, '$1').replace(/ :/g, '\u00a0:').replace(/« /g, '«\u00a0').replace(/ »/g, '\u00a0»')
     : Array.isArray(v) ? v.map(fr)
       : v && typeof v === 'object' ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, fr(x)]))
         : v;
 
 export default {
-  code: 'fr-FR',
-  lang: 'fr-FR',
-  dir: 'fr/',
-  ogLocale: 'fr_FR',
+  code: 'fr-CA',
+  lang: 'fr-CA',
+  dir: 'ca/fr/',
+  ogLocale: 'fr_CA',
   claims: 'fr',
-  stores: [{ href: `https://www.amazon.fr/dp/${ASIN}`, cta: 'Acheter sur Amazon.fr', short: 'Acheter sur Amazon' }],
+  stores: [{ href: `https://www.amazon.ca/dp/${ASIN}`, cta: 'Acheter sur Amazon.ca', short: 'Acheter sur Amazon' }],
   og: { for: 'Soin du prépuce', lines: ['Un souci intime,', 'entre vos mains.'], chips: ['Jusqu’à <b>70 mm</b>', 'Sans paliers', 'Tient en place'] },
-  legal: fr({
-    file: 'mentions-legales.html',
-    link: 'Mentions légales',
-    title: 'Mentions légales | Luca Bloom',
-    description: 'Mentions légales du site de Luca Bloom : éditeur, hébergeur, propriété intellectuelle et contact.',
-    label: 'Mentions légales',
-    h1: 'Mentions légales',
-    intro: 'Informations prévues par la loi n° 2004-575 du 21 juin 2004 pour la confiance dans l’économie numérique (LCEN).',
-    sections: [
-      ['Éditeur du site', `<dl><dt>Nom</dt><dd>Luca Bloom</dd><dt>Adresse</dt><dd>S-Building 3F, 2-1-19 Roppongi, Minato-ku, Tokyo 106-0032, Japon</dd><dt>Contact</dt><dd>${MAIL}</dd><dt>Directeur de la publication</dt><dd>Le responsable de Luca Bloom</dd></dl>`],
-      ['Hébergeur', '<dl><dt>Nom</dt><dd>GitHub, Inc. (service GitHub Pages)</dd><dt>Adresse</dt><dd>88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis</dd></dl>'],
-      ['Propriété intellectuelle', '<p>Les textes, illustrations, modèles 3D et marques de ce site appartiennent à Luca Bloom. Toute reproduction sans autorisation est interdite.</p>'],
-      ['Vente', '<p>Le produit est vendu sur Amazon.fr. Les conditions de vente, de livraison, de rétractation et les garanties légales sont celles indiquées sur Amazon.fr au moment de la commande.</p>'],
-      ['Contact', `<p>Pour toute question : ${MAIL}</p>`],
-    ],
-    date: 'Mise à jour : 5 octobre 2026',
-  }),
   t: fr({
     title: 'Luca Bloom | Outil de soin du prépuce, ouverture jusqu’à 70 mm',
     description:
-      'Luca Bloom est un outil de soin du prépuce. Tournez la molette : les bras s’ouvrent en douceur jusqu’à 70 mm et restent exactement là où vous vous arrêtez, même quand vous lâchez. Emballage discret. Disponible sur Amazon.fr.',
+      'Luca Bloom est un outil de soin du prépuce. Tournez la molette : les bras s’ouvrent en douceur jusqu’à 70 mm et restent exactement là où vous vous arrêtez, même quand vous lâchez. Emballage discret. Disponible sur Amazon.ca.',
     ogDescription: 'Tournez la molette : les bras s’ouvrent en douceur jusqu’à 70 mm et restent là où vous vous arrêtez. Un outil discret pour le soin du prépuce.',
     ldDescription:
       'Luca Bloom est un outil de soin du prépuce. Tournez la molette : les bras s’ouvrent en douceur jusqu’à 70 mm et restent exactement là où vous vous arrêtez, même quand vous lâchez.',
@@ -60,7 +44,7 @@ export default {
     max: 'MAX 70 mm',
     sliderAria: 'Écartement',
     badges: [['Jusqu’à 70 mm', 'd’écartement'], ['Sans paliers', 's’arrête où vous voulez'], ['Contrôlé au Japon', 'nettoyé et assemblé<br>fabriqué en Chine']],
-    buyNote: 'Disponible sur Amazon.fr',
+    buyNote: 'Disponible sur Amazon.ca',
     barAria: 'Acheter',
     barSmall: 'Sur Amazon',
     worryLabel: 'Ça vous parle ?',
@@ -166,11 +150,11 @@ export default {
       ['Y a-t-il une durée maximale ?', 'Oui, pour votre sécurité : pas plus de 30 minutes d’affilée et pas plus d’1 heure au total sur 24 heures. Jamais pendant le sommeil.'],
       ['Les extrémités des bras sont légèrement écartées.', 'En raison de petites différences entre les unités, les extrémités des bras peuvent être très légèrement écartées. Cela reste dans les spécifications du produit.'],
       ['Est-ce un dispositif médical ?', 'Non. Luca Bloom est un produit de soin personnel courant, et non un dispositif médical ; il ne revendique aucun effet médical ou thérapeutique.'],
-      ['Où l’acheter ?', 'Luca Bloom est disponible sur Amazon.fr.'],
+      ['Où l’acheter ?', 'Luca Bloom est disponible sur Amazon.ca.'],
     ],
     supportLabel: 'Assistance',
     supportH2: 'Questions et assistance',
-    supportSub: 'Écrivez-nous à <a class="c-inherit" href="mailto:lucabloom65@gmail.com">lucabloom65@gmail.com</a>. Vous pouvez aussi nous contacter via la messagerie de votre commande Amazon.',
+    supportSub: 'Écrivez-nous à <a class="c-inherit" href="mailto:lucabloom65@gmail.com">lucabloom65@gmail.com</a>. Vous pouvez aussi nous contacter par la messagerie de votre commande Amazon.',
     manual: ['Mode d’emploi illustré', 'Étapes en images (texte en japonais)'],
     finalH2: 'Commencez aujourd’hui, <span class="ib">à votre rythme.</span>',
     finalSub: 'Privé, discret, et entièrement à votre main.',
@@ -185,21 +169,21 @@ export default {
   }),
   privacy: fr({
     title: 'Politique de confidentialité | Luca Bloom',
-    description: 'Comment le site de Luca Bloom traite les données personnelles : données collectées, finalités, durée de conservation, prestataires et vos droits (RGPD).',
+    description: 'Comment le site de Luca Bloom traite les renseignements personnels : renseignements recueillis, fins, conservation, fournisseurs et vos droits (LPRPDE et Loi 25 du Québec).',
     label: 'Confidentialité',
     h1: 'Politique de confidentialité',
-    intro: 'Cette politique explique comment Luca Bloom (« nous ») traite les données personnelles sur son site officiel (https://luca-bloom.com/, le « Site »), conformément au Règlement général sur la protection des données (RGPD) et à la loi Informatique et Libertés.',
+    intro: 'Cette politique explique comment Luca Bloom (« nous ») recueille et utilise les renseignements personnels sur son site officiel (https://luca-bloom.com/, le « Site »), conformément à la Loi sur la protection des renseignements personnels et les documents électroniques (LPRPDE) et à la Loi sur la protection des renseignements personnels dans le secteur privé du Québec (Loi 25).',
     sections: [
-      ['1. Responsable du traitement', `<dl><dt>Responsable</dt><dd>Luca Bloom</dd><dt>Adresse</dt><dd>S-Building 3F, 2-1-19 Roppongi, Minato-ku, Tokyo 106-0032, Japon</dd><dt>Contact</dt><dd>${MAIL}</dd></dl>`],
-      ['2. Données collectées', '<ul><li>Si vous nous écrivez : votre adresse e-mail, votre nom (si vous l’indiquez) et le contenu de votre message.</li><li>Lors de votre visite : les données techniques envoyées automatiquement par votre navigateur (adresse IP, type de navigateur, page de provenance, date et heure). Elles sont enregistrées sur les serveurs de l’hébergeur indiqué au point 5.</li></ul><p>Le Site n’utilise pas de cookies. Il ne propose ni compte ni achat, et nous ne collectons ni votre nom, ni votre adresse, ni vos données de paiement par son intermédiaire.</p>'],
-      ['3. Finalités et bases légales', '<ul><li>Répondre à vos demandes. Base légale : notre intérêt légitime à vous répondre, ou des mesures prises à votre demande.</li><li>Faire fonctionner le Site en sécurité et le protéger contre les abus. Base légale : notre intérêt légitime.</li><li>Respecter nos obligations légales. Base légale : obligation légale.</li></ul>'],
-      ['4. Durée de conservation', '<p>Nous conservons les e-mails le temps nécessaire au traitement de votre demande et de son suivi, et au maximum 3 ans. Les journaux de connexion sont conservés par l’hébergeur selon sa propre politique.</p>'],
-      ['5. Prestataires et transferts hors de l’UE', '<p>Nous n’utilisons ni Google Analytics ni aucun outil de mesure d’audience. Le Site est hébergé par GitHub Pages (GitHub, Inc., États-Unis), qui reçoit des données techniques comme votre adresse IP lorsque vous consultez une page. Nous sommes établis au Japon, pays qui bénéficie d’une décision d’adéquation de la Commission européenne ; les transferts vers les États-Unis reposent sur les garanties mises en place par l’hébergeur.</p>'],
-      ['6. Liens vers Amazon', '<p>Le bouton « Acheter sur Amazon.fr » renvoie vers une page produit d’Amazon. Lors d’un achat, Amazon traite vos nom, adresse et données de paiement selon sa propre politique de confidentialité. Nous ne recevons pas ces informations par le Site.</p>'],
-      ['7. Vos droits', `<p>Vous disposez d’un droit d’accès, de rectification, d’effacement, de limitation, d’opposition et de portabilité de vos données, ainsi que du droit de définir des directives relatives à leur sort après votre décès. Pour les exercer, écrivez-nous à ${MAIL} ; nous vous répondrons dans un délai d’un mois. Vous pouvez également introduire une réclamation auprès de la CNIL (www.cnil.fr).</p>`],
-      ['8. Sécurité', '<p>Nous prenons des mesures appropriées pour protéger vos données contre la perte, l’utilisation abusive ou la divulgation non autorisée.</p>'],
-      ['9. Modifications', '<p>Nous pouvons mettre à jour cette politique, par exemple en cas d’évolution de la loi. La version en vigueur est celle publiée sur cette page.</p>'],
-      ['10. Contact', `<p>Luca Bloom<br>${MAIL}</p>`],
+      ['1. Qui sommes-nous', `<dl><dt>Organisation</dt><dd>Luca Bloom</dd><dt>Adresse</dt><dd>S-Building 3F, 2-1-19 Roppongi, Minato-ku, Tokyo 106-0032, Japon</dd><dt>Responsable de la protection des renseignements personnels</dt><dd>L’exploitant de Luca Bloom, ${MAIL}</dd></dl>`],
+      ['2. Renseignements recueillis', '<ul><li>Si vous nous écrivez : votre adresse courriel, votre nom (si vous l’indiquez) et le contenu de votre message.</li><li>Lors de votre visite : les données techniques envoyées automatiquement par votre navigateur (adresse IP, type de navigateur, page de provenance, date et heure). Elles sont enregistrées sur les serveurs de l’hébergeur indiqué au point 5.</li></ul><p>Le Site n’utilise pas de témoins (cookies) ni d’outil de mesure d’audience. Il ne propose ni compte ni achat, et nous ne recueillons ni votre nom, ni votre adresse, ni vos données de paiement par son intermédiaire.</p>'],
+      ['3. Fins et consentement', '<p>Nous utilisons vos renseignements uniquement pour répondre à vos demandes, faire fonctionner le Site en sécurité et respecter nos obligations légales. En nous écrivant, vous consentez à ce que nous utilisions vos renseignements pour vous répondre. Vous pouvez retirer votre consentement en tout temps en nous écrivant.</p>'],
+      ['4. Conservation', '<p>Nous conservons les courriels le temps nécessaire au traitement de votre demande et de son suivi, et au maximum 3 ans, puis nous les supprimons.</p>'],
+      ['5. Fournisseurs et communication à l’extérieur du Canada', '<p>Le Site est hébergé par GitHub Pages (GitHub, Inc., États-Unis), qui reçoit des données techniques comme votre adresse IP lorsque vous consultez une page. Nous sommes établis au Japon. Vos renseignements peuvent donc être traités aux États-Unis et au Japon et être soumis aux lois de ces pays. Nous ne vendons pas vos renseignements personnels.</p>'],
+      ['6. Liens vers Amazon', '<p>Le bouton « Acheter sur Amazon.ca » renvoie vers une page produit d’Amazon.ca. Lors d’un achat, Amazon traite vos nom, adresse et données de paiement selon sa propre politique de confidentialité. Nous ne recevons pas ces renseignements par le Site.</p>'],
+      ['7. Vos droits', `<p>Vous pouvez demander l’accès à vos renseignements personnels, leur rectification, ou retirer votre consentement. Les résidents du Québec peuvent aussi demander que leurs renseignements leur soient communiqués dans un format technologique structuré et couramment utilisé. Écrivez-nous à ${MAIL} ; nous vous répondrons dans un délai de 30 jours. Vous pouvez porter plainte auprès du Commissariat à la protection de la vie privée du Canada ou, au Québec, de la Commission d’accès à l’information.</p>`],
+      ['8. Sécurité', '<p>Nous prenons des mesures raisonnables pour protéger vos renseignements contre la perte, l’utilisation abusive ou la communication non autorisée.</p>'],
+      ['9. Modifications', '<p>Nous pouvons mettre à jour cette politique. La version en vigueur est celle publiée sur cette page.</p>'],
+      ['10. Nous joindre', `<p>Luca Bloom<br>${MAIL}</p>`],
     ],
     date: 'Mise à jour : 5 octobre 2026',
   }),

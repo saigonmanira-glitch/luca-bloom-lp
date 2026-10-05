@@ -45,7 +45,7 @@ export function langMenu(L, kind) {
 }
 
 // Facebook などに「ほかの言語版もある」と伝える（自分以外の全言語）
-const OG_LOCALES = ['ja_JP', 'en_GB', 'en_AU', 'en_US', 'es_MX', 'fr_FR'];
+const OG_LOCALES = ['ja_JP', 'en_GB', 'en_AU', 'en_US', 'en_CA', 'fr_CA', 'es_MX'];
 
 function head(L, { title, description, ogDescription = description, canonical, kind, ogType, extraLd = [] }) {
   const og = `${SITE}${L.dir}og.png`;
@@ -61,8 +61,8 @@ function head(L, { title, description, ogDescription = description, canonical, k
 <link rel="canonical" href="${canonical}">
 ${kind ? alternateTags(kind) + '\n' : ''}<meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="theme-color" content="#161A29">
-<link rel="icon" href="../favicon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta property="og:type" content="${ogType}">
 <meta property="og:site_name" content="Luca Bloom">
 <meta property="og:locale" content="${L.ogLocale}">
@@ -386,7 +386,7 @@ ${t.faq.map(([q, a]) => `      <details><summary>${q}</summary><p>${a}</p></deta
     <h2>${t.supportH2}</h2>
     <p class="sub">${t.supportSub}</p>
     <div class="support-links">
-      <a href="../jp/manual.html" hreflang="ja"><b>${t.manual[0]}</b><span>${t.manual[1]}</span></a>
+      <a href="/jp/manual.html" hreflang="ja"><b>${t.manual[0]}</b><span>${t.manual[1]}</span></a>
     </div>
   </div>
 </section>
@@ -413,7 +413,7 @@ ${footer(L, '')}
   </div>
 </aside>
 
-<script type="module" src="../assets/js/app.js"></script>
+<script type="module" src="/assets/js/app.js"></script>
 </body>
 </html>
 `;

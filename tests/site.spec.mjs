@@ -2,10 +2,10 @@
 import { test, expect } from '@playwright/test';
 import fs from 'node:fs';
 import { findBanned } from '../tools/claims.mjs';
-import { MENU, alternates } from '../tools/i18n/site.mjs';
+import { MENU, INTL_PAGES, LOCALES, alternates } from '../tools/i18n/site.mjs';
 
 // 海外向けページ（tools/build-i18n.mjs が生成）
-const INTL = ['en/', 'en/privacy.html', 'us/', 'us/privacy.html', 'mx/', 'mx/privacy.html', 'fr/', 'fr/privacy.html', 'fr/mentions-legales.html'];
+const INTL = INTL_PAGES;
 const pages = ['', 'privacy.html', 'jp/', 'jp/manual.html', ...INTL, 'column/'].concat(
   fs
     .readdirSync(new URL('../column/', import.meta.url))
@@ -113,7 +113,8 @@ const LOCALE_TESTS = [
   { dir: 'en/', lang: 'en-GB', claims: 'en', closed: 'Closed', v45: 'Opening width 45 millimetres', hosts: ['www.amazon.co.uk', 'www.amazon.com.au'] },
   { dir: 'us/', lang: 'en-US', claims: 'en', closed: 'Closed', v45: 'Opening width 45 millimeters', hosts: ['www.amazon.com'] },
   { dir: 'mx/', lang: 'es-MX', claims: 'es', closed: 'Cerrado', v45: 'Apertura de 45 milímetros', hosts: ['www.amazon.com.mx'] },
-  { dir: 'fr/', lang: 'fr-FR', claims: 'fr', closed: 'Fermé', v45: 'Écartement de 45 millimètres', hosts: ['www.amazon.fr'] },
+  { dir: 'ca/', lang: 'en-CA', claims: 'en', closed: 'Closed', v45: 'Opening width 45 millimetres', hosts: ['www.amazon.ca'] },
+  { dir: 'ca/fr/', lang: 'fr-CA', claims: 'fr', closed: 'Fermé', v45: 'Écartement de 45 millimètres', hosts: ['www.amazon.ca'] },
 ];
 
 for (const L of LOCALE_TESTS) {
@@ -172,7 +173,7 @@ for (const L of LOCALE_TESTS) {
 }
 
 test('多言語：全言語のページが hreflang で同じ組を相互に指し合っている', async ({ page }) => {
-  const groups = { lp: ['', 'en/', 'us/', 'mx/', 'fr/'], privacy: ['privacy.html', 'en/privacy.html', 'us/privacy.html', 'mx/privacy.html', 'fr/privacy.html'] };
+  const groups = { lp: ['', ...LOCALES.map((L) => L.dir)], privacy: ['privacy.html', ...LOCALES.map((L) => `${L.dir}privacy.html`)] };
   for (const [kind, list] of Object.entries(groups)) {
     const expected = Object.fromEntries(alternates(kind));
     for (const p of list) {

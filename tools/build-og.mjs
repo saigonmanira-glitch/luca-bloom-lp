@@ -1,7 +1,7 @@
 // 海外向けページの共有画像（og.png・1200×630）と、3D が出るまでの静止画（hero-fallback.webp・-800.webp）を
 // 言語ファイルの og（見出し・特長）から作る。文言を変えたら実行してコミットする。
 //   node tools/build-og.mjs            … 全言語
-//   node tools/build-og.mjs fr-FR      … 指定した言語だけ
+//   node tools/build-og.mjs fr-CA      … 指定した言語だけ
 // 必要なもの：Playwright の Chromium（CHROMIUM_PATH で指定可）、フォントの元ファイル（npm run build:fonts で .cache/fonts に取得）
 import fs from 'node:fs';
 import path from 'node:path';
