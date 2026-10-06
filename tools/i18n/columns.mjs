@@ -169,7 +169,9 @@ function siteFooter(L, ui) {
 }
 
 function productBox(L, ui) {
-  const buttons = L.stores.map((s) => `<a class="btn" href="${s.href}" rel="nofollow sponsored noopener" target="_blank">${s.cta}</a>`).join('');
+  const buttons = L.waitlist
+    ? `<a class="btn" href="${esc(L.waitlist.href)}">${L.waitlist.cta}</a>`
+    : L.stores.map((s) => `<a class="btn" href="${s.href}" rel="nofollow sponsored noopener" target="_blank">${s.cta}</a>`).join('');
   return `<aside class="product">
 <p class="product-label">${ui.authorLabel}</p>
 <p>${ui.author}</p>

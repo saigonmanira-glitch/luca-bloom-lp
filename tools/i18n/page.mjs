@@ -6,6 +6,7 @@ import path from 'node:path';
 import { MENU, SITE, alternateTags } from './site.mjs';
 import { COUNTRIES, supportLink } from './support.mjs';
 import { columnLink, columnName } from './columns.mjs';
+import { WAITLIST } from './waitlist.mjs';
 
 const DIR = import.meta.dirname;
 const read = (f) => fs.readFileSync(path.join(DIR, f), 'utf8');
@@ -96,13 +97,24 @@ const organization = (url) => ({
 export function lpHtml(L) {
   const t = L.t;
   const url = SITE + L.dir;
+  // 発売前の国（L.waitlist）は、購入ボタンの代わりに発売通知のメールボタンと、目標までの残り件数を出す
+  const w = L.waitlist;
   const buttons = (cls) =>
-    L.stores
-      .map((s, i) => `      <a class="cta${i ? ' cta-2' : ''}${cls}" href="${s.href}" target="_blank" rel="noopener sponsored">${s.cta}\n        ${arrow}</a>`)
-      .join('\n');
-  const barButtons = L.stores
-    .map((s, i) => `<a class="cta${i ? ' cta-2' : ''}" href="${s.href}" target="_blank" rel="noopener sponsored"${s.short !== s.cta ? ` aria-label="${esc(s.cta)}"` : ''}>${s.short}</a>`)
-    .join('\n    ');
+    w ? `      <a class="cta${cls}" href="${esc(w.href)}">${w.cta}\n        ${arrow}</a>`
+      : L.stores
+        .map((s, i) => `      <a class="cta${i ? ' cta-2' : ''}${cls}" href="${s.href}" target="_blank" rel="noopener sponsored">${s.cta}\n        ${arrow}</a>`)
+        .join('\n');
+  const barButtons = w ? `<a class="cta" href="${esc(w.href)}" aria-label="${esc(w.cta)}">${w.short}</a>`
+    : L.stores
+      .map((s, i) => `<a class="cta${i ? ' cta-2' : ''}" href="${s.href}" target="_blank" rel="noopener sponsored"${s.short !== s.cta ? ` aria-label="${esc(s.cta)}"` : ''}>${s.short}</a>`)
+      .join('\n    ');
+  const wlDate = new Intl.DateTimeFormat(L.lang, { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(WAITLIST.updated));
+  const waitlistBox = (full) =>
+    w ? `      <div class="wl">
+        <p class="wl-h">${w.head(WAITLIST.target - WAITLIST.count)}</p>
+        <progress class="wl-bar" max="${WAITLIST.target}" value="${WAITLIST.count}" aria-label="${esc(w.progress(WAITLIST.count, WAITLIST.target))}">${w.progress(WAITLIST.count, WAITLIST.target)}</progress>
+        <p class="wl-n"><span>${w.progress(WAITLIST.count, WAITLIST.target)}</span><span>${w.updated(wlDate)}</span></p>
+${full ? `        <p class="wl-note">${w.note}</p>\n` : ''}      </div>\n` : '';
   const product = {
     '@context': 'https://schema.org', '@type': 'Product', name: 'Luca Bloom', description: plain(t.ldDescription),
     brand: { '@type': 'Brand', name: 'Luca Bloom' }, image: [`${url}og.png`], material: t.material, category: t.category,
@@ -150,7 +162,7 @@ ${t.badges.map(([b, s]) => `      <li><b>${b}</b>${s}</li>`).join('\n')}
 
     <div class="buy">
       <p class="price">${t.buyNote}</p>
-${buttons(' js-buy')}
+${waitlistBox(true)}${buttons(' js-buy')}
     </div>
   </div>
 </header>
@@ -423,7 +435,7 @@ ${supportLinks(L)}
     <h2>${t.finalH2}</h2>
     <p class="sub">${t.finalSub}</p>
     <div class="buy">
-${buttons(' js-buy')}
+${waitlistBox(false)}${buttons(' js-buy')}
     </div>
   </div>
 </section>

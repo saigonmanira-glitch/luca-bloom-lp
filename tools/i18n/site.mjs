@@ -6,11 +6,13 @@ import enCA from './locales/en-CA.mjs';
 import frCA from './locales/fr-CA.mjs';
 import esMX from './locales/es-MX.mjs';
 import { SUPPORT_PAGES } from './support.mjs';
+import { prelaunch } from './waitlist.mjs';
 
 export const SITE = 'https://luca-bloom.com/';
 
 // 生成するページの言語（日本語版は手作業で管理しているため含めない）
-export const LOCALES = [enGB, enUS, enCA, frCA, esMX];
+// 米国・カナダ・メキシコは発売前（tools/i18n/waitlist.mjs）：購入ボタンの代わりに発売通知の受付を表示する
+export const LOCALES = [enGB, enUS, enCA, frCA, esMX].map(prelaunch);
 
 // 生成されるページ（テスト・サイトの検査で使う）。商品ページと、その国のプライバシーポリシー、
 // 同梱カードの QR コードから開くサポートページ（国の選択・マニュアル。tools/i18n/support.mjs）

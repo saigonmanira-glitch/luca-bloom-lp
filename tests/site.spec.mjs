@@ -3,6 +3,7 @@ import { test, expect } from '@playwright/test';
 import fs from 'node:fs';
 import { findBanned } from '../tools/claims.mjs';
 import { MENU, INTL_PAGES, LOCALES, alternates } from '../tools/i18n/site.mjs';
+import { WAITLIST } from '../tools/i18n/waitlist.mjs';
 import { COUNTRIES, supportAlternates } from '../tools/i18n/support.mjs';
 import { COLUMN_SETS, COLUMN_PAGES, columnAlternates } from '../tools/i18n/columns.mjs';
 
@@ -140,7 +141,23 @@ for (const L of LOCALE_TESTS) {
     expect(errors).toEqual([]);
   });
 
-  test(`${L.lang}：購入ボタンはその国の Amazon へ、別タブ・sponsored付き`, async ({ page }) => {
+  // 発売前の国（tools/i18n/waitlist.mjs）は、購入ボタンの代わりに発売通知のメールボタンと残り件数を出す
+  const pre = LOCALES.find((x) => x.lang === L.lang).waitlist;
+  if (pre) {
+    test(`${L.lang}：発売前は、Amazon へのリンクがなく、発売通知のメールボタンと目標までの残り件数がある`, async ({ page }) => {
+      await page.goto(L.dir, { waitUntil: 'domcontentloaded' });
+      await expect(page.locator('a[href*="www.amazon."]')).toHaveCount(0);
+      const mail = page.locator('a.cta[href^="mailto:lucabloom65@gmail.com?subject="]');
+      expect(await mail.count()).toBeGreaterThanOrEqual(3); // ヒーロー・最後・下部バー
+      const href = await mail.first().getAttribute('href');
+      expect(decodeURIComponent(new URL(href).searchParams.get('subject'))).toBe(pre.subject);
+      await expect(page.locator('.wl-bar').first()).toHaveAttribute('max', String(WAITLIST.target));
+      await expect(page.locator('.wl-bar').first()).toHaveAttribute('value', String(WAITLIST.count));
+      await expect(page.locator('.wl-h b').first()).toHaveText(String(WAITLIST.target - WAITLIST.count));
+    });
+  }
+
+  if (!pre) test(`${L.lang}：購入ボタンはその国の Amazon へ、別タブ・sponsored付き`, async ({ page }) => {
     await page.goto(L.dir);
     const links = page.locator('a[href*="www.amazon."]');
     const hosts = await links.evaluateAll((as) => as.map((a) => new URL(a.href).hostname));
@@ -320,7 +337,8 @@ for (const { L, articles } of COLUMN_SETS) {
       const text = [await page.locator('body').innerText(), await page.title(), await page.locator('meta[name="description"]').getAttribute('content')].join('\n');
       const hit = findBanned(text, L.claims);
       expect(hit, `/${L.dir}column/${a.slug}.html に「${hit}」`).toBeNull();
-      for (const s of L.stores) await expect(page.locator(`.product a[href="${s.href}"]`)).toHaveAttribute('rel', /sponsored/);
+      if (L.waitlist) await expect(page.locator('.product a[href^="mailto:"]')).toHaveCount(1);
+      else for (const s of L.stores) await expect(page.locator(`.product a[href="${s.href}"]`)).toHaveAttribute('rel', /sponsored/);
     }
     expect(overflowAll).toEqual([]);
     expect(errors).toEqual([]);
