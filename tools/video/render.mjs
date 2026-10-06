@@ -69,13 +69,14 @@ const ALL = {
   },
   // カナダ（フランス語）。約物：コロンの前・« » の内側に改行しない空白
   fr: {
-    html: 'fr-CA', note: 'Images de modèles 3D.', film: 'Le voile rose représente une ouverture étroite',
+    html: 'fr-CA', labels: ['SIMPLE', 'JUSQU’À 70\u00a0mm', 'AUTOBLOCAGE', 'CONICITÉ INVERSÉE', 'MODE D’EMPLOI', 'DISCRÉTION'], css: '.steps li{font-size:36px}',
+    note: 'Images de modèles 3D.', film: 'Le voile rose représente une ouverture étroite',
     easyH: 'Il suffit de tourner<br>la molette.', easyS: 'Insérez les bras fermés,<br>puis écartez-les lentement de l’intérieur.',
     mmH: 'Jusqu’à 70 mm,<br>sans paliers.', mmK: 'Écartement', closed: 'Fermé', mmS: 'Arrêtez-vous à un écartement<br>confortable, sans douleur.',
     lockH: 'Lâchez :<br>il reste en place.', lockS: 'La vis-mère interne le maintient à cet écartement.<br>Il ne se referme jamais brusquement.',
     taperH: 'Des extrémités larges,<br>conçues pour ne pas glisser.', taperS: 'Étroits à la base, plus larges vers l’extrémité.<br>Une face plane de 6 mm repose sur la peau.',
     howH: 'Trois étapes simples.', steps: ['Appliquez une crème ou une huile', 'Insérez les bras fermés, extrémités d’abord', 'Tournez pour ouvrir, sans dépasser le confort'],
-    limit: '<b>30 minutes au plus par séance</b> · <b>1 heure au total par 24 heures</b><br>N’utilisez pas le produit pendant le sommeil.',
+    limit: '<b>30 minutes au plus par séance</b><br><b>1 heure au total par 24 heures</b><br>N’utilisez pas le produit pendant le sommeil.',
     privH: 'Personne ne saura<br>ce que vous avez reçu.', privS: 'La boîte ne porte que « Luca Bloom » au dos.<br>Le dispositif est livré dans un calage ajusté.',
     lead: 'Un outil de soin personnel<br>pour un prépuce qui semble serré',
     feat1: 'Jusqu’à 70 mm<span>|</span>Sans paliers<span>|</span>Résine légère, pas froide au toucher',
@@ -84,13 +85,14 @@ const ALL = {
   },
   // メキシコ（スペイン語）。LP と同じく「tú」
   es: {
-    html: 'es-MX', note: 'Las imágenes son modelos 3D.', film: 'La película rosa representa una abertura estrecha',
+    html: 'es-MX', labels: ['FÁCIL', 'HASTA 70\u00a0mm', 'AUTOBLOQUEO', 'CONO INVERTIDO', 'CÓMO SE USA', 'DISCRECIÓN'], css: '.steps li{font-size:36px}',
+    note: 'Las imágenes son modelos 3D.', film: 'La película rosa representa una abertura estrecha',
     easyH: 'Solo gira<br>la manija.', easyS: 'Introduce los brazos cerrados<br>y ábrelos despacio desde dentro.',
     mmH: 'Hasta 70 mm,<br>ajuste continuo.', mmK: 'Apertura', closed: 'Cerrado', mmS: 'Detente en una apertura cómoda<br>que no duela.',
     lockH: 'Suéltala<br>y se queda.', lockS: 'El tornillo interno la mantiene en esa apertura.<br>Nunca se cierra de golpe.',
     taperH: 'Puntas más anchas,<br>pensadas para no resbalar.', taperS: 'Delgados en la base, más anchos hacia la punta.<br>Una cara plana de 6 mm apoya sobre la piel.',
     howH: 'Tres pasos sencillos.', steps: ['Aplica crema o aceite', 'Introduce los brazos cerrados, punta primero', 'Gira para abrir, solo hasta donde sea cómodo'],
-    limit: '<b>Máximo 30 minutos por sesión</b> · <b>1 hora en total cada 24 horas</b><br>No la uses mientras duermes.',
+    limit: '<b>Máximo 30 minutos por sesión</b><br><b>1 hora en total cada 24 horas</b><br>No la uses mientras duermes.',
     privH: 'Nadie sabrá<br>qué te llegó.', privS: 'La caja solo dice “Luca Bloom” en la parte trasera.<br>La herramienta viaja en un acolchado a la medida.',
     lead: 'Una herramienta de autocuidado<br>para quienes sienten el prepucio apretado',
     feat1: 'Hasta 70 mm<span>|</span>Ajuste continuo<span>|</span>Resina ligera, no se siente fría',
@@ -104,6 +106,8 @@ ALL.us = { ...ALL.en, html: 'en-US', taperS: ALL.en.taperS.replace('towards', 't
 const nb = (v) => (typeof v === 'string' ? v.replace(/ :/g, '\u00a0:').replace(/« /g, '«\u00a0').replace(/ »/g, '\u00a0»') : Array.isArray(v) ? v.map(nb) : v);
 ALL.fr = Object.fromEntries(Object.entries(ALL.fr).map(([k, v]) => [k, nb(v)]));
 const TEXT = ALL[LANG];
+// 各場面の小見出し（日本語版・英語版は英語のまま）
+const LABELS = TEXT.labels || ['EASY', 'UP TO 70mm', 'SELF-LOCK', 'REVERSE TAPER', 'HOW TO USE', 'PRIVACY'];
 if (!TEXT) {
   console.error(`対応していない言語：${LANG}（ja・en・us・fr・es）`);
   process.exit(1);
@@ -148,6 +152,7 @@ h2{font-weight:900;font-size:76px;line-height:1.32;letter-spacing:.05em}
 .card .feat span{color:var(--gold);margin:0 .6em}
 .card .fine{margin-top:44px;font-size:24px;color:var(--on-navy-muted);font-weight:400;line-height:1.7}
 #outro .logo{font-size:128px}
+${TEXT.css || ''}
 </style></head><body>
 <div id="gl"></div>
 
@@ -157,32 +162,32 @@ h2{font-weight:900;font-size:76px;line-height:1.32;letter-spacing:.05em}
 <p class="film" data-t="33.8,40.6"><i></i>${TEXT.film}</p>
 
 <div class="copy" data-t="4.0,10.6">
-  <p class="label">EASY</p>
+  <p class="label">${LABELS[0]}</p>
   <h2>${TEXT.easyH}</h2>
   <p class="sub">${TEXT.easyS}</p>
 </div>
 
 <div class="copy" data-t="11.2,19.6">
-  <p class="label">UP TO 70mm</p>
+  <p class="label">${LABELS[1]}</p>
   <h2>${TEXT.mmH}</h2>
   <div class="counter"><span class="k">${TEXT.mmK}</span><span id="mm" data-closed="${TEXT.closed}">${TEXT.closed}</span><span id="mmunit">mm</span></div>
   <p class="sub">${TEXT.mmS}</p>
 </div>
 
 <div class="copy" data-t="20.2,26.6">
-  <p class="label">SELF-LOCK</p>
+  <p class="label">${LABELS[2]}</p>
   <h2>${TEXT.lockH}</h2>
   <p class="sub">${TEXT.lockS}</p>
 </div>
 
 <div class="copy" data-t="27.6,32.6">
-  <p class="label">REVERSE TAPER</p>
+  <p class="label">${LABELS[3]}</p>
   <h2>${TEXT.taperH}</h2>
   <p class="sub">${TEXT.taperS}</p>
 </div>
 
 <div class="copy" data-t="33.5,40.6">
-  <p class="label">HOW TO USE</p>
+  <p class="label">${LABELS[4]}</p>
   <h2>${TEXT.howH}</h2>
   <ol class="steps">
     <li data-t="34.2,99"><span class="n">1</span>${TEXT.steps[0]}</li>
@@ -193,7 +198,7 @@ h2{font-weight:900;font-size:76px;line-height:1.32;letter-spacing:.05em}
 </div>
 
 <div class="copy" data-t="41.5,46.4">
-  <p class="label">PRIVACY</p>
+  <p class="label">${LABELS[5]}</p>
   <h2>${TEXT.privH}</h2>
   <p class="sub">${TEXT.privS}</p>
 </div>
