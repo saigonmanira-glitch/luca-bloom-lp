@@ -19,14 +19,17 @@ const files = execFileSync('git', ['ls-files', '*.html'], { encoding: 'utf8' })
 
 const META = /<meta http-equiv="Content-Security-Policy" content="[^"]*">/;
 
-function policy(styleHashes) {
+// SNS用の中継ページ（go/）だけは、Cloudflare Web Analytics の計測スクリプトを許可する（tools/build-go.mjs）
+const BEACON = /static\.cloudflareinsights\.com\/beacon\.min\.js/;
+
+function policy(styleHashes, beacon = false) {
   return [
     "default-src 'none'", // 下で許可したもの以外は、すべて読み込まない
-    "script-src 'self'", // スクリプトは自サイトのファイルのみ（HTML 内に直接書いたスクリプト・eval は不可）
+    `script-src 'self'${beacon ? ' https://static.cloudflareinsights.com' : ''}`, // スクリプトは自サイトのファイルのみ（HTML 内に直接書いたスクリプト・eval は不可）
     `style-src 'self' ${styleHashes.join(' ')}`.trim(),
     "img-src 'self'",
     "font-src 'self'",
-    "connect-src 'self'",
+    `connect-src 'self'${beacon ? ' https://cloudflareinsights.com' : ''}`,
     "manifest-src 'self'",
     "media-src 'none'",
     "frame-src 'none'",
@@ -52,7 +55,7 @@ for (const f of files) {
     (m) => `'sha256-${createHash('sha256').update(m[1], 'utf8').digest('base64')}'`,
   );
   const unique = [...new Set(hashes)];
-  const next = html.replace(META, `<meta http-equiv="Content-Security-Policy" content="${policy(unique)}">`);
+  const next = html.replace(META, `<meta http-equiv="Content-Security-Policy" content="${policy(unique, f.startsWith('go/') && BEACON.test(html))}">`);
   if (next === html) continue;
   stale++;
   if (check) console.error(`CSP が最新ではありません（npm run build を実行してください）：${f}`);
