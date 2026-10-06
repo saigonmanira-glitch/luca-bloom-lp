@@ -32,11 +32,11 @@ for (const ch of CHANNELS) {
 <link rel="canonical" href="${url}">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <style>
-body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#161A29;color:#EEF0F6;font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",Meiryo,sans-serif;text-align:center;padding:24px;box-sizing:border-box}
-.logo{font-family:"Avenir Next","Helvetica Neue",Arial,sans-serif;font-weight:600;font-size:22px;letter-spacing:.06em;color:#C3CADB;margin:0 0 16px}
-p{margin:0 0 20px;font-size:15px;line-height:1.8}
-a{display:inline-block;background:#E3B34E;color:#161A29;font-weight:700;text-decoration:none;border-radius:999px;padding:12px 24px}
-a:focus-visible{outline:2px solid #EEF0F6;outline-offset:3px}
+body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#FFFFFF;color:#1A1E2C;font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",Meiryo,sans-serif;text-align:center;padding:24px;box-sizing:border-box}
+.logo{font-family:"Avenir Next","Helvetica Neue",Arial,sans-serif;font-weight:600;font-size:22px;letter-spacing:.06em;color:#161A29;margin:0 0 16px}
+p{margin:0 0 20px;font-size:15px;line-height:1.8;color:#3E4352}
+a{display:inline-block;background:#161A29;color:#FFFFFF;font-weight:700;text-decoration:none;border-radius:999px;padding:12px 24px}
+a:focus-visible{outline:2px solid #E3B34E;outline-offset:3px}
 </style>
 ${beacon}<script defer src="/go/go.js"></script>
 </head>
