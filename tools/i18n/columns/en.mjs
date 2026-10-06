@@ -1,9 +1,11 @@
+import fs from 'node:fs';
+
 // 英語のコラム（日本語版 /column/ をもとに、海外の規制に合わせて書き直したもの）。
 // ・病名（phimosis など）・治療や効果をうたう語・比較の語は使わない（tools/claims.mjs で検出）
 // ・日本語版の「真性・仮性の違い」「包茎リングとの違い」は、病名の説明と他製品との比較になるため載せない
 // ・受診先や緊急連絡先は国ごとに違うため、D（国の情報）から入れる。つづりは英国式（米国向けは columns.mjs で置き換える）
 // D = { gp：かかりつけ医の呼び方, gpA：冠詞つき, gpBox：図の箱の短い文, emergency：緊急時の案内（文）, afterHours：図に入れる短い案内 }
-export default (D) => ({
+const base = (D) => ({
   ui: {
     label: 'Column',
     indexTitle: 'Column: everyday care and common worries',
@@ -307,3 +309,15 @@ export default (D) => ({
     },
   ],
 });
+
+// 自動で追加される記事（luca-bloom-sns の column_en.py が週2本ずつ書き足す。検査に通ったものだけ）
+// 文中の {gp} {gpA} {emergency} {afterHours} は、国ごとの受診先・緊急連絡先に置き換える（米国・カナダ版でも正しい呼び方になる）
+const AUTO = JSON.parse(fs.readFileSync(new URL('./auto-en.json', import.meta.url), 'utf8'));
+const fill = (v, D) => (typeof v === 'string' ? v.replace(/\{(gp|gpA|emergency|afterHours)\}/g, (_, k) => D[k])
+  : Array.isArray(v) ? v.map((x) => fill(x, D)) : v);
+
+export default (D) => {
+  const set = base(D);
+  set.articles.push(...AUTO.map((a) => ({ ...a, jp: null, title: fill(a.title, D), description: fill(a.description, D), points: fill(a.points, D), body: fill(a.body, D) })));
+  return set;
+};

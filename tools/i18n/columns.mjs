@@ -74,21 +74,23 @@ export const COLUMN_PAGES = COLUMN_SETS.flatMap(({ L, articles }) => [`${L.dir}c
 // hreflang：同じ記事の各言語版と日本語版（slug が null なら一覧ページ）
 export function columnAlternates(slug, jp) {
   const file = slug ? `${slug}.html` : '';
+  // 自動で追加された記事は英語版だけにあるため、その記事がある言語だけを並べる（日本語版がない記事には ja を付けない）
+  const has = (dir) => !slug || COLUMN_SETS.some((s) => s.L.dir === dir && s.articles.some((a) => a.slug === slug));
   return [
-    ['ja', `${SITE}column/${jp ? `${jp}.html` : ''}`],
-    ...HREFLANG.map(([h, dir]) => [h, `${SITE}${dir}column/${file}`]),
+    ...(slug && !jp ? [] : [['ja', `${SITE}column/${jp ? `${jp}.html` : ''}`]]),
+    ...HREFLANG.filter(([, dir]) => has(dir)).map(([h, dir]) => [h, `${SITE}${dir}column/${file}`]),
     ['x-default', `${SITE}en/column/${file}`],
   ];
 }
 export const columnAlternateTags = (slug, jp) =>
   columnAlternates(slug, jp).map(([h, u]) => `<link rel="alternate" hreflang="${h}" href="${u}">`).join('\n');
 // 日本語版の記事ファイル名 → 海外版の slug（日本語版に hreflang を書き込むため）
-export const JP_TO_SLUG = Object.fromEntries(COLUMN_SETS[0].articles.map((a) => [a.jp, a.slug]));
+export const JP_TO_SLUG = Object.fromEntries(COLUMN_SETS[0].articles.filter((a) => a.jp).map((a) => [a.jp, a.slug]));
 
 const esc = (s) => String(s).replace(/&(?!amp;|lt;|gt;|quot;|#)/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const plain = (s) => String(s).replace(/<[^>]+>/g, '').replace(/&amp;/g, '&');
 const ld = (o) => `<script type="application/ld+json">${JSON.stringify(o)}</script>`;
-const dateText = (L) => new Intl.DateTimeFormat(L.lang, { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(PUBLISHED));
+const dateText = (L, d = PUBLISHED) => new Intl.DateTimeFormat(L.lang, { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(d));
 
 function block(b) {
   const [type, ...a] = b;
@@ -187,7 +189,7 @@ export function articleHtml(set, a) {
   const related = [1, 2, 3].map((k) => articles[(i + k) % articles.length]);
   const article = {
     '@context': 'https://schema.org', '@type': 'Article', headline: a.title, description: a.description,
-    datePublished: PUBLISHED, dateModified: PUBLISHED, mainEntityOfPage: url, image: `${SITE}${L.dir}og.png`,
+    datePublished: a.date || PUBLISHED, dateModified: a.date || PUBLISHED, mainEntityOfPage: url, image: `${SITE}${L.dir}og.png`,
     author: { '@type': 'Organization', name: 'Luca Bloom', url: SITE + L.dir },
     publisher: { '@type': 'Organization', name: 'Luca Bloom', url: SITE + L.dir, logo: { '@type': 'ImageObject', url: `${SITE}apple-touch-icon.png` } },
     url, inLanguage: L.lang,
@@ -210,7 +212,7 @@ ${siteHeader(L, ui)}
 <nav class="crumbs" aria-label="${esc(ui.crumbs)}"><a href="/${L.dir}">${ui.home}</a> › <a href="/${L.dir}column/">${ui.indexH1}</a> › ${a.title}</nav>
 <article>
 <h1>${a.title}</h1>
-<p class="date"><time datetime="${PUBLISHED}">${dateText(L)}</time></p>
+<p class="date"><time datetime="${a.date || PUBLISHED}">${dateText(L, a.date || PUBLISHED)}</time></p>
 ${block(a.body[0])}
 <div class="points"><p class="t">${ui.points}</p><ul>${a.points.map((p) => `<li>${p}</li>`).join('')}</ul></div>
 ${a.body.slice(1).map(block).join('\n')}
