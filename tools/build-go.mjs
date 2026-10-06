@@ -9,13 +9,13 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-export const CF_TOKEN = '';
+export const CF_TOKEN = 'f84e8a91cd1443f0ba481943c1bf1e02';
 const AMAZON = 'https://www.amazon.co.jp/dp/B0HHXQ1X4C';
 export const CHANNELS = ['instagram', 'threads', 'facebook', 'x', 'note'];
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const beacon = CF_TOKEN
-  ? `<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"${CF_TOKEN}"}'></script>\n`
+  ? `<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "${CF_TOKEN}"}'></script>\n`
   : '';
 
 for (const ch of CHANNELS) {
