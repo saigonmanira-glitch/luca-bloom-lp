@@ -43,7 +43,7 @@ Foreskin care tool from Tokyo. Opens up to 70 mm, stepless, stays where you stop
 
 日本語訳：東京発の包皮ケアツール。最大70mmまで無段階に開き、止めた位置で保たれます。医療機器ではありません。18歳以上。Amazon 英国・豪州で販売中。米国・カナダ・メキシコの方は下のリンクから投票を。
 
-**Instagram・Threads（138文字／上限150文字）**　名前欄：`Luca Bloom | Foreskin care tool`
+**Instagram・Threads（138文字／上限150文字）**　名前欄：`Luca Bloom | Foreskin care`（26文字／上限30文字）
 
 ```
 Foreskin care tool
