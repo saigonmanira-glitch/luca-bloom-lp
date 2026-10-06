@@ -14,7 +14,8 @@
     "test": "playwright test",
     "verify": "npm run lint && npm run check && npm audit --audit-level=moderate && npm run test",
     "serve": "node tools/serve.mjs",
-    "video": "node tools/video/render.mjs"
+    "video": "node tools/video/render.mjs",
+    "sns:brand": "node tools/sns/build-brand.mjs"
   },
   "repository": {
     "type": "git",

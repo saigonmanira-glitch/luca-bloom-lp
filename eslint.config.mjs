@@ -15,8 +15,8 @@ export default [
     languageOptions: { ecmaVersion: 2020, sourceType: 'script', globals: globals.browser },
   },
   {
-    // Amazon 用動画の描画（ブラウザ内で実行）
-    files: ['tools/video/scene.js'],
+    // Amazon 用動画・SNS 用の製品画像の描画（ブラウザ内で実行）
+    files: ['tools/video/scene.js', 'tools/sns/product.js'],
     languageOptions: { ecmaVersion: 2022, sourceType: 'module', globals: globals.browser },
   },
   {
@@ -24,8 +24,8 @@ export default [
     languageOptions: { ecmaVersion: 2022, sourceType: 'module', globals: globals.node },
   },
   {
-    // テストと動画の書き出しは、ブラウザ内で実行するコードも含む
-    files: ['tests/**/*.mjs', 'tools/video/render.mjs'],
+    // テスト・動画・SNS 画像の書き出しは、ブラウザ内で実行するコードも含む
+    files: ['tests/**/*.mjs', 'tools/video/render.mjs', 'tools/sns/build-brand.mjs'],
     languageOptions: { ecmaVersion: 2022, sourceType: 'module', globals: { ...globals.node, ...globals.browser } },
   },
 ];
