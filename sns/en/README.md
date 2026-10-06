@@ -29,34 +29,34 @@
 
 英国の朝の通勤時間と、オーストラリアの夕方の時間帯に同時に届きます。
 
-プロフィール画像・ヘッダー（X・Facebook・YouTube）・北米の投票呼びかけ画像と、北米向けの紹介文は `sns/en/brand/`（`README.md`）にあります。
+プロフィール画像・ヘッダー（X・Facebook・YouTube）・北米の投票呼びかけ画像は `sns/en/brand/`（`README.md`）にあります。
 
 ## プロフィール文（英語・日本語訳）
 
-日本語の紹介文と同じ内容を、英国・豪州の規制に合わせて書き直しました。`sns/brand/README.md`（別ブランチ・PR #5）の英語版紹介文は、「widen（広げる）」「Utility model pending（出願中）」など誤解されやすい表現を含むため、下の文に差し替えることをおすすめします。
+広報は英語1本で行うため、英国・オーストラリア・米国・カナダ・メキシコの5か国共通です。各国の規制に合わせ、病名・効果・比較・価格・「限定」を入れていません。
 
-**X（159文字／上限160文字）**
+**X（149文字／上限160文字）**
 
 ```
-Foreskin care tool from Tokyo. Turn the handle: opens up to 70 mm, stepless, and stays where you stop. Discreet box. Not a medical device. 18+. UK & Australia.
+Foreskin care tool from Tokyo. Opens up to 70 mm, stepless, stays where you stop. Not a medical device. 18+. On Amazon UK & AU. US/CA/MX: vote below.
 ```
 
-日本語訳：東京発の包皮ケアツール。ハンドルを回すと最大70mmまで無段階に開き、止めた位置で保たれます。中身がわからない箱でお届け。医療機器ではありません。18歳以上。英国・オーストラリアで販売。
+日本語訳：東京発の包皮ケアツール。最大70mmまで無段階に開き、止めた位置で保たれます。医療機器ではありません。18歳以上。Amazon 英国・豪州で販売中。米国・カナダ・メキシコの方は下のリンクから投票を。
 
-**Instagram・Threads（149文字／上限150文字）**　名前欄：`Luca Bloom | Foreskin care tool`
+**Instagram・Threads（138文字／上限150文字）**　名前欄：`Luca Bloom | Foreskin care tool`
 
 ```
 Foreskin care tool
 ▷ Opens up to 70 mm, stepless
 ▷ Stays put when you let go
-▷ Box says only “Luca Bloom”
 Not a medical device · 18+
-UK & Australia ↓
+On Amazon UK & AU
+US/CA/MX: vote ↓
 ```
 
-日本語訳：包皮ケアツール／▷ 最大70mmまで無段階に開く／▷ 手を離しても止まる／▷ 箱の表記は「Luca Bloom」だけ／医療機器ではありません・18歳以上／英国・オーストラリアで販売↓
+日本語訳：包皮ケアツール／▷ 最大70mmまで無段階に開く／▷ 手を離しても止まる／医療機器ではありません・18歳以上／Amazon 英国・豪州で販売中／米国・カナダ・メキシコの方は投票を↓
 
-プロフィールのリンク：`https://luca-bloom.com/en/`
+プロフィールのリンク：`https://luca-bloom.com/en/`（英語LP。画面上部の「Language」から米国・カナダ・メキシコの投票ページへ移れます）
 
 ## 投稿のテーマ配分（30本）
 

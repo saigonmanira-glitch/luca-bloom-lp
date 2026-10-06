@@ -29,21 +29,13 @@ const FACES = `
 
 const L = Object.fromEntries(LOCALES.map((x) => [x.code, x]));
 
-// 市場ごとの文言。og は LP の共有画像と同じ見出し・特長。market：販売先（発売前の国は投票の案内）
-const MARKETS = [
-  { id: 'en', og: L['en-GB'].og, url: 'luca-bloom.com/en', market: 'On Amazon UK &amp; Amazon Australia' },
-  { id: 'us', og: L['en-US'].og, url: 'luca-bloom.com/us', market: 'Coming to the US, Canada &amp; Mexico · Goal: 2026', vote: 'en' },
-  { id: 'ca', og: L['en-CA'].og, url: 'luca-bloom.com/ca', market: 'Coming to the US, Canada &amp; Mexico · Goal: 2026', vote: 'en' },
-  { id: 'ca-fr', og: L['fr-CA'].og, url: 'luca-bloom.com/ca/fr', market: 'Bientôt aux États-Unis, au Canada et au Mexique · Objectif&nbsp;: 2026', vote: 'fr' },
-  { id: 'mx', og: L['es-MX'].og, url: 'luca-bloom.com/mx', market: 'Muy pronto en EE.&nbsp;UU., Canadá y México · Meta: 2026', vote: 'es' },
-];
+// 5か国（英国・オーストラリア・米国・カナダ・メキシコ）共通の英語版。広報は英語1本で行う。
+// og は LP の共有画像と同じ見出し・特長。market：販売先と、発売前の国（投票中）の案内
+// リンク先の英語LPには国の切り替え（Language）があり、米国・カナダ・メキシコの投票ページへ移れる
+const COMMON = { og: L['en-GB'].og, url: 'luca-bloom.com/en', market: 'On Amazon UK &amp; Australia · Coming to the US, Canada &amp; Mexico' };
 
-// 投票の告知画像の文言（LP の発売前の表示と同じ内容）
-const VOTE = {
-  en: { goal: 'Our goal: launch in 2026', h: ['Help bring Luca Bloom', 'to the US, Canada and Mexico'], p: 'Sales start once 30 people vote by email.<br>One email per person · No payment or commitment', cta: 'Vote at' },
-  fr: { goal: 'Notre objectif&nbsp;: lancement en 2026', h: ['Aidez Luca Bloom à arriver', 'aux États-Unis, au Canada et au Mexique'], p: 'La vente commence quand 30 personnes auront voté par courriel.<br>Un courriel par personne · Aucun paiement ni engagement', cta: 'Votez sur' },
-  es: { goal: 'Nuestra meta: lanzar en 2026', h: ['Ayuda a que Luca Bloom llegue', 'a Estados Unidos, Canadá y México'], p: 'La venta empieza cuando 30 personas voten por correo.<br>Un correo por persona · Sin pago ni compromiso', cta: 'Vota en' },
-};
+// 投票の告知画像の文言（LP の発売前の表示と同じ内容）。投票は国ごとの LP から
+const VOTE = { goal: 'Our goal: launch in 2026', h: ['Help bring Luca Bloom', 'to the US, Canada and Mexico'], p: 'Sales start once 30 people vote by email.<br>One email per person · No payment or commitment', cta: 'Vote at', url: 'luca-bloom.com/us · /ca · /mx' };
 
 const FLOWER = (size) => `<svg width="${size}" height="${size}" viewBox="-360 -360 720 720"><defs><linearGradient id="gd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#DDAE4C"/><stop offset="1" stop-color="#B9862A"/></linearGradient><path id="p" d="M0,-92 C 88,-150 96,-262 0,-350 C -100,-276 -88,-150 0,-92Z"/></defs><g fill="url(#gd)">${[0, 60, 120, 180, 240, 300].map((r) => `<use href="#p" transform="rotate(${r})"/>`).join('')}<circle r="34" fill="#161A29"/></g></svg>`;
 
@@ -80,16 +72,16 @@ const LAYOUTS = {
 <img class="prod" src="{{PROD}}">` },
 };
 
-// 発売前の国の投票の告知画像（Instagram の縦長 1080×1350、X・Facebook の横長 1600×900）
+// 発売前の国（米国・カナダ・メキシコ）の投票の告知画像（Instagram の縦長 1080×1350、X・Facebook の横長 1600×900）
 const VOTE_LAYOUTS = {
   'vote-portrait': { w: 1080, h: 1350, html: (m, v) => `
 <style>.c{position:absolute;left:90px;right:90px;top:90px;text-align:center}.logo{justify-content:center;font-size:58px}.goal{display:inline-block;margin-top:46px;background:#E3B34E;color:#161A29;border-radius:99px;padding:.35em 1.1em;font-size:30px;font-weight:900}h1{margin-top:30px;font-size:56px}.p{margin-top:24px;font-size:25px;line-height:1.7;color:#3E4352}.prod{left:50%;transform:translateX(-50%);top:720px;height:400px}.cta{position:absolute;left:90px;right:90px;bottom:84px;text-align:center;background:#161A29;color:#F1EEE6;border-radius:24px;padding:26px 20px;font-size:30px;font-weight:700}.cta b{font-family:QS;color:#E3B34E}</style>
 <div class="c"><div class="logo">${FLOWER(48)}Luca Bloom</div><p class="goal">${v.goal}</p><h1>${v.h.join('<br>')}</h1><p class="p">${v.p}</p></div>
-<img class="prod" src="{{PROD}}"><p class="cta">${v.cta} <b>${m.url}</b></p>` },
+<img class="prod" src="{{PROD}}"><p class="cta">${v.cta} <b>${v.url}</b></p>` },
   'vote-landscape': { w: 1600, h: 900, html: (m, v) => `
 <style>.l{position:absolute;left:100px;top:90px;width:860px}.logo{font-size:56px}.goal{display:inline-block;margin-top:40px;background:#E3B34E;color:#161A29;border-radius:99px;padding:.35em 1.1em;font-size:28px;font-weight:900}h1{margin-top:26px;font-size:44px}.p{margin-top:22px;font-size:23px;line-height:1.7;color:#3E4352}.prod{right:70px;top:250px;height:360px}.cta{position:absolute;left:100px;bottom:80px;background:#161A29;color:#F1EEE6;border-radius:22px;padding:22px 34px;font-size:28px;font-weight:700}.cta b{font-family:QS;color:#E3B34E}</style>
 <div class="l"><div class="logo">${FLOWER(46)}Luca Bloom</div><p class="goal">${v.goal}</p><h1>${v.h.join('<br>')}</h1><p class="p">${v.p}</p></div>
-<img class="prod" src="{{PROD}}"><p class="cta">${v.cta} <b>${m.url}</b></p>` },
+<img class="prod" src="{{PROD}}"><p class="cta">${v.cta} <b>${v.url}</b></p>` },
 };
 
 fs.mkdirSync(OUT, { recursive: true });
@@ -143,8 +135,6 @@ async function shot(name, { w, h, html }, ...args) {
   await page.screenshot({ path: path.join(OUT, `${name}.png`) });
   console.log(`sns/en/brand/${name}.png ${w}×${h}`);
 }
-for (const m of MARKETS) {
-  for (const [kind, layout] of Object.entries(LAYOUTS)) await shot(`${kind}-${m.id}`, layout, m);
-  if (m.vote) for (const [kind, layout] of Object.entries(VOTE_LAYOUTS)) await shot(`${kind}-${m.id}`, layout, m, VOTE[m.vote]);
-}
+for (const [kind, layout] of Object.entries(LAYOUTS)) await shot(kind, layout, COMMON);
+for (const [kind, layout] of Object.entries(VOTE_LAYOUTS)) await shot(kind, layout, COMMON, VOTE);
 await browser.close();
