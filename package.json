@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Luca Bloom LP",
   "scripts": {
-    "build": "npm run build:js && npm run build:i18n && npm run build:csp && npm run build:fonts && npm run build:csp",
+    "build": "npm run build:go && npm run build:js && npm run build:i18n && npm run build:csp && npm run build:fonts && npm run build:csp",
     "build:i18n": "node tools/build-i18n.mjs",
     "build:og": "node tools/build-og.mjs",
     "build:js": "rm -rf assets/js && esbuild src/app.js --bundle --splitting --format=esm --minify --target=es2020 --outdir=assets/js --chunk-names=chunks/[name]-[hash] --legal-comments=eof",
@@ -15,7 +15,8 @@
     "verify": "npm run lint && npm run check && npm audit --audit-level=moderate && npm run test",
     "serve": "node tools/serve.mjs",
     "video": "node tools/video/render.mjs",
-    "sns:brand": "node tools/sns/build-brand.mjs"
+    "sns:brand": "node tools/sns/build-brand.mjs",
+    "build:go": "node tools/build-go.mjs"
   },
   "repository": {
     "type": "git",
