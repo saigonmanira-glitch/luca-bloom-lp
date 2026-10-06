@@ -16,7 +16,8 @@
     "serve": "node tools/serve.mjs",
     "video": "node tools/video/render.mjs",
     "sns:brand": "node tools/sns/build-brand.mjs",
-    "build:go": "node tools/build-go.mjs"
+    "build:go": "node tools/build-go.mjs",
+    "amazon:images": "node tools/amazon/build-images.mjs"
   },
   "repository": {
     "type": "git",

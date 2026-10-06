@@ -25,7 +25,7 @@ export default [
   },
   {
     // テスト・動画・SNS 画像の書き出しは、ブラウザ内で実行するコードも含む
-    files: ['tests/**/*.mjs', 'tools/video/render.mjs', 'tools/sns/build-brand.mjs'],
+    files: ['tests/**/*.mjs', 'tools/video/render.mjs', 'tools/sns/build-brand.mjs', 'tools/amazon/build-images.mjs'],
     languageOptions: { ecmaVersion: 2022, sourceType: 'module', globals: { ...globals.node, ...globals.browser } },
   },
 ];

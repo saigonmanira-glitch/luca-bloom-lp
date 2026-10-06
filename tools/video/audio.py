@@ -535,9 +535,10 @@ def bgm():
 
 def main():
     os.makedirs(OUT, exist_ok=True)
-    video = os.path.join(OUT, 'luca-bloom-amazon.mp4')
+    # 引数で動画を指定できる（例：python3 tools/video/audio.py out/luca-bloom-amazon-en.mp4）
+    video = os.path.abspath(sys.argv[1]) if len(sys.argv) > 1 else os.path.join(OUT, 'luca-bloom-amazon.mp4')
     if not os.path.exists(video):
-        sys.exit('先に npm run video で映像を作ってください。')
+        sys.exit(f'先に映像を作ってください（{os.path.relpath(video, ROOT)} がありません。npm run video）。')
     music = bgm().astype(np.float32)
     wav = os.path.join(OUT, 'bgm.wav')
     sf.write(wav, music, SR)
@@ -550,7 +551,7 @@ def main():
         check=True,
     )
     os.replace(tmp, video)
-    print('完成：out/luca-bloom-amazon.mp4（BGM入り）、out/bgm.wav（BGMのみ）')
+    print(f'完成：{os.path.relpath(video, ROOT)}（BGM入り）、out/bgm.wav（BGMのみ）')
 
 
 if __name__ == '__main__':

@@ -1,6 +1,7 @@
 // Amazon 商品動画（MP4・1920×1080・30fps・H.264）を作る。
 //   npm run video                    → out/luca-bloom-amazon.mp4 と out/luca-bloom-thumbnail.jpg
 //   npm run video -- --stills 5,15   → 指定した秒の静止画だけ out/still-*.png に書き出す（確認用）
+//   npm run video -- --lang en       → 英国・オーストラリア向けの英語版 out/luca-bloom-amazon-en.mp4（BGM は python3 tools/video/audio.py out/luca-bloom-amazon-en.mp4）
 // 必要なもの：ffmpeg（環境変数 FFMPEG で場所を指定可）、Playwright の Chromium（CHROMIUM_PATH で指定可）、
 // フォントの元ファイル（.cache/fonts。npm run build:fonts で自動ダウンロード）
 import http from 'node:http';
@@ -34,8 +35,47 @@ for (const f of Object.values(FONT_FILES)) {
   }
 }
 
+// ---------- 言語（--lang en で英国・オーストラリア向けの英語版。既定は日本語） ----------
+// 英語版の表現は海外LPと同じ決まり（病名・効果・比較・価格・「限定」を入れない。英国式のつづり）
+const LANG = arg('lang') || 'ja';
+const TEXT = {
+  ja: {
+    html: 'ja', note: '※画像は3Dモデルです', film: 'ピンクの膜は狭い穴のイメージ',
+    easyH: 'ハンドルを<br>回すだけ。', easyS: '閉じたアームを入れ、<br>内側からゆっくり広げます。',
+    mmH: '最大70mmまで、<br>無段階に。', mmK: '開き幅', closed: '全閉', mmS: '痛みを感じない、<br>ちょうどいい幅で止められます。',
+    lockH: '手を離しても、<br>戻らない。', lockS: '内部の送りねじの力で、その幅に固定。<br>急に閉じることはありません。',
+    taperH: '先端が太い、<br>ずれにくいアーム。', taperS: '根元が細く、先端に向かって太くなる形。<br>肌には幅6mmの面で当たります。',
+    howH: '使い方は3ステップ。', steps: ['クリームやオイルでなじませる', '閉じたアームを先端から入れる', '痛くない幅まで、回して開く'],
+    limit: '<b>1回30分以内</b>・<b>24時間の合計1時間以内</b><br>就寝中は使用しないでください。',
+    privH: '届いても、<br>誰にもわからない。', privS: '化粧箱の表記は、背面の「Luca Bloom」だけ。<br>本体は専用のクッション材に収めてお届けします。',
+    lead: '包皮が狭い方や匂いが気になる方のための<br>セルフケアツール',
+    feat1: '最大70mm<span>｜</span>無段階調整<span>｜</span>軽くて冷たくない樹脂製',
+    feat2: '日本で検品・洗浄・組立<span>｜</span>実用新案出願済み',
+    fine: '本製品は雑貨であり、医療機器ではありません。想定使用年齢：18歳以上。',
+  },
+  en: {
+    html: 'en-GB', note: 'Images are 3D models.', film: 'The pink film shows a narrow opening',
+    easyH: 'Just turn<br>the handle.', easyS: 'Insert the closed arms,<br>then open them slowly from inside.',
+    mmH: 'Up to 70 mm,<br>stepless.', mmK: 'Opening', closed: 'Closed', mmS: 'Stop at a comfortable width<br>that does not hurt.',
+    lockH: 'Let go,<br>and it stays.', lockS: 'The internal lead screw holds it at that width.<br>It never snaps shut.',
+    taperH: 'Wider tips,<br>shaped not to slip.', taperS: 'Narrow at the base, wider towards the tip.<br>A 6 mm flat face rests against the skin.',
+    howH: 'Three simple steps.', steps: ['Apply cream or oil', 'Insert the closed arms, tips first', 'Turn to open, only as far as is comfortable'],
+    limit: '<b>30 minutes at most per session</b> · <b>1 hour in total per 24 hours</b><br>Do not use while asleep.',
+    privH: 'Nobody will know<br>what arrived.', privS: 'The box only says “Luca Bloom” on the back.<br>The device ships in a fitted cushioned insert.',
+    lead: 'A self-care tool for anyone<br>whose foreskin feels tight',
+    feat1: 'Up to 70 mm<span>|</span>Stepless<span>|</span>Light resin, not cold to the touch',
+    feat2: 'Inspected, cleaned and assembled in Japan<span>|</span>Japanese utility model application filed',
+    fine: 'Luca Bloom is not a medical device. For adults aged 18 and over.',
+  },
+}[LANG];
+if (!TEXT) {
+  console.error(`対応していない言語：${LANG}（ja・en）`);
+  process.exit(1);
+}
+const SUFFIX = LANG === 'ja' ? '' : `-${LANG}`;
+
 // ---------- 画面（文字の表示時刻は data-t="開始,終了" 秒） ----------
-const HTML = `<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><title>video</title><style>
+const HTML = `<!DOCTYPE html><html lang="${TEXT.html}"><head><meta charset="utf-8"><title>video</title><style>
 @font-face{font-family:ZK;font-weight:400;src:url(/fonts/zk-400.ttf)}
 @font-face{font-family:ZK;font-weight:700;src:url(/fonts/zk-700.ttf)}
 @font-face{font-family:ZK;font-weight:900;src:url(/fonts/zk-900.ttf)}
@@ -76,64 +116,64 @@ h2{font-weight:900;font-size:76px;line-height:1.32;letter-spacing:.05em}
 <div id="gl"></div>
 
 <p class="mark" data-t="3.8,46.6">Luca Bloom</p>
-<p class="note" data-t="3.8,46.6">※画像は3Dモデルです</p>
-<p class="film" data-t="4.4,26.6"><i></i>ピンクの膜は狭い穴のイメージ</p>
-<p class="film" data-t="33.8,40.6"><i></i>ピンクの膜は狭い穴のイメージ</p>
+<p class="note" data-t="3.8,46.6">${TEXT.note}</p>
+<p class="film" data-t="4.4,26.6"><i></i>${TEXT.film}</p>
+<p class="film" data-t="33.8,40.6"><i></i>${TEXT.film}</p>
 
 <div class="copy" data-t="4.0,10.6">
   <p class="label">EASY</p>
-  <h2>ハンドルを<br>回すだけ。</h2>
-  <p class="sub">閉じたアームを入れ、<br>内側からゆっくり広げます。</p>
+  <h2>${TEXT.easyH}</h2>
+  <p class="sub">${TEXT.easyS}</p>
 </div>
 
 <div class="copy" data-t="11.2,19.6">
   <p class="label">UP TO 70mm</p>
-  <h2>最大70mmまで、<br>無段階に。</h2>
-  <div class="counter"><span class="k">開き幅</span><span id="mm">全閉</span><span id="mmunit">mm</span></div>
-  <p class="sub">痛みを感じない、<br>ちょうどいい幅で止められます。</p>
+  <h2>${TEXT.mmH}</h2>
+  <div class="counter"><span class="k">${TEXT.mmK}</span><span id="mm" data-closed="${TEXT.closed}">${TEXT.closed}</span><span id="mmunit">mm</span></div>
+  <p class="sub">${TEXT.mmS}</p>
 </div>
 
 <div class="copy" data-t="20.2,26.6">
   <p class="label">SELF-LOCK</p>
-  <h2>手を離しても、<br>戻らない。</h2>
-  <p class="sub">内部の送りねじの力で、その幅に固定。<br>急に閉じることはありません。</p>
+  <h2>${TEXT.lockH}</h2>
+  <p class="sub">${TEXT.lockS}</p>
 </div>
 
 <div class="copy" data-t="27.6,32.6">
   <p class="label">REVERSE TAPER</p>
-  <h2>先端が太い、<br>ずれにくいアーム。</h2>
-  <p class="sub">根元が細く、先端に向かって太くなる形。<br>肌には幅6mmの面で当たります。</p>
+  <h2>${TEXT.taperH}</h2>
+  <p class="sub">${TEXT.taperS}</p>
 </div>
 
 <div class="copy" data-t="33.5,40.6">
   <p class="label">HOW TO USE</p>
-  <h2>使い方は3ステップ。</h2>
+  <h2>${TEXT.howH}</h2>
   <ol class="steps">
-    <li data-t="34.2,99"><span class="n">1</span>クリームやオイルでなじませる</li>
-    <li data-t="35.0,99"><span class="n">2</span>閉じたアームを先端から入れる</li>
-    <li data-t="35.8,99"><span class="n">3</span>痛くない幅まで、回して開く</li>
+    <li data-t="34.2,99"><span class="n">1</span>${TEXT.steps[0]}</li>
+    <li data-t="35.0,99"><span class="n">2</span>${TEXT.steps[1]}</li>
+    <li data-t="35.8,99"><span class="n">3</span>${TEXT.steps[2]}</li>
   </ol>
-  <p class="limit" data-t="37.0,99"><b>1回30分以内</b>・<b>24時間の合計1時間以内</b><br>就寝中は使用しないでください。</p>
+  <p class="limit" data-t="37.0,99">${TEXT.limit}</p>
 </div>
 
 <div class="copy" data-t="41.5,46.4">
   <p class="label">PRIVACY</p>
-  <h2>届いても、<br>誰にもわからない。</h2>
-  <p class="sub">化粧箱の表記は、背面の「Luca Bloom」だけ。<br>本体は専用のクッション材に収めてお届けします。</p>
+  <h2>${TEXT.privH}</h2>
+  <p class="sub">${TEXT.privS}</p>
 </div>
 
 <div class="card" id="title">
   <p class="logo" data-t="0.3,99">Luca Bloom</p>
   <div class="rule" data-t="0.8,99"></div>
-  <p class="lead" data-t="1.1,99">包皮が狭い方や匂いが気になる方のための<br>セルフケアツール</p>
+  <p class="lead" data-t="1.1,99">${TEXT.lead}</p>
 </div>
 
 <div class="card" id="outro" style="opacity:0">
   <p class="logo" data-t="47.2,99">Luca Bloom</p>
   <div class="rule" data-t="47.6,99"></div>
-  <p class="feat" data-t="47.9,99">最大70mm<span>｜</span>無段階調整<span>｜</span>軽くて冷たくない樹脂製</p>
-  <p class="feat" data-t="48.3,99">日本で検品・洗浄・組立<span>｜</span>実用新案出願済み</p>
-  <p class="fine" data-t="48.8,99">本製品は雑貨であり、医療機器ではありません。想定使用年齢：18歳以上。</p>
+  <p class="feat" data-t="47.9,99">${TEXT.feat1}</p>
+  <p class="feat" data-t="48.3,99">${TEXT.feat2}</p>
+  <p class="fine" data-t="48.8,99">${TEXT.fine}</p>
 </div>
 </body></html>`;
 
@@ -190,14 +230,14 @@ fs.mkdirSync(OUT, { recursive: true });
 const stills = arg('stills');
 if (stills) {
   for (const s of stills.split(',').map(Number)) {
-    fs.writeFileSync(path.join(OUT, `still-${s}.png`), await frameAt(s));
-    console.log(`out/still-${s}.png`);
+    fs.writeFileSync(path.join(OUT, `still${SUFFIX}-${s}.png`), await frameAt(s));
+    console.log(`out/still${SUFFIX}-${s}.png`);
   }
 } else {
   // サムネイル（Amazon の動画登録で使う。開き幅70mmの場面）
-  fs.writeFileSync(path.join(OUT, 'luca-bloom-thumbnail.jpg'), await frameAt(18.8, 'jpeg'));
+  fs.writeFileSync(path.join(OUT, `luca-bloom-thumbnail${SUFFIX}.jpg`), await frameAt(18.8, 'jpeg'));
 
-  const file = path.join(OUT, 'luca-bloom-amazon.mp4');
+  const file = path.join(OUT, `luca-bloom-amazon${SUFFIX}.mp4`);
   // 無音の音声トラックを付ける（音声なしの動画を受け付けない配信先への対策）
   const ff = spawn(
     FFMPEG,
@@ -220,7 +260,7 @@ if (stills) {
   }
   ff.stdin.end();
   await done;
-  console.log(`完成：out/luca-bloom-amazon.mp4（${(fs.statSync(file).size / 1024 / 1024).toFixed(1)}MB）`);
+  console.log(`完成：out/luca-bloom-amazon${SUFFIX}.mp4（${(fs.statSync(file).size / 1024 / 1024).toFixed(1)}MB）`);
 }
 await browser.close();
 server.close();

@@ -187,7 +187,7 @@ window.renderAt = (t) => {
       track(K.offset, t),
     );
     const w = 10 + travel;
-    mm.textContent = travel < 0.5 ? '全閉' : String(Math.round(w));
+    mm.textContent = travel < 0.5 ? mm.dataset.closed : String(Math.round(w));
     unit.style.visibility = travel < 0.5 ? 'hidden' : 'visible';
     renderer.render(dScene, dCam);
   } else {
