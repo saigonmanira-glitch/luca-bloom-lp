@@ -109,12 +109,25 @@ export function lpHtml(L) {
       .map((s, i) => `<a class="cta${i ? ' cta-2' : ''}" href="${s.href}" target="_blank" rel="noopener sponsored"${s.short !== s.cta ? ` aria-label="${esc(s.cta)}"` : ''}>${s.short}</a>`)
       .join('\n    ');
   const wlDate = new Intl.DateTimeFormat(L.lang, { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(WAITLIST.updated));
+  // シェアのリンク（X・Facebook・WhatsApp・メール）。外部の埋め込みやスクリプトは使わない
+  const share = (text) => {
+    const u = encodeURIComponent(url);
+    const tx = encodeURIComponent(text);
+    return [
+      ['X', `https://twitter.com/intent/tweet?text=${tx}&url=${u}`],
+      ['Facebook', `https://www.facebook.com/sharer/sharer.php?u=${u}`],
+      ['WhatsApp', `https://wa.me/?text=${tx}%20${u}`],
+    ].map(([n, h]) => `<a href="${esc(h)}" target="_blank" rel="noopener">${n}</a>`).join('')
+      + `<a href="${esc(`mailto:?subject=${encodeURIComponent('Luca Bloom')}&body=${tx}%20${u}`)}">${w.mail}</a>`;
+  };
   const waitlistBox = (full) =>
     w ? `      <div class="wl">
-        <p class="wl-h">${w.head(WAITLIST.target - WAITLIST.count)}</p>
+        <p class="wl-goal">${w.goal}</p>
+        <p class="wl-count"><b>${WAITLIST.count}</b><span>/ ${WAITLIST.target} ${w.votes}</span></p>
         <progress class="wl-bar" max="${WAITLIST.target}" value="${WAITLIST.count}" aria-label="${esc(w.progress(WAITLIST.count, WAITLIST.target))}">${w.progress(WAITLIST.count, WAITLIST.target)}</progress>
-        <p class="wl-n"><span>${w.progress(WAITLIST.count, WAITLIST.target)}</span><span>${w.updated(wlDate)}</span></p>
-${full ? `        <p class="wl-note">${w.note}</p>\n` : ''}      </div>\n` : '';
+        <p class="wl-n"><span>${w.left(WAITLIST.target - WAITLIST.count)}</span><span>${w.updated(wlDate)}</span></p>
+${full ? `        <p class="wl-note">${w.note}</p>\n` : ''}        <div class="wl-share"><p>${w.shareH}</p><div>${share(w.shareText)}</div></div>
+      </div>\n` : '';
   const product = {
     '@context': 'https://schema.org', '@type': 'Product', name: 'Luca Bloom', description: plain(t.ldDescription),
     brand: { '@type': 'Brand', name: 'Luca Bloom' }, image: [`${url}og.png`], material: t.material, category: t.category,

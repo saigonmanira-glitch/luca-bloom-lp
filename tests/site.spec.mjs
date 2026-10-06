@@ -144,7 +144,7 @@ for (const L of LOCALE_TESTS) {
   // 発売前の国（tools/i18n/waitlist.mjs）は、購入ボタンの代わりに発売通知のメールボタンと残り件数を出す
   const pre = LOCALES.find((x) => x.lang === L.lang).waitlist;
   if (pre) {
-    test(`${L.lang}：発売前は、Amazon へのリンクがなく、発売通知のメールボタンと目標までの残り件数がある`, async ({ page }) => {
+    test(`${L.lang}：発売前は、Amazon へのリンクがなく、投票のメールボタン・票数・シェアのリンクがある`, async ({ page }) => {
       await page.goto(L.dir, { waitUntil: 'domcontentloaded' });
       await expect(page.locator('a[href*="www.amazon."]')).toHaveCount(0);
       const mail = page.locator('a.cta[href^="mailto:lucabloom65@gmail.com?subject="]');
@@ -153,7 +153,8 @@ for (const L of LOCALE_TESTS) {
       expect(decodeURIComponent(new URL(href).searchParams.get('subject'))).toBe(pre.subject);
       await expect(page.locator('.wl-bar').first()).toHaveAttribute('max', String(WAITLIST.target));
       await expect(page.locator('.wl-bar').first()).toHaveAttribute('value', String(WAITLIST.count));
-      await expect(page.locator('.wl-h b').first()).toHaveText(String(WAITLIST.target - WAITLIST.count));
+      await expect(page.locator('.wl-count b').first()).toHaveText(String(WAITLIST.count));
+      await expect(page.locator('.wl-share a[href^="https://twitter.com/intent/tweet"]').first()).toHaveAttribute('href', new RegExp(encodeURIComponent(`https://luca-bloom.com/${L.dir}`)));
     });
   }
 
