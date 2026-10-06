@@ -35,10 +35,10 @@ for (const f of Object.values(FONT_FILES)) {
   }
 }
 
-// ---------- 言語（--lang en で英国・オーストラリア向けの英語版。既定は日本語） ----------
+// ---------- 言語（--lang en：英国・豪州・カナダ英語、us：米国、fr：カナダ・フランス語、es：メキシコ。既定は日本語） ----------
 // 英語版の表現は海外LPと同じ決まり（病名・効果・比較・価格・「限定」を入れない。英国式のつづり）
 const LANG = arg('lang') || 'ja';
-const TEXT = {
+const ALL = {
   ja: {
     html: 'ja', note: '※画像は3Dモデルです', film: 'ピンクの膜は狭い穴のイメージ',
     easyH: 'ハンドルを<br>回すだけ。', easyS: '閉じたアームを入れ、<br>内側からゆっくり広げます。',
@@ -67,9 +67,45 @@ const TEXT = {
     feat2: 'Inspected, cleaned and assembled in Japan<span>|</span>Japanese utility model application filed',
     fine: 'Luca Bloom is not a medical device. For adults aged 18 and over.',
   },
-}[LANG];
+  // カナダ（フランス語）。約物：コロンの前・« » の内側に改行しない空白
+  fr: {
+    html: 'fr-CA', note: 'Images de modèles 3D.', film: 'Le voile rose représente une ouverture étroite',
+    easyH: 'Il suffit de tourner<br>la molette.', easyS: 'Insérez les bras fermés,<br>puis écartez-les lentement de l’intérieur.',
+    mmH: 'Jusqu’à 70 mm,<br>sans paliers.', mmK: 'Écartement', closed: 'Fermé', mmS: 'Arrêtez-vous à un écartement<br>confortable, sans douleur.',
+    lockH: 'Lâchez :<br>il reste en place.', lockS: 'La vis-mère interne le maintient à cet écartement.<br>Il ne se referme jamais brusquement.',
+    taperH: 'Des extrémités larges,<br>conçues pour ne pas glisser.', taperS: 'Étroits à la base, plus larges vers l’extrémité.<br>Une face plane de 6 mm repose sur la peau.',
+    howH: 'Trois étapes simples.', steps: ['Appliquez une crème ou une huile', 'Insérez les bras fermés, extrémités d’abord', 'Tournez pour ouvrir, sans dépasser le confort'],
+    limit: '<b>30 minutes au plus par séance</b> · <b>1 heure au total par 24 heures</b><br>N’utilisez pas le produit pendant le sommeil.',
+    privH: 'Personne ne saura<br>ce que vous avez reçu.', privS: 'La boîte ne porte que « Luca Bloom » au dos.<br>Le dispositif est livré dans un calage ajusté.',
+    lead: 'Un outil de soin personnel<br>pour un prépuce qui semble serré',
+    feat1: 'Jusqu’à 70 mm<span>|</span>Sans paliers<span>|</span>Résine légère, pas froide au toucher',
+    feat2: 'Inspecté, nettoyé et assemblé au Japon<span>|</span>Demande de modèle d’utilité déposée au Japon',
+    fine: 'Luca Bloom n’est pas un instrument médical. Réservé aux adultes de 18 ans et plus.',
+  },
+  // メキシコ（スペイン語）。LP と同じく「tú」
+  es: {
+    html: 'es-MX', note: 'Las imágenes son modelos 3D.', film: 'La película rosa representa una abertura estrecha',
+    easyH: 'Solo gira<br>la manija.', easyS: 'Introduce los brazos cerrados<br>y ábrelos despacio desde dentro.',
+    mmH: 'Hasta 70 mm,<br>ajuste continuo.', mmK: 'Apertura', closed: 'Cerrado', mmS: 'Detente en una apertura cómoda<br>que no duela.',
+    lockH: 'Suéltala<br>y se queda.', lockS: 'El tornillo interno la mantiene en esa apertura.<br>Nunca se cierra de golpe.',
+    taperH: 'Puntas más anchas,<br>pensadas para no resbalar.', taperS: 'Delgados en la base, más anchos hacia la punta.<br>Una cara plana de 6 mm apoya sobre la piel.',
+    howH: 'Tres pasos sencillos.', steps: ['Aplica crema o aceite', 'Introduce los brazos cerrados, punta primero', 'Gira para abrir, solo hasta donde sea cómodo'],
+    limit: '<b>Máximo 30 minutos por sesión</b> · <b>1 hora en total cada 24 horas</b><br>No la uses mientras duermes.',
+    privH: 'Nadie sabrá<br>qué te llegó.', privS: 'La caja solo dice “Luca Bloom” en la parte trasera.<br>La herramienta viaja en un acolchado a la medida.',
+    lead: 'Una herramienta de autocuidado<br>para quienes sienten el prepucio apretado',
+    feat1: 'Hasta 70 mm<span>|</span>Ajuste continuo<span>|</span>Resina ligera, no se siente fría',
+    feat2: 'Revisado, limpiado y ensamblado en Japón<span>|</span>Solicitud de modelo de utilidad presentada en Japón',
+    fine: 'Luca Bloom no es un dispositivo médico. Solo para mayores de 18 años.',
+  },
+};
+// 米国：英語版を米国式のつづりに
+ALL.us = { ...ALL.en, html: 'en-US', taperS: ALL.en.taperS.replace('towards', 'toward') };
+// フランス語の約物をそろえる
+const nb = (v) => (typeof v === 'string' ? v.replace(/ :/g, '\u00a0:').replace(/« /g, '«\u00a0').replace(/ »/g, '\u00a0»') : Array.isArray(v) ? v.map(nb) : v);
+ALL.fr = Object.fromEntries(Object.entries(ALL.fr).map(([k, v]) => [k, nb(v)]));
+const TEXT = ALL[LANG];
 if (!TEXT) {
-  console.error(`対応していない言語：${LANG}（ja・en）`);
+  console.error(`対応していない言語：${LANG}（ja・en・us・fr・es）`);
   process.exit(1);
 }
 const SUFFIX = LANG === 'ja' ? '' : `-${LANG}`;
