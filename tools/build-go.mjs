@@ -4,6 +4,7 @@
 //
 // 集計を有効にするには、Cloudflare の Web Analytics でサイトを追加し、表示されたトークン（公開して問題ない識別子）を
 // CF_TOKEN に入れて npm run build を実行する。トークンが空の間は、移動だけ行い集計はしない。
+// リンクを貼ったときの画像は go/og-amazon.png(白基調・1200×630)。
 // 外部の計測スクリプトを読み込むのはこの中継ページだけで、他のページの CSP は変えない（tools/build-csp.mjs）。
 import fs from 'node:fs';
 import path from 'node:path';
@@ -36,10 +37,14 @@ for (const ch of CHANNELS) {
 <meta property="og:title" content="Amazonへ移動｜Luca Bloom（ルカブルーム）の商品ページ">
 <meta property="og:description" content="Amazonへ移動します。包皮がきつい方のためのセルフケアツール「Luca Bloom」のAmazon商品ページです。">
 <meta property="og:url" content="${url}">
-<meta property="og:image" content="https://luca-bloom.com/og.png">
+<meta property="og:image" content="https://luca-bloom.com/go/og-amazon.png">
+<meta property="og:image:alt" content="Luca Bloom：Amazonへ移動">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Amazonへ移動｜Luca Bloom（ルカブルーム）の商品ページ">
+<meta name="twitter:description" content="Amazonへ移動します。包皮がきつい方のためのセルフケアツール「Luca Bloom」のAmazon商品ページです。">
+<meta name="twitter:image" content="https://luca-bloom.com/go/og-amazon.png">
 <link rel="canonical" href="${url}">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <style>
