@@ -27,8 +27,19 @@ for (const ch of CHANNELS) {
 <meta http-equiv="Content-Security-Policy" content="">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="robots" content="noindex">
-<title>Amazonの商品ページへ移動しています｜Luca Bloom</title>
-<meta name="description" content="Luca Bloom（ルカブルーム）のAmazonの商品ページへ移動しています。">
+<title>Amazonへ移動｜Luca Bloom（ルカブルーム）の商品ページ</title>
+<meta name="description" content="Amazonへ移動します。包皮がきつい方のためのセルフケアツール「Luca Bloom（ルカブルーム）」のAmazon商品ページです。">
+<meta name="theme-color" content="#FFFFFF">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Luca Bloom">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:title" content="Amazonへ移動｜Luca Bloom（ルカブルーム）の商品ページ">
+<meta property="og:description" content="Amazonへ移動します。包皮がきつい方のためのセルフケアツール「Luca Bloom」のAmazon商品ページです。">
+<meta property="og:url" content="${url}">
+<meta property="og:image" content="https://luca-bloom.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="${url}">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <style>
@@ -43,8 +54,8 @@ ${beacon}<script defer src="/go/go.js"></script>
 <body>
 <main>
 <p class="logo">Luca Bloom</p>
-<p>Amazonの商品ページへ移動しています。</p>
-<a id="go" href="${AMAZON}" rel="sponsored">移動しない場合はこちら</a>
+<p>Amazonへ移動しています。</p>
+<a id="go" href="${AMAZON}" rel="sponsored">Amazonで見る</a>
 </main>
 </body>
 </html>
