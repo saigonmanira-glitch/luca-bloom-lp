@@ -45,7 +45,8 @@ a{color:inherit}
 .doc p{margin-top:10px}
 .doc ul{margin:10px 0 0;padding-left:1.3em}
 .doc li+li{margin-top:6px}
-.doc dl{margin:12px 0 0;display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:15px;color:#3E4352}
+.doc dl{margin:12px 0 0;display:grid;grid-template-columns:minmax(0,11em) minmax(0,1fr);gap:6px 14px;font-size:15px;color:#3E4352}
+@media (max-width:480px){.doc dl{grid-template-columns:minmax(0,1fr);gap:0}.doc dd{margin-bottom:10px}}
 .doc dt{font-weight:700;color:var(--ink)}
 .doc dd{margin:0;overflow-wrap:anywhere}
 .doc .date{margin-top:36px;font-size:14px;color:var(--muted);text-align:right}

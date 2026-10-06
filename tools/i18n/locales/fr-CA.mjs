@@ -169,6 +169,7 @@ export default {
     finalSub: 'Privé, discret, et entièrement à votre main.',
     footer: 'Luca Bloom est un produit de soin personnel courant, et non un dispositif médical ; il ne revendique aucun effet médical ou thérapeutique. Réservé aux adultes de 18 ans et plus. Fabriqué en Chine ; contrôlé, nettoyé et assemblé au Japon.',
     navLabel: 'Liens',
+    footerMore: (href) => ` Pour les mises en garde détaillées et le mode d’emploi, utilisez le code QR de la carte incluse ou consultez la <a class="c-inherit" href="${href}">page d’assistance</a>.`,
     safetyLink: 'Consignes de sécurité',
     privacyLink: 'Politique de confidentialité',
     operator: `Édité par Luca Bloom<br>S-Building 3F, 2-1-19 Roppongi, Minato-ku, Tokyo 106-0032, Japon<br>Contact : ${MAIL}`,

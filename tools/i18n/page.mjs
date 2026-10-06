@@ -5,7 +5,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { MENU, SITE, alternateTags } from './site.mjs';
 import { COUNTRIES, supportLink } from './support.mjs';
-import { columnLink } from './columns.mjs';
+import { columnLink, columnName } from './columns.mjs';
 
 const DIR = import.meta.dirname;
 const read = (f) => fs.readFileSync(path.join(DIR, f), 'utf8');
@@ -458,11 +458,18 @@ function supportLinks(L) {
 function footer(L, prefix) {
   const t = L.t;
   const legal = L.legal ? `<a href="${L.legal.file}">${L.legal.link}</a>` : '';
+  // 日本語版と同じく、ご使用マニュアル・免責事項（PDF）・コラムへのリンクと、サポートページの案内を載せる
+  const list = COUNTRIES.flatMap((c) => c.langs.filter((v) => v.lp === L.dir).map((v) => ({ c, ...supportLink(c, v) })));
+  const name = (c) => (list.length > 1 ? ` (${c.name})` : '');
+  const hub = list.length === 1 ? `/${list[0].c.dir}` : '/intl/';
+  const support = list
+    .map(({ c, manual, pdf }) => `<a href="${manual}">${t.manual[0]}${name(c)}</a><a href="${pdf}" target="_blank" rel="noopener">${t.pdf[0]}${name(c)}</a>`)
+    .join('');
   return `<footer>
   <div class="wrap">
     <span class="logo">Luca Bloom</span>
-    <p>${t.footer}</p>
-    <nav aria-label="${esc(t.navLabel)}"><a href="${prefix}#safety">${t.safetyLink}</a><a href="privacy.html">${t.privacyLink}</a>${legal}</nav>
+    <p>${t.footer}${t.footerMore(hub)}</p>
+    <nav aria-label="${esc(t.navLabel)}"><a href="${prefix}#safety">${t.safetyLink}</a>${support}<a href="/${L.dir}column/">${columnName(L)}</a><a href="privacy.html">${t.privacyLink}</a>${legal}</nav>
     <p class="op">${t.operator}</p>
     ${prefix ? '' : `<p>${t.imagesNote}</p>\n    `}<p>© Luca Bloom</p>
   </div>

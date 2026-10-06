@@ -244,6 +244,9 @@ ${productBox(L, ui)}
 ${siteFooter(L, ui)}`;
 }
 
+// コラムの名前（商品ページのフッター用）
+export const columnName = (L) => COLUMN_SETS.find((s) => s.L === L).ui.indexH1;
+
 // 商品ページのコラムへの入口（日本語版と同じ見た目）
 export function columnLink(L) {
   const set = COLUMN_SETS.find((s) => s.L === L);

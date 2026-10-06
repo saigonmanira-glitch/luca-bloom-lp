@@ -165,3 +165,32 @@ test('セキュリティ：security.txt（脆弱性の連絡先）が有効期�
   const exp = new Date(body.match(/^Expires: (.+)$/m)[1]);
   expect(exp.getTime()).toBeGreaterThan(Date.now() + 30 * 24 * 3600 * 1000); // 期限切れの30日前に失敗して更新を促す
 });
+
+// ---------- 表示崩れ：文字が1文字ずつ折り返して縦書きのようになっていないこと（スマホ幅・最小320px） ----------
+test('表示崩れ：狭い画面でも、文章が縦書きのように1文字ずつ折り返されていない', async ({ page }) => {
+  test.setTimeout(600_000);
+  await page.route('**/assets/js/**', (r) => r.abort()); // 3D は確認に不要
+  const bad = [];
+  for (const width of [320, 390]) {
+    await page.setViewportSize({ width, height: 800 });
+    for (const p of pages) {
+      await page.goto(p, { waitUntil: 'domcontentloaded' });
+      await page.evaluate(() => document.fonts.ready);
+      const found = await page.evaluate(() => {
+        const out = [];
+        for (const el of document.querySelectorAll('body *')) {
+          if (el.closest('svg,script,style')) continue;
+          const own = [...el.childNodes].filter((n) => n.nodeType === 3).map((n) => n.textContent).join('').trim();
+          if (own.length < 8) continue;
+          const r = el.getBoundingClientRect();
+          const lh = parseFloat(getComputedStyle(el).fontSize) * 1.2;
+          // 8文字以上の文章が、幅3文字分未満の細い箱に4行以上で詰め込まれている
+          if (r.width > 0 && r.width < lh * 1.5 && r.height > lh * 4) out.push(own.slice(0, 30));
+        }
+        return out;
+      });
+      bad.push(...found.map((t) => `${width}px /${p}: ${t}`));
+    }
+  }
+  expect(bad).toEqual([]);
+});

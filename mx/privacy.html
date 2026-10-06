@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'sha256-jr+99oMVcAtKtIUlC/3aKn5EhZTkRbJaXBN0lEQV9qo=' 'sha256-L+vJ73+3TLgMKihDkMPt0/mDT7xj+OMBDlp1iHardWs='; img-src 'self'; font-src 'self'; connect-src 'self'; manifest-src 'self'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests; require-trusted-types-for 'script'; trusted-types 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'sha256-jr+99oMVcAtKtIUlC/3aKn5EhZTkRbJaXBN0lEQV9qo=' 'sha256-Ucg1BIK1XBsez72b+mHUucn9hJ9D9/hXAQoPcsKKwq0='; img-src 'self'; font-src 'self'; connect-src 'self'; manifest-src 'self'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests; require-trusted-types-for 'script'; trusted-types 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Aviso de privacidad | Luca Bloom</title>
 <meta name="description" content="Aviso de privacidad del sitio de Luca Bloom: qué datos personales recabamos, para qué, con quién los compartimos y cómo ejercer tus derechos ARCO.">
@@ -91,7 +91,8 @@ a{color:inherit}
 .doc p{margin-top:10px}
 .doc ul{margin:10px 0 0;padding-left:1.3em}
 .doc li+li{margin-top:6px}
-.doc dl{margin:12px 0 0;display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:15px;color:#3E4352}
+.doc dl{margin:12px 0 0;display:grid;grid-template-columns:minmax(0,11em) minmax(0,1fr);gap:6px 14px;font-size:15px;color:#3E4352}
+@media (max-width:480px){.doc dl{grid-template-columns:minmax(0,1fr);gap:0}.doc dd{margin-bottom:10px}}
 .doc dt{font-weight:700;color:var(--ink)}
 .doc dd{margin:0;overflow-wrap:anywhere}
 .doc .date{margin-top:36px;font-size:14px;color:var(--muted);text-align:right}
@@ -186,8 +187,8 @@ footer .op a{color:inherit}
 <footer>
   <div class="wrap">
     <span class="logo">Luca Bloom</span>
-    <p>Luca Bloom es un producto de cuidado personal de uso general, no es un dispositivo médico y no afirma ningún efecto médico ni terapéutico. Solo para mayores de 18 años. Hecho en China; revisado, limpiado y ensamblado en Japón.</p>
-    <nav aria-label="Enlaces"><a href="./#safety">Información de seguridad</a><a href="privacy.html">Aviso de privacidad</a></nav>
+    <p>Luca Bloom es un producto de cuidado personal de uso general, no es un dispositivo médico y no afirma ningún efecto médico ni terapéutico. Solo para mayores de 18 años. Hecho en China; revisado, limpiado y ensamblado en Japón. Para advertencias detalladas e instrucciones de uso, usa el código QR de la tarjeta incluida o consulta la <a class="c-inherit" href="/intl/mx/">página de soporte</a>.</p>
+    <nav aria-label="Enlaces"><a href="./#safety">Información de seguridad</a><a href="/intl/mx/manual.html">Manual de uso</a><a href="/intl/mx/terms.pdf" target="_blank" rel="noopener">Aviso de responsabilidad (PDF)</a><a href="/mx/column/">Columna</a><a href="privacy.html">Aviso de privacidad</a></nav>
     <p class="op">Operado por Luca Bloom<br>S-Building 3F, 2-1-19 Roppongi, Minato-ku, Tokio 106-0032, Japón<br>Contacto: <a href="mailto:lucabloom65@gmail.com">lucabloom65@gmail.com</a></p>
     <p>© Luca Bloom</p>
   </div>
