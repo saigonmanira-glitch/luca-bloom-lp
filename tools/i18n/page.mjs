@@ -174,7 +174,7 @@ ${t.badges.map(([b, s]) => `      <li><b>${b}</b>${s}</li>`).join('\n')}
     </ul>
 
     <div class="buy">
-      <p class="price">${t.buyNote}</p>
+      <p class="price">${L.price || t.buyNote}</p>
 ${waitlistBox(true)}${buttons(' js-buy')}
     </div>
   </div>
@@ -448,7 +448,7 @@ ${supportLinks(L)}
     <h2>${t.finalH2}</h2>
     <p class="sub">${t.finalSub}</p>
     <div class="buy">
-${waitlistBox(false)}${buttons(' js-buy')}
+${L.price ? `      <p class="price">${L.price}</p>\n` : ''}${waitlistBox(false)}${buttons(' js-buy')}
     </div>
   </div>
 </section>
@@ -457,7 +457,7 @@ ${waitlistBox(false)}${buttons(' js-buy')}
 ${footer(L, '')}
 
 <aside class="bar" id="bar" aria-label="${esc(t.barAria)}">
-  <div class="in">
+${L.price ? `  <p class="price">${L.price}</p>\n` : ''}  <div class="in">
     <p class="p">Luca Bloom<small>${t.barSmall}</small></p>
     ${barButtons}
   </div>

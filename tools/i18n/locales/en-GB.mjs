@@ -12,6 +12,8 @@ export default {
     { href: `https://www.amazon.co.uk/dp/${ASIN}`, cta: 'Buy on Amazon UK', short: 'UK' },
     { href: `https://www.amazon.com.au/dp/${ASIN}`, cta: 'Buy on Amazon Australia', short: 'Australia' },
   ],
+  // 初期ロットの限定価格（日本の「初期ロット100個限定価格」と同じ扱い）。購入欄・最後の購入欄・下部の固定バーに出す
+  price: 'Launch price, first 30 units only: <span class="nb"><b>£42.99</b> UK (incl. VAT)</span> · <span class="nb"><b>A$79.95</b> Australia (incl. GST)</span>',
   og: { for: 'Foreskin care tool', lines: ['A private concern,', 'in your own hands.'], chips: ['Opens up to <b>70 mm</b>', 'Stepless', 'Stays where you stop'] },
   t: {
     title: 'Luca Bloom | Foreskin care tool that opens up to 70 mm',
