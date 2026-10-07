@@ -30,9 +30,9 @@ const FACES = `
 const L = Object.fromEntries(LOCALES.map((x) => [x.code, x]));
 
 // 5か国（英国・オーストラリア・米国・カナダ・メキシコ）共通の英語版。広報は英語1本で行う。
-// og は LP の共有画像と同じ見出し・特長。market：販売先と、発売前の国（投票中）の案内
-// リンク先の英語LPには国の切り替え（Language）があり、米国・カナダ・メキシコの投票ページへ移れる
-const COMMON = { og: L['en-GB'].og, url: 'luca-bloom.com/en', market: 'On Amazon UK &amp; Australia · Coming to the US, Canada &amp; Mexico' };
+// og は LP の共有画像と同じ見出し・特長。販売国が増えても作り直さずに使えるよう、国名は入れない
+// リンク先の英語LPには国の切り替え（Language）があり、各国のページへ移れる
+const COMMON = { og: L['en-GB'].og, url: 'luca-bloom.com/en' };
 
 // 投票の告知画像の文言（LP の発売前の表示と同じ内容）。投票は国ごとの LP から
 const VOTE = { goal: 'Our goal: launch in 2026', h: ['Help bring Luca Bloom', 'to the US, Canada and Mexico'], p: 'Sales start once 30 people vote by email.<br>One email per person · No payment or commitment', cta: 'Vote at', url: 'luca-bloom.com/us · /ca · /mx' };
@@ -59,16 +59,16 @@ const LAYOUTS = {
   'x-header': { w: 1500, h: 500, html: (m) => `
 <style>.l{position:absolute;left:110px;top:56px;width:720px}.logo{font-size:64px}.for{margin-top:22px;font-size:19px}h1{margin-top:8px;font-size:40px}.chips{margin-top:20px;font-size:17px}.market{position:absolute;right:56px;top:40px;font-size:16px}.url{position:absolute;right:60px;bottom:34px;font-size:22px}.prod{right:70px;top:112px;height:320px}</style>
 <div class="l"><div class="logo">${FLOWER(52)}Luca Bloom</div><p class="for">${m.og.for}</p><h1>${m.og.lines.join('<br>')}</h1>${chips(m.og)}</div>
-<img class="prod" src="{{PROD}}"><p class="market">${m.market}</p><p class="url">${m.url}</p>` },
+<img class="prod" src="{{PROD}}"><p class="url">${m.url}</p>` },
   // Facebook のカバー 1640×624。スマホでは左右が切れて中央の幅1110px前後だけが見えるため、中央に寄せる
   'facebook-cover': { w: 1640, h: 624, html: (m) => `
 <style>.l{position:absolute;left:300px;top:110px;width:640px}.logo{font-size:62px}.for{margin-top:24px;font-size:19px}h1{margin-top:8px;font-size:42px}.chips{margin-top:22px;font-size:18px}.market{margin-top:24px;font-size:17px}.url{position:absolute;left:300px;bottom:44px;font-size:22px}.prod{left:940px;top:180px;height:270px}</style>
-<div class="l"><div class="logo">${FLOWER(50)}Luca Bloom</div><p class="for">${m.og.for}</p><h1>${m.og.lines.join('<br>')}</h1>${chips(m.og)}<p class="market">${m.market}</p></div>
+<div class="l"><div class="logo">${FLOWER(50)}Luca Bloom</div><p class="for">${m.og.for}</p><h1>${m.og.lines.join('<br>')}</h1>${chips(m.og)}</div>
 <img class="prod" src="{{PROD}}"><p class="url">${m.url}</p>` },
   // YouTube のバナー 2560×1440。すべての画面で見えるのは中央の 1546×423（横507〜2053・縦508〜931）
   'youtube-banner': { w: 2560, h: 1440, html: (m) => `
 <style>.l{position:absolute;left:560px;top:530px;width:920px}.logo{font-size:80px}.for{margin-top:18px;font-size:22px}h1{margin-top:6px;font-size:44px}.chips{margin-top:14px;font-size:20px}.row{margin-top:18px;display:flex;align-items:center;gap:24px}.market{font-size:19px}.url{font-size:24px}.prod{left:1560px;top:545px;height:330px}</style>
-<div class="l"><div class="logo">${FLOWER(64)}Luca Bloom</div><p class="for">${m.og.for}</p><h1>${m.og.lines.join(' ')}</h1>${chips(m.og)}<div class="row"><p class="market">${m.market}</p><p class="url">${m.url}</p></div></div>
+<div class="l"><div class="logo">${FLOWER(64)}Luca Bloom</div><p class="for">${m.og.for}</p><h1>${m.og.lines.join(' ')}</h1>${chips(m.og)}<div class="row"><p class="url">${m.url}</p></div></div>
 <img class="prod" src="{{PROD}}">` },
 };
 
