@@ -7,6 +7,7 @@ import { MENU, SITE, alternateTags } from './site.mjs';
 import { COUNTRIES, supportLink } from './support.mjs';
 import { columnLink, columnName } from './columns.mjs';
 import { WAITLIST } from './waitlist.mjs';
+import { SOCIAL_CSS, socialHtml } from './social.mjs';
 
 const DIR = import.meta.dirname;
 const read = (f) => fs.readFileSync(path.join(DIR, f), 'utf8');
@@ -23,7 +24,7 @@ const LANG_CSS = `.langs{position:relative;background:none;margin:0;border-radiu
 .langs a:hover{background:var(--ivory)}
 .langs a[aria-current]{font-weight:700;background:#F1EEE6}
 `;
-export const LP_CSS = read('lp.css') + LANG_CSS;
+export const LP_CSS = read('lp.css') + LANG_CSS + SOCIAL_CSS;
 export const DOC_CSS = read('doc.css') + LANG_CSS;
 const SPRITE = read('parts/sprite.frag');
 const BOX_FB = read('parts/box-fallback.frag');
@@ -483,8 +484,17 @@ function supportLinks(L) {
     .join('\n');
 }
 
+// 公式SNSの一覧の読み上げ名（言語ごと）
+const SNS_TEXT = {
+  en: { label: 'Luca Bloom on social media', follow: (n) => `Luca Bloom on ${n}` },
+  fr: { label: 'Luca Bloom sur les réseaux sociaux', follow: (n) => `Luca Bloom sur ${n}` },
+  es: { label: 'Luca Bloom en redes sociales', follow: (n) => `Luca Bloom en ${n}` },
+};
+
 function footer(L, prefix) {
   const t = L.t;
+  // 商品ページだけ、ロゴの下に公式SNSのアイコンを出す（海外は英語アカウント共通）
+  const sns = prefix ? '' : socialHtml('en', SNS_TEXT[L.lang.slice(0, 2)]);
   const legal = L.legal ? `<a href="${L.legal.file}">${L.legal.link}</a>` : '';
   // 日本語版と同じく、ご使用マニュアル・免責事項（PDF）・コラムへのリンクと、サポートページの案内を載せる
   const list = COUNTRIES.flatMap((c) => c.langs.filter((v) => v.lp === L.dir).map((v) => ({ c, ...supportLink(c, v) })));
@@ -496,7 +506,7 @@ function footer(L, prefix) {
   return `<footer>
   <div class="wrap">
     <span class="logo">Luca Bloom</span>
-    <p>${t.footer}${t.footerMore(hub)}</p>
+    ${sns ? `${sns}\n    ` : ''}<p>${t.footer}${t.footerMore(hub)}</p>
     <nav aria-label="${esc(t.navLabel)}"><a href="${prefix}#safety">${t.safetyLink}</a>${support}<a href="/${L.dir}column/">${columnName(L)}</a><a href="privacy.html">${t.privacyLink}</a>${legal}</nav>
     <p class="op">${t.operator}</p>
     ${prefix ? '' : `<p>${t.imagesNote}</p>\n    `}<p>© Luca Bloom</p>
