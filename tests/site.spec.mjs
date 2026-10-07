@@ -151,6 +151,10 @@ for (const L of LOCALE_TESTS) {
       expect(await mail.count()).toBeGreaterThanOrEqual(3); // ヒーロー・最後・下部バー
       const href = await mail.first().getAttribute('href');
       expect(decodeURIComponent(new URL(href).searchParams.get('subject'))).toBe(pre.subject);
+      // メールアプリが開かない環境向けに、Gmail・Outlook の作成画面とアドレスを出す（ヒーロー・最後）
+      expect(await page.locator('.wl-alt a[href^="https://mail.google.com/mail/?view=cm"]').count()).toBeGreaterThanOrEqual(2);
+      expect(await page.locator('.wl-alt a[href^="https://outlook.live.com/mail/0/deeplink/compose"]').count()).toBeGreaterThanOrEqual(2);
+      await expect(page.locator('.wl-addr').first()).toHaveText('lucabloom65@gmail.com');
       await expect(page.locator('.wl-bar').first()).toHaveAttribute('max', String(WAITLIST.target));
       await expect(page.locator('.wl-bar').first()).toHaveAttribute('value', String(WAITLIST.count));
       await expect(page.locator('.wl-count b').first()).toHaveText(String(WAITLIST.count));

@@ -100,7 +100,8 @@ export function lpHtml(L) {
   // 発売前の国（L.waitlist）は、購入ボタンの代わりに発売通知のメールボタンと、目標までの残り件数を出す
   const w = L.waitlist;
   const buttons = (cls) =>
-    w ? `      <a class="cta${cls}" href="${esc(w.href)}">${w.cta}\n        ${arrow}</a>`
+    w ? `      <a class="cta${cls}" href="${esc(w.href)}">${w.cta}\n        ${arrow}</a>
+      <p class="wl-alt">${w.alt} ${w.web.map(([n, h]) => `<a href="${esc(h)}" target="_blank" rel="noopener">${n}</a>`).join(' · ')} ${w.or} <span class="wl-addr">${w.address}</span></p>`
       : L.stores
         .map((s, i) => `      <a class="cta${i ? ' cta-2' : ''}${cls}" href="${s.href}" target="_blank" rel="noopener sponsored">${s.cta}\n        ${arrow}</a>`)
         .join('\n');
@@ -120,13 +121,15 @@ export function lpHtml(L) {
     ].map(([n, h]) => `<a href="${esc(h)}" target="_blank" rel="noopener">${n}</a>`).join('')
       + `<a href="${esc(`mailto:?subject=${encodeURIComponent('Luca Bloom')}&body=${tx}%20${u}`)}">${w.mail}</a>`;
   };
-  const waitlistBox = (full) =>
+  const waitlistBox = () =>
     w ? `      <div class="wl">
         <p class="wl-goal">${w.goal}</p>
         <p class="wl-count"><b>${WAITLIST.count}</b><span>/ ${WAITLIST.target} ${w.votes}</span></p>
         <progress class="wl-bar" max="${WAITLIST.target}" value="${WAITLIST.count}" aria-label="${esc(w.progress(WAITLIST.count, WAITLIST.target))}">${w.progress(WAITLIST.count, WAITLIST.target)}</progress>
         <p class="wl-n"><span>${w.left(WAITLIST.target - WAITLIST.count)}</span><span>${w.updated(wlDate)}</span></p>
-${full ? `        <p class="wl-note">${w.note}</p>\n` : ''}        <div class="wl-share"><p>${w.shareH}</p><div>${share(w.shareText)}</div></div>
+        <p class="wl-deal">${w.deal}</p>
+        <p class="wl-note">${w.note}</p>
+        <div class="wl-share"><p>${w.shareH}</p><div>${share(w.shareText)}</div></div>
       </div>\n` : '';
   const product = {
     '@context': 'https://schema.org', '@type': 'Product', name: 'Luca Bloom', description: plain(t.ldDescription),
@@ -175,7 +178,7 @@ ${t.badges.map(([b, s]) => `      <li><b>${b}</b>${s}</li>`).join('\n')}
 
     <div class="buy">
       <p class="price">${L.price || t.buyNote}</p>
-${waitlistBox(true)}${buttons(' js-buy')}
+${waitlistBox()}${buttons(' js-buy')}
     </div>
   </div>
 </header>
@@ -448,7 +451,7 @@ ${supportLinks(L)}
     <h2>${t.finalH2}</h2>
     <p class="sub">${t.finalSub}</p>
     <div class="buy">
-${L.price ? `      <p class="price">${L.price}</p>\n` : ''}${waitlistBox(false)}${buttons(' js-buy')}
+${L.price ? `      <p class="price">${L.price}</p>\n` : ''}${waitlistBox()}${buttons(' js-buy')}
     </div>
   </div>
 </section>

@@ -7,7 +7,14 @@
 export const WAITLIST = { open: false, target: 30, count: 0, updated: '2026-10-06' };
 
 const MAIL = 'lucabloom65@gmail.com';
-const mailto = (subject, body) => `mailto:${MAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+const enc = encodeURIComponent;
+const mailto = (subject, body) => `mailto:${MAIL}?subject=${enc(subject)}&body=${enc(body)}`;
+// メールアプリが開かない環境（Instagram・X などのアプリ内ブラウザ、メールアプリ未設定のパソコン）向けに、
+// ブラウザで開く Gmail・Outlook の作成画面と、アドレスそのものを並べて出す
+const webMail = (subject, body) => [
+  ['Gmail', `https://mail.google.com/mail/?view=cm&fs=1&to=${MAIL}&su=${enc(subject)}&body=${enc(body)}`],
+  ['Outlook', `https://outlook.live.com/mail/0/deeplink/compose?to=${MAIL}&subject=${enc(subject)}&body=${enc(body)}`],
+];
 
 // 言語ごとの文面。country：国名、store：その国の Amazon
 // メールは「欲しい」の1票として数えるだけで、こちらからは送らない（発売はこのページで知らせる）
@@ -22,7 +29,10 @@ const TEXT = {
     votes: 'pre-registered',
     left: (n) => n > 0 ? `${n} more to our pre-launch goal` : 'Pre-launch goal reached',
     progress: (count, target) => `${count} of ${target} pre-registered`,
-    note: 'Luca Bloom goes on sale on Amazon in the United States, Canada and Mexico in mid-November 2026. Send us one email to pre-register, and we will email you once when it goes on sale. No payment or commitment.',
+    deal: 'The more pre-registrations, the lower the launch price.',
+    note: 'One email per person · No payment or commitment',
+    alt: 'Email app not opening? Use',
+    or: 'or write to',
     updated: (date) => `Count as of ${date}`,
     shareH: 'Know someone who needs this? Share this page',
     shareText: 'Luca Bloom launches in the US, Canada and Mexico in mid-November. Pre-register here:',
@@ -44,7 +54,10 @@ const TEXT = {
     votes: 'préinscrits',
     left: (n) => n > 0 ? `Encore ${n} pour notre objectif avant le lancement` : 'Objectif atteint',
     progress: (count, target) => `${count} préinscrits sur ${target}`,
-    note: 'Luca Bloom sera en vente sur Amazon aux États-Unis, au Canada et au Mexique à la mi-novembre 2026. Envoyez-nous un seul courriel pour vous préinscrire : nous vous écrirons une fois, au lancement. Aucun paiement ni engagement.',
+    deal: 'Plus il y a de préinscriptions, plus le prix de lancement baisse.',
+    note: 'Un courriel par personne · Aucun paiement ni engagement',
+    alt: 'Votre application de courriel ne s’ouvre pas ? Utilisez',
+    or: 'ou écrivez à',
     updated: (date) => `Nombre au ${date}`,
     shareH: 'Vous connaissez quelqu’un que ça aiderait ? Partagez cette page',
     shareText: 'Luca Bloom arrive aux États-Unis, au Canada et au Mexique à la mi-novembre. Préinscription ici :',
@@ -66,7 +79,10 @@ const TEXT = {
     votes: 'preregistros',
     left: (n) => n > 0 ? `Faltan ${n} para nuestra meta antes del lanzamiento` : 'Meta alcanzada',
     progress: (count, target) => `${count} de ${target} preregistros`,
-    note: 'Luca Bloom sale a la venta en Amazon en Estados Unidos, Canadá y México a mediados de noviembre de 2026. Mándanos un solo correo para preregistrarte y te avisaremos una sola vez cuando salga a la venta. Sin pago ni compromiso.',
+    deal: 'Entre más preregistros, más bajo el precio de lanzamiento.',
+    note: 'Un correo por persona · Sin pago ni compromiso',
+    alt: '¿No se abre tu app de correo? Usa',
+    or: 'o escribe a',
     updated: (date) => `Conteo al ${date}`,
     shareH: '¿Conoces a alguien a quien le sirva? Comparte esta página',
     shareText: 'Luca Bloom llega a Estados Unidos, Canadá y México a mediados de noviembre. Preregístrate aquí:',
@@ -105,7 +121,7 @@ export function prelaunch(L) {
   const faq = L.t.faq.slice(0, -1).concat([[L.t.faq.at(-1)[0], w.faq]]); // 最後の質問が「どこで買えるか」
   return {
     ...L,
-    waitlist: { ...w, href: mailto(w.subject, w.body) },
+    waitlist: { ...w, href: mailto(w.subject, w.body), web: webMail(w.subject, w.body), address: MAIL },
     t: { ...L.t, description: fix(L.t.description), buyNote: w.buyNote, barSmall: w.barSmall, barAria: w.barAria, faq },
     privacy: {
       ...L.privacy,
