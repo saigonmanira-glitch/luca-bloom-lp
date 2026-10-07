@@ -35,7 +35,8 @@ const L = Object.fromEntries(LOCALES.map((x) => [x.code, x]));
 const COMMON = { og: L['en-GB'].og, url: 'luca-bloom.com/en' };
 
 // 投票の告知画像の文言（LP の発売前の表示と同じ内容）。投票は国ごとの LP から
-const VOTE = { goal: 'Our goal: launch in 2026', h: ['Help bring Luca Bloom', 'to the US, Canada and Mexico'], p: 'Sales start once 30 people vote by email.<br>One email per person · No payment or commitment', cta: 'Vote at', url: 'luca-bloom.com/us · /ca · /mx' };
+// 国名は入れない（対象国が変わってもそのまま使える）。投票先はプロフィールのリンクから各国のページへ
+const VOTE = { goal: 'Our goal: launch in 2026', h: ['Want Luca Bloom', 'in your country?'], p: 'Sales start once 30 people vote by email.<br>One email per person · No payment or commitment', cta: 'Vote via the', url: 'link in bio' };
 
 const FLOWER = (size) => `<svg width="${size}" height="${size}" viewBox="-360 -360 720 720"><defs><linearGradient id="gd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#DDAE4C"/><stop offset="1" stop-color="#B9862A"/></linearGradient><path id="p" d="M0,-92 C 88,-150 96,-262 0,-350 C -100,-276 -88,-150 0,-92Z"/></defs><g fill="url(#gd)">${[0, 60, 120, 180, 240, 300].map((r) => `<use href="#p" transform="rotate(${r})"/>`).join('')}<circle r="34" fill="#161A29"/></g></svg>`;
 
@@ -72,7 +73,7 @@ const LAYOUTS = {
 <img class="prod" src="{{PROD}}">` },
 };
 
-// 発売前の国（米国・カナダ・メキシコ）の投票の告知画像（Instagram の縦長 1080×1350、X・Facebook の横長 1600×900）
+// 発売前の国の投票の告知画像（Instagram の縦長 1080×1350、X・Facebook の横長 1600×900）
 const VOTE_LAYOUTS = {
   'vote-portrait': { w: 1080, h: 1350, html: (m, v) => `
 <style>.c{position:absolute;left:90px;right:90px;top:90px;text-align:center}.logo{justify-content:center;font-size:58px}.goal{display:inline-block;margin-top:46px;background:#E3B34E;color:#161A29;border-radius:99px;padding:.35em 1.1em;font-size:30px;font-weight:900}h1{margin-top:30px;font-size:56px}.p{margin-top:24px;font-size:25px;line-height:1.7;color:#3E4352}.prod{left:50%;transform:translateX(-50%);top:720px;height:400px}.cta{position:absolute;left:90px;right:90px;bottom:84px;text-align:center;background:#161A29;color:#F1EEE6;border-radius:24px;padding:26px 20px;font-size:30px;font-weight:700}.cta b{font-family:QS;color:#E3B34E}</style>
