@@ -85,6 +85,19 @@ const VOTE_LAYOUTS = {
 <img class="prod" src="{{PROD}}"><p class="cta">${v.cta} <b>${v.url}</b></p>` },
 };
 
+// 固定投稿の画像（Instagram・Threads の縦長 1080×1350、X・Facebook の横長 1600×900）。国名・価格は入れない
+const PIN = { for: 'Foreskin care tool', h: ['A private concern,', 'in your own hands.'], p: 'Turn the handle. The arms open up to 70 mm<br>and stay where you stop.', chips: ['Up to <b>70 mm</b>', 'Stepless', 'Stays put', 'Discreet box'], fine: 'Not a medical device · For adults 18+' };
+const PIN_LAYOUTS = {
+  'pinned-portrait': { w: 1080, h: 1350, html: (m, v) => `
+<style>.c{position:absolute;left:80px;right:80px;top:84px;text-align:center}.logo{justify-content:center;font-size:58px}.for{margin-top:40px;font-size:24px}h1{margin-top:12px;font-size:64px}.p{margin-top:22px;font-size:28px;line-height:1.55;color:#3E4352;font-weight:700}.prod{left:50%;transform:translateX(-50%);top:690px;height:390px}.chips{position:absolute;left:60px;right:60px;bottom:150px;justify-content:center;font-size:24px}.fine{position:absolute;left:0;right:0;bottom:84px;text-align:center;font-size:22px;color:#6B7080}</style>
+<div class="c"><div class="logo">${FLOWER(50)}Luca Bloom</div><p class="for">${v.for}</p><h1>${v.h.join('<br>')}</h1><p class="p">${v.p}</p></div>
+<img class="prod" src="{{PROD}}"><div class="chips">${v.chips.map((c) => `<span>${c}</span>`).join('')}</div><p class="fine">${v.fine}</p>` },
+  'pinned-landscape': { w: 1600, h: 900, html: (m, v) => `
+<style>.l{position:absolute;left:100px;top:96px;width:820px}.logo{font-size:56px}.for{margin-top:40px;font-size:22px}h1{margin-top:10px;font-size:58px}.p{margin-top:22px;font-size:26px;line-height:1.55;color:#3E4352;font-weight:700}.chips{margin-top:34px;font-size:22px}.prod{right:70px;top:250px;height:360px}.fine{position:absolute;left:100px;bottom:70px;font-size:21px;color:#6B7080}</style>
+<div class="l"><div class="logo">${FLOWER(46)}Luca Bloom</div><p class="for">${v.for}</p><h1>${v.h.join('<br>')}</h1><p class="p">${v.p}</p><div class="chips">${v.chips.map((c) => `<span>${c}</span>`).join('')}</div></div>
+<img class="prod" src="{{PROD}}"><p class="fine">${v.fine}</p>` },
+};
+
 fs.mkdirSync(OUT, { recursive: true });
 const browser = await chromium.launch({
   ...(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {}),
@@ -138,4 +151,5 @@ async function shot(name, { w, h, html }, ...args) {
 }
 for (const [kind, layout] of Object.entries(LAYOUTS)) await shot(kind, layout, COMMON);
 for (const [kind, layout] of Object.entries(VOTE_LAYOUTS)) await shot(kind, layout, COMMON, VOTE);
+for (const [kind, layout] of Object.entries(PIN_LAYOUTS)) await shot(kind, layout, COMMON, PIN);
 await browser.close();
