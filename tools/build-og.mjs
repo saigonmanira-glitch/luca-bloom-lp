@@ -22,6 +22,11 @@ const ZK700 = font('zenkakugothicnew__ZenKakuGothicNew-Bold.ttf');
 const ZK900 = font('zenkakugothicnew__ZenKakuGothicNew-Black.ttf');
 const QS = font('quicksand__Quicksand[wght].ttf');
 
+const PRODUCT = `<svg viewBox="-13 -1 104 63"><defs>
+<path id="a" d="M0 0V39A1 1 0 0 0 1 40H1.394A2 2 0 0 0 2.504 39.664L3.664 38.891L4.387 38.211A3 3 0 0 0 5 36.394V35.475A20 20 0 0 0 4.784 32.541L2.522 17.293A2 2 0 0 1 4.5 15H7A1 1 0 0 0 8 14V0Z"/>
+<g id="b"><rect x="-11.5" y="1" width="10" height="18"/><path d="M-6.5 1L-11.5 6M-6.5 19L-11.5 14" fill="none"/><rect x="-1.5" y="5" width="1.5" height="10"/><rect x="0" y="0" width="85" height="20"/><path d="M0 2L2 0M83 0L85 2M85 18L83 20M2 20L0 18" fill="none"/><path d="M85 6H86.75V20.25H85Z"/><path d="M86.75 7H88.25L89.25 8V12L88.25 13H86.75Z"/><path d="M5 2V12H3.5L6 18L8.5 12H7V2Z" fill="none" stroke-width=".3"/><text transform="translate(9.95 1.3) rotate(90)" font-family="QS" font-size="5.6" font-weight="700" fill="none" stroke-width=".28" textLength="17.4" lengthAdjust="spacingAndGlyphs">CLOSE</text></g></defs>
+<g fill="#F1EEE6" stroke="#8990A6" stroke-width=".35" stroke-linejoin="round"><use href="#a" transform="translate(8 20) scale(-1 1)"/><use href="#a" transform="translate(30 20)"/><use href="#b"/></g></svg>`;
+
 const html = (og) => `<!DOCTYPE html><html><head><meta charset="utf-8"><style>
 @font-face{font-family:ZK;font-weight:700;src:url(data:font/ttf;base64,${ZK700})}
 @font-face{font-family:ZK;font-weight:900;src:url(data:font/ttf;base64,${ZK900})}
@@ -40,10 +45,26 @@ svg{position:absolute;right:62px;top:168px;width:420px}
 <div class="l"><p class="logo">Luca Bloom</p><p class="for">${og.for}</p>
 <h1>${og.lines.join('<br>')}</h1>
 <div class="chips">${og.chips.map((c) => `<span>${c}</span>`).join('')}</div></div>
-<svg viewBox="-13 -1 104 63"><defs>
-<path id="a" d="M0 0V39A1 1 0 0 0 1 40H1.394A2 2 0 0 0 2.504 39.664L3.664 38.891L4.387 38.211A3 3 0 0 0 5 36.394V35.475A20 20 0 0 0 4.784 32.541L2.522 17.293A2 2 0 0 1 4.5 15H7A1 1 0 0 0 8 14V0Z"/>
-<g id="b"><rect x="-11.5" y="1" width="10" height="18"/><path d="M-6.5 1L-11.5 6M-6.5 19L-11.5 14" fill="none"/><rect x="-1.5" y="5" width="1.5" height="10"/><rect x="0" y="0" width="85" height="20"/><path d="M0 2L2 0M83 0L85 2M85 18L83 20M2 20L0 18" fill="none"/><path d="M85 6H86.75V20.25H85Z"/><path d="M86.75 7H88.25L89.25 8V12L88.25 13H86.75Z"/><path d="M5 2V12H3.5L6 18L8.5 12H7V2Z" fill="none" stroke-width=".3"/><text transform="translate(9.95 1.3) rotate(90)" font-family="QS" font-size="5.6" font-weight="700" fill="none" stroke-width=".28" textLength="17.4" lengthAdjust="spacingAndGlyphs">CLOSE</text></g></defs>
-<g fill="#F1EEE6" stroke="#8990A6" stroke-width=".35" stroke-linejoin="round"><use href="#a" transform="translate(8 20) scale(-1 1)"/><use href="#a" transform="translate(30 20)"/><use href="#b"/></g></svg>
+${PRODUCT}
+</body></html>`;
+
+const jaHtml = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:ZK;font-weight:700;src:url(data:font/ttf;base64,${ZK700})}
+@font-face{font-family:ZK;font-weight:900;src:url(data:font/ttf;base64,${ZK900})}
+@font-face{font-family:QS;font-weight:300 700;src:url(data:font/ttf;base64,${QS})}
+*{margin:0;box-sizing:border-box}
+body{width:1200px;height:630px;overflow:hidden;background:radial-gradient(60% 80% at 50% 55%,#262C47 0%,#161A29 72%);color:#EEF0F6;font-family:ZK;text-align:center}
+.logo{position:absolute;left:0;right:0;top:44px;font-family:QS;font-weight:500;font-size:40px;letter-spacing:.06em;color:#EEF0F6}
+.for{position:absolute;left:0;right:0;top:112px;font-weight:900;font-size:42px;letter-spacing:.04em;color:#E3B34E}
+svg{position:absolute;left:50%;top:196px;width:470px;transform:translateX(-50%)}
+.chips{position:absolute;left:0;right:0;bottom:40px;display:flex;justify-content:center;gap:12px}
+.chips span{border:1px solid #3A4262;border-radius:99px;padding:8px 18px;font-weight:700;font-size:22px;white-space:nowrap;background:#1C2135}
+.chips b{font-family:QS;color:#E3B34E}
+</style></head><body>
+<p class="logo">Luca Bloom</p>
+<p class="for">包茎・包皮のセルフケアツール</p>
+${PRODUCT}
+<div class="chips"><span>最大<b>70mm</b>まで開く</span><span>無段階調整</span><span>手を離しても止まる</span></div>
 </body></html>`;
 
 let chromium;
@@ -59,6 +80,14 @@ for (const mod of ['playwright', '@playwright/test']) {
 const browser = await chromium.launch(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {});
 const page = await browser.newPage({ viewport: { width: 1200, height: 630 } });
 const only = process.argv[2];
+// 日本語版（/og.png）。SNS やブログのリンクカードは画像の左右を切り落とすことが多い（note は中央の約930px、
+// 正方形にする所は中央の630px）ため、製品・名前・何の道具かを中央に集める。3D の静止画は作らない
+if (!only || only === 'ja') {
+  await page.setContent(jaHtml);
+  await page.evaluate(() => document.fonts.ready);
+  fs.writeFileSync(path.join(ROOT, 'og.png'), await page.screenshot({ type: 'png' }));
+  console.log('og.png（日本語版）');
+}
 for (const L of LOCALES.filter((l) => !only || l.code === only)) {
   await page.setContent(html(L.og));
   await page.evaluate(() => document.fonts.ready);

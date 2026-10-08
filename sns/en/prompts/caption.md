@@ -19,7 +19,7 @@ Reply with **JSON only**, in exactly this shape:
   "id": "{{id}}",
   "instagram": "60–150 words, short paragraphs separated by blank lines, ending with “Link in bio.” and then 3–5 allowed hashtags",
   "x": "≤ 280 characters including https://luca-bloom.com/en/ (counts as 23)",
-  "threads": "≤ 500 characters including https://luca-bloom.com/en/",
+  "threads": "≤ 500 characters including https://luca-bloom.com/en/, ending with one line: #phimosis",
   "alt": "Image description for screen readers, ≤ 200 characters",
   "ja": {
     "instagram": "Japanese translation of the Instagram caption",
@@ -48,7 +48,7 @@ Do not add anything outside the JSON.
 > 返答は**JSONだけ**で、上の形にしてください。
 > - instagram：60〜150語。短い段落を空行で区切り、最後に「Link in bio.」と、使ってよいハッシュタグを3〜5個
 > - x：リンク https://luca-bloom.com/en/（23文字として数える）を含めて280文字以内
-> - threads：リンクを含めて500文字以内
+> - threads：リンクを含めて500文字以内。最後の行に #phimosis（包茎）だけを付ける
 > - alt：画面読み上げ用の画像の説明（代替テキスト）、200文字以内
 > - ja：各投稿文の日本語訳（内容確認用）
 > - check：禁止語・医療的な効果・価格・比較を使っていないことの確認を1行で

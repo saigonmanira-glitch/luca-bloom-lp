@@ -12,6 +12,9 @@ const data = JSON.parse(fs.readFileSync(file, 'utf8'));
 const posts = Array.isArray(data) ? data : data.posts || [data];
 
 const HASHTAGS = new Set(['#LucaBloom', '#MensSelfCare', '#MensGrooming', '#PersonalCare', '#IntimateCare', '#SelfCare', '#MensCare']);
+// Threads はハッシュタグ（トピック）を1つしか付けられないため、検索される語の #phimosis（包茎）1つだけにする。
+// 本文には病名を書かない（このタグだけは禁止語の確認から外す）
+const THREADS_TAG = '#phimosis';
 
 // X の文字数の数え方：URL は23文字、ラテン文字・一般的な記号は1文字、それ以外（▷ や日本語など）は2文字
 function xLength(text) {
@@ -35,7 +38,7 @@ for (const p of posts) {
   for (const k of ['instagram', 'x', 'threads', 'alt']) if (!p[k]) err(`${k} がありません`);
   if (!p.ja || !p.ja.instagram || !p.ja.x || !p.ja.threads) err('日本語訳（ja）が足りません');
 
-  const english = [p.instagram, p.x, p.threads, p.alt, ...(p.image ? [p.image.eyebrow, p.image.headline, ...(p.image.checklist || []), ...(p.image.chips || [])] : [])];
+  const english = [p.instagram, p.x, (p.threads || '').replace(THREADS_TAG, ''), p.alt, ...(p.image ? [p.image.eyebrow, p.image.headline, ...(p.image.checklist || []), ...(p.image.chips || [])] : [])];
   for (const t of english.filter(Boolean)) {
     const hit = findBanned(t);
     if (hit) err(`禁止語「${hit}」：${t.slice(0, 60).replace(/\n/g, ' ')}…`);
@@ -53,10 +56,12 @@ for (const p of posts) {
     const words = p.instagram.replace(/#\w+/g, '').split(/\s+/).filter((w) => /[a-z]/i.test(w)).length;
     if (words < 40 || words > 170) err(`Instagram の本文が ${words} 語（目安60〜150語）`);
   }
-  for (const k of ['instagram', 'x', 'threads']) {
+  for (const k of ['instagram', 'x']) {
     for (const tag of (p[k] || '').match(/#\w+/g) || []) if (!HASHTAGS.has(tag)) err(`${k} に許可していないハッシュタグ ${tag}`);
   }
-  for (const k of ['x', 'threads']) if (((p[k] || '').match(/#\w+/g) || []).length > 2) err(`${k} のハッシュタグが3個以上`);
+  if (((p.x || '').match(/#\w+/g) || []).length > 2) err('x のハッシュタグが3個以上');
+  const threadsTags = (p.threads || '').match(/#\w+/g) || [];
+  if (threadsTags.length !== 1 || threadsTags[0] !== THREADS_TAG) err(`threads のハッシュタグは ${THREADS_TAG} の1つだけ（今：${threadsTags.join(' ') || 'なし'}）`);
   if (p.image && p.image.headline && p.image.headline.split('\n').length > 3) err('画像の見出しが4行以上');
 }
 
