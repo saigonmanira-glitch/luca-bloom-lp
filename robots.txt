@@ -1,4 +1,31 @@
+# 検索エンジンとAI検索のクローラー（サイトを巡回して情報を集めるプログラム）をすべて許可します
+
 User-agent: *
+Allow: /
+
+# AI検索・AI回答向け（明示的に許可）
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
 Allow: /
 
 Sitemap: https://luca-bloom.com/sitemap.xml

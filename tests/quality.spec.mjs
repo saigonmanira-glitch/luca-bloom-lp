@@ -109,9 +109,10 @@ test('構造化データ：JSON-LD が読み込めて、価格と FAQ が画面�
     for (const b of blocks) expect(() => JSON.parse(b), `/${p} の JSON-LD が壊れています`).not.toThrow();
   }
   await page.goto('', { waitUntil: 'domcontentloaded' });
-  const ld = (await page.locator('script[type="application/ld+json"]').allTextContents()).map((b) => JSON.parse(b));
+  // 日本語版は1つの @graph にまとめている（組織・サイト・ページ・商品・FAQ）
+  const ld = (await page.locator('script[type="application/ld+json"]').allTextContents()).flatMap((b) => JSON.parse(b)['@graph'] || [JSON.parse(b)]);
   const product = ld.find((x) => x['@type'] === 'Product');
-  expect(product.offers).toMatchObject({ price: '5800', priceCurrency: 'JPY' });
+  expect([product.offers].flat()).toContainEqual(expect.objectContaining({ price: '5800', priceCurrency: 'JPY' }));
   await expect(page.locator('.price').first()).toContainText('5,800円');
   const faq = ld.find((x) => x['@type'] === 'FAQPage');
   const shown = await page.locator('.faq details summary').allTextContents();
