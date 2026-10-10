@@ -1,8 +1,7 @@
 // Amazon の商品画像（2000×2000）の海外版を作る。
 //   node tools/amazon/build-images.mjs      → 全言語
 //   node tools/amazon/build-images.mjs us   → 指定した版だけ
-// 版：en（英国・オーストラリア・カナダ英語。英国式のつづり）、us（米国。米国式のつづり・インチ併記）、
-//     ca-fr（カナダ・フランス語）、mx（メキシコ・スペイン語）。出力は amazon/{版}/*.jpg
+// 版：global（全世界共通。同じ ASIN で各国に出品するため1組だけ）。出力は amazon/global/*.jpg
 // 下地は日本語版から文字だけを消したもの（amazon/base/。tools/amazon/clean_bases.py で作る）。
 // その上に英語の文字を、日本語版と同じ位置・同じ書体で重ねる。
 // 表現は海外LPと同じ決まり（病名・効果・比較・最上級・価格・「限定」を入れない）。日本語版の「業界最大の開き幅」は比較の表現のため載せない。
