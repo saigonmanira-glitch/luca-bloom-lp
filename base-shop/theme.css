@@ -1,0 +1,216 @@
+/* Luca Bloom の BASE ショップ用テーマ。BASE のテンプレートから読み込む（https://luca-bloom.com/base-shop/theme.css）。
+   ここを書き換えて公開すれば、BASE のテンプレートを貼り替えずに見た目を変えられる。 */
+/* ================================================================
+   Luca Bloom テーマ（LP・動画と同じ世界観。白を基調に、紺と金をアクセントに使う）
+   元のテンプレートの構造・ID・クラス・BASEのタグは変えず、見た目だけを上書きしています。
+   BASE管理画面の「背景」「ナビゲーションの色」の設定は、このあとに読み込まれるため引き続き有効です。
+   ================================================================ */
+:root {
+    --lb-navy: #161A29;
+    --lb-ink: #1A1E2C;
+    --lb-muted: #5E6373;
+    --lb-line: #E1E4EC;
+    --lb-soft: #F4F5F9;
+    --lb-gold: #E3B34E;
+    --lb-gold-ink: #8A6010;
+    --lb-white: #FFFFFF;
+    --lb-radius: 16px;
+    --lb-shadow: 0 1px 2px rgba(22, 26, 41, .06), 0 8px 24px rgba(22, 26, 41, .06);
+    --lb-font: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", Meiryo, sans-serif;
+    --lb-en: "Quicksand", "Zen Kaku Gothic New", sans-serif;
+    --lb-logo: "Montserrat", "Quicksand", sans-serif;
+}
+body {
+    background: radial-gradient(70% 50% at 50% 0%, #FFFFFF 0%, #F6F7FA 60%, #EEF0F5 100%) fixed;
+    background-color: #F6F7FA;
+    color: var(--lb-ink);
+    font-family: var(--lb-font);
+}
+body.shop { color: var(--lb-ink); font-size: 14px; line-height: 1.7; word-break: normal; overflow-wrap: anywhere; }
+a { color: var(--lb-ink); }
+::selection { background: rgba(227, 179, 78, .35); }
+
+/* ---------- ヘッダー ---------- */
+body.shop #mainHeader { margin-bottom: 28px; }
+body.shop #shopHeader h1 { margin: 64px 0 30px; font-family: var(--lb-logo); font-weight: 200; font-size: 40px; letter-spacing: .06em; color: var(--lb-navy); }
+body.shop #shopHeader h1 a { color: var(--lb-navy); }
+body.shop #shopHeader nav { border-top: 1px solid var(--lb-line); border-bottom: 1px solid var(--lb-line); margin: 0 7px; font-family: var(--lb-en); font-size: 12px; font-weight: 700; letter-spacing: .16em; }
+body.shop #shopHeader nav ul li { height: 44px; }
+body.shop #shopHeader nav ul li a,
+body.template #category-menu span { color: var(--lb-ink); padding: 12px 10px; }
+body.shop #shopHeader nav ul li:hover { border-bottom: 2px solid var(--lb-gold); height: 42px; }
+body.shop #shopHeader nav ul li.itemSearch:hover { border-bottom: none; height: 44px; }
+body.shop #shopHeader nav ul li.itemSearch form { height: 44px; }
+body.shop #shopHeader nav ul li.itemSearch form input { font-family: var(--lb-en); letter-spacing: .12em; color: var(--lb-ink); }
+.template #category-menu .category-list ul { border: 1px solid var(--lb-line); border-radius: 12px; box-shadow: var(--lb-shadow); background: var(--lb-white); overflow: hidden; }
+body.template #category-menu:hover .category-list ul li:hover { background-color: var(--lb-soft); }
+body.template #category-menu:hover .category-list ul li a { color: var(--lb-ink); letter-spacing: .04em; }
+.categoryTitle01 { font-weight: 900; color: var(--lb-navy); }
+.titleForSearchResult { color: var(--lb-muted); }
+
+/* ---------- お知らせ（固定ブログ） ---------- */
+.pinnedBlog .pinnedBlog_title { display: inline-block; }
+.pinnedBlog { text-align: center; }
+.pinnedBlog .pinnedBlog_title a { color: var(--lb-ink); border-bottom: 1px solid var(--lb-gold); padding-bottom: 2px; }
+
+/* ---------- 商品一覧 ---------- */
+body#shopTopPage .item { background: var(--lb-white); border: 1px solid var(--lb-line); border-radius: var(--lb-radius); box-shadow: var(--lb-shadow); padding: 10px 10px 16px; transition: transform .25s, box-shadow .25s; }
+body#shopTopPage .item:hover { transform: translateY(-3px); box-shadow: 0 2px 4px rgba(22, 26, 41, .06), 0 16px 32px rgba(22, 26, 41, .10); }
+body#shopTopPage .item .itemImg { border-radius: 12px; background: var(--lb-soft); padding: 0; }
+body#shopTopPage .item:hover .itemImg { border: none; padding: 0; }
+body#shopTopPage .item a { color: var(--lb-ink); }
+body#shopTopPage .item:hover a { color: var(--lb-ink); }
+body#shopTopPage .item .itemTitle { margin: 14px 0 4px; }
+body#shopTopPage .item a .itemTitle h2 { font-size: 14px; font-weight: 700; letter-spacing: .02em; }
+body#shopTopPage .item .itemDetail .itemPrice,
+body#shopTopPage .item .itemDetail .discountPrice__calcPrice { font-family: var(--lb-en); font-weight: 700; font-size: 15px; color: var(--lb-gold-ink); letter-spacing: .02em; }
+body#shopTopPage .item .itemImg a .soldout_cover p { color: var(--lb-navy); letter-spacing: .12em; font-family: var(--lb-en); }
+body#shopTopPage .item .comingSoon { color: var(--lb-gold-ink); font-family: var(--lb-en); font-weight: 700; letter-spacing: .12em; }
+@media (min-width: 769px) {
+    body#shopTopPage .item { margin: 0 14px 28px; padding: 14px 14px 18px; width: 238px; }
+    body#shopTopPage .item a .itemTitle h2 { width: 100%; }
+    body#shopTopPage .item .itemImg { width: 100%; }
+}
+
+/* ---------- 商品ページ ---------- */
+body#shopDetailPage #mainContent { background: var(--lb-white); border: 1px solid var(--lb-line); border-radius: 20px; box-shadow: var(--lb-shadow); box-sizing: border-box; padding: 24px 16px; }
+body#shopDetailPage header h1.itemTitle { color: var(--lb-navy); font-weight: 900; letter-spacing: .03em; line-height: 1.45; }
+body#shopDetailPage #slideImg .imgBox { border-radius: 14px; background: var(--lb-soft); overflow: hidden; }
+body#shopDetailPage #slideImgPager .smallImgBox { border-radius: 8px; overflow: hidden; background: var(--lb-soft); }
+body#shopDetailPage #slideImgPager .active .smallImgBox { outline: 2px solid var(--lb-gold); outline-offset: -2px; }
+body#shopDetailPage #mainContent .purchase { border-top: 1px solid var(--lb-line); border-bottom: 1px solid var(--lb-line); }
+body#shopDetailPage .itemPrice h2 { color: var(--lb-navy); }
+body#shopDetailPage .itemPrice h2 .price__value { font-family: var(--lb-en); font-weight: 700; }
+body#shopDetailPage .itemPrice h2 .price__tax { color: var(--lb-muted); }
+body#shopDetailPage #purchase_form select,
+body#shopDetailPage #purchase_form input { border: 1px solid var(--lb-line); border-radius: 10px; }
+body#shopDetailPage #purchase_form .purchaseButton .purchaseButton__btn { background: var(--lb-navy); color: #F1EEE6; border-radius: 99px; padding: 16px 0; font-size: 14px; letter-spacing: .08em; box-shadow: 0 6px 16px rgba(22, 26, 41, .18); }
+body#shopDetailPage #purchase_form .purchaseButton .purchaseButton__btn.purchaseButton__btn--outOfStock { background: #8A8FA0; box-shadow: none; }
+body#shopDetailPage #purchase_form .purchaseButton .purchaseButton__btn:disabled,
+body#shopDetailPage #purchase_form .purchaseButton .purchaseButton__btn--disabled,
+body#shopDetailPage #purchase_form .purchaseButton .purchaseButton__btn.purchaseButton__btn--comingSoonStay { background: #EEEEEE; color: #999999; box-shadow: none; }
+body#shopDetailPage .purchase .soldout { color: var(--lb-navy); font-family: var(--lb-en); font-weight: 700; letter-spacing: .12em; }
+body#shopDetailPage .purchase .comingSoon { color: var(--lb-gold-ink); }
+body#shopDetailPage .itemDescription { color: var(--lb-ink); }
+body#shopDetailPage .itemDescription p { line-height: 2; }
+@media (min-width: 769px) {
+    body#shopDetailPage #mainContent { padding: 72px 64px; width: 960px; }
+}
+
+/* ---------- ABOUT・お問い合わせ・規約 ---------- */
+.main { background: var(--lb-white); border: 1px solid var(--lb-line); border-radius: 20px; box-shadow: var(--lb-shadow); }
+.main #about { color: var(--lb-muted); }
+.main #about h2,
+.inquirySection h1 { color: var(--lb-navy); font-family: var(--lb-en); font-weight: 700; letter-spacing: .2em; }
+.main #about p { font-size: 15px; line-height: 2; }
+.inquirySection dl dd input,
+.inquirySection dl dd textarea { border: 1px solid var(--lb-line); border-radius: 10px; }
+.inquirySection .control-panel input#buttonLeave,
+#inquiryCompleteSection a { background: var(--lb-navy); color: #F1EEE6; border-radius: 99px; }
+#privacy,
+#law { border-radius: 20px; border: 1px solid var(--lb-line); box-shadow: var(--lb-shadow); color: var(--lb-ink); }
+#law .law_attention { background-color: var(--lb-soft); border-radius: 10px; }
+@media (max-width: 769px) {
+    .main, #privacy, #law { padding: 24px 16px; box-sizing: border-box; }
+}
+
+/* ---------- フッター ---------- */
+.lbFooter { text-align: center; padding: 40px 16px 8px; border-top: 1px solid var(--lb-line); margin-bottom: 28px; }
+.lbFooter__logo { margin: 0; font-family: var(--lb-logo); font-weight: 200; font-size: 28px; letter-spacing: .06em; color: var(--lb-navy); }
+.lbFooter__rule { width: 48px; height: 2px; margin: 14px auto; background: var(--lb-gold); border: 0; }
+.lbFooter__note { margin: 0 auto; max-width: 40em; font-size: 11px; font-weight: 400; line-height: 1.8; color: #8A8FA0; }
+.lbFooter__lp { display: inline-block; margin-top: 10px; font-size: 12px; font-weight: 700; color: var(--lb-gold-ink) !important; border-bottom: 1px solid currentColor; }
+body.shop #mainFooter .footerMenu ul li { color: var(--lb-muted); }
+body.shop #mainFooter .footerMenu ul li a { color: var(--lb-muted); }
+
+/* ---------- トップ：1商品のための売り場（ヒーロー・特長・梱包・使い方・購入） ---------- */
+.lbTop { max-width: 980px; margin: 0 auto; padding: 0 16px; box-sizing: border-box; }
+.lbHero { display: grid; gap: 8px; align-items: center; background: var(--lb-white); border: 1px solid var(--lb-line); border-radius: 24px; box-shadow: var(--lb-shadow); overflow: hidden; }
+.lbHero__txt { padding: 32px 24px 8px; text-align: center; }
+.lbHero__badges { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 0 0 14px; padding: 0; }
+.lbHero__badges li { font-size: 11px; font-weight: 700; color: var(--lb-gold-ink); border: 1px solid rgba(138, 96, 16, .35); border-radius: 99px; padding: 3px 10px; }
+.lbHero__for { margin: 0; font-weight: 700; font-size: 13px; letter-spacing: .24em; color: var(--lb-gold-ink); }
+.lbHero__catch { margin: 10px 0 0; font-weight: 900; font-size: 22px; line-height: 1.45; letter-spacing: .03em; color: var(--lb-navy); }
+.lbHero__catch span { display: inline-block; }
+.lbHero__lead { margin: 14px auto 0; max-width: 30em; font-size: 14px; line-height: 1.9; color: var(--lb-muted); }
+.lbHero__img { position: relative; padding: 8px 24px 24px; background: radial-gradient(60% 70% at 50% 50%, #EEF0F6 0%, #FFFFFF 75%); text-align: center; }
+.lbHero__img img { width: 100%; max-width: 440px; height: auto; vertical-align: top; }
+.lbBuy { margin: 22px 0 0; }
+.lbBuy__price { margin: 0; font-family: var(--lb-en); font-weight: 700; font-size: 34px; letter-spacing: .02em; color: var(--lb-navy); line-height: 1.2; }
+.lbBuy__price small { margin-left: 6px; font-family: var(--lb-font); font-size: 13px; font-weight: 700; color: var(--lb-muted); }
+.lbBuy__btn { display: block; max-width: 340px; margin: 14px auto 0; padding: 17px 0; border-radius: 99px; background: var(--lb-gold); color: var(--lb-navy) !important; font-weight: 900; font-size: 16px; letter-spacing: .08em; text-align: center; box-shadow: 0 8px 20px rgba(227, 179, 78, .35); }
+.lbBuy__btn:hover { opacity: .9; transform: translateY(-1px); }
+.lbBuy__sub { margin: 10px 0 0; font-size: 12px; color: var(--lb-muted); }
+.lbBuy__sub a { color: var(--lb-gold-ink); font-weight: 700; border-bottom: 1px solid currentColor; }
+.lbSec { margin: 56px 0 0; }
+.lbSec__label { margin: 0; text-align: center; font-family: var(--lb-en); font-weight: 700; font-size: 12px; letter-spacing: .24em; color: var(--lb-gold-ink); }
+.lbSec__h { margin: 8px 0 22px; text-align: center; font-weight: 900; font-size: 22px; line-height: 1.5; color: var(--lb-navy); }
+.lbFeat { display: grid; gap: 12px; margin: 0; padding: 0; }
+.lbFeat li { background: var(--lb-white); border: 1px solid var(--lb-line); border-radius: var(--lb-radius); box-shadow: var(--lb-shadow); padding: 20px; }
+.lbFeat__n { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 9px; background: var(--lb-gold); color: var(--lb-navy); font-family: var(--lb-en); font-weight: 700; }
+.lbFeat h3 { margin: 12px 0 6px; font-size: 17px; font-weight: 900; color: var(--lb-navy); }
+.lbFeat p { margin: 0; font-size: 13.5px; line-height: 1.85; color: var(--lb-muted); }
+.lbFeat p b { color: var(--lb-ink); }
+.lbPics { display: grid; gap: 12px; margin: 12px 0 0; }
+.lbPics img { width: 100%; height: auto; border-radius: var(--lb-radius); box-shadow: var(--lb-shadow); }
+.lbPrivacy { display: grid; gap: 10px; background: var(--lb-white); border: 1px solid var(--lb-line); border-radius: var(--lb-radius); box-shadow: var(--lb-shadow); padding: 24px; }
+.lbPrivacy p { margin: 0; font-size: 14px; line-height: 1.9; color: var(--lb-muted); }
+.lbPrivacy p b { color: var(--lb-navy); }
+.lbSteps { counter-reset: s; display: grid; gap: 10px; margin: 0; padding: 0; }
+.lbSteps li { counter-increment: s; display: flex; align-items: center; gap: 14px; background: var(--lb-white); border: 1px solid var(--lb-line); border-radius: 14px; padding: 14px 16px; font-weight: 700; font-size: 14.5px; }
+.lbSteps li::before { content: counter(s); flex: none; width: 34px; height: 34px; border-radius: 50%; background: var(--lb-navy); color: var(--lb-gold); display: flex; align-items: center; justify-content: center; font-family: var(--lb-en); }
+.lbLimit { margin: 12px 0 0; padding: 14px 18px; border-left: 4px solid var(--lb-gold); background: var(--lb-white); border-radius: 0 12px 12px 0; font-size: 13px; line-height: 1.8; color: var(--lb-ink); }
+.lbShopH { margin: 56px 0 0; }
+.lbFollow { margin: 56px auto 0; max-width: 980px; padding: 28px 16px; box-sizing: border-box; text-align: center; }
+.lbFollow__h { margin: 0; font-weight: 900; font-size: 17px; color: var(--lb-navy); }
+.lbFollow__p { margin: 6px 0 0; font-size: 13px; color: var(--lb-muted); }
+.lbFollow .sns { justify-content: center; margin: 16px 0 0; }
+.lbFollow__lp { display: inline-block; margin-top: 18px; padding: 11px 24px; border-radius: 99px; border: 1px solid var(--lb-navy); color: var(--lb-navy) !important; font-weight: 700; font-size: 13px; }
+.sns { list-style: none; display: flex; flex-wrap: wrap; gap: 10px; padding: 0; }
+.sns li { list-style: none; }
+.sns a { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: var(--lb-white); border: 1px solid var(--lb-line); box-shadow: var(--lb-shadow); }
+.sns a:hover { transform: translateY(-2px); }
+.sns svg { width: 20px; height: 20px; display: block; }
+/* スマホ：画面下に価格と購入ボタンを固定（トップページだけ） */
+.lbBar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 1000; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: rgba(255, 255, 255, .96); border-top: 1px solid var(--lb-line); box-shadow: 0 -6px 20px rgba(22, 26, 41, .08); }
+.lbBar__p { margin: 0; font-family: var(--lb-en); font-weight: 700; font-size: 20px; color: var(--lb-navy); line-height: 1.1; }
+.lbBar__p small { display: block; font-family: var(--lb-font); font-size: 11px; color: var(--lb-muted); font-weight: 700; }
+.lbBar a { flex: none; padding: 13px 28px; border-radius: 99px; background: var(--lb-gold); color: var(--lb-navy) !important; font-weight: 900; font-size: 15px; }
+body#shopTopPage #mainFooter { margin-bottom: 120px; }
+@media (min-width: 769px) {
+    .lbHero { grid-template-columns: 1.05fr 1fr; gap: 0; }
+    .lbHero__txt { padding: 48px 20px 48px 48px; text-align: left; }
+    .lbHero__badges { justify-content: flex-start; }
+    .lbHero__catch { font-size: 34px; }
+    .lbHero__lead { margin-left: 0; }
+    .lbBuy__btn { margin-left: 0; }
+    .lbHero__img { padding: 32px; }
+    .lbSec__h { font-size: 28px; }
+    .lbFeat { grid-template-columns: 1fr 1fr; gap: 16px; }
+    .lbPics { grid-template-columns: 1fr 1fr; gap: 16px; }
+    .lbPrivacy { grid-template-columns: 1fr 1fr; padding: 32px 36px; }
+    .lbSteps { grid-template-columns: repeat(3, 1fr); }
+    .lbBar { display: none; }
+    body#shopTopPage #mainFooter { margin-bottom: 100px; }
+}
+/* 商品が1つだけのときは、一覧のカードを大きく横長に */
+@media (min-width: 769px) {
+    body#shopTopPage .itemList .item:only-child { width: 640px; display: grid; grid-template-columns: 300px 1fr; gap: 28px; align-items: center; text-align: left; padding: 20px; }
+    body#shopTopPage .itemList .item:only-child .itemTitle { text-align: left; }
+    body#shopTopPage .itemList .item:only-child a .itemTitle h2 { white-space: normal; font-size: 18px; }
+    body#shopTopPage .itemList .item:only-child .itemDetail .itemPrice { text-align: left; font-size: 24px; }
+}
+
+/* ---------- 商品ページ：購入前の安心ポイント ---------- */
+.lbAssure { margin: 22px 0 0; padding: 18px; background: var(--lb-soft); border-radius: 14px; }
+.lbAssure > ul:not(.sns) { margin: 0; padding: 0; display: grid; gap: 8px; }
+.lbAssure > ul:not(.sns) > li { position: relative; padding-left: 22px; font-size: 13px; line-height: 1.7; color: var(--lb-ink); }
+.lbAssure > ul:not(.sns) > li::before { content: ""; position: absolute; left: 4px; top: .55em; width: 8px; height: 8px; border-radius: 50%; background: var(--lb-gold); }
+.lbAssure__links { margin: 14px 0 0; font-size: 12px; color: var(--lb-muted); }
+.lbAssure__links a { color: var(--lb-gold-ink); font-weight: 700; border-bottom: 1px solid currentColor; }
+.lbAssure .sns { margin: 12px 0 0; }
+.lbAssure .sns a { width: 38px; height: 38px; }
+.lbAssure .sns svg { width: 18px; height: 18px; }
+.sns img { width: 20px; height: 20px; display: block; }
+.lbAssure .sns img { width: 18px; height: 18px; }
+.lbFooter__sns { justify-content: center; }
