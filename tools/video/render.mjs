@@ -44,7 +44,8 @@ const ALL = {
     easyH: 'ハンドルを<br>回すだけ。', easyS: '閉じたアームを入れ、<br>内側からゆっくり広げます。',
     mmH: '最大70mmまで、<br>無段階に。', mmK: '開き幅', closed: '全閉', mmS: '痛みを感じない、<br>ちょうどいい幅で止められます。',
     lockH: '手を離しても、<br>戻らない。', lockS: '内部の送りねじの力で、その幅に固定。<br>急に閉じることはありません。',
-    taperH: '先端が太い、<br>ずれにくいアーム。', taperS: '根元が細く、先端に向かって太くなる形。<br>肌には幅6mmの面で当たります。',
+    taperH: '先端が太いから、<br>皮膚がずれにくい。', taperS: '根元の細いくぼみに皮膚がおさまり、<br>太い先端が抜けを防ぎます。', taperP: 'だから、そのまま少しずつ広げられる。',
+    flatH: '線ではなく、<br>面で当たる。', flatS: '外側は幅6mmの平面、角はR2。<br>力が一点に集まりにくい形です。', flatLine: '丸い棒：線で当たる', flatSurface: 'Luca Bloom：面で当たる', turn: 'ハンドル1回転で2mm',
     howH: '使い方は3ステップ。', steps: ['クリームやオイルでなじませる', '閉じたアームを先端から入れる', '痛くない幅まで、回して開く'],
     limit: '<b>1回30分以内</b>・<b>24時間の合計1時間以内</b><br>就寝中は使用しないでください。',
     privH: '届いても、<br>誰にもわからない。', privS: '化粧箱の表記は、背面の「Luca Bloom」だけ。<br>本体は専用のクッション材に収めてお届けします。',
@@ -58,7 +59,8 @@ const ALL = {
     easyH: 'Just turn<br>the handle.', easyS: 'Insert the closed arms,<br>then open them slowly from inside.',
     mmH: 'Up to 70 mm,<br>stepless.', mmK: 'Opening', closed: 'Closed', mmS: 'Stop at a comfortable width<br>that does not hurt.',
     lockH: 'Let go,<br>and it stays.', lockS: 'The internal lead screw holds it at that width.<br>It never snaps shut.',
-    taperH: 'Wider tips,<br>shaped not to slip.', taperS: 'Narrow at the base, wider towards the tip.<br>A 6 mm flat face rests against the skin.',
+    taperH: 'Wider tips.<br>The skin stays put.', taperS: 'The skin rests in the narrow neck,<br>and the wide tips keep it from slipping off.', taperP: 'So you can widen it, little by little.',
+    flatH: 'Not a line.<br>A flat face.', flatS: 'A 6 mm flat outer face with R2 corners<br>spreads the pressure.', flatLine: 'Round rod: line contact', flatSurface: 'Luca Bloom: surface contact', turn: '2 mm per turn of the handle',
     howH: 'Three simple steps.', steps: ['Apply cream or oil', 'Insert the closed arms, tips first', 'Turn to open, only as far as is comfortable'],
     limit: '<b>30 minutes at most per session</b> · <b>1 hour in total per 24 hours</b><br>Do not use while asleep.',
     privH: 'Nobody will know<br>what arrived.', privS: 'The box only says “Luca Bloom” on the back.<br>The device ships in a fitted cushioned insert.',
@@ -69,12 +71,13 @@ const ALL = {
   },
   // カナダ（フランス語）。約物：コロンの前・« » の内側に改行しない空白
   fr: {
-    html: 'fr-CA', labels: ['SIMPLE', 'JUSQU’À 70\u00a0mm', 'AUTOBLOCAGE', 'CONICITÉ INVERSÉE', 'MODE D’EMPLOI', 'DISCRÉTION'], css: '.steps li{font-size:36px}',
+    html: 'fr-CA', labels: ['SIMPLE', 'JUSQU’À 70\u00a0mm', 'AUTOBLOCAGE', 'CONICITÉ INVERSÉE', 'MODE D’EMPLOI', 'DISCRÉTION', 'FACE PLANE'], css: '.steps li{font-size:36px}',
     note: 'Images de modèles 3D.', film: 'Le voile rose représente une ouverture étroite',
     easyH: 'Il suffit de tourner<br>la molette.', easyS: 'Insérez les bras fermés,<br>puis écartez-les lentement de l’intérieur.',
     mmH: 'Jusqu’à 70 mm,<br>sans paliers.', mmK: 'Écartement', closed: 'Fermé', mmS: 'Arrêtez-vous à un écartement<br>confortable, sans douleur.',
     lockH: 'Lâchez :<br>il reste en place.', lockS: 'La vis-mère interne le maintient à cet écartement.<br>Il ne se referme jamais brusquement.',
-    taperH: 'Des extrémités larges,<br>conçues pour ne pas glisser.', taperS: 'Étroits à la base, plus larges vers l’extrémité.<br>Une face plane de 6 mm repose sur la peau.',
+    taperH: 'Extrémités larges :<br>la peau reste en place.', taperS: 'La peau se loge dans le col étroit,<br>et les extrémités larges la retiennent.', taperP: 'Vous écartez donc peu à peu, sans glisser.',
+    flatH: 'Pas une ligne :<br>une face plane.', flatS: 'Une face extérieure plane de 6 mm, coins R2,<br>qui répartit la pression.', flatLine: 'Tige ronde : contact en ligne', flatSurface: 'Luca Bloom : contact en surface', turn: '2 mm par tour de molette',
     howH: 'Trois étapes simples.', steps: ['Appliquez une crème ou une huile', 'Insérez les bras fermés, extrémités d’abord', 'Tournez pour ouvrir, sans dépasser le confort'],
     limit: '<b>30 minutes au plus par séance</b><br><b>1 heure au total par 24 heures</b><br>N’utilisez pas le produit pendant le sommeil.',
     privH: 'Personne ne saura<br>ce que vous avez reçu.', privS: 'La boîte ne porte que « Luca Bloom » au dos.<br>Le dispositif est livré dans un calage ajusté.',
@@ -85,12 +88,13 @@ const ALL = {
   },
   // メキシコ（スペイン語）。LP と同じく「tú」
   es: {
-    html: 'es-MX', labels: ['FÁCIL', 'HASTA 70\u00a0mm', 'AUTOBLOQUEO', 'CONO INVERTIDO', 'CÓMO SE USA', 'DISCRECIÓN'], css: '.steps li{font-size:36px}',
+    html: 'es-MX', labels: ['FÁCIL', 'HASTA 70\u00a0mm', 'AUTOBLOQUEO', 'CONO INVERTIDO', 'CÓMO SE USA', 'DISCRECIÓN', 'CARA PLANA'], css: '.steps li{font-size:36px}',
     note: 'Las imágenes son modelos 3D.', film: 'La película rosa representa una abertura estrecha',
     easyH: 'Solo gira<br>la manija.', easyS: 'Introduce los brazos cerrados<br>y ábrelos despacio desde dentro.',
     mmH: 'Hasta 70 mm,<br>ajuste continuo.', mmK: 'Apertura', closed: 'Cerrado', mmS: 'Detente en una apertura cómoda<br>que no duela.',
     lockH: 'Suéltala<br>y se queda.', lockS: 'El tornillo interno la mantiene en esa apertura.<br>Nunca se cierra de golpe.',
-    taperH: 'Puntas más anchas,<br>pensadas para no resbalar.', taperS: 'Delgados en la base, más anchos hacia la punta.<br>Una cara plana de 6 mm apoya sobre la piel.',
+    taperH: 'Puntas anchas:<br>la piel no se mueve.', taperS: 'La piel queda en el cuello delgado<br>y las puntas anchas evitan que se salga.', taperP: 'Así puedes abrir poco a poco.',
+    flatH: 'No una línea:<br>una cara plana.', flatS: 'Cara exterior plana de 6 mm con esquinas R2<br>que reparte la presión.', flatLine: 'Varilla redonda: contacto en línea', flatSurface: 'Luca Bloom: contacto en superficie', turn: '2 mm por vuelta de la manija',
     howH: 'Tres pasos sencillos.', steps: ['Aplica crema o aceite', 'Introduce los brazos cerrados, punta primero', 'Gira para abrir, solo hasta donde sea cómodo'],
     limit: '<b>Máximo 30 minutos por sesión</b><br><b>1 hora en total cada 24 horas</b><br>No la uses mientras duermes.',
     privH: 'Nadie sabrá<br>qué te llegó.', privS: 'La caja solo dice “Luca Bloom” en la parte trasera.<br>La herramienta viaja en un acolchado a la medida.',
@@ -101,13 +105,13 @@ const ALL = {
   },
 };
 // 米国：英語版を米国式のつづりに
-ALL.us = { ...ALL.en, html: 'en-US', taperS: ALL.en.taperS.replace('towards', 'toward') };
+ALL.us = { ...ALL.en, html: 'en-US' };
 // フランス語の約物をそろえる
 const nb = (v) => (typeof v === 'string' ? v.replace(/ :/g, '\u00a0:').replace(/« /g, '«\u00a0').replace(/ »/g, '\u00a0»') : Array.isArray(v) ? v.map(nb) : v);
 ALL.fr = Object.fromEntries(Object.entries(ALL.fr).map(([k, v]) => [k, nb(v)]));
 const TEXT = ALL[LANG];
 // 各場面の小見出し（日本語版・英語版は英語のまま）
-const LABELS = TEXT.labels || ['EASY', 'UP TO 70mm', 'SELF-LOCK', 'REVERSE TAPER', 'HOW TO USE', 'PRIVACY'];
+const LABELS = TEXT.labels || ['EASY', 'UP TO 70mm', 'SELF-LOCK', 'REVERSE TAPER', 'HOW TO USE', 'PRIVACY', 'FLAT FACE'];
 if (!TEXT) {
   console.error(`対応していない言語：${LANG}（ja・en・us・fr・es）`);
   process.exit(1);
@@ -152,52 +156,79 @@ h2{font-weight:900;font-size:76px;line-height:1.32;letter-spacing:.05em}
 .card .feat span{color:var(--gold);margin:0 .6em}
 .card .fine{margin-top:44px;font-size:24px;color:var(--on-navy-muted);font-weight:400;line-height:1.7}
 #outro .logo{font-size:128px}
+.turn{margin-top:18px;display:inline-block;width:fit-content;background:var(--navy);color:var(--gold);border-radius:99px;padding:8px 22px;font-size:30px;font-weight:900}
+.point{margin-top:28px;width:fit-content;padding:16px 26px;border-left:6px solid var(--gold);background:rgba(255,255,255,.8);font-size:34px;line-height:1.5;font-weight:900;color:var(--ink)}
+.xs{display:block;width:760px;margin-top:26px}
+.xs text{font-family:ZK;font-size:30px;font-weight:700;fill:var(--muted)}
+.xs text.b{fill:var(--ink);font-weight:900}
 ${TEXT.css || ''}
 </style></head><body>
 <div id="gl"></div>
 
 <p class="mark" data-t="3.8,46.6">Luca Bloom</p>
-<p class="note" data-t="3.8,46.6">${TEXT.note}</p>
-<p class="film" data-t="4.4,26.6"><i></i>${TEXT.film}</p>
-<p class="film" data-t="33.8,40.6"><i></i>${TEXT.film}</p>
+<p class="note" data-t="3.8,56.2">${TEXT.note}</p>
+<p class="film" data-t="4.4,37.2"><i></i>${TEXT.film}</p>
+<p class="film" data-t="44.2,50.4"><i></i>${TEXT.film}</p>
 
-<div class="copy" data-t="4.0,10.6">
+<div class="copy" data-t="4.0,10.4">
   <p class="label">${LABELS[0]}</p>
   <h2>${TEXT.easyH}</h2>
   <p class="sub">${TEXT.easyS}</p>
 </div>
 
-<div class="copy" data-t="11.2,19.6">
+<div class="copy" data-t="11.0,18.9">
   <p class="label">${LABELS[1]}</p>
   <h2>${TEXT.mmH}</h2>
   <div class="counter"><span class="k">${TEXT.mmK}</span><span id="mm" data-closed="${TEXT.closed}">${TEXT.closed}</span><span id="mmunit">mm</span></div>
+  <p class="turn" data-t="13.5,99">${TEXT.turn}</p>
   <p class="sub">${TEXT.mmS}</p>
 </div>
 
-<div class="copy" data-t="20.2,26.6">
+<div class="copy" data-t="19.6,29.8">
+  <p class="label">${LABELS[3]}</p>
+  <h2>${TEXT.taperH}</h2>
+  <p class="sub">${TEXT.taperS}</p>
+  <p class="point" data-t="23.5,99">${TEXT.taperP}</p>
+</div>
+
+<div class="copy" data-t="30.6,37.2">
+  <p class="label">${LABELS[6]}</p>
+  <h2>${TEXT.flatH}</h2>
+  <svg class="xs" viewBox="0 0 760 330" aria-hidden="true">
+    <g fill="none" stroke="#C86F7E" stroke-width="7" stroke-linecap="round">
+      <path d="M170 30V88"/><path d="M152 70l18 20 18-20"/>
+      ${[470, 515, 560, 605, 650].map((x) => `<path d="M${x} 30V82"/><path d="M${x - 14} 66l14 16 14-16"/>`).join('')}
+    </g>
+    <path d="M60 118Q170 82 280 118" fill="none" stroke="#E58E9E" stroke-width="14" stroke-linecap="round" opacity=".85"/>
+    <circle cx="170" cy="175" r="72" fill="#fff" stroke="#8990A6" stroke-width="5"/>
+    <circle cx="170" cy="103" r="9" fill="#C86F7E"/>
+    <path d="M440 100H680" stroke="#E58E9E" stroke-width="14" stroke-linecap="round" opacity=".85"/>
+    <rect x="460" y="110" width="200" height="130" rx="22" fill="#fff" stroke="#8990A6" stroke-width="5"/>
+    <path d="M478 110H642" stroke="#C86F7E" stroke-width="9" stroke-linecap="round"/>
+    <text x="170" y="300" text-anchor="middle">${TEXT.flatLine}</text>
+    <text x="560" y="300" text-anchor="middle" class="b">${TEXT.flatSurface}</text>
+  </svg>
+  <p class="sub">${TEXT.flatS}</p>
+</div>
+
+<div class="copy" data-t="37.8,43.6">
   <p class="label">${LABELS[2]}</p>
   <h2>${TEXT.lockH}</h2>
   <p class="sub">${TEXT.lockS}</p>
 </div>
 
-<div class="copy" data-t="27.6,32.6">
-  <p class="label">${LABELS[3]}</p>
-  <h2>${TEXT.taperH}</h2>
-  <p class="sub">${TEXT.taperS}</p>
-</div>
-
-<div class="copy" data-t="33.5,40.6">
+<div class="copy" data-t="44.2,50.4">
   <p class="label">${LABELS[4]}</p>
   <h2>${TEXT.howH}</h2>
   <ol class="steps">
-    <li data-t="34.2,99"><span class="n">1</span>${TEXT.steps[0]}</li>
-    <li data-t="35.0,99"><span class="n">2</span>${TEXT.steps[1]}</li>
-    <li data-t="35.8,99"><span class="n">3</span>${TEXT.steps[2]}</li>
+    <li data-t="44.9,99"><span class="n">1</span>${TEXT.steps[0]}</li>
+    <li data-t="45.7,99"><span class="n">2</span>${TEXT.steps[1]}</li>
+    <li data-t="46.5,99"><span class="n">3</span>${TEXT.steps[2]}</li>
   </ol>
-  <p class="limit" data-t="37.0,99">${TEXT.limit}</p>
+  <p class="limit" data-t="47.7,99">${TEXT.limit}</p>
 </div>
 
-<div class="copy" data-t="41.5,46.4">
+<div class="copy" data-t="51.2,56.2">
   <p class="label">${LABELS[5]}</p>
   <h2>${TEXT.privH}</h2>
   <p class="sub">${TEXT.privS}</p>
@@ -210,11 +241,11 @@ ${TEXT.css || ''}
 </div>
 
 <div class="card" id="outro" style="opacity:0">
-  <p class="logo" data-t="47.2,99">Luca Bloom</p>
-  <div class="rule" data-t="47.6,99"></div>
-  <p class="feat" data-t="47.9,99">${TEXT.feat1}</p>
-  <p class="feat" data-t="48.3,99">${TEXT.feat2}</p>
-  <p class="fine" data-t="48.8,99">${TEXT.fine}</p>
+  <p class="logo" data-t="58.8,99">Luca Bloom</p>
+  <div class="rule" data-t="59.2,99"></div>
+  <p class="feat" data-t="59.5,99">${TEXT.feat1}</p>
+  <p class="feat" data-t="59.9,99">${TEXT.feat2}</p>
+  <p class="fine" data-t="60.4,99">${TEXT.fine}</p>
 </div>
 </body></html>`;
 
@@ -276,7 +307,7 @@ if (stills) {
   }
 } else {
   // サムネイル（Amazon の動画登録で使う。開き幅70mmの場面）
-  fs.writeFileSync(path.join(OUT, `luca-bloom-thumbnail${SUFFIX}.jpg`), await frameAt(18.8, 'jpeg'));
+  fs.writeFileSync(path.join(OUT, `luca-bloom-thumbnail${SUFFIX}.jpg`), await frameAt(18.3, 'jpeg'));
 
   const file = path.join(OUT, `luca-bloom-amazon${SUFFIX}.mp4`);
   // 無音の音声トラックを付ける（音声なしの動画を受け付けない配信先への対策）

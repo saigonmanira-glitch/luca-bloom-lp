@@ -29,7 +29,7 @@ OUT = os.path.join(ROOT, 'out')
 SAMPLES = os.path.join(ROOT, '.cache', 'samples')
 FFMPEG = os.environ.get('FFMPEG', 'ffmpeg')
 SR = 48000
-DURATION = 52.0
+DURATION = 65.0
 N = int(DURATION * SR)
 
 BPM = 110
@@ -222,10 +222,11 @@ CH = {
     'D/F#': dict(bass=42, lh=[42, 54], rh=[66, 69, 74], arp=[74, 78, 81, 86], pad=[54, 57, 66, 74, 78]),
 }
 # 小節ごとのコードと場面（1小節＝約2.18秒）
-#  0-1 イントロ / 2-9 Aメロ / 10-17 サビ / 18-20 落ち着く / 21 盛り上げ / 22 最後の和音（約48秒）
-FORM = (['D', 'A'] + ['D', 'A/C#', 'G', 'A', 'D', 'A/C#', 'G', 'Asus']
-        + ['G', 'A', 'D', 'D/F#', 'G', 'A', 'D', 'A'] + ['G', 'A', 'G', 'Asus', 'D'])
-INTRO, VERSE, CHORUS, BREAK, BUILD, FINAL = range(0, 2), range(2, 10), range(10, 18), range(18, 21), 21, 22
+#  0-1 イントロ / 2-13 Aメロ / 14-21 サビ / 22-25 落ち着く / 26 盛り上げ / 27 最後の和音（約59秒〜）
+# 映像（tools/video/timeline.mjs）の場面の切れ目に合わせている：サビ＝面で当たる断面〜使い方、落ち着く＝化粧箱
+FORM = (['D', 'A'] + ['D', 'A/C#', 'G', 'A', 'D', 'A/C#', 'G', 'Asus', 'D', 'A/C#', 'G', 'Asus']
+        + ['G', 'A', 'D', 'D/F#', 'G', 'A', 'D', 'A'] + ['G', 'A', 'G', 'A', 'Asus', 'D'])
+INTRO, VERSE, CHORUS, BREAK, BUILD, FINAL = range(0, 2), range(2, 14), range(14, 22), range(22, 26), 26, 27
 
 # 鉄琴のメロディ（8分音符×8、None＝休み）
 GLOCK_INTRO = [[86, None, 81, None, 78, None, 81, None], [85, None, 81, None, 76, None, None, None]]
@@ -239,7 +240,7 @@ MELODY = [
     [86, None, None, None, 81, None, 78, None],
     [76, None, 78, None, 81, None, None, None],
 ]
-GLOCK_BREAK = [[None] * 4 + [83, None, 81, None], [None] * 4 + [85, None, 81, None], [None] * 4 + [83, None, 86, None]]
+GLOCK_BREAK = [[None] * 4 + [83, None, 81, None], [None] * 4 + [85, None, 81, None], [None] * 4 + [83, None, 86, None], [None] * 4 + [85, None, 88, None]]
 
 
 def humanize(t):
