@@ -235,3 +235,11 @@ body#shopTopPage #mainFooter { margin-bottom: 120px; }
 @media (max-width: 768px) {
   .lbHero__img { order: -1; padding-bottom: 8px; }
 }
+
+/* ---------- LINEオープンチャット ---------- */
+.lbLine { display: block; position: relative; max-width: 560px; margin: 22px auto 0; padding: 18px 48px 18px 20px; background: var(--lb-white); border: 1.5px solid #06C755; border-radius: var(--lb-radius); box-shadow: var(--lb-shadow); text-align: left; color: var(--lb-ink) !important; }
+.lbLine::after { content: ""; position: absolute; right: 20px; top: 50%; width: 9px; height: 9px; margin-top: -5px; border-right: 2.5px solid #06C755; border-top: 2.5px solid #06C755; transform: rotate(45deg); }
+.lbLine__k { display: block; font-family: var(--lb-en); font-weight: 700; font-size: 11px; letter-spacing: .22em; color: #05A045; }
+.lbLine b { display: block; margin-top: 2px; font-size: 16px; font-weight: 900; }
+.lbLine span:not(.lbLine__k) { display: block; margin-top: 4px; font-size: 12.5px; line-height: 1.7; color: var(--lb-muted); }
+.lbLine small { display: block; margin-top: 6px; font-size: 11px; color: #8A8FA0; }
