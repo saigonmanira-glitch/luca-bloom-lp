@@ -214,3 +214,24 @@ body#shopTopPage #mainFooter { margin-bottom: 120px; }
 .sns img { width: 20px; height: 20px; display: block; }
 .lbAssure .sns img { width: 18px; height: 18px; }
 .lbFooter__sns { justify-content: center; }
+
+/* ---------- 悩み・訴求文・動画 ---------- */
+.lbFor { display: grid; gap: 10px; margin: 0; padding: 0; }
+.lbFor li { position: relative; list-style: none; background: var(--lb-white); border: 1px solid var(--lb-line); border-radius: 14px; padding: 14px 16px 14px 46px; font-weight: 700; font-size: 14.5px; line-height: 1.7; color: var(--lb-ink); }
+.lbFor li::before { content: ""; position: absolute; left: 16px; top: 50%; width: 18px; height: 18px; margin-top: -9px; border-radius: 50%; border: 2px solid var(--lb-gold); box-sizing: border-box; }
+.lbFor li::after { content: ""; position: absolute; left: 21px; top: 50%; width: 5px; height: 9px; margin-top: -6px; border: solid var(--lb-gold-ink); border-width: 0 2px 2px 0; transform: rotate(45deg); }
+.lbMsg { margin: 20px 0 0; padding: 26px 24px; background: var(--lb-navy); color: #E8EAF2; border-radius: var(--lb-radius); }
+.lbMsg__h { margin: 0 0 10px; font-weight: 900; font-size: 18px; line-height: 1.6; color: var(--lb-gold); }
+.lbMsg p { margin: 0; font-size: 14px; line-height: 2; }
+.lbMovie { position: relative; overflow: hidden; border-radius: var(--lb-radius); box-shadow: var(--lb-shadow); background: #E4E7EE; aspect-ratio: 16 / 9; }
+.lbMovie video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.lbMovie__cap { margin: 12px 0 0; font-size: 12.5px; line-height: 1.8; color: var(--lb-muted); text-align: center; }
+.lbHero__img img.js-lbPhoto { border-radius: 14px; }
+@media (min-width: 769px) {
+  .lbFor { grid-template-columns: 1fr 1fr; }
+  .lbMsg { padding: 34px 40px; }
+  .lbMsg__h { font-size: 21px; }
+}
+@media (max-width: 768px) {
+  .lbHero__img { order: -1; padding-bottom: 8px; }
+}
