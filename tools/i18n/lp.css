@@ -179,6 +179,10 @@ details p{padding:0 16px 16px;font-size:14.5px;color:#3E4352}
 .support-links a::after{content:"";position:absolute;right:20px;top:50%;width:9px;height:9px;margin-top:-5px;border-right:2px solid var(--navy);border-top:2px solid var(--navy);transform:rotate(45deg)}
 .support-links b{display:block;font-size:16px}
 .support-links span{display:block;font-size:13px;color:var(--muted);margin-top:2px}
+.has-ic .ic{position:absolute;left:20px;top:16px;width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center}
+.has-ic .ic svg{width:24px;height:24px;fill:#fff}
+.has-ic .k{padding-left:52px;line-height:40px;margin-top:-2px}
+.dc-link .ic{background:#5865F2}
 .dc-link{display:block;position:relative;background:#fff;color:var(--ink);border:1.5px solid #5865F2;border-radius:16px;padding:18px 52px 18px 20px;text-decoration:none;box-shadow:0 10px 26px rgba(22,26,41,.10)}
 .dc-link::after{content:"";position:absolute;right:22px;top:50%;width:10px;height:10px;margin-top:-6px;border-right:2.5px solid #5865F2;border-top:2.5px solid #5865F2;transform:rotate(45deg)}
 .dc-link .k{display:block;font-family:var(--font-en);font-weight:700;font-size:12px;letter-spacing:.22em;color:#4752C4}
