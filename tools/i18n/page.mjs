@@ -426,6 +426,13 @@ ${t.faq.map(([q, a]) => `      <details><summary>${q}</summary><p>${a}</p></deta
   </div>
 </section>
 
+<!-- ================= COMMUNITY（Discord） ================= -->
+<section class="sec pt0" id="community">
+  <div class="wrap">
+    <a class="dc-link" href="${DISCORD}" target="_blank" rel="noopener"><span class="k">COMMUNITY</span><b>${COMMUNITY[L.lang.slice(0, 2)].h}</b><span class="d">${COMMUNITY[L.lang.slice(0, 2)].d}</span><span class="n">${COMMUNITY[L.lang.slice(0, 2)].n}</span></a>
+  </div>
+</section>
+
 <!-- ================= SUPPORT ================= -->
 <section class="sec pt0" id="support">
   <div class="wrap">
@@ -483,6 +490,14 @@ function supportLinks(L) {
       <a href="${pdf}" target="_blank" rel="noopener"><b>${L.t.pdf[0]}${name(c)}</b><span>${L.t.pdf[1]}</span></a>`)
     .join('\n');
 }
+
+// 海外向けの英語チャット（Discord）。チャットのみ・英語のみ
+const DISCORD = 'https://discord.gg/Eykzj5PyE';
+const COMMUNITY = {
+  en: { h: 'Anonymous chat on Discord', d: 'Talk with others about intimate care, under a nickname of your choice.', n: 'English only. Not a place for medical advice or diagnosis.' },
+  fr: { h: 'Discussion anonyme sur Discord', d: 'Échangez avec d’autres personnes sur les soins intimes, sous le pseudonyme de votre choix.', n: 'En anglais uniquement. Ce n’est pas un lieu de conseil ou de diagnostic médical.' },
+  es: { h: 'Chat anónimo en Discord', d: 'Conversa con otras personas sobre el cuidado íntimo, con el nombre de usuario que prefieras.', n: 'Solo en inglés. No es un espacio para consejos ni diagnósticos médicos.' },
+};
 
 // 公式SNSの一覧の読み上げ名（言語ごと）
 const SNS_TEXT = {
