@@ -11,8 +11,8 @@ const file = process.argv[2] || path.join(ROOT, 'sns/en/posts.json');
 const data = JSON.parse(fs.readFileSync(file, 'utf8'));
 const posts = Array.isArray(data) ? data : data.posts || [data];
 
-const HASHTAGS = new Set(['#LucaBloom', '#MensSelfCare', '#MensGrooming', '#PersonalCare', '#IntimateCare', '#SelfCare', '#MensCare']);
-// Threads はハッシュタグ（トピック）を1つしか付けられないため、検索される語の #phimosis（包茎）1つだけにする。
+const HASHTAGS = new Set(['#LucaBloom', '#MensSelfCare', '#MensGrooming', '#PersonalCare', '#IntimateCare', '#SelfCare', '#MensCare', '#phimosis']);
+// 検索される語の #phimosis（包茎）は、Threads・Instagram・X の末尾にプログラムが付ける（Threads は唯一のタグ）。
 // 本文には病名を書かない（このタグだけは禁止語の確認から外す）
 const THREADS_TAG = '#phimosis';
 
@@ -38,7 +38,7 @@ for (const p of posts) {
   for (const k of ['instagram', 'x', 'threads', 'alt']) if (!p[k]) err(`${k} がありません`);
   if (!p.ja || !p.ja.instagram || !p.ja.x || !p.ja.threads) err('日本語訳（ja）が足りません');
 
-  const english = [p.instagram, p.x, (p.threads || '').replace(THREADS_TAG, ''), p.alt, ...(p.image ? [p.image.eyebrow, p.image.headline, ...(p.image.checklist || []), ...(p.image.chips || [])] : [])];
+  const english = [(p.instagram || '').replace(THREADS_TAG, ''), (p.x || '').replace(THREADS_TAG, ''), (p.threads || '').replace(THREADS_TAG, ''), p.alt, ...(p.image ? [p.image.eyebrow, p.image.headline, ...(p.image.checklist || []), ...(p.image.chips || [])] : [])];
   for (const t of english.filter(Boolean)) {
     const hit = findBanned(t);
     if (hit) err(`禁止語「${hit}」：${t.slice(0, 60).replace(/\n/g, ' ')}…`);
