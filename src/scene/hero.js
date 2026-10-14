@@ -62,7 +62,7 @@ export function initHero(state) {
   const renderer = createRenderer(stage);
   if (!renderer) return;
   renderer.toneMapping = ACESFilmicToneMapping; // 白の階調をやわらかく（磁器のような白）
-  renderer.toneMappingExposure = 1.0;
+  renderer.toneMappingExposure = 0.9; // 明るい背景でも白が飛ばないよう、動画と同じ値
 
   const scene = new Scene();
   const camera = new PerspectiveCamera(24, 1, 1, 2000);
@@ -88,7 +88,7 @@ export function initHero(state) {
   const rim = new DirectionalLight(0xc6d0ff, 0.45 * LIGHT);
   rim.position.set(60, 60, -140);
   scene.add(rim);
-  const ground = new Mesh(new PlaneGeometry(700, 700), new ShadowMaterial({ opacity: 0.35 }));
+  const ground = new Mesh(new PlaneGeometry(700, 700), new ShadowMaterial({ opacity: 0.22 }));
   ground.rotation.x = -Math.PI / 2;
   ground.position.y = -57;
   ground.receiveShadow = true;

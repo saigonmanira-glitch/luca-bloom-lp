@@ -50,7 +50,7 @@ export function initBox() {
   const rim = new DirectionalLight(0xbfd0ff, 0.55 * LIGHT);
   rim.position.set(80, 140, -280);
   scene.add(rim);
-  const ground = new Mesh(new PlaneGeometry(1400, 1400), new ShadowMaterial({ opacity: 0.42 }));
+  const ground = new Mesh(new PlaneGeometry(1400, 1400), new ShadowMaterial({ opacity: 0.3 }));
   ground.rotation.x = -Math.PI / 2;
   ground.receiveShadow = true;
   scene.add(ground);
@@ -193,11 +193,13 @@ export function buildBox() {
   grp.add(dv);
 
   // フタ：背面の上辺で開閉。天板＋前面を覆うフラップ、内側に名刺ポケット96×60（R10の切り欠き）
+  // フタの外寸は下箱より各辺1.5mm大きく、閉じると縁が段になって見える
+  const O = 1.5;
   const pivot = new Group();
   pivot.position.set(0, HT, -DP / 2);
   grp.add(pivot);
-  box(L, T, DP, 0, T / 2, DP / 2, NAVY, pivot);
-  box(L, HT + T, T, 0, -(HT + T) / 2 + T, DP + T / 2, NAVY, pivot);
+  box(L + 2 * O, T, DP + 2 * O, 0, T / 2, DP / 2, NAVY, pivot);
+  box(L + 2 * O, HT + T, T, 0, -(HT + T) / 2 + T, DP + O + T / 2, NAVY, pivot);
   box(96, 0.6, 60, 0, -0.3, DP / 2, NAVY_IN, pivot);
   const notch = new Mesh(new CylinderGeometry(10, 10, 0.7, 32, 1, false, Math.PI / 2, Math.PI), NOTCH);
   notch.position.set(0, -0.36, DP / 2 + 30);

@@ -341,7 +341,7 @@ ${t.voices.map(([n, q, who]) => `      <figure class="voice">
 </section>
 
 <!-- ================= PRIVACY ================= -->
-<section class="sec dark">
+<section class="sec privacy">
   <div class="wrap">
     <p class="label">${t.privLabel}</p>
     <h2>${t.privH2}</h2>
