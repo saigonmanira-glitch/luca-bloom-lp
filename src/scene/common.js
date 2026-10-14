@@ -70,10 +70,11 @@ export function onContextLost(renderer, stop, fallback) {
 
 // ドラッグで横回転させる。onMove(dx) に移動量(px)を渡す
 export function addDrag(el, onMove) {
-  const d = { on: false, x: 0 };
+  const d = { on: false, x: 0, y: 0 };
   el.addEventListener('pointerdown', (e) => {
     d.on = true;
     d.x = e.clientX;
+    d.y = e.clientY;
     try {
       el.setPointerCapture(e.pointerId);
     } catch {
@@ -82,11 +83,13 @@ export function addDrag(el, onMove) {
   });
   el.addEventListener('pointermove', (e) => {
     if (!d.on) return;
-    onMove(e.clientX - d.x);
+    onMove(e.clientX - d.x, e.clientY - d.y);
     d.x = e.clientX;
+    d.y = e.clientY;
   });
   ['pointerup', 'pointercancel'].forEach((n) => {
     el.addEventListener(n, () => {
+      if (d.on && d.onEnd) d.onEnd();
       d.on = false;
     });
   });

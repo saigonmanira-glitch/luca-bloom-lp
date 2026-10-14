@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'sha256-jr+99oMVcAtKtIUlC/3aKn5EhZTkRbJaXBN0lEQV9qo=' 'sha256-TT/tbT92qH6UzA/f+xUOgWA0x57Y7BPZlE8Y8ElzfiY=' 'sha256-NrhnUWhYHu88VfjPkdeJ9H1RLio2KPE3H3RwhExId8g='; img-src 'self'; font-src 'self'; connect-src 'self'; manifest-src 'self'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests; require-trusted-types-for 'script'; trusted-types 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'sha256-jr+99oMVcAtKtIUlC/3aKn5EhZTkRbJaXBN0lEQV9qo=' 'sha256-TT/tbT92qH6UzA/f+xUOgWA0x57Y7BPZlE8Y8ElzfiY=' 'sha256-Vn2hazd6W0I2qeDeXRyDL2uC0YYTTGvBbhZTjiI4PRs='; img-src 'self'; font-src 'self'; connect-src 'self'; manifest-src 'self'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests; require-trusted-types-for 'script'; trusted-types 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Luca Bloom | Cuidado del prepucio, apertura de hasta 70 mm</title>
 <meta name="description" content="Luca Bloom es una herramienta para el cuidado del prepucio. Gira la manija y los brazos se abren con suavidad hasta 70 mm, y se quedan justo donde te detienes, aunque los sueltes. Empaque discreto. En Amazon México desde mediados de noviembre de 2026.">
@@ -107,7 +107,8 @@ small.gl{font-size:12px;color:var(--muted);font-weight:400}
 .hero h1 .catch{display:block}
 .hero h1{margin-top:0;font-size:28px;font-weight:900;line-height:1.45;letter-spacing:.04em}
 .hero .lead{margin-top:12px;font-size:15px;color:var(--on-navy-muted)}
-.stage{position:relative;width:100%;aspect-ratio:1/0.82;margin-top:6px;touch-action:pan-y}
+.stage{position:relative;width:100%;aspect-ratio:1/0.82;margin-top:6px;touch-action:none;cursor:grab}
+.stage:active{cursor:grabbing}
 .stage canvas{display:block;width:100%;height:100%}
 .stage .fb-img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}   /* 3Dが出るまでの静止画。JavaScriptが無効な時は noscript 側の同じ画像を表示 */
 .stage-note{margin:0 0 12px;font-size:12.5px;line-height:1.6;color:var(--on-navy-muted);text-align:center}
@@ -358,7 +359,7 @@ body{letter-spacing:.01em}
     <h1 id="top"><span class="for">Herramienta para el cuidado del prepucio</span><span class="catch"><span>Una preocupación íntima,</span> <span>en tus manos,</span> <span>a tu ritmo.</span></span></h1>
     <p class="lead">Solo gira la manija. Los brazos están diseñados para no deslizarse y no se regresan al soltarlos. Ábrela hasta 70 mm, tan poco a poco como quieras.</p>
 
-    <div class="stage" id="stage" role="img" aria-label="Modelo 3D de Luca Bloom. La membrana rosa representa una abertura estrecha, que los brazos abren suavemente desde adentro. Desliza hacia los lados para girarlo.">
+    <div class="stage" id="stage" role="img" aria-label="Modelo 3D de Luca Bloom. La membrana rosa representa una abertura estrecha, que los brazos abren suavemente desde adentro. Arrástralo para girarlo en cualquier dirección.">
       <img class="fb-img" id="fb" src="hero-fallback.webp" srcset="hero-fallback-800.webp 800w, hero-fallback.webp 1200w" sizes="(min-width: 600px) 520px, calc(100vw - 40px)" alt="Dibujo de la herramienta Luca Bloom" width="1200" height="630" fetchpriority="high" decoding="async">
       <noscript><img class="fb-img" src="hero-fallback.webp" alt="Dibujo de la herramienta Luca Bloom" width="1200" height="630"></noscript>
     </div>

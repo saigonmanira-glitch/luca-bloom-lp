@@ -37,7 +37,7 @@ export default {
     heroFor: 'Foreskin care tool',
     heroCatch: ['A private concern,', 'in your own hands,', 'at your own pace.'],
     heroLead: 'Just turn the handle. The arms are shaped not to slip, and they won’t spring back when you let go. Open up to 70 mm, as gradually as you like.',
-    stageAria: '3D model of Luca Bloom. The pink film represents a narrow opening, which the arms open gently from the inside. Drag sideways to rotate.',
+    stageAria: '3D model of Luca Bloom. The pink film represents a narrow opening, which the arms open gently from the inside. Drag to turn it in any direction.',
     stageNote: ['The pink film represents a narrow opening.', 'Insert the closed arms,', 'then turn the handle to open', 'gently from the inside.'],
     meterLabel: 'Turn the handle to set the width',
     closed: 'Closed',

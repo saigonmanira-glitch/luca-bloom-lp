@@ -37,7 +37,7 @@ export default {
     heroFor: 'Outil de soin du prépuce',
     heroCatch: ['Un souci intime,', 'entre vos mains,', 'à votre rythme.'],
     heroLead: 'Il suffit de tourner la molette. Les bras sont conçus pour ne pas glisser et ne se referment pas quand vous lâchez. Ouvrez jusqu’à 70 mm, aussi progressivement que vous le souhaitez.',
-    stageAria: 'Modèle 3D de Luca Bloom. La membrane rose représente une ouverture étroite, que les bras ouvrent en douceur de l’intérieur. Faites glisser sur le côté pour le faire pivoter.',
+    stageAria: 'Modèle 3D de Luca Bloom. La membrane rose représente une ouverture étroite, que les bras ouvrent en douceur de l’intérieur. Faites-le glisser pour le faire pivoter dans tous les sens.',
     stageNote: ['La membrane rose représente une ouverture étroite.', 'Insérez les bras fermés,', 'puis tournez la molette pour ouvrir', 'en douceur, de l’intérieur.'],
     meterLabel: 'Réglez l’écartement avec la molette',
     closed: 'Fermé',

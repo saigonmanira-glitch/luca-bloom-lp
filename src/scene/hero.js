@@ -1,4 +1,4 @@
-// Luca Bloom LP：ヒーローの3D：本体モデル（自動開閉・回転・時間で外箱が透ける）
+// Luca Bloom LP：ヒーローの3D：本体モデル（自動開閉・ドラッグで回転・時間で外箱が透ける）
 import {
   ACESFilmicToneMapping,
   DirectionalLight,
@@ -52,7 +52,7 @@ function createSeeThrough(device) {
 }
 
 // ================= ヒーロー：本体モデル =================
-// ・本体は40秒で1周のペースでゆっくり回転（横ドラッグで向きを変えられる）
+// ・本体は自動では回転しない。ドラッグで上下左右に向きを変えられ、手を離して5秒後に定位置へ戻る
 // ・アームは全閉⇄最大(70mm)を自動で往復。ハンドルは1回転=2mmなので、
 //   アーム移動 2.5mm/秒 ＝ ハンドル 1.25回転/秒。端で1.5秒かけて加減速し、2秒止まる。
 export function initHero(state) {
@@ -94,10 +94,13 @@ export function initHero(state) {
   ground.receiveShadow = true;
   scene.add(ground);
 
+  // 回転の中心を本体の中ほど（カメラの注視点の高さ）に置き、上下に傾けても画面の中央で回るようにする
   const model = new Group();
+  model.position.y = LOOK.y;
   scene.add(model);
   const device = buildDevice();
   device.dev.position.x = 4; // 全体の中心を回転軸に合わせる
+  device.dev.position.y -= LOOK.y;
   model.add(device.dev);
   const updateSleeve = buildSleeve(device);
   const seeThrough = createSeeThrough(device);
@@ -109,14 +112,21 @@ export function initHero(state) {
     updateSleeve(state.current);
   };
 
-  const SPIN = (Math.PI * 2) / 40;
   const V = 2.5;
   const TA = 1.5;
   const HOLD = 2;
   const USERV = 10;
   const reduce = prefersReducedMotion();
-  // 回転の開始位置：340°から始める
-  let spin = (340 * Math.PI) / 180;
+  // 定位置：横 340°・傾き 0°。ドラッグを離して5秒後に、1.2秒かけて定位置へ戻る
+  const HOME = (340 * Math.PI) / 180;
+  const BACK_WAIT = 5;
+  const BACK_TIME = 1.2;
+  const TILT_MAX = Math.PI / 2; // 真上・真下まで
+  let spin = HOME;
+  let tilt = 0;
+  let back = -1; // 戻るまでの残り秒数（-1 = 待っていない）
+  let from = null; // 戻り始めの向き
+  let backT = 0;
   let dir = 1;
   let vel = 0;
   let hold = 1;
@@ -126,10 +136,39 @@ export function initHero(state) {
   let alive = true;
   let last = 0;
 
-  const drag = addDrag(stage, (dx) => {
+  const drag = addDrag(stage, (dx, dy) => {
     spin += dx * 0.012;
+    tilt = Math.max(-TILT_MAX, Math.min(TILT_MAX, tilt + dy * 0.012));
+    back = -1;
+    from = null;
     state.kick();
   });
+  drag.onEnd = () => {
+    back = BACK_WAIT;
+    state.kick();
+  };
+  // 定位置へ戻る処理（dt 秒進める）。最短の向きで戻す
+  const ease = (x) => (x < 0.5 ? 4 * x * x * x : 1 - (-2 * x + 2) ** 3 / 2);
+  function goHome(dt) {
+    if (back < 0 || drag.on) return;
+    if (back > 0) {
+      back = Math.max(0, back - dt);
+      return;
+    }
+    if (!from) {
+      const d = Math.atan2(Math.sin(spin - HOME), Math.cos(spin - HOME));
+      from = { spin: HOME + d, tilt };
+      backT = 0;
+    }
+    backT = reduce ? 1 : Math.min(1, backT + dt / BACK_TIME);
+    const k = ease(backT);
+    spin = from.spin + (HOME - from.spin) * k;
+    tilt = from.tilt * (1 - k);
+    if (backT >= 1) {
+      back = -1;
+      from = null;
+    }
+  }
   state.slider.addEventListener('input', () => {
     idle = 6; // 手動操作後6秒で自動に戻る
     vel = 0;
@@ -140,7 +179,7 @@ export function initHero(state) {
     const dt = Math.min(0.1, last ? (now - last) / 1000 : 0);
     last = now;
     const anim = !reduce;
-    if (anim && !drag.on) spin += SPIN * dt;
+    goHome(dt);
 
     if (!state.demo) {
       // 手動：スライダーの値へ最大10mm/秒で追従
@@ -178,11 +217,11 @@ export function initHero(state) {
       state.slider.value = 10 + state.current;
     }
 
-    model.rotation.y = spin;
+    model.rotation.set(tilt, spin, 0);
     seeThrough(dt, reduce);
     place();
     renderer.render(scene, camera);
-    if (visible && !document.hidden && (anim || state.current !== state.target)) {
+    if (visible && !document.hidden && (anim || back >= 0 || state.current !== state.target)) {
       requestAnimationFrame(frame);
     } else {
       running = false;

@@ -29,7 +29,7 @@ export default {
     heroFor: 'Herramienta para el cuidado del prepucio',
     heroCatch: ['Una preocupación íntima,', 'en tus manos,', 'a tu ritmo.'],
     heroLead: 'Solo gira la manija. Los brazos están diseñados para no deslizarse y no se regresan al soltarlos. Ábrela hasta 70 mm, tan poco a poco como quieras.',
-    stageAria: 'Modelo 3D de Luca Bloom. La membrana rosa representa una abertura estrecha, que los brazos abren suavemente desde adentro. Desliza hacia los lados para girarlo.',
+    stageAria: 'Modelo 3D de Luca Bloom. La membrana rosa representa una abertura estrecha, que los brazos abren suavemente desde adentro. Arrástralo para girarlo en cualquier dirección.',
     stageNote: ['La membrana rosa representa una abertura estrecha.', 'Introduce los brazos cerrados,', 'gira la manija y abre', 'suavemente desde adentro.'],
     meterLabel: 'Ajusta la apertura con la manija',
     closed: 'Cerrado',
