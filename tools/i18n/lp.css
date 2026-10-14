@@ -87,7 +87,7 @@ small.gl{font-size:12px;color:var(--muted);font-weight:400}
 .hero .badges b,.hero .meter-row b{color:var(--navy)}
 .hero .badges li{background:rgba(255,255,255,.55)}
 .hero .cta-2{color:var(--navy);border-color:var(--navy)}
-.hero .stage{background:radial-gradient(closest-side at 50% 42%,rgba(104,118,150,.8) 0%,rgba(122,135,165,.6) 45%,rgba(160,171,196,.24) 78%,rgba(160,171,196,0) 100%)}   /* 白い本体が背景に溶けないよう、本体の後ろだけ青みのグレーの光。縁はページの背景へ溶かし、枠を見せない */
+.hero .stage{background:radial-gradient(closest-side at 50% 42%,rgba(110,124,156,.72) 0%,rgba(114,128,160,.66) 55%,rgba(146,158,186,.32) 80%,rgba(160,171,196,0) 100%)}   /* 白い本体が背景に溶けないよう、本体の後ろだけ青みのグレーの光。縁はページの背景へ溶かし、枠を見せない */
 .hero .stage canvas{filter:drop-shadow(0 10px 14px rgba(22,26,41,.2))}   /* 本体の輪郭に沿った影で、白い本体の形をはっきり見せる */
 
 /* ---------- WORRY ---------- */
