@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'sha256-jr+99oMVcAtKtIUlC/3aKn5EhZTkRbJaXBN0lEQV9qo=' 'sha256-TT/tbT92qH6UzA/f+xUOgWA0x57Y7BPZlE8Y8ElzfiY=' 'sha256-MOGOeioTsguYNAQkDWKUCvnGzcVG0kfWV+gXNcYeUss=' 'sha256-OwlAI1fp4E0xW8lMXbaosUJDZ6pr4MSOqSxBs28LiP4='; img-src 'self'; font-src 'self'; connect-src 'self'; manifest-src 'self'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests; require-trusted-types-for 'script'; trusted-types 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'sha256-jr+99oMVcAtKtIUlC/3aKn5EhZTkRbJaXBN0lEQV9qo=' 'sha256-TT/tbT92qH6UzA/f+xUOgWA0x57Y7BPZlE8Y8ElzfiY=' 'sha256-00lOEhxJ0w5SqVj21klHJfNY/8eS6CpE23UNFcNJscw=' 'sha256-OwlAI1fp4E0xW8lMXbaosUJDZ6pr4MSOqSxBs28LiP4='; img-src 'self'; font-src 'self'; connect-src 'self'; manifest-src 'self'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests; require-trusted-types-for 'script'; trusted-types 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>包茎ケアツール Luca Bloom（ルカブルーム）｜包皮がきつい方へ</title>
 <meta name="description" content="Luca Bloom（ルカブルーム）は、包茎・包皮がきつい方のためのセルフケアツール。ハンドルを回してアームの間隔を最大70mmまで無段階に調整でき、手を離してもその幅で止まるセルフロック構造。包茎の種類や、包茎リングとの違いも紹介。実用新案出願済み。">
@@ -135,7 +135,8 @@ small.gl{font-size:12px;color:var(--muted);font-weight:400}
 .hero .badges b,.hero .meter-row b{color:var(--navy)}
 .hero .badges li{background:rgba(255,255,255,.55)}
 .hero .cta-2{color:var(--navy);border-color:var(--navy)}
-.hero .stage{background:radial-gradient(closest-side at 50% 42%,rgba(110,124,156,.72) 0%,rgba(114,128,160,.66) 55%,rgba(146,158,186,.32) 80%,rgba(160,171,196,0) 100%)}   /* 白い本体が背景に溶けないよう、本体の後ろだけ青みのグレーの光。縁はページの背景へ溶かし、枠を見せない */
+.hero{isolation:isolate}
+.hero .stage::before{content:"";position:absolute;z-index:-1;left:50%;top:44%;width:max(200vw,1600px);height:230%;transform:translate(-50%,-50%);pointer-events:none;background:radial-gradient(closest-side,rgba(112,126,158,.6) 0%,rgba(113,127,159,.57) 20%,rgba(117,130,161,.49) 36%,rgba(123,136,166,.38) 50%,rgba(131,143,171,.26) 63%,rgba(140,152,178,.15) 75%,rgba(150,161,186,.07) 86%,rgba(158,168,192,.02) 94%,rgba(160,170,194,0) 100%)}   /* 白い本体が背景に溶けないよう、本体の後ろに青みのグレーの光。画面の幅より広くとり、上下へ長い距離でなめらかに薄くして輪郭を出さない */
 .hero .stage canvas{filter:drop-shadow(0 10px 14px rgba(22,26,41,.2))}   /* 本体の輪郭に沿った影で、白い本体の形をはっきり見せる */
 
 /* ---------- WORRY ---------- */
