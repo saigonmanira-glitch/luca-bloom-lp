@@ -13,6 +13,7 @@ import { lpHtml, docHtml, langMenu } from './i18n/page.mjs';
 import { COLUMN_SETS, JP_TO_SLUG, articleHtml, indexHtml, columnAlternateTags, columnAlternates } from './i18n/columns.mjs';
 import { COUNTRIES, selectorHtml, hubHtml, manualHtml, supportAlternateTags, supportAlternates, SUPPORT_PDFS, SUPPORT_EXTRA_CSS } from './i18n/support.mjs';
 import { SOCIAL_CSS, socialHtml } from './i18n/social.mjs';
+import { newsList } from './i18n/news.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const check = process.argv.includes('--check');
@@ -68,6 +69,7 @@ patch('index.html', 'hreflang', alternateTags('lp'));
 patch('index.html', 'langs', langMenu(JA, 'lp'));
 // 公式SNSのアイコン（tools/i18n/social.mjs に URL を入れたものだけ）と、その見た目
 patch('index.html', 'sns', socialHtml('ja', { label: 'Luca Bloom 公式SNS', follow: (n) => `Luca Bloom の${n}` }));
+patch('index.html', 'news', newsList('ja'));
 patch('index.html', 'sns-css', `<style>${SOCIAL_CSS}</style>`);
 patch('privacy.html', 'hreflang', alternateTags('privacy'));
 patch('jp/index.html', 'hreflang', supportAlternateTags('hub'));

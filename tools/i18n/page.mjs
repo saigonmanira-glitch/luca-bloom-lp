@@ -6,6 +6,7 @@ import path from 'node:path';
 import { MENU, SITE, alternateTags } from './site.mjs';
 import { COUNTRIES, supportLink } from './support.mjs';
 import { columnLink, columnName } from './columns.mjs';
+import { newsList } from './news.mjs';
 import { WAITLIST } from './waitlist.mjs';
 import { SOCIAL_CSS, socialHtml } from './social.mjs';
 
@@ -451,9 +452,7 @@ ${supportLinks(L)}
   <div class="wrap">
     <p class="label">${NEWS_TEXT[L.lang.slice(0, 2)].label}</p>
     <h2 id="news-h">${NEWS_TEXT[L.lang.slice(0, 2)].h}</h2>
-    <ul class="news">
-${NEWS.map((n) => `      <li><time datetime="${n.date}">${n.date.replaceAll('-', '.')}</time><span class="src">${n.src}</span><a href="${n.url}" target="_blank" rel="noopener"${L.lang.startsWith('en') ? '' : ' lang="en"'}>${n.title}</a></li>`).join('\n')}
-    </ul>
+    ${newsList(L.lang)}
   </div>
 </section>
 
@@ -503,10 +502,7 @@ function supportLinks(L) {
     .join('\n');
 }
 
-// お知らせ（英語のプレスリリース）。新しい順。海外LP全ページに載せる
-const NEWS = [
-  { date: '2026-10-15', src: 'PRLog', url: 'https://www.prlog.org/13176565-japanese-brand-luca-bloom-to-launch-mens-self-care-tool-in-the-us-canada-and-mexico-in-november.html', title: 'Japanese Brand Luca Bloom to Launch Men’s Self-Care Tool in the US, Canada and Mexico in November' },
-];
+// お知らせ欄の見出し（一覧は news.mjs で全ページ共通）
 const NEWS_TEXT = {
   en: { label: 'News', h: 'Latest news' },
   fr: { label: 'Actualités', h: 'Dernières actualités' },
