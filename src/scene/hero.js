@@ -8,6 +8,7 @@ import {
   PerspectiveCamera,
   PlaneGeometry,
   PMREMGenerator,
+  Quaternion,
   Scene,
   ShadowMaterial,
   Vector3,
@@ -117,13 +118,14 @@ export function initHero(state) {
   const HOLD = 2;
   const USERV = 10;
   const reduce = prefersReducedMotion();
-  // 定位置：横 340°・傾き 0°。ドラッグを離して5秒後に、1.2秒かけて定位置へ戻る
-  const HOME = (340 * Math.PI) / 180;
+  // 定位置：正面から見て本体が画面と平行な向き。ドラッグを離して5秒後に、1.2秒かけて定位置へ戻る
+  // 向きは四元数（回転を表す値）で持ち、上下左右どの方向にも制限なく回る
+  const HOME = new Quaternion();
   const BACK_WAIT = 5;
   const BACK_TIME = 1.2;
-  const TILT_MAX = Math.PI / 2; // 真上・真下まで
-  let spin = HOME;
-  let tilt = 0;
+  const UP = new Vector3(0, 1, 0);
+  const RIGHT = new Vector3(1, 0, 0);
+  const turn = new Quaternion();
   let back = -1; // 戻るまでの残り秒数（-1 = 待っていない）
   let from = null; // 戻り始めの向き
   let backT = 0;
@@ -137,8 +139,9 @@ export function initHero(state) {
   let last = 0;
 
   const drag = addDrag(stage, (dx, dy) => {
-    spin += dx * 0.012;
-    tilt = Math.max(-TILT_MAX, Math.min(TILT_MAX, tilt + dy * 0.012));
+    // 画面の縦軸・横軸まわりに回す（指の動きと同じ向きに転がる）
+    model.quaternion.premultiply(turn.setFromAxisAngle(UP, dx * 0.012));
+    model.quaternion.premultiply(turn.setFromAxisAngle(RIGHT, dy * 0.012));
     back = -1;
     from = null;
     state.kick();
@@ -156,14 +159,11 @@ export function initHero(state) {
       return;
     }
     if (!from) {
-      const d = Math.atan2(Math.sin(spin - HOME), Math.cos(spin - HOME));
-      from = { spin: HOME + d, tilt };
+      from = model.quaternion.clone();
       backT = 0;
     }
     backT = reduce ? 1 : Math.min(1, backT + dt / BACK_TIME);
-    const k = ease(backT);
-    spin = from.spin + (HOME - from.spin) * k;
-    tilt = from.tilt * (1 - k);
+    model.quaternion.slerpQuaternions(from, HOME, ease(backT));
     if (backT >= 1) {
       back = -1;
       from = null;
@@ -217,7 +217,6 @@ export function initHero(state) {
       state.slider.value = 10 + state.current;
     }
 
-    model.rotation.set(tilt, spin, 0);
     seeThrough(dt, reduce);
     place();
     renderer.render(scene, camera);
@@ -243,7 +242,7 @@ export function initHero(state) {
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
     const d = w / h < 1.1 ? 268 : 246;
-    camera.position.set(LOOK.x - d * 0.3, LOOK.y + d * 0.36, d * 0.88);
+    camera.position.set(LOOK.x, LOOK.y, d); // 真正面から（本体と画面が平行）
     camera.lookAt(LOOK);
     camera.updateProjectionMatrix();
     seeThrough(0, reduce);
