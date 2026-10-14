@@ -90,7 +90,7 @@ const organization = (url) => ({
   name: 'Luca Bloom',
   url,
   logo: `${SITE}apple-touch-icon.png`,
-  email: 'lucabloom65@gmail.com',
+  email: 'info@luca-bloom.com',
   address: { '@type': 'PostalAddress', postalCode: '106-0032', addressRegion: 'Tokyo', addressLocality: 'Minato-ku', streetAddress: 'S-Building 3F, 2-1-19 Roppongi', addressCountry: 'JP' },
 });
 
@@ -137,6 +137,7 @@ export function lpHtml(L) {
     brand: { '@type': 'Brand', name: 'Luca Bloom' }, image: [`${url}og.png`], material: t.material, category: t.category,
     additionalProperty: t.props.map(([name, value]) => ({ '@type': 'PropertyValue', name, value })),
     countryOfOrigin: { '@type': 'Country', name: t.country },
+    ...(L.offers ? { offers: L.offers.map((o) => ({ '@type': 'Offer', ...o, availability: 'https://schema.org/LimitedAvailability', itemCondition: 'https://schema.org/NewCondition' })) } : {}),
   };
   const faq = {
     '@context': 'https://schema.org', '@type': 'FAQPage',

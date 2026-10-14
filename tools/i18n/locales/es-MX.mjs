@@ -2,7 +2,7 @@
 // 規制：COFEPRIS（医療機器・健康関連の広告）、PROFECO（消費者保護）、個人情報は LFPDPPP（ARCO 権利）。
 // 病名・効果をうたう語は tools/claims.mjs で検出する。
 const ASIN = 'B0HHXQ1X4C';
-const MAIL = '<a href="mailto:lucabloom65@gmail.com">lucabloom65@gmail.com</a>';
+const MAIL = '<a href="mailto:info@luca-bloom.com">info@luca-bloom.com</a>';
 
 export default {
   code: 'es-MX',
@@ -154,7 +154,7 @@ export default {
     ],
     supportLabel: 'Soporte',
     supportH2: 'Manual de uso y aviso de responsabilidad',
-    supportSub: 'También puedes abrirlos con el código QR de la tarjeta incluida. Léelos antes de usar el producto. Dudas: <a class="c-inherit" href="mailto:lucabloom65@gmail.com">lucabloom65@gmail.com</a>',
+    supportSub: 'También puedes abrirlos con el código QR de la tarjeta incluida. Léelos antes de usar el producto. Dudas: <a class="c-inherit" href="mailto:info@luca-bloom.com">info@luca-bloom.com</a>',
     manual: ['Manual de uso', 'Uso ilustrado, cuidado y almacenamiento, contraindicaciones, liberación de emergencia'],
     pdf: ['Aviso de responsabilidad (PDF)', 'Instrucciones de uso, advertencias de seguridad y condiciones de venta'],
     finalH2: 'Empieza hoy, <span class="ib">a tu ritmo.</span>',

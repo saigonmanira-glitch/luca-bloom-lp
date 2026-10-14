@@ -4,7 +4,7 @@
 import base from './en-GB.mjs';
 
 const ASIN = 'B0HHXQ1X4C';
-const MAIL = '<a href="mailto:lucabloom65@gmail.com">lucabloom65@gmail.com</a>';
+const MAIL = '<a href="mailto:info@luca-bloom.com">info@luca-bloom.com</a>';
 
 const CA = [
   [/\bmoisturise/g, 'moisturize'], [/\bMoisturise/g, 'Moisturize'],

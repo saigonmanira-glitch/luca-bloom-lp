@@ -6,7 +6,7 @@
 // npm run build を実行してコミットする。発売したら OPEN を true にすると、購入ボタンに戻る。
 export const WAITLIST = { open: false, target: 30, count: 0, updated: '2026-10-06' };
 
-const MAIL = 'lucabloom65@gmail.com';
+const MAIL = 'info@luca-bloom.com';
 const enc = encodeURIComponent;
 const mailto = (subject, body) => `mailto:${MAIL}?subject=${enc(subject)}&body=${enc(body)}`;
 // メールアプリが開かない環境（Instagram・X などのアプリ内ブラウザ、メールアプリ未設定のパソコン）向けに、

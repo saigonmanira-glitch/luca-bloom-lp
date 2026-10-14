@@ -14,6 +14,11 @@ export default {
   ],
   // 初期ロットの限定価格（日本の「初期ロット100個限定価格」と同じ扱い）。購入欄・最後の購入欄・下部の固定バーに出す
   price: 'Launch price, first 30 units only: <span class="nb"><b>£42.99</b> UK (incl. VAT)</span> · <span class="nb"><b>A$79.95</b> Australia (incl. GST)</span>',
+  // 構造化データ（JSON-LD）の販売情報。価格は上の price と同じ初期ロット限定価格
+  offers: [
+    { name: 'Amazon.co.uk introductory price (first production batch only)', url: `https://www.amazon.co.uk/dp/${ASIN}`, price: '42.99', priceCurrency: 'GBP', areaServed: 'GB' },
+    { name: 'Amazon.com.au introductory price (first production batch only)', url: `https://www.amazon.com.au/dp/${ASIN}`, price: '79.95', priceCurrency: 'AUD', areaServed: 'AU' },
+  ],
   og: { for: 'Foreskin care tool', lines: ['A private concern,', 'in your own hands.'], chips: ['Opens up to <b>70 mm</b>', 'Stepless', 'Stays where you stop'] },
   t: {
     title: 'Luca Bloom | Foreskin care tool that opens up to 70 mm',
@@ -157,7 +162,7 @@ export default {
     ],
     supportLabel: 'Support',
     supportH2: 'User manual and disclaimer',
-    supportSub: 'You can also open these from the QR code on the card in the box. Please read them before use. Questions: <a class="c-inherit" href="mailto:lucabloom65@gmail.com">lucabloom65@gmail.com</a>',
+    supportSub: 'You can also open these from the QR code on the card in the box. Please read them before use. Questions: <a class="c-inherit" href="mailto:info@luca-bloom.com">info@luca-bloom.com</a>',
     manual: ['User manual', 'Illustrated how-to, care and storage, who must not use it, emergency release'],
     pdf: ['Disclaimer (PDF)', 'Instructions for use, safety warnings and terms of sale'],
     finalH2: 'Start today, <span class="ib">at your own pace.</span>',
@@ -167,7 +172,7 @@ export default {
     footerMore: (href) => ` For detailed safety information and instructions, use the QR code on the card in the box or see the <a class="c-inherit" href="${href}">support page</a>.`,
     safetyLink: 'Safety information',
     privacyLink: 'Privacy policy',
-    operator: 'Operated by Luca Bloom<br>S-Building 3F, 2-1-19 Roppongi, Minato-ku, Tokyo 106-0032, Japan<br>Contact: <a href="mailto:lucabloom65@gmail.com">lucabloom65@gmail.com</a>',
+    operator: 'Operated by Luca Bloom<br>S-Building 3F, 2-1-19 Roppongi, Minato-ku, Tokyo 106-0032, Japan<br>Contact: <a href="mailto:info@luca-bloom.com">info@luca-bloom.com</a>',
     imagesNote: 'Product images on this page are 3D models and illustrations.',
     home: 'Home',
     backHome: 'Back to home',
@@ -179,7 +184,7 @@ export default {
     h1: 'Privacy policy',
     intro: 'This policy explains how Luca Bloom (“we”, “us”) handles personal information on its official website (https://luca-bloom.com/, the “Site”). It is written to meet the UK GDPR, the UK Data Protection Act 2018 and the Australian Privacy Act 1988.',
     sections: [
-      ['1. Who we are', '<dl><dt>Controller</dt><dd>Luca Bloom</dd><dt>Address</dt><dd>S-Building 3F, 2-1-19 Roppongi, Minato-ku, Tokyo 106-0032, Japan</dd><dt>Contact</dt><dd><a href="mailto:lucabloom65@gmail.com">lucabloom65@gmail.com</a></dd></dl>'],
+      ['1. Who we are', '<dl><dt>Controller</dt><dd>Luca Bloom</dd><dt>Address</dt><dd>S-Building 3F, 2-1-19 Roppongi, Minato-ku, Tokyo 106-0032, Japan</dd><dt>Contact</dt><dd><a href="mailto:info@luca-bloom.com">info@luca-bloom.com</a></dd></dl>'],
       ['2. What we collect', '<ul><li>If you email us: your email address, your name (if you give it) and the content of your message.</li><li>When you visit the Site: technical data that your browser sends automatically, such as your IP address, browser type, referring page and the date and time of access. These are recorded on the servers of the hosting service listed in section 5.</li></ul><p>The Site does not use cookies. There are no accounts or purchases on the Site, and we do not collect your name, address or payment details through it.</p>'],
       ['3. Why we use it, and our legal basis', '<ul><li>To reply to your enquiries. Legal basis: our legitimate interest in answering you, or taking steps at your request.</li><li>To run the Site securely and protect it against misuse. Legal basis: our legitimate interest in keeping the Site available and secure.</li><li>To comply with the law. Legal basis: legal obligation.</li></ul>'],
       ['4. How long we keep it', '<p>We keep enquiry emails for as long as needed to deal with your enquiry and any follow-up, and no longer than 3 years. Hosting access logs are kept by the hosting provider under its own retention policy.</p>'],
@@ -188,7 +193,7 @@ export default {
       ['7. Your rights', '<p>You can ask us to give you a copy of, correct, delete or restrict the use of the personal information we hold about you, to stop using it, or to transfer it to you. Contact us using the details below; we will verify your identity and respond within one month. If you are unhappy with how we handle your data, you can complain to the Information Commissioner’s Office (ICO) in the UK or the Office of the Australian Information Commissioner (OAIC) in Australia.</p>'],
       ['8. Security', '<p>We take appropriate measures to protect against the loss, misuse or unauthorised disclosure of the personal information we hold.</p>'],
       ['9. Changes to this policy', '<p>We may update this policy, for example when the law changes. The updated policy applies from the time it is published on this page.</p>'],
-      ['10. Contact', '<p>Luca Bloom<br><a href="mailto:lucabloom65@gmail.com">lucabloom65@gmail.com</a></p>'],
+      ['10. Contact', '<p>Luca Bloom<br><a href="mailto:info@luca-bloom.com">info@luca-bloom.com</a></p>'],
     ],
     date: 'Effective date: 5 October 2026',
   },

@@ -54,7 +54,7 @@ export default {
     h1: 'Privacy policy',
     intro: 'This policy explains how Luca Bloom (“we”, “us”) collects and uses personal information on its official website (https://luca-bloom.com/, the “Site”).',
     sections: [
-      ['1. Who we are', '<dl><dt>Business</dt><dd>Luca Bloom</dd><dt>Address</dt><dd>S-Building 3F, 2-1-19 Roppongi, Minato-ku, Tokyo 106-0032, Japan</dd><dt>Contact</dt><dd><a href="mailto:lucabloom65@gmail.com">lucabloom65@gmail.com</a></dd></dl>'],
+      ['1. Who we are', '<dl><dt>Business</dt><dd>Luca Bloom</dd><dt>Address</dt><dd>S-Building 3F, 2-1-19 Roppongi, Minato-ku, Tokyo 106-0032, Japan</dd><dt>Contact</dt><dd><a href="mailto:info@luca-bloom.com">info@luca-bloom.com</a></dd></dl>'],
       ['2. Information we collect', '<ul><li>If you email us: your email address, your name (if you give it) and the content of your message.</li><li>When you visit the Site: technical data that your browser sends automatically, such as your IP address, browser type, referring page and the date and time of access. These are recorded on the servers of the hosting service listed in section 4.</li></ul><p>The Site does not use cookies, advertising trackers or analytics. There are no accounts or purchases on the Site, and we do not collect your name, address or payment details through it.</p>'],
       ['3. How we use it', '<ul><li>To answer your inquiries.</li><li>To run the Site securely and protect it against misuse.</li><li>To comply with the law.</li></ul>'],
       ['4. Sharing', '<p>We do not sell personal information, and we do not share it for targeted advertising. To deliver the Site we use GitHub Pages (GitHub, Inc., United States), which receives technical data such as your IP address when you view a page. We may disclose information if the law requires it.</p>'],
@@ -63,7 +63,7 @@ export default {
       ['7. Children', '<p>The Site and the product are intended for adults aged 18 and over. We do not knowingly collect personal information from children under 13.</p>'],
       ['8. How long we keep it, and security', '<p>We keep inquiry emails for as long as needed to deal with your inquiry and any follow-up, and no longer than 3 years. We take reasonable measures to protect the information we hold.</p>'],
       ['9. Changes to this policy', '<p>We may update this policy. The updated policy applies from the time it is published on this page.</p>'],
-      ['10. Contact', '<p>Luca Bloom<br><a href="mailto:lucabloom65@gmail.com">lucabloom65@gmail.com</a></p>'],
+      ['10. Contact', '<p>Luca Bloom<br><a href="mailto:info@luca-bloom.com">info@luca-bloom.com</a></p>'],
     ],
     date: 'Effective date: October 5, 2026',
   },

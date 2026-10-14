@@ -3,7 +3,7 @@
 //   en：海外版（英語・フランス語・スペイン語の LP 共通。広報は英語アカウント1本）
 // アカウントを作ったら、ここに URL を入れて npm run build を実行する。
 export const SOCIAL = {
-  ja: { x: 'https://x.com/Lucabloomcare', instagram: 'https://www.instagram.com/luca_bloom_jp/', threads: 'https://www.threads.com/@lucabloomjp', line: 'https://line.me/ti/g2/qqvC7ZLnOdnwihhRu2Qg2O_P5ZcDWQNfEctjDQ', note: 'https://note.com/gifted_snipe4039', youtube: '', tiktok: '', facebook: 'https://www.facebook.com/profile.php?id=61590738184407' },
+  ja: { x: 'https://x.com/Lucabloomcare', instagram: 'https://www.instagram.com/luca_bloom_jp/', threads: 'https://www.threads.com/@lucabloomjp', line: 'https://line.me/ti/g2/qqvC7ZLnOdnwihhRu2Qg2O_P5ZcDWQNfEctjDQ', note: 'https://note.com/gifted_snipe4039', youtube: '', tiktok: '', facebook: 'https://www.facebook.com/profile.php?id=61594879060396' },
   en: { x: 'https://x.com/LucaBloomGlobal', instagram: 'https://www.instagram.com/luca_bloom_global/', threads: 'https://www.threads.com/@luca_bloom_global', substack: 'https://lucabloom.substack.com', discord: 'https://discord.gg/Eykzj5PyE', facebook: 'https://www.facebook.com/profile.php?id=61594882033222', youtube: '', tiktok: '' },
 };
 

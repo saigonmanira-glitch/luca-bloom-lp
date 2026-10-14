@@ -4,7 +4,7 @@
 // 病名・効果をうたう語は tools/claims.mjs で検出する。
 // カナダのフランス語の約物：コロンの前と « » の内側に改行しない空白（U+00A0）を入れ、? ! ; の前には入れない。
 const ASIN = 'B0HHXQ1X4C';
-const MAIL = '<a href="mailto:lucabloom65@gmail.com">lucabloom65@gmail.com</a>';
+const MAIL = '<a href="mailto:info@luca-bloom.com">info@luca-bloom.com</a>';
 
 const fr = (v) =>
   typeof v === 'string' ? v.replace(/ ([?!;])/g, '$1').replace(/ :/g, '\u00a0:').replace(/« /g, '«\u00a0').replace(/ »/g, '\u00a0»')
@@ -162,7 +162,7 @@ export default {
     ],
     supportLabel: 'Assistance',
     supportH2: 'Mode d’emploi et avis de non-responsabilité',
-    supportSub: 'Vous pouvez aussi les ouvrir avec le code QR de la carte incluse. Lisez-les avant l’utilisation. Questions : <a class="c-inherit" href="mailto:lucabloom65@gmail.com">lucabloom65@gmail.com</a>',
+    supportSub: 'Vous pouvez aussi les ouvrir avec le code QR de la carte incluse. Lisez-les avant l’utilisation. Questions : <a class="c-inherit" href="mailto:info@luca-bloom.com">info@luca-bloom.com</a>',
     manual: ['Mode d’emploi', 'Utilisation illustrée, entretien et rangement, contre-indications, dégagement d’urgence'],
     pdf: ['Avis de non-responsabilité (PDF)', 'Mode d’emploi, avertissements de sécurité et conditions de vente'],
     finalH2: 'Commencez aujourd’hui, <span class="ib">à votre rythme.</span>',

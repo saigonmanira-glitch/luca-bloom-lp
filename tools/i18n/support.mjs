@@ -6,7 +6,7 @@
 // 免責事項は各国の PDF（intl/{国}/terms.pdf）。PDF を差し替えたら、ここの文章と COUNTRIES の pages（ページ数）も合わせる。
 import { SITE } from './site.mjs';
 
-const MAIL = '<a href="mailto:lucabloom65@gmail.com">lucabloom65@gmail.com</a>';
+const MAIL = '<a href="mailto:info@luca-bloom.com">info@luca-bloom.com</a>';
 
 // ---------------- 英語：英国・豪州・米国・カナダの PDF は同じ文面（医師の呼び方・つづり・緊急連絡先・年齢だけが違う） ----------------
 // doc：PDF での医師の呼び方（英国・豪州 a medical practitioner／米国・カナダ a physician）
