@@ -4,13 +4,10 @@ import {
   DirectionalLight,
   Group,
   HemisphereLight,
-  Mesh,
   PerspectiveCamera,
-  PlaneGeometry,
   PMREMGenerator,
   Quaternion,
   Scene,
-  ShadowMaterial,
   Vector3,
 } from 'three';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
@@ -89,11 +86,7 @@ export function initHero(state) {
   const rim = new DirectionalLight(0xc6d0ff, 0.45 * LIGHT);
   rim.position.set(60, 60, -140);
   scene.add(rim);
-  const ground = new Mesh(new PlaneGeometry(700, 700), new ShadowMaterial({ opacity: 0.3 }));
-  ground.rotation.x = -Math.PI / 2;
-  ground.position.y = -57;
-  ground.receiveShadow = true;
-  scene.add(ground);
+  // 床の影は置かない（真正面から見ると影が細い帯になるため）
 
   // 回転の中心を本体の中ほど（カメラの注視点の高さ）に置き、上下に傾けても画面の中央で回るようにする
   const model = new Group();

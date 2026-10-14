@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'sha256-jr+99oMVcAtKtIUlC/3aKn5EhZTkRbJaXBN0lEQV9qo=' 'sha256-TT/tbT92qH6UzA/f+xUOgWA0x57Y7BPZlE8Y8ElzfiY=' 'sha256-w8fObumnBJ6kLU3mj+VkjkUD/uQ1sExPxiVOzrGwDRc='; img-src 'self'; font-src 'self'; connect-src 'self'; manifest-src 'self'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests; require-trusted-types-for 'script'; trusted-types 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'sha256-jr+99oMVcAtKtIUlC/3aKn5EhZTkRbJaXBN0lEQV9qo=' 'sha256-TT/tbT92qH6UzA/f+xUOgWA0x57Y7BPZlE8Y8ElzfiY=' 'sha256-DIQF0SYzmccdgQA5U6RROxeF9BONeq3ThcW0YvVEIWo='; img-src 'self'; font-src 'self'; connect-src 'self'; manifest-src 'self'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests; require-trusted-types-for 'script'; trusted-types 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Luca Bloom | Cuidado del prepucio, apertura de hasta 70 mm</title>
 <meta name="description" content="Luca Bloom es una herramienta para el cuidado del prepucio. Gira la manija y los brazos se abren con suavidad hasta 70 mm, y se quedan justo donde te detienes, aunque los sueltes. Empaque discreto. En Amazon México desde mediados de noviembre de 2026.">
@@ -137,7 +137,8 @@ small.gl{font-size:12px;color:var(--muted);font-weight:400}
 .hero .badges b,.hero .meter-row b{color:var(--navy)}
 .hero .badges li{background:rgba(255,255,255,.55)}
 .hero .cta-2{color:var(--navy);border-color:var(--navy)}
-.hero .stage{background:radial-gradient(70% 72% at 50% 46%,#C6CDDB 0%,#9AA5BC 100%);border-radius:24px;box-shadow:inset 0 0 0 1px rgba(22,26,41,.06)}   /* 白い本体が背景に溶けないよう、本体の後ろだけ青みのグレー */
+.hero .stage{background:radial-gradient(closest-side at 50% 42%,rgba(104,118,150,.8) 0%,rgba(122,135,165,.6) 45%,rgba(160,171,196,.24) 78%,rgba(160,171,196,0) 100%)}   /* 白い本体が背景に溶けないよう、本体の後ろだけ青みのグレーの光。縁はページの背景へ溶かし、枠を見せない */
+.hero .stage canvas{filter:drop-shadow(0 10px 14px rgba(22,26,41,.2))}   /* 本体の輪郭に沿った影で、白い本体の形をはっきり見せる */
 
 /* ---------- WORRY ---------- */
 .worry{list-style:none;padding:0;margin:26px 0 0;display:grid;gap:10px}
