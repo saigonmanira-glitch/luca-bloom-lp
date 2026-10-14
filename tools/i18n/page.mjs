@@ -446,6 +446,17 @@ ${supportLinks(L)}
   </div>
 </section>
 
+<!-- ================= NEWS ================= -->
+<section class="sec pt0" id="news" aria-labelledby="news-h">
+  <div class="wrap">
+    <p class="label">${NEWS_TEXT[L.lang.slice(0, 2)].label}</p>
+    <h2 id="news-h">${NEWS_TEXT[L.lang.slice(0, 2)].h}</h2>
+    <ul class="news">
+${NEWS.map((n) => `      <li><time datetime="${n.date}">${n.date.replaceAll('-', '.')}</time><span class="src">${n.src}</span><a href="${n.url}" target="_blank" rel="noopener"${L.lang.startsWith('en') ? '' : ' lang="en"'}>${n.title}</a></li>`).join('\n')}
+    </ul>
+  </div>
+</section>
+
 <!-- ================= COLUMN ================= -->
 <section class="sec pt0" id="column">
   <div class="wrap">
@@ -491,6 +502,16 @@ function supportLinks(L) {
       <a href="${pdf}" target="_blank" rel="noopener"><b>${L.t.pdf[0]}${name(c)}</b><span>${L.t.pdf[1]}</span></a>`)
     .join('\n');
 }
+
+// お知らせ（英語のプレスリリース）。新しい順。海外LP全ページに載せる
+const NEWS = [
+  { date: '2026-10-15', src: 'PRLog', url: 'https://www.prlog.org/13176565-japanese-brand-luca-bloom-to-launch-mens-self-care-tool-in-the-us-canada-and-mexico-in-november.html', title: 'Japanese Brand Luca Bloom to Launch Men’s Self-Care Tool in the US, Canada and Mexico in November' },
+];
+const NEWS_TEXT = {
+  en: { label: 'News', h: 'Latest news' },
+  fr: { label: 'Actualités', h: 'Dernières actualités' },
+  es: { label: 'Noticias', h: 'Últimas noticias' },
+};
 
 // 海外向けの英語チャット（Discord）。チャットのみ・英語のみ
 const DISCORD = 'https://discord.gg/Eykzj5PyE';
