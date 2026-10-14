@@ -88,7 +88,7 @@ export function initHero(state) {
   const rim = new DirectionalLight(0xc6d0ff, 0.45 * LIGHT);
   rim.position.set(60, 60, -140);
   scene.add(rim);
-  const ground = new Mesh(new PlaneGeometry(700, 700), new ShadowMaterial({ opacity: 0.22 }));
+  const ground = new Mesh(new PlaneGeometry(700, 700), new ShadowMaterial({ opacity: 0.3 }));
   ground.rotation.x = -Math.PI / 2;
   ground.position.y = -57;
   ground.receiveShadow = true;
