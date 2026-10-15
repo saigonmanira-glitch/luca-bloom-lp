@@ -3,10 +3,14 @@
 import {
   ACESFilmicToneMapping,
   Box3,
+  CatmullRomCurve3,
+  ConeGeometry,
+  CylinderGeometry,
   DirectionalLight,
   Group,
   HemisphereLight,
   Mesh,
+  MeshStandardMaterial,
   NoToneMapping,
   OrthographicCamera,
   PCFSoftShadowMap,
@@ -16,6 +20,7 @@ import {
   Scene,
   ShadowMaterial,
   SRGBColorSpace,
+  TubeGeometry,
   Vector3,
   WebGLRenderer,
 } from 'three';
@@ -74,6 +79,55 @@ device.dev.traverse((o) => {
 // アームの部品（開き幅の寸法線に使う）：固定アーム＝本体に直接付いた x=-34.5 の部品、駆動アーム＝mover の最初の部品
 const fixedArm = device.dev.children.find((o) => o.isMesh && Math.abs(o.position.x + 34.5) < 1e-6);
 const moverArm = device.mover.children[0];
+
+// ---------- 金色の立体の矢印（ハンドルの回転・アームの動き・膜を押し広げる向き） ----------
+const GOLD = new MeshStandardMaterial({ color: 0xe3b34e, metalness: 0.65, roughness: 0.28, envMapIntensity: 1.3 });
+const UP = new Vector3(0, 1, 0);
+// 先端の円すい（位置 p、向き t）
+const tip = (p, t, r, h) => {
+  const m = new Mesh(new ConeGeometry(r, h, 32), GOLD);
+  m.quaternion.setFromUnitVectors(UP, t.clone().normalize());
+  m.position.copy(p).addScaledVector(t.clone().normalize(), h / 2);
+  m.castShadow = true;
+  return m;
+};
+// ハンドルの回転の矢印：ハンドルの軸（x 方向、高さ y=10）を囲む輪。手前側で上へ回る向き＝アームが開く向き
+const turnArrow = new Group();
+{
+  const R = 19;
+  const X = -50;
+  const P = (f) => new Vector3(X, 10 + R * Math.sin(f), R * Math.cos(f));
+  // 奥の上から下を回って手前を上がり、矢じりは手前で上を向く
+  const f0 = (-235 * Math.PI) / 180;
+  const f1 = (20 * Math.PI) / 180;
+  const pts = [];
+  for (let i = 0; i <= 80; i++) pts.push(P(f0 + ((f1 - f0) * i) / 80));
+  const tube = new Mesh(new TubeGeometry(new CatmullRomCurve3(pts), 160, 2, 20, false), GOLD);
+  tube.castShadow = true;
+  turnArrow.add(tube);
+  turnArrow.add(tip(P(f1), new Vector3(0, Math.cos(f1), -Math.sin(f1)), 5, 11));
+}
+device.dev.add(turnArrow);
+// 直線の矢印（a → b）
+const straightArrow = (a, b, r = 1.6) => {
+  const g = new Group();
+  const d = b.clone().sub(a);
+  const len = d.length() - 9;
+  const shaft = new Mesh(new CylinderGeometry(r, r, len, 24), GOLD);
+  shaft.quaternion.setFromUnitVectors(UP, d.clone().normalize());
+  shaft.position.copy(a).addScaledVector(d.clone().normalize(), len / 2);
+  shaft.castShadow = true;
+  g.add(shaft);
+  g.add(tip(a.clone().addScaledVector(d.clone().normalize(), len), d, r * 2.6, 9));
+  return g;
+};
+// アームが開く向き（アームの前、高さ y=-28）
+const moveArrow = straightArrow(new Vector3(-24, -28, 7), new Vector3(16, -28, 7));
+device.dev.add(moveArrow);
+// 膜を左右へ押し広げる向き（膜の口の高さ。位置は shot のたびにアームに合わせる）
+const pushL = new Group();
+const pushR = new Group();
+device.dev.add(pushL, pushR);
 
 function seeThrough(on) {
   const { housing, decal, decalBack } = device;
@@ -151,6 +205,17 @@ window.shot = (o) => {
   updateSleeve(t);
   sleeve.visible = !!o.sleeve;
   seeThrough(!!o.see);
+  turnArrow.visible = !!o.turnArrow;
+  moveArrow.visible = !!o.moveArrow;
+  pushL.clear();
+  pushR.clear();
+  if (o.pushArrows) {
+    const y = o.pushY ?? -22;
+    const xl = -34.5 - 3.6; // 固定アームの外側（くびれ部）
+    const xr = -34.5 + t + 3.6; // 駆動アームの外側
+    pushL.add(straightArrow(new Vector3(xl - 2, y, 0), new Vector3(xl - 16, y, 0), 1.3));
+    pushR.add(straightArrow(new Vector3(xr + 2, y, 0), new Vector3(xr + 16, y, 0), 1.3));
+  }
   ground.visible = o.shadow !== false;
   model.rotation.set(((o.pitch ?? 0) * Math.PI) / 180, ((o.yaw ?? 0) * Math.PI) / 180, 0);
   model.updateMatrixWorld(true);
