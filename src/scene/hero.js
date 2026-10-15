@@ -99,10 +99,10 @@ export function initHero(state) {
   const updateSleeve = buildSleeve(device);
   const seeThrough = createSeeThrough(device);
 
-  // 1回転(2π)=2mm。閉じる向き＝ハンドルの手前の面が側面の矢印（上向き）の方へ動く向き
+  // 1回転(2π)=2mm。閉じる向き＝側面の矢印が下へ動く向き
   const place = () => {
     device.mover.position.x = state.current;
-    device.shaft.rotation.x = state.current * Math.PI;
+    device.shaft.rotation.x = -state.current * Math.PI;
     updateSleeve(state.current);
   };
 
