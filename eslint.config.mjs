@@ -16,7 +16,7 @@ export default [
   },
   {
     // Amazon 用動画・SNS 用の製品画像の描画（ブラウザ内で実行）
-    files: ['tools/video/scene.js', 'tools/sns/product.js'],
+    files: ['tools/video/scene.js', 'tools/sns/product.js', 'tools/amazon/shots.js'],
     languageOptions: { ecmaVersion: 2022, sourceType: 'module', globals: globals.browser },
   },
   {
