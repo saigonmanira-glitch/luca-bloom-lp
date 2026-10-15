@@ -168,7 +168,7 @@ function armGeometry(dir, top, fillet) {
 }
 
 // ---------- 本体一式（本体・シャフト・留め具・固定アーム・駆動アーム）。ヒーローと箱の中で共用 ----------
-export function buildDevice() {
+export function buildDevice({ backArrowUp = false } = {}) {
   const dev = new Group();
   const housing = POM.clone(); // 本体の外箱。内部構造を見せる時に透明にする
   const add = (g, mat, parent) => {
@@ -207,8 +207,8 @@ export function buildDevice() {
   }
 
   // 刻印「↓CLOSE」（側面2か所）。キャンバス 1mm=20px、範囲：本体左端から x 3〜15mm、下面から y 1〜19mm
-  let decal;
-  {
+  // backArrowUp：背面側の矢印だけ上向きにする（LPのヒーロー）
+  const decalMaterial = (up) => {
     const c = document.createElement('canvas');
     c.width = 240;
     c.height = 360;
@@ -218,14 +218,15 @@ export function buildDevice() {
     g.strokeStyle = '#8c877b';
     g.lineWidth = 5;
     g.lineJoin = 'round';
+    const V = (mm) => Y(up ? 20 - mm : mm);
     g.beginPath();
-    g.moveTo(X(5), Y(18));
-    g.lineTo(X(5), Y(8));
-    g.lineTo(X(3.5), Y(8));
-    g.lineTo(X(6), Y(2));
-    g.lineTo(X(8.5), Y(8));
-    g.lineTo(X(7), Y(8));
-    g.lineTo(X(7), Y(18));
+    g.moveTo(X(5), V(18));
+    g.lineTo(X(5), V(8));
+    g.lineTo(X(3.5), V(8));
+    g.lineTo(X(6), V(2));
+    g.lineTo(X(8.5), V(8));
+    g.lineTo(X(7), V(8));
+    g.lineTo(X(7), V(18));
     g.closePath();
     g.stroke();
     g.save();
@@ -238,19 +239,23 @@ export function buildDevice() {
     g.lineWidth = 5;
     g.strokeText('CLOSE', 0, 0);
     g.restore();
-    decal = new MeshBasicMaterial({
+    return new MeshBasicMaterial({
       map: new CanvasTexture(c),
       transparent: true,
       depthWrite: false,
       polygonOffset: true,
       polygonOffsetFactor: -2,
     });
+  };
+  const decal = decalMaterial(false);
+  const decalBack = backArrowUp ? decalMaterial(true) : decal;
+  {
     const p1 = new Mesh(new PlaneGeometry(12, 18), decal);
     p1.position.set(-42.5 + 9, 10, 10.02);
     dev.add(p1);
-    const p2 = p1.clone();
+    const p2 = new Mesh(p1.geometry, decalBack);
+    p2.position.set(-42.5 + 9, 10, -10.02);
     p2.rotation.y = Math.PI;
-    p2.position.z = -10.02;
     dev.add(p2);
   }
 
@@ -368,6 +373,7 @@ export function buildDevice() {
     shaft,
     housing,
     decal,
+    decalBack,
     width(y) {
       const sp = spanAt(outline, y);
       return sp ? sp[1] : 0;

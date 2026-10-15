@@ -20,7 +20,7 @@ import { buildSleeve } from './sleeve.js';
 // 1周期 10秒：不透明 4秒 → 1秒で透ける → 透過 4秒 → 1秒で戻る。
 const SEE = { period: 10, opaque: 4, fade: 1, clear: 4 };
 function createSeeThrough(device) {
-  const { housing, decal } = device;
+  const { housing, decal, decalBack } = device;
   const ss = (x) => x * x * (3 - 2 * x);
   let t = 0;
   let prev = -1;
@@ -46,6 +46,7 @@ function createSeeThrough(device) {
     housing.opacity = 1 - 0.8 * xv;
     housing.depthWrite = xv < 0.5;
     decal.opacity = 1 - xv;
+    decalBack.opacity = 1 - xv;
   };
 }
 
@@ -92,7 +93,7 @@ export function initHero(state) {
   const model = new Group();
   model.position.y = LOOK.y;
   scene.add(model);
-  const device = buildDevice();
+  const device = buildDevice({ backArrowUp: true }); // 背面の「CLOSE」矢印は上向き
   device.dev.position.x = 4; // 全体の中心を回転軸に合わせる
   device.dev.position.y -= LOOK.y;
   model.add(device.dev);
