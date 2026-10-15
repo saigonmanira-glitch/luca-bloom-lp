@@ -126,19 +126,22 @@ const toScreen = (cam, w, h, obj, p) => {
 window.shot = (o) => {
   const W = o.w;
   const H = o.h;
+  renderer.setPixelRatio(o.ss ?? 2); // 2倍の解像度で描いて縮小し、輪郭をなめらかにする
   renderer.setSize(W, H, false);
   if (o.kind === 'box') {
     renderer.toneMapping = NoToneMapping;
     renderer.toneMappingExposure = 1;
     box.grp.rotation.y = ((o.yaw ?? 180) * Math.PI) / 180;
     box.pivot.rotation.x = -(o.lid ?? 0);
+    box.grp.updateMatrixWorld(true);
     const cam = new PerspectiveCamera(o.fov ?? 26, W / H, 1, 3000);
     const look = new Vector3(...(o.look ?? [0, 30, 0]));
     cam.position.copy(look).addScaledVector(new Vector3(...(o.dir ?? [0.2, 0.55, 1])).normalize(), o.dist ?? 420);
     cam.lookAt(look);
     cam.updateProjectionMatrix();
     renderer.render(bScene, cam);
-    return { url: renderer.domElement.toDataURL('image/png') };
+    const pts = (o.points ?? []).map((p) => toScreen(cam, W, H, box.grp, p));
+    return { url: renderer.domElement.toDataURL('image/png'), pts };
   }
   renderer.toneMapping = ACESFilmicToneMapping;
   renderer.toneMappingExposure = o.exposure ?? 0.9;

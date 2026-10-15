@@ -1,9 +1,10 @@
-// Amazon の商品画像（2000×2000・JPEG）を作る。出力は amazon/global/*.jpg
+// Amazon の商品画像（2000×2000・JPEG・4枚）を作る。出力は amazon/global/*.jpg
 //   node tools/amazon/build-images.mjs          → 全部
-//   node tools/amazon/build-images.mjs 03 05    → ファイル名の先頭が一致するものだけ
-// 同じ ASIN（商品番号）で全世界に出品するため、画像は全世界共通の1組。説明は動画で行うので、
-// 画像は文字をできる限り使わず、3Dモデル・図・記号・数字（mm など）だけで機能を伝える。
-// 見た目は LP に合わせる（淡いグレーの光、本体の後ろに青みのグレーの光、紺と金のアクセント）。
+//   node tools/amazon/build-images.mjs 02 04    → ファイル名の先頭が一致するものだけ
+// 同じ ASIN（商品番号）で全世界に出品するため、画像は全世界共通の1組。細かい説明は動画で行うので、
+// 画像は「見て欲しくなる」ことを優先し、大きな 3D の製品・短い英単語の見出し・記号・数字で特長を伝える。
+// 見た目は LP に合わせる（淡いグレーの光、本体の後ろに青みのグレーの光、紺と金のアクセント、Zen Kaku Gothic と Quicksand）。
+// 表現は海外LPと同じ決まり（病名・効果・比較・最上級・価格・「限定」を入れない。tools/claims.mjs で検査）。
 // 本体と化粧箱の絵は LP と同じ 3Dモデル（src/scene/）を tools/amazon/shots.js で描く。
 // 必要なもの：Playwright の Chromium（CHROMIUM_PATH で指定可）、フォントの元ファイル（npm run build:fonts で .cache/fonts に取得）
 import http from 'node:http';
@@ -11,11 +12,15 @@ import fs from 'node:fs';
 import path from 'node:path';
 import * as esbuild from 'esbuild';
 import { chromium } from '@playwright/test';
+import { findBanned } from '../claims.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '../..');
 const OUT = path.join(ROOT, 'amazon/global');
 const FONTS = path.join(ROOT, '.cache/fonts');
 const FONT_FILES = {
+  'zk-400.ttf': 'zenkakugothicnew__ZenKakuGothicNew-Regular.ttf',
+  'zk-700.ttf': 'zenkakugothicnew__ZenKakuGothicNew-Bold.ttf',
+  'zk-900.ttf': 'zenkakugothicnew__ZenKakuGothicNew-Black.ttf',
   'qs.ttf': 'quicksand__Quicksand[wght].ttf',
   'ms.ttf': 'montserrat__Montserrat[wght].ttf',
 };
@@ -31,234 +36,209 @@ const NAVY = '#161A29';
 const GOLD = '#E3B34E';
 const GOLD_INK = '#8A6010';
 const PINK = '#E58E9E';
-const MUTED = '#5E6373';
+const MUTED = '#4C5263';
 
-// ---------- 記号（線の絵。viewBox 0 0 100 100） ----------
-const svg = (body, size, color = NAVY, sw = 6) =>
-  `<svg viewBox="0 0 100 100" width="${size}" height="${size}" fill="none" stroke="${color}" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round">${body}</svg>`;
+// ---------- 記号（線の絵。viewBox 0 0 100 100、色は currentColor） ----------
 const ICON = {
-  turn: '<path d="M74 30A32 32 0 1 0 82 56"/><path d="M62 28L76 29L77 15"/>',
-  width: '<path d="M16 18V82M84 18V82"/><path d="M28 50H72M38 40L28 50L38 60M62 40L72 50L62 60"/>',
+  width: '<path d="M14 16V84M86 16V84"/><path d="M28 50H72M40 38L28 50L40 62M60 38L72 50L60 62"/>',
+  slider: '<path d="M10 50H90"/><circle cx="60" cy="50" r="14" fill="currentColor"/>',
   lock: '<rect x="24" y="44" width="52" height="42" rx="9"/><path d="M35 44V32A15 15 0 0 1 65 32V44"/><path d="M50 60V70"/>',
-  release:
-    '<path d="M30 58V34a5 5 0 0 1 10 0V52M40 50V26a5 5 0 0 1 10 0V50M50 50V28a5 5 0 0 1 10 0V52M60 52V36a5 5 0 0 1 10 0V64c0 14-9 24-22 24c-10 0-15-5-20-12L18 60a5 5 0 0 1 8-6l4 4"/><path d="M14 22L22 30M50 10V18M86 22L78 30"/>',
-  stepless: '<path d="M12 50H88" stroke-width="10"/><circle cx="58" cy="50" r="14" fill="#fff"/>',
-  taper: '<path d="M42 10V46C42 54 30 64 30 78C30 88 38 92 50 92C62 92 70 88 70 78C70 64 58 54 58 46V10"/>',
   eyeOff: '<path d="M8 50C20 30 34 22 50 22S80 30 92 50C80 70 66 78 50 78S20 70 8 50Z"/><circle cx="50" cy="50" r="13"/><path d="M16 84L84 16"/>',
-  clock: '<circle cx="50" cy="50" r="38"/><path d="M50 26V50L66 60"/>',
-  moon: '<path d="M62 18A32 32 0 1 0 82 62A26 26 0 0 1 62 18Z"/>',
-  no: '<circle cx="50" cy="50" r="44"/><path d="M19 19L81 81"/>',
-  check: '<path d="M22 52L42 72L80 30"/>',
-  cross: '<path d="M26 26L74 74M74 26L26 74"/>',
-  arrowR: '<path d="M14 50H84M64 30L84 50L64 70"/>',
-  carton:
-    '<path d="M12 36L50 22L88 36V76L50 90L12 76Z"/><path d="M12 36L50 50L88 36M50 50V90"/><path d="M31 29L69 43V56"/>',
+  carton: '<path d="M14 34L50 20L86 34V74L50 88L14 74Z"/><path d="M14 34L50 48L86 34M50 48V88"/><path d="M32 27L68 41V54"/>',
+  japan: '<circle cx="50" cy="50" r="38"/><path d="M33 51L45 63L68 38"/>',
 };
+const icon = (name, size, color, sw = 7) =>
+  `<svg viewBox="0 0 100 100" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round" style="color:${color};flex:none">${ICON[name]}</svg>`;
 
 // ---------- 共通の見た目 ----------
 const CSS = `
+@font-face{font-family:ZK;font-weight:400;src:url(/fonts/zk-400.ttf)}
+@font-face{font-family:ZK;font-weight:700;src:url(/fonts/zk-700.ttf)}
+@font-face{font-family:ZK;font-weight:900;src:url(/fonts/zk-900.ttf)}
 @font-face{font-family:QS;font-weight:300 700;src:url(/fonts/qs.ttf)}
 @font-face{font-family:MS;font-weight:100 900;src:url(/fonts/ms.ttf)}
 *{margin:0;box-sizing:border-box}
 html,body{width:2000px;height:2000px;overflow:hidden;background:#fff}
 #gl{position:absolute;left:-99999px;top:0}
-#art{position:absolute;inset:0;overflow:hidden;font-family:QS,sans-serif;color:${NAVY}}
-.bg{background:radial-gradient(120% 90% at 50% 40%,#F6F7FA 0%,#E4E7EE 55%,#D3D8E2 100%)}
-.glow{position:absolute;pointer-events:none;background:radial-gradient(closest-side,rgba(112,126,158,.5) 0%,rgba(115,129,160,.45) 25%,rgba(122,135,165,.34) 45%,rgba(133,145,172,.2) 64%,rgba(147,158,184,.08) 82%,rgba(160,170,194,0) 100%)}
+#art{position:absolute;inset:0;overflow:hidden;font-family:QS,sans-serif;color:${NAVY};
+  background:radial-gradient(110% 80% at 50% 42%,#F7F8FB 0%,#E6E9F0 52%,#D2D7E2 100%)}
+.glow{position:absolute;pointer-events:none;background:radial-gradient(closest-side,rgba(112,126,158,.55) 0%,rgba(114,128,160,.5) 22%,rgba(120,133,164,.4) 40%,rgba(130,142,170,.27) 58%,rgba(143,154,180,.14) 75%,rgba(156,166,190,.05) 90%,rgba(160,170,194,0) 100%)}
 .a{position:absolute}
-.mark{position:absolute;left:120px;top:104px;font-family:MS;font-weight:200;font-size:58px;letter-spacing:.04em;color:${NAVY}}
-.num{font-weight:700;letter-spacing:.01em;line-height:1;white-space:nowrap}
-.num small{font-size:.5em;margin-left:.12em;font-weight:600}
-.card{position:absolute;background:rgba(255,255,255,.78);border-radius:44px;box-shadow:0 24px 60px -30px rgba(22,26,41,.35)}
-.badge{position:absolute;display:flex;align-items:center;justify-content:center;border-radius:50%;background:${NAVY};color:${GOLD}}
 .c{transform:translate(-50%,-50%)}
+.kicker{font-family:QS;font-weight:700;font-size:38px;letter-spacing:.24em;color:${GOLD_INK};display:flex;align-items:center;gap:22px}
+.kicker::before{content:"";width:64px;height:4px;background:${GOLD};border-radius:2px}
+.h{font-family:ZK;font-weight:900;font-size:156px;line-height:1.08;letter-spacing:-.005em;color:${NAVY};margin-top:30px}
+.h em{font-style:normal;background:linear-gradient(180deg,#E9BC57 0%,#C08A25 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{font-family:QS;font-weight:600;font-size:46px;line-height:1.4;color:${MUTED};margin-top:30px}
+.mark{position:absolute;right:120px;top:118px;font-family:MS;font-weight:200;font-size:54px;letter-spacing:.04em;color:${NAVY}}
+.glass{position:absolute;background:rgba(255,255,255,.72);border:1.5px solid rgba(255,255,255,.9);border-radius:48px;box-shadow:0 30px 70px -36px rgba(22,26,41,.45)}
+.disc{display:flex;align-items:center;justify-content:center;border-radius:50%;background:${NAVY};flex:none;box-shadow:0 14px 30px -14px rgba(22,26,41,.7)}
+.t1{font-family:QS;font-weight:700;font-size:56px;line-height:1.1;color:${NAVY};white-space:nowrap}
+.t2{font-family:QS;font-weight:600;font-size:34px;line-height:1.3;color:${MUTED};margin-top:10px;white-space:nowrap}
+.big{font-family:QS;font-weight:700;line-height:1;letter-spacing:-.01em;white-space:nowrap;background:linear-gradient(180deg,#E9BC57 0%,#B9821F 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.big small{font-size:.42em;margin-left:.1em}
+.pill{display:inline-flex;align-items:center;gap:14px;height:76px;padding:0 34px;border-radius:99px;background:${NAVY};color:#fff;font-family:QS;font-weight:700;font-size:36px;letter-spacing:.02em;white-space:nowrap;box-shadow:0 14px 30px -16px rgba(22,26,41,.8)}
+.chip{display:inline-flex;align-items:center;height:80px;padding:0 36px;border-radius:99px;background:rgba(255,255,255,.75);border:1.5px solid #C4CAD6;font-family:QS;font-weight:700;font-size:36px;color:${NAVY};white-space:nowrap}
+.foot{position:absolute;left:0;right:0;bottom:56px;text-align:center;font-family:QS;font-weight:600;font-size:28px;letter-spacing:.06em;color:#6B7080}
 `;
-const img = (r, x, y, extra = '') => `<img class="a" src="${r.url}" style="left:${x}px;top:${y}px;${extra}">`;
+const img = (r, x, y, extra = '') => `<img class="a" src="${r.url}" width="${r.w}" height="${r.h}" style="left:${x}px;top:${y}px;${extra}">`;
 const glow = (cx, cy, w, h) => `<div class="glow" style="left:${cx - w / 2}px;top:${cy - h / 2}px;width:${w}px;height:${h}px"></div>`;
+const head = (kicker, h, sub = '', x = 130, y = 150) =>
+  `<div class="a" style="left:${x}px;top:${y}px"><p class="kicker">${kicker}</p><h1 class="h">${h}</h1>${sub ? `<p class="sub">${sub}</p>` : ''}</div>`;
 const mark = '<p class="mark">Luca Bloom</p>';
-const num = (x, y, v, unit, size, color = NAVY, extra = '') =>
-  `<p class="a num c" style="left:${x}px;top:${y}px;font-size:${size}px;color:${color};${extra}">${v}${unit ? `<small>${unit}</small>` : ''}</p>`;
-// 寸法線（矢印つき）。x1,y1 → x2,y2
-const dim = (x1, y1, x2, y2, color = NAVY, sw = 5, head = 22) => {
+const layer = (body) => `<svg class="a" style="left:0;top:0;overflow:visible" width="2000" height="2000" viewBox="0 0 2000 2000">${body}</svg>`;
+// 矢印つきの線（x1,y1 → x2,y2）。both=true で両端に矢印
+const arrow = (x1, y1, x2, y2, color, sw, head, both = false) => {
   const a = Math.atan2(y2 - y1, x2 - x1);
   const hd = (x, y, s) =>
-    `M${x + Math.cos(a + s * 2.6) * head} ${y + Math.sin(a + s * 2.6) * head}L${x} ${y}L${x + Math.cos(a - s * 2.6) * head} ${y + Math.sin(a - s * 2.6) * head}`;
-  return `<path d="M${x1} ${y1}L${x2} ${y2}${hd(x1, y1, -1).replace('M', 'M')}${hd(x2, y2, 1)}" stroke="${color}" stroke-width="${sw}" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+    `M${x + Math.cos(a + s * 2.55) * head} ${y + Math.sin(a + s * 2.55) * head}L${x} ${y}L${x + Math.cos(a - s * 2.55) * head} ${y + Math.sin(a - s * 2.55) * head}`;
+  return `<path d="M${x1} ${y1}L${x2} ${y2}${hd(x2, y2, 1)}${both ? hd(x1, y1, -1) : ''}" stroke="${color}" stroke-width="${sw}" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
 };
-const layer = (body) => `<svg class="a" style="left:0;top:0" width="2000" height="2000" viewBox="0 0 2000 2000">${body}</svg>`;
 
-// ---------- 画像の組み立て（S：3Dの描画。shot(設定) → { url, pts, arms }） ----------
+// 回転の矢印（中心 cx,cy・半径 r。左上から時計回りに約3/4周して、先端に矢じり）
+const turnArc = (cx, cy, r, color, sw) => {
+  const a0 = (200 * Math.PI) / 180;
+  const a1 = (470 * Math.PI) / 180;
+  const P = (a) => [cx + r * Math.cos(a), cy + r * Math.sin(a)];
+  const [x0, y0] = P(a0);
+  const [x1, y1] = P(a1);
+  const t = a1 + Math.PI / 2; // 先端の進む向き
+  const h = sw * 4;
+  const hd = (s) => [x1 - Math.cos(t + s * 0.6) * h, y1 - Math.sin(t + s * 0.6) * h];
+  const [ha, hb] = [hd(1), hd(-1)];
+  return `<path d="M${x0} ${y0}A${r} ${r} 0 1 1 ${x1} ${y1}M${ha[0]} ${ha[1]}L${x1} ${y1}L${hb[0]} ${hb[1]}" stroke="${color}" stroke-width="${sw}" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+};
+
+// ---------- 4枚の組み立て（S：3Dの描画。shot(設定) → { url, w, h, pts, arms }） ----------
 const IMAGES = [
-  // 1枚目（メイン画像）：Amazon の決まりどおり、白い背景（RGB 255）に製品だけ。文字・記号なし
+  // 1枚目：製品の魅力をひと目で（大きな製品・見出し・3つの特長）
   {
-    file: '01-main',
-    bg: '#fff',
+    file: '01-hero',
+    text: ['FORESKIN CARE TOOL', 'Turn. Open. Stays put.', '70 mm', 'Max opening', 'Stepless', 'Fine control', 'Self-lock', 'Holds when you let go', 'Not a medical device · 18+', 'Utility model filed · JP'],
     async html(S) {
-      const r = await S({ w: 2000, h: 2000, travel: 22, dist: 300, look: [-10, -16, 0], shadow: true });
-      return img(r, 0, 0);
-    },
-  },
-  // 2枚目：全体と特長の記号（開き幅70mm・無段階・手を離しても止まる・先端が太いアーム）
-  {
-    file: '02-overview',
-    async html(S) {
-      const r = await S({ w: 2000, h: 1400, travel: 30, dist: 255, look: [-9, -16, 0] });
-      const items = [
-        [svg(ICON.width, 150, GOLD, 6), num(0, 0, '70', 'mm', 64, NAVY, 'position:static;transform:none;margin-top:18px')],
-        [svg(ICON.stepless, 150, GOLD, 6), ''],
-        [svg(ICON.lock, 150, GOLD, 6), ''],
-        [svg(ICON.taper, 150, GOLD, 6), ''],
+      const r = await S({ w: 2000, h: 1300, travel: 34, dist: 215, look: [-6, -15, 0], dir: [-0.42, 0.34, 0.86] });
+      const tiles = [
+        ['width', '70<small style="font-size:.6em"> mm</small>', 'Max opening'],
+        ['slider', 'Stepless', 'Fine control'],
+        ['lock', 'Self-lock', 'Holds when you let go'],
       ];
-      return `${glow(1000, 760, 2600, 1100)}${mark}${img(r, 0, 120)}
-${items.map(([ic, n], i) => `<div class="card" style="left:${130 + i * 445}px;top:1530px;width:405px;height:340px;display:flex;flex-direction:column;align-items:center;justify-content:center">${ic}${n}</div>`).join('')}`;
+      return `${glow(1080, 1080, 2900, 1250)}${mark}
+${head('FORESKIN CARE TOOL', 'Turn. Open.<br><em>Stays put.</em>')}
+<div class="a" style="right:120px;top:210px"><span class="pill" style="background:rgba(255,255,255,.75);color:${NAVY};border:1.5px solid #C4CAD6;box-shadow:none">Utility model filed · JP</span></div>
+${img(r, 0, 470)}
+${tiles
+  .map(
+    ([ic, t, d], i) => `<div class="glass" style="left:${120 + i * 595}px;top:1590px;width:570px;height:270px;display:flex;align-items:center;gap:30px;padding:0 36px">
+<div class="disc" style="width:136px;height:136px">${icon(ic, 82, GOLD, 8)}</div><div><p class="t1">${t}</p><p class="t2" style="${d.length > 14 ? 'font-size:28px;white-space:normal;width:300px' : ''}">${d}</p></div></div>`,
+  )
+  .join('')}
+<p class="foot">Not a medical device · 18+</p>`;
     },
   },
-  // 3枚目：ハンドルを回すと、2本のアームが平行に開く（全閉を薄く重ね、最大70mmを実線で）
+  // 2枚目：ハンドルを回すと、2本のアームが平行に最大70mmまで開く。無段階で、手を離すとその幅で止まる
   {
-    file: '03-open',
+    file: '02-open',
+    text: ['TURN THE HANDLE', 'Opens up to 70 mm.', 'Two arms open in parallel.', 'Stop anywhere — no steps.', 'Turn', '1 turn = 2 mm', '70 mm', 'Closed', 'Let go. It holds.'],
     async html(S) {
-      const o = { w: 2000, h: 1500, view: 'front', scale: 16, look: [-4, -12, 0], shadow: false };
+      const o = { w: 2000, h: 1100, view: 'front', scale: 13, look: [-9, -12, 0], shadow: false };
       const a = await S({ ...o, travel: 0 });
-      const b = await S({ ...o, travel: 60, points: [[-54, 10, 0], [-24, -22, 0], [21, -22, 0]] });
-      const [hx, hy] = b.pts[0];
+      const b = await S({ ...o, travel: 60, points: [[-54, 10, 0], [-24, -24, 0], [20, -24, 0]] });
+      const top = 560;
+      const [hx, hy] = [b.pts[0][0], top + b.pts[0][1]];
       const [m1, m2] = [b.pts[1], b.pts[2]];
-      const top = 300;
-      const y = top + b.arms.left[1] + 90;
-      return `${glow(1000, 1000, 2600, 1300)}${mark}
-${img(a, 0, top, 'opacity:.4')}${img(b, 0, top)}
-${layer(`${dim(m1[0], top + m1[1], m2[0], top + m2[1], GOLD, 10, 36)}<g transform="translate(${hx - 20} ${top + hy - 230}) scale(2.4)">${ICON.turn.replace(/<path/g, `<path stroke="${GOLD}" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"`)}</g>
-${dim(b.arms.left[0], y, b.arms.right[0], y, GOLD_INK, 6, 26)}
-<path d="M${b.arms.left[0]} ${y - 40}V${y + 40}M${b.arms.right[0]} ${y - 40}V${y + 40}" stroke="${GOLD_INK}" stroke-width="5" stroke-linecap="round"/>`)}
-${num((b.arms.left[0] + b.arms.right[0]) / 2, y + 110, '70', 'mm', 120, NAVY)}`;
+      const L = b.arms.left[0];
+      const R = b.arms.right[0];
+      const y = top + b.arms.left[1] + 70;
+      return `${glow(1000, 1200, 2900, 1200)}${mark}
+${head('TURN THE HANDLE', 'Opens up to <em>70 mm.</em>', 'Two arms open in parallel.<br>Stop anywhere — no steps.')}
+${img(a, 0, top, 'opacity:.32')}${img(b, 0, top)}
+${layer(`${turnArc(hx, hy, 150, GOLD, 10)}
+${arrow(m1[0], top + m1[1], m2[0], top + m2[1], GOLD, 12, 46)}
+${arrow(L, y, R, y, GOLD_INK, 6, 28, true)}<path d="M${L} ${y - 44}V${y + 44}M${R} ${y - 44}V${y + 44}" stroke="${GOLD_INK}" stroke-width="6" stroke-linecap="round"/>`)}
+<div class="a c" style="left:${hx}px;top:${hy + 250}px"><span class="pill">Turn</span></div>
+<p class="a c t2" style="left:${hx}px;top:${hy + 330}px;margin:0;font-size:30px">1 turn = 2 mm</p>
+<div class="a c" style="left:${(L + R) / 2}px;top:${y}px"><span class="pill" style="background:${GOLD};color:${NAVY};font-size:44px;height:84px">70 mm</span></div>
+<div class="glass" style="left:120px;top:1700px;width:1760px;height:200px;display:flex;align-items:center;gap:40px;padding:0 60px">
+  <p class="t2" style="margin:0;font-size:36px">Closed</p>
+  <svg width="760" height="60" viewBox="0 0 760 60"><defs><linearGradient id="sg" x1="0" x2="1"><stop offset="0" stop-color="#C9CFDB"/><stop offset="1" stop-color="${GOLD}"/></linearGradient></defs><rect x="0" y="20" width="760" height="20" rx="10" fill="url(#sg)"/><circle cx="470" cy="30" r="27" fill="#fff" stroke="${GOLD_INK}" stroke-width="7"/></svg>
+  <p class="t2" style="margin:0;font-size:36px;color:${NAVY};font-weight:700">70 mm</p>
+  <div style="width:2px;height:110px;background:#C4CAD6;margin:0 10px"></div>
+  <div class="disc" style="width:110px;height:110px">${icon('lock', 64, GOLD, 9)}</div>
+  <p class="t1" style="font-size:50px">Let go.<br>It holds.</p>
+</div>`;
     },
   },
-  // 4枚目：無段階に調整でき、手を離してもその幅で止まる（内部の送りねじを透かして見せる）
+  // 3枚目：アームの形（根元が細く先端が太い「逆テーパー」、外側は幅6mmの平らな面）
   {
-    file: '04-lock',
+    file: '03-arms',
+    text: ['ARM DESIGN', 'Wide tips. Stays in place.', 'Reverse taper', 'Narrow neck, wide tip', 'Flat face', '6 mm wide · R2 corners'],
     async html(S) {
-      const r = await S({ w: 2000, h: 1300, view: 'front', scale: 17, look: [-4, -12, 0], travel: 32, see: true, shadow: false });
-      const top = 380;
-      const y = top + r.arms.left[1] + 70;
-      const x1 = r.arms.left[0];
-      const x2 = r.arms.right[0];
-      // 下：目盛りのない連続した帯（無段階）と、いまの位置
-      const bx = 330;
-      const bw = 1340;
-      const by = 1830;
-      const k = 0.45;
-      return `${glow(1000, 1000, 2600, 1300)}${mark}
-<div class="card" style="left:1340px;top:90px;width:540px;height:230px;display:flex;align-items:center;justify-content:center;gap:30px">${svg(ICON.release, 150, NAVY, 6)}${svg(ICON.arrowR, 80, MUTED, 7)}${svg(ICON.lock, 150, GOLD_INK, 7)}</div>
-${img(r, 0, top)}
-${layer(`${dim(x1, y, x2, y, GOLD_INK, 6, 24)}<path d="M${x1} ${y - 36}V${y + 36}M${x2} ${y - 36}V${y + 36}" stroke="${GOLD_INK}" stroke-width="5" stroke-linecap="round"/>
-<defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#C4CAD6"/><stop offset="1" stop-color="${GOLD}"/></linearGradient></defs>
-<rect x="${bx}" y="${by - 14}" width="${bw}" height="28" rx="14" fill="url(#g)"/>
-<circle cx="${bx + bw * k}" cy="${by}" r="36" fill="#fff" stroke="${GOLD_INK}" stroke-width="8"/>`)}
-<div class="badge c" style="left:${(x1 + x2) / 2}px;top:${y}px;width:120px;height:120px">${svg(ICON.lock, 76, GOLD, 8)}</div>
-${num(bx - 90, by, '0', '', 64, MUTED)}${num(bx + bw + 130, by, '70', 'mm', 64, MUTED)}`;
-    },
-  },
-  // 5枚目：先端が太い「逆テーパー」のアーム。くびれ部に皮膚（ピンクの膜）がおさまり、外れにくい
-  {
-    file: '05-taper',
-    async html(S) {
-      // 左：本体（ピンクの膜＝狭い穴のイメージ）。右：アームの形（根元が細く、先端が太い）を拡大し、
-      // くびれ部におさまった皮膚（ピンクの輪）が、太い先端で止まる様子
-      const r = await S({ w: 1160, h: 1500, view: 'front', scale: 10.5, look: [-4, -14, 0], travel: 25, sleeve: true, shadow: false });
+      const r = await S({ w: 1250, h: 1300, travel: 26, sleeve: true, shadow: false, dist: 175, fov: 24, look: [-20, -27, 0], dir: [-0.5, 0.18, 0.85], points: [[-34.5, -21, 0], [-6.5, -34, 4]] });
+      const top = 640;
       const ARM = 'M0 0V39A1 1 0 0 0 1 40H1.394A2 2 0 0 0 2.504 39.664L3.664 38.891L4.387 38.211A3 3 0 0 0 5 36.394V35.475A20 20 0 0 0 4.784 32.541L2.522 17.293A2 2 0 0 1 4.5 15H7A1 1 0 0 0 8 14V0Z';
-      const k = 30; // 1mmあたりのpx
-      const ox = 1370; // アームの左端
-      const oy = 330; // アームの上端
-      const X = (v) => ox + v * k;
-      const Y = (v) => oy + v * k;
-      return `${glow(800, 1050, 2000, 1400)}${mark}${img(r, 20, 300)}
-<div class="card" style="left:1160px;top:250px;width:740px;height:1560px"></div>
-${layer(`<path d="${ARM}" transform="translate(${ox} ${oy}) scale(${k})" fill="#fff" stroke="${NAVY}" stroke-width="${3 / k}" stroke-linejoin="round"/>
-<ellipse cx="${X(2.1)}" cy="${Y(21.5)}" rx="${3.4 * k}" ry="${0.9 * k}" fill="none" stroke="${PINK}" stroke-width="30" opacity=".9"/>
-${dim(X(2.1), Y(23.5), X(2.1), Y(31.2), GOLD, 10, 34)}
-<path d="M${X(-0.6)} ${Y(32.4)}H${X(5.6)}" stroke="${GOLD}" stroke-width="12" stroke-linecap="round"/>
-`)}`;
+      // 右上の丸：アームの形（y=12〜40mmの部分）を拡大。くびれに皮膚（ピンクの輪）、太い先端で止まる
+      const c1 = [1560, 840];
+      const k = 15;
+      const ax = c1[0] - 3 * k;
+      const ay = c1[1] - 26 * k;
+      // 右下の丸：アームの断面（幅6mm・角R2）。面全体で当たる
+      const c2 = [1560, 1520];
+      const p1 = [r.pts[0][0], top + r.pts[0][1]];
+      const p2 = [r.pts[1][0], top + r.pts[1][1]];
+      return `${glow(800, 1200, 2400, 1400)}${mark}
+${head('ARM DESIGN', 'Wide tips.<br><em>Stays in place.</em>')}
+${img(r, 20, top, '-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 24%),linear-gradient(to right,transparent 0,#000 16%);-webkit-mask-composite:source-in;mask-composite:intersect')}
+${layer(`<defs><clipPath id="k1"><circle cx="${c1[0]}" cy="${c1[1]}" r="250"/></clipPath><clipPath id="k2"><circle cx="${c2[0]}" cy="${c2[1]}" r="250"/></clipPath></defs>
+<path d="M${p1[0]} ${p1[1]}C${p1[0] + 300} ${p1[1] - 60} ${c1[0] - 420} ${c1[1]} ${c1[0] - 262} ${c1[1]}" stroke="${GOLD}" stroke-width="5" fill="none" stroke-dasharray="4 14" stroke-linecap="round"/><circle cx="${p1[0]}" cy="${p1[1]}" r="16" fill="${GOLD}"/>
+<path d="M${p2[0]} ${p2[1]}C${p2[0] + 260} ${p2[1] + 40} ${c2[0] - 420} ${c2[1]} ${c2[0] - 262} ${c2[1]}" stroke="${GOLD}" stroke-width="5" fill="none" stroke-dasharray="4 14" stroke-linecap="round"/><circle cx="${p2[0]}" cy="${p2[1]}" r="16" fill="${GOLD}"/>
+<circle cx="${c1[0]}" cy="${c1[1]}" r="256" fill="rgba(255,255,255,.85)" stroke="${GOLD}" stroke-width="8"/>
+<g clip-path="url(#k1)"><path d="${ARM}" transform="translate(${ax} ${ay}) scale(${k})" fill="#F4F2EC" stroke="#8990A6" stroke-width="${2.5 / k}" stroke-linejoin="round"/>
+<ellipse cx="${ax + 2.0 * k}" cy="${ay + 22.5 * k}" rx="${3.6 * k}" ry="${0.95 * k}" fill="none" stroke="${PINK}" stroke-width="22"/>
+${arrow(ax + 2.0 * k, ay + 25 * k, ax + 2.0 * k, ay + 31 * k, GOLD_INK, 9, 30)}
+<path d="M${ax - 1 * k} ${ay + 32.6 * k}H${ax + 6 * k}" stroke="${GOLD_INK}" stroke-width="10" stroke-linecap="round"/></g>
+<circle cx="${c2[0]}" cy="${c2[1]}" r="256" fill="rgba(255,255,255,.85)" stroke="${GOLD}" stroke-width="8"/>
+<g clip-path="url(#k2)"><path d="M${c2[0] - 190} ${c2[1] - 40}Q${c2[0]} ${c2[1] - 52} ${c2[0] + 190} ${c2[1] - 40}" stroke="${PINK}" stroke-width="30" fill="none" stroke-linecap="round" opacity=".9"/>
+<rect x="${c2[0] - 150}" y="${c2[1] - 22}" width="300" height="200" rx="50" fill="#F4F2EC" stroke="#8990A6" stroke-width="6"/>
+${[-120, -60, 0, 60, 120].map((d) => arrow(c2[0] + d, c2[1] - 190, c2[0] + d, c2[1] - 80, GOLD_INK, 8, 22)).join('')}
+</g>`)}
+<div class="a" style="left:1300px;top:1100px;width:520px;text-align:center"><p class="t1" style="font-size:52px">Reverse taper</p><p class="t2" style="margin-top:6px">Narrow neck, wide tip</p></div>
+<div class="a" style="left:1300px;top:1790px;width:520px;text-align:center"><p class="t1" style="font-size:52px">Flat face</p><p class="t2" style="margin-top:6px">6 mm wide · R2 corners</p></div>`;
     },
   },
-  // 6枚目：アームの外側は幅6mmの平らな面（角R2）。線ではなく面で当たり、力が分散する
+  // 4枚目：届いても中身がわからない（化粧箱は背面に「Luca Bloom」だけ・外箱に入れて発送）、日本で検品・組立、仕様
   {
-    file: '06-flat',
-    async html() {
-      // 断面図：左＝丸い棒（線で当たる）、右＝Luca Bloom（幅6mm・角R2の平らな面で当たる）
-      const arrows = (cx, y0, xs, len, color) =>
-        xs.map((dx) => `<path d="M${cx + dx} ${y0 - len}V${y0 - 18}M${cx + dx - 16} ${y0 - 36}L${cx + dx} ${y0 - 18}L${cx + dx + 16} ${y0 - 36}" stroke="${color}" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`).join('');
-      const L = 560;
-      const R = 1360;
-      const Y = 1060;
-      const skin = (cx, w, sag) => `<path d="M${cx - w} ${Y - 40 - sag}Q${cx} ${Y - 40 + sag * 0.2} ${cx + w} ${Y - 40 - sag}" stroke="${PINK}" stroke-width="34" fill="none" stroke-linecap="round" opacity=".85"/>`;
-      return `${glow(1000, 1060, 2600, 1400)}${mark}
-${layer(`${skin(L, 300, 120)}${skin(R, 330, 30)}
-<circle cx="${L}" cy="${Y + 150}" r="190" fill="#fff" stroke="#9AA2B5" stroke-width="10"/>
-<rect x="${R - 285}" y="${Y - 40}" width="570" height="380" rx="95" fill="#fff" stroke="${NAVY}" stroke-width="10"/>
-${arrows(L, Y - 70, [0], 300, '#9AA2B5')}
-${arrows(R, Y - 70, [-240, -160, -80, 0, 80, 160, 240], 200, GOLD)}
-${dim(R - 285, Y + 450, R + 285, Y + 450, NAVY, 6, 24)}`)}
-<div class="badge c" style="left:${L}px;top:${Y + 560}px;width:110px;height:110px;background:#9AA2B5;color:#fff">${svg(ICON.cross, 64, '#fff', 11)}</div>
-<div class="badge c" style="left:${R}px;top:${Y + 640}px;width:130px;height:130px">${svg(ICON.check, 84, GOLD, 11)}</div>
-${num(R, Y + 530, '6', 'mm', 76, NAVY)}
-${num(R + 380, Y + 20, 'R2', '', 60, MUTED)}<svg class="a" style="left:0;top:0" width="2000" height="2000"><path d="M${R + 330} ${Y + 20}L${R + 262} ${Y - 18}" stroke="${MUTED}" stroke-width="5" stroke-linecap="round"/></svg>`;
-    },
-  },
-  // 7枚目：寸法（全長100.75・本体85×20・アーム40・最大の開き70）と素材・製造国
-  {
-    file: '07-size',
+    file: '04-privacy',
+    text: ['PRIVACY', 'Discreet by design.', 'Only “Luca Bloom” on the box', 'Ships in a plain outer box', 'Inspected & assembled in Japan', '85 × 20 × 20 mm', 'POM resin', 'Made in China', '18+'],
     async html(S) {
-      const o = { w: 2000, h: 1500, view: 'front', scale: 14, look: [-4, -12, 0], shadow: false };
-      const P = [[-54, 20, 0], [46.75, 20, 0], [-42.5, 20, 0], [42.5, 20, 0], [42.5, 0, 0], [-34.5, 0, 0], [-34.5, -40, 0]];
-      const a = await S({ ...o, travel: 60 });
-      const b = await S({ ...o, travel: 0, points: P });
-      const top = 330;
-      const p = b.pts.map(([x, y]) => [x, y + top]);
-      const yA = p[0][1] - 190;
-      const yB = p[0][1] - 90;
-      const xR = p[3][0] + 170;
-      const xL = p[5][0] - 150;
-      const yO = top + a.arms.left[1] + 110;
-      const ext = (x, y1, y2) => `<path d="M${x} ${y1}V${y2}" stroke="${MUTED}" stroke-width="3" stroke-dasharray="10 10"/>`;
-      return `${glow(1000, 1000, 2600, 1300)}${mark}
-${img(a, 0, top, 'opacity:.25')}${img(b, 0, top)}
-${layer(`${ext(p[0][0], yA - 30, p[0][1])}${ext(p[1][0], yA - 30, p[1][1])}${ext(p[2][0], yB - 30, p[2][1])}${ext(p[3][0], yB - 30, p[3][1])}
-${dim(p[0][0], yA, p[1][0], yA)}${dim(p[2][0], yB, p[3][0], yB, MUTED)}
-<path d="M${p[3][0] + 40} ${p[3][1]}H${xR + 30}M${p[4][0] + 40} ${p[4][1]}H${xR + 30}" stroke="${MUTED}" stroke-width="3" stroke-dasharray="10 10"/>${dim(xR, p[3][1], xR, p[4][1])}
-<path d="M${p[5][0] - 30} ${p[5][1]}H${xL - 30}M${p[6][0] - 30} ${p[6][1]}H${xL - 30}" stroke="${MUTED}" stroke-width="3" stroke-dasharray="10 10"/>${dim(xL, p[5][1], xL, p[6][1])}
-${dim(a.arms.left[0], yO, a.arms.right[0], yO, GOLD_INK, 6, 24)}`)}
-${num((p[0][0] + p[1][0]) / 2, yA - 60, '100.75', 'mm', 58)}${num((p[2][0] + p[3][0]) / 2, yB - 50, '85', 'mm', 46, MUTED)}
-${num(xR + 120, (p[3][1] + p[4][1]) / 2, '20', 'mm', 52)}${num(xL - 120, (p[5][1] + p[6][1]) / 2, '40', 'mm', 52)}
-${num((a.arms.left[0] + a.arms.right[0]) / 2, yO + 80, '70', 'mm', 76, GOLD_INK)}
-<p class="a num" style="left:0;right:0;top:1850px;text-align:center;font-size:40px;font-weight:600;color:${MUTED};letter-spacing:.06em">POM&nbsp;&nbsp;·&nbsp;&nbsp;Made in China&nbsp;&nbsp;·&nbsp;&nbsp;Inspected &amp; assembled in Japan</p>`;
-    },
-  },
-  // 8枚目：化粧箱は背面に「Luca Bloom」だけ。さらに外箱に入れて届く（中身がわからない）
-  {
-    file: '08-package',
-    async html(S) {
-      const r = await S({ kind: 'box', w: 1300, h: 1100, yaw: 180, lid: 0, dist: 380, look: [0, 22, 0], dir: [-0.35, 0.5, 1] });
-      return `${glow(1000, 1000, 2600, 1300)}${mark}${img(r, 40, 420)}
-${layer(`<g transform="translate(1360 820) scale(5.2)" stroke="#8C6A3E" stroke-width="2.4" fill="#D9B98C" stroke-linejoin="round"><path d="M12 36L50 22L88 36V76L50 90L12 76Z"/><path d="M12 36L50 50L88 36M50 50V90" fill="none"/><path d="M42 47L42 87" stroke="#B8935E" stroke-width="7"/></g>
-<g transform="translate(1180 1010) scale(1.6)">${ICON.arrowR.replace(/<path/g, `<path stroke="${MUTED}" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"`)}</g>`)}
-<div class="badge c" style="left:1640px;top:560px;width:220px;height:220px">${svg(ICON.eyeOff, 140, GOLD, 7)}</div>`;
-    },
-  },
-  // 9枚目：安全のための使用の上限（1回30分・24時間で合計1時間・就寝中は使わない・18歳以上）
-  {
-    file: '09-safety',
-    async html() {
-      const cell = (x, y, icon, label) =>
-        `<div class="card" style="left:${x}px;top:${y}px;width:820px;height:760px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:40px">${icon}${label}</div>`;
-      const t = (v, u, c = NAVY) => `<p class="num" style="font-size:120px;color:${c}">${v}<small>${u}</small></p>`;
-      const noSleep = `<div style="position:relative;width:300px;height:300px">${svg(ICON.moon, 300, NAVY, 6)}<div style="position:absolute;inset:0">${svg(ICON.no, 300, '#C0453C', 7)}</div></div>`;
-      return `${glow(1000, 1060, 2600, 1700)}${mark}
-${cell(140, 300, svg(ICON.clock, 300, NAVY, 6), t('≤30', 'min'))}
-${cell(1040, 300, svg(ICON.clock, 300, NAVY, 6).replace('<path d="M50 26V50L66 60"/>', '<path d="M50 26V50L66 60"/><path d="M14 30A40 40 0 0 1 30 14" stroke-width="9"/>'), t('≤1', 'h / 24 h'))}
-${cell(140, 1140, noSleep, '')}
-${cell(1040, 1140, '', `<p class="num" style="font-size:300px;color:${NAVY}">18<span style="color:${GOLD_INK}">+</span></p>`)}`;
+      const r = await S({ kind: 'box', w: 1350, h: 1100, yaw: 0, lid: 1.85, dist: 470, fov: 26, look: [0, 42, 10], dir: [-0.3, 0.75, 1] });
+      const rows = [
+        ['eyeOff', 'Only “Luca Bloom”<br>on the box'],
+        ['carton', 'Ships in a plain<br>outer box'],
+        ['japan', 'Inspected &amp; assembled<br>in Japan'],
+      ];
+      return `${glow(760, 1150, 2400, 1400)}${mark}
+${head('PRIVACY', 'Discreet<br><em>by design.</em>')}
+${img(r, -20, 620)}
+${rows
+  .map(
+    ([ic, t], i) => `<div class="glass" style="left:1290px;top:${640 + i * 330}px;width:600px;height:290px;display:flex;align-items:center;gap:30px;padding:0 36px">
+<div class="disc" style="width:120px;height:120px">${icon(ic, 72, GOLD, 7)}</div><p class="t1" style="font-size:40px;line-height:1.25;white-space:normal">${t}</p></div>`,
+  )
+  .join('')}
+<div class="a" style="left:0;right:0;top:1740px;display:flex;justify-content:center;gap:22px">
+${['85 × 20 × 20 mm', 'POM resin', 'Made in China', '18+'].map((c) => `<span class="chip">${c}</span>`).join('')}</div>`;
     },
   },
 ];
+
+// 表現の検査（病名・効果・比較・最上級・価格・「限定」）
+for (const im of IMAGES) {
+  const bad = findBanned(im.text.join('\n'), 'en');
+  if (bad) {
+    console.error(`${im.file}：海外で使わない語があります（${bad}）`);
+    process.exit(1);
+  }
+}
 
 // ---------- 書き出し ----------
 const bundle = await esbuild.build({
@@ -268,7 +248,7 @@ const bundle = await esbuild.build({
   format: 'iife',
   target: 'es2020',
 });
-const HTML = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>${CSS}</style></head><body><div id="gl"></div><div id="art"></div></body></html>`;
+const HTML = `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><style>${CSS}</style></head><body><div id="gl"></div><div id="art"></div></body></html>`;
 const server = http.createServer((req, res) => {
   const p = new URL(req.url, 'http://x').pathname;
   if (p === '/') return res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' }).end(HTML);
@@ -291,29 +271,26 @@ await page.addStyleTag({
   content: '@font-face{font-family:Quicksand;font-weight:300 700;src:url(/fonts/qs.ttf)}@font-face{font-family:Montserrat;font-weight:100 900;src:url(/fonts/ms.ttf)}',
 });
 await page.evaluate(() =>
-  Promise.all(['700 10px Quicksand', '200 10px Montserrat', '700 10px QS', '200 10px MS'].map((f) => document.fonts.load(f))),
+  Promise.all(
+    ['700 10px Quicksand', '200 10px Montserrat', '700 10px QS', '600 10px QS', '200 10px MS', '900 10px ZK'].map((f) => document.fonts.load(f)),
+  ),
 );
 await page.addScriptTag({ url: '/shots.js' });
 await page.waitForFunction(() => window.ready === true, null, { timeout: 120_000 });
 
-const S = (o) => page.evaluate((x) => window.shot(x), o);
+const S = async (o) => ({ ...(await page.evaluate((x) => window.shot(x), o)), w: o.w, h: o.h });
 const only = process.argv.slice(2);
 fs.mkdirSync(OUT, { recursive: true });
 for (const im of IMAGES.filter((i) => !only.length || only.some((p) => i.file.startsWith(p)))) {
   const html = await im.html(S);
-  await page.evaluate(
-    ([h, bg]) => {
-      const art = document.getElementById('art');
-      art.className = bg ? '' : 'bg';
-      art.style.background = bg || '';
-      art.innerHTML = h;
-      return Promise.all([...art.querySelectorAll('img')].map((i) => i.decode()));
-    },
-    [html, im.bg || ''],
-  );
+  await page.evaluate((h) => {
+    const art = document.getElementById('art');
+    art.innerHTML = h;
+    return Promise.all([...art.querySelectorAll('img')].map((i) => i.decode()));
+  }, html);
   await page.evaluate(() => document.fonts.ready);
   const file = path.join(OUT, `${im.file}.jpg`);
-  fs.writeFileSync(file, await page.screenshot({ type: 'jpeg', quality: 90, clip: { x: 0, y: 0, width: 2000, height: 2000 } }));
+  fs.writeFileSync(file, await page.screenshot({ type: 'jpeg', quality: 92, clip: { x: 0, y: 0, width: 2000, height: 2000 } }));
   console.log(`amazon/global/${im.file}.jpg ${Math.round(fs.statSync(file).size / 1024)}KB`);
 }
 await browser.close();
