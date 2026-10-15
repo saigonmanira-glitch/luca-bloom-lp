@@ -13,7 +13,7 @@
       <path d="M0 2L2 0M83 0L85 2M85 18L83 20M2 20L0 18" fill="none"/>
       <path d="M85 6H86.75V20.25H85Z"/>
       <path d="M86.75 7H88.25L89.25 8V12L88.25 13H86.75Z"/>
-      <path d="M5 2V12H3.5L6 18L8.5 12H7V2Z" fill="none" stroke-width=".3"/>
+      <path d="M5 18V8H3.5L6 2L8.5 8H7V18Z" fill="none" stroke-width=".3"/>
       <text transform="translate(9.95 1.3) rotate(90)" font-family="Quicksand,Arial,sans-serif" font-size="5.6" font-weight="700" fill="none" stroke-width=".28" textLength="17.4" lengthAdjust="spacingAndGlyphs">CLOSE</text>
     </g>
   </defs>

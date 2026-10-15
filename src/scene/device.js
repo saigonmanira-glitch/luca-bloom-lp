@@ -206,7 +206,7 @@ export function buildDevice() {
     add(upright(new ExtrudeGeometry(b, { depth: 3.5, bevelEnabled: false, curveSegments: 8 }), 0), housing);
   }
 
-  // 刻印「↓CLOSE」（側面2か所）。キャンバス 1mm=20px、範囲：本体左端から x 3〜15mm、下面から y 1〜19mm
+  // 刻印「↑CLOSE」（側面2か所）。キャンバス 1mm=20px、範囲：本体左端から x 3〜15mm、下面から y 1〜19mm
   let decal;
   {
     const c = document.createElement('canvas');
@@ -219,13 +219,13 @@ export function buildDevice() {
     g.lineWidth = 5;
     g.lineJoin = 'round';
     g.beginPath();
-    g.moveTo(X(5), Y(18));
-    g.lineTo(X(5), Y(8));
-    g.lineTo(X(3.5), Y(8));
-    g.lineTo(X(6), Y(2));
-    g.lineTo(X(8.5), Y(8));
-    g.lineTo(X(7), Y(8));
-    g.lineTo(X(7), Y(18));
+    g.moveTo(X(5), Y(2));
+    g.lineTo(X(5), Y(12));
+    g.lineTo(X(3.5), Y(12));
+    g.lineTo(X(6), Y(18));
+    g.lineTo(X(8.5), Y(12));
+    g.lineTo(X(7), Y(12));
+    g.lineTo(X(7), Y(2));
     g.closePath();
     g.stroke();
     g.save();

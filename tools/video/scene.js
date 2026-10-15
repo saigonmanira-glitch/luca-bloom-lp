@@ -175,7 +175,7 @@ window.renderAt = (t) => {
     const travel = track(K.travel, t);
     model.rotation.y = (track(K.spin, t) * Math.PI) / 180;
     device.mover.position.x = travel;
-    device.shaft.rotation.x = -travel * Math.PI;
+    device.shaft.rotation.x = travel * Math.PI; // 閉じる向き＝側面の矢印（上向き）
     updateSleeve(travel);
     sleeve.visible = track(K.sleeve, t) > 0.5;
     seeThrough(track(K.see, t));
