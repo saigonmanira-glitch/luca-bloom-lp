@@ -98,13 +98,26 @@ const arrow = (x1, y1, x2, y2, color, sw, head, both = false) => {
 // ---------- 4枚の組み立て（S：3Dの描画。shot(設定) → { url, w, h, pts, arms }） ----------
 // アームの断面（図面どおり：幅6mm×厚さ5mm、肌に当たる外側の角R2・内側の角R1）。単位 mm、左上が原点、上の辺が肌に当たる面
 const SECTION = 'M0 2A2 2 0 0 1 2 0H4A2 2 0 0 1 6 2V4A1 1 0 0 1 5 5H1A1 1 0 0 1 0 4Z';
+// 背景の飾り：細かい点の格子（中央ほど薄い）と、金色の細い円弧
+const deco = (cx, cy, rs = [620, 780]) =>
+  layer(`<defs><pattern id="dots" width="44" height="44" patternUnits="userSpaceOnUse"><circle cx="22" cy="22" r="2.2" fill="rgba(22,26,41,.13)"/></pattern>
+<radialGradient id="fade" cx="${cx / 2000}" cy="${cy / 2000}" r=".75"><stop offset=".25" stop-color="#000"/><stop offset="1" stop-color="#fff"/></radialGradient>
+<mask id="dm"><rect width="2000" height="2000" fill="url(#fade)"/></mask></defs>
+<rect width="2000" height="2000" fill="url(#dots)" mask="url(#dm)"/>
+${rs.map((r, n) => `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(227,179,78,${n ? 0.28 : 0.4})" stroke-width="${n ? 2 : 3}" stroke-dasharray="${n ? '2 16' : `${r * 2.2} ${r * 4}`}" stroke-linecap="round" transform="rotate(${n ? 0 : 200} ${cx} ${cy})"/>`).join('')}`);
+// 寸法線：両端の目盛りと、外から内向き（inside=false）または内から外向きの矢印
+const extLine = (x, y1, y2) => `<path d="M${x} ${y1}V${y2}" stroke="${MUTED}" stroke-width="3" stroke-dasharray="6 9"/>`;
+// アームの先端（最も太い所）とくぼみ部の高さ（本体の座標、mm）
+const Y_TIP = -35.475;
+const Y_NECK = -17.3;
 const IMAGES = [
-  // 1枚目：回して、開いて、止まる。開く動きを残像で見せ、ハンドルには立体の回転の矢印
+  // 1枚目：回して、開いて、止まる。後ろに「Luca Bloom」の文字だけの化粧箱。特長は4語
   {
     file: '01-hero',
-    text: ['Turn. Open. Stays put.', '70 mm', 'Stepless', 'Self-lock'],
+    text: ['Turn. Open. Stays put.', '70 mm', 'Stepless', 'Self-lock', 'Discreet', 'Made in China · Inspected & assembled in Japan · 18+'],
     async html(S) {
-      const v = { w: 2000, h: 1400, dist: 230, look: [-10, -12, 0], dir: [-0.5, 0.3, 0.82] };
+      const box = await S({ kind: 'box', w: 900, h: 720, yaw: 205, lid: 0, dist: 470, fov: 26, look: [0, 18, 0], dir: [0.15, 0.4, 1] });
+      const v = { w: 1600, h: 1200, dist: 235, look: [-12, -13, 0], dir: [-0.5, 0.3, 0.82] };
       const g0 = await S({ ...v, travel: 0, shadow: false });
       const g1 = await S({ ...v, travel: 22, shadow: false });
       const r = await S({ ...v, travel: 44, turnArrow: true, moveArrow: true });
@@ -112,71 +125,82 @@ const IMAGES = [
         ['width', '70 mm'],
         ['slider', 'Stepless'],
         ['lock', 'Self-lock'],
+        ['eyeOff', 'Discreet'],
       ];
-      return `${glow(1000, 1150, 3000, 1400)}${mark}
+      return `${glow(900, 1100, 3000, 1500)}${deco(760, 1050)}${mark}
 ${head('', 'Turn. Open.<br><em>Stays put.</em>', '', 130, 110)}
-${img(g0, 0, 420, 'opacity:.16')}${img(g1, 0, 420, 'opacity:.3')}${img(r, 0, 420)}
-<div class="a" style="left:0;right:0;top:1740px;display:flex;justify-content:center;gap:90px">
-${badges.map(([ic, t]) => `<div style="display:flex;align-items:center;gap:26px"><div class="disc" style="width:124px;height:124px">${icon(ic, 74, GOLD, 8)}</div><p class="t1" style="font-size:58px">${t}</p></div>`).join('')}</div>`;
+${img(box, 1060, 880)}
+${img(g0, 0, 470, 'opacity:.16')}${img(g1, 0, 470, 'opacity:.3')}${img(r, 0, 470)}
+<div class="a" style="left:0;right:0;top:1712px;display:flex;justify-content:center;gap:46px">
+${badges.map(([ic, t]) => `<div class="glass" style="position:static;display:flex;align-items:center;gap:22px;height:132px;padding:0 40px 0 22px;border-radius:99px"><div class="disc" style="width:96px;height:96px">${icon(ic, 58, GOLD, 8)}</div><p class="t1" style="font-size:46px">${t}</p></div>`).join('')}</div>
+<p class="foot" style="bottom:44px">Made in China · Inspected &amp; assembled in Japan · 18+</p>`;
     },
   },
-  // 2枚目：閉じた時（先端の外側10mm・くぼみ部5mm）→ 最大70mm。ハンドル1回転で2mm
+  // 2枚目：閉じた時（先端の外側10mm・くぼみ部5mm）→ 最大70mm。寸法線は 3D の点から求めるので、製品の位置と一致する。
+  // 右：ハンドルの拡大（立体の回転の矢印）、1回転で2mm
   {
     file: '02-size',
     text: ['10 → 70 mm', '1 turn = 2 mm', '5 mm', '10 mm', '70 mm'],
     async html(S) {
-      const o = { w: 2000, h: 760, view: 'front', scale: 9.6, look: [-2, -12, 0], yaw: 30, pitch: 10, shadow: false };
-      const P = [[-49, 10, 0], [-34.5 - 2.522, -17.3, 0], [-34.5 + 2.522, -17.3, 0]];
-      const a = await S({ ...o, travel: 0, turnArrow: true, points: P });
-      const b = await S({ ...o, travel: 60, moveArrow: true });
+      const o = { w: 1300, h: 720, view: 'front', scale: 11.5, look: [-3.6, -10.5, 0], shadow: false };
+      const pa = [[-39.5, Y_TIP, 0], [-29.5, Y_TIP, 0], [-34.5 - 2.522, Y_NECK, 0], [-34.5 + 2.522, Y_NECK, 0], [0, -40, 0]];
+      const pb = [[-39.5, Y_TIP, 0], [30.5, Y_TIP, 0], [0, -40, 0]];
+      const a = await S({ ...o, travel: 0, points: pa });
+      const b = await S({ ...o, travel: 60, moveArrow: true, points: pb });
+      const hz = await S({ w: 560, h: 560, travel: 0, turnArrow: true, dist: 92, fov: 26, look: [-49, 8, 0], dir: [-0.78, 0.32, 0.55], shadow: false });
+      const X0 = 60;
       const ya = 300;
-      const yb = 1140;
-      // 閉じた時：先端の外側の幅（10mm）と、くぼみ部の幅（5mm）
-      const aL = a.arms.left[0];
-      const aR = a.arms.right[0];
-      const aT = ya + a.arms.left[1];
-      const [nL, nR] = [a.pts[1], a.pts[2]];
-      const nY = ya + nL[1];
-      // 開いた時：70mm
-      const bL = b.arms.left[0];
-      const bR = b.arms.right[0];
-      const bT = yb + b.arms.left[1];
-      const tick = (x, y) => `<path d="M${x} ${y - 30}V${y + 30}" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>`;
-      return `${glow(1000, 1150, 3000, 1700)}${mark}
+      const yb = 1090;
+      const A = a.pts.map(([x, y]) => [X0 + x, ya + y]);
+      const B = b.pts.map(([x, y]) => [X0 + x, yb + y]);
+      const la = A[4][1] + 48; // 閉じた時の寸法線（先端の下）
+      const lb = B[2][1] + 52; // 開いた時の寸法線
+      const ny = A[2][1];
+      const col = 1420; // 右の列（数値）
+      return `${glow(800, 1150, 2800, 1800)}${deco(700, 1050, [])}${mark}
 <p class="a h" style="left:130px;top:110px;margin:0;font-size:150px">10<span style="font-family:QS;color:${GOLD};margin:0 .18em">→</span><em>70</em><span style="font-size:.5em"> mm</span></p>
-${img(a, 0, ya)}${img(b, 0, yb)}
-${layer(`<g style="color:${NAVY}">${arrow(aL - 150, aT + 40, aL - 10, aT + 40, NAVY, 5, 22)}${arrow(aR + 150, aT + 40, aR + 10, aT + 40, NAVY, 5, 22)}${tick(aL, aT + 40)}${tick(aR, aT + 40)}</g>
-<g style="color:${GOLD_INK}">${arrow(nL[0] - 170, nY, nL[0] - 8, nY, GOLD_INK, 5, 22)}${arrow(nR[0] + 170, nY, nR[0] + 8, nY, GOLD_INK, 5, 22)}</g>
-<g style="color:${GOLD_INK}">${arrow(bL, bT + 50, bR, bT + 50, GOLD_INK, 6, 26, true)}${tick(bL, bT + 50)}${tick(bR, bT + 50)}</g>`)}
-<p class="a c t1" style="left:${aR + 300}px;top:${aT + 40}px;font-size:56px">10<span style="font-size:.55em"> mm</span></p>
-<p class="a c t1" style="left:${nR[0] + 300}px;top:${nY}px;font-size:56px;color:${GOLD_INK}">5<span style="font-size:.55em"> mm</span></p>
-<div class="a c" style="left:${(bL + bR) / 2}px;top:${bT + 50}px"><span class="pill" style="background:${GOLD};color:${NAVY};font-size:50px;height:92px">70 mm</span></div>
-<p class="a t1" style="right:${2000 - a.pts[0][0] + 250}px;top:${ya + a.pts[0][1] - 30}px;font-size:46px">1 turn<br><span style="color:${GOLD_INK}">= 2 mm</span></p>`;
+${img(a, X0, ya)}${img(b, X0, yb)}
+${layer(`${extLine(A[0][0], A[0][1], la + 20)}${extLine(A[1][0], A[1][1], la + 20)}
+${arrow(A[0][0] - 110, la, A[0][0], la, NAVY, 5, 20)}${arrow(A[1][0] + 110, la, A[1][0], la, NAVY, 5, 20)}
+${arrow(A[2][0] - 120, ny, A[2][0] - 4, ny, GOLD_INK, 5, 20)}${arrow(A[3][0] + 120, ny, A[3][0] + 4, ny, GOLD_INK, 5, 20)}
+<path d="M${A[1][0] + 130} ${la}H${col - 24}M${A[3][0] + 140} ${ny}H${col - 24}" stroke="${GOLD}" stroke-width="3" stroke-dasharray="3 12" stroke-linecap="round"/>
+${extLine(B[0][0], B[0][1], lb + 20)}${extLine(B[1][0], B[1][1], lb + 20)}${arrow(B[0][0], lb, B[1][0], lb, GOLD_INK, 6, 26, true)}
+<circle cx="1660" cy="1390" r="236" fill="rgba(255,255,255,.9)" stroke="${GOLD}" stroke-width="8"/>`)}
+<p class="a t1" style="left:${col}px;top:${ny - 40}px;font-size:72px;color:${GOLD_INK}">5<span style="font-size:.5em"> mm</span></p>
+<p class="a t1" style="left:${col}px;top:${la - 40}px;font-size:72px">10<span style="font-size:.5em"> mm</span></p>
+<div class="a c" style="left:${(B[0][0] + B[1][0]) / 2}px;top:${lb}px"><span class="pill" style="background:${GOLD};color:${NAVY};font-size:50px;height:92px">70 mm</span></div>
+<img class="a" src="${hz.url}" width="460" height="460" style="left:1430px;top:1160px;border-radius:50%">
+<p class="a c t1" style="left:1660px;top:1690px;font-size:50px">1 turn <span style="color:${GOLD_INK}">= 2 mm</span></p>`;
     },
   },
-  // 3枚目：2本のアームが内側から押し広げ、膜（ピンク）はくびれ部に収まる。先端が太いので抜けにくい。
-  // 右：アームの断面（図面どおり）。幅6mmの面とR2の角で肌に当たる
+  // 3枚目：2本のアームが膜（ピンク）を内側から押し広げ、膜の口はくびれ部に収まる。先端が太いので抜けにくい。
+  // 右上：全体のどこを拡大したか。右下：アームの断面（図面どおり）
   {
     file: '03-hold',
     text: ['Wide tips. Stays in place.', '6 mm', 'R2'],
     async html(S) {
       const r = await S({ w: 1300, h: 1400, view: 'front', scale: 19.5, look: [-19, -27, 0], travel: 26, sleeve: true, pushArrows: true, pushY: -22, shadow: false, points: [[-34.5 + 26 + 4.6, -30, 0]] });
       const top = 560;
+      const ctx = await S({ w: 520, h: 400, travel: 26, sleeve: true, view: 'front', scale: 4.2, look: [-4, -12, 0], shadow: false, points: [[-46, -13, 0], [-1, -42, 0]] });
       const k = 50; // 断面図：1mmあたりのpx
       const cx = 1580;
-      const cy = 1290;
-      // 断面は肌に当たる面を右に向ける（右のアームと同じ向き）。元の図形を90度回して置く
+      const cy = 1330;
       const sx = cx + 2.5 * k - 30;
       const sy = cy - 3 * k;
       const rot = `translate(${sx} ${sy}) rotate(90) scale(${k})`;
-      // 肌（ピンク）：右の面と R2 の角に沿う
       const X = sx - 5 * k;
       const skin = `M${X + 3.8 * k} ${sy - 1.7 * k}L${X + 5.15 * k} ${sy + 0.15 * k}A${2.15 * k} ${2.15 * k} 0 0 1 ${X + 7.15 * k} ${sy + 2 * k}V${sy + 4 * k}A${2.15 * k} ${2.15 * k} 0 0 1 ${X + 5.15 * k} ${sy + 6.15 * k}L${X + 3.8 * k} ${sy + 7.7 * k}`;
       const [lx, ly] = [90 + r.pts[0][0], top + r.pts[0][1]];
-      return `${glow(800, 1250, 2600, 1500)}${mark}
+      const [q1, q2] = ctx.pts;
+      const cX = 1400;
+      const cY = 290;
+      return `${glow(800, 1250, 2600, 1500)}${deco(760, 1250, [600, 760])}${mark}
 ${head('', 'Wide tips.<br><em>Stays in place.</em>', '', 130, 110)}
 ${img(r, 90, top, '-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 14%)')}
-${layer(`<path d="M${lx + 10} ${ly}C${lx + 160} ${ly} ${cx - 420} ${cy} ${cx - 330} ${cy}" stroke="${GOLD}" stroke-width="5" fill="none" stroke-dasharray="4 14" stroke-linecap="round"/><circle cx="${lx}" cy="${ly}" r="14" fill="${GOLD}"/>
+<div class="glass" style="left:${cX - 20}px;top:${cY - 20}px;width:560px;height:440px;border-radius:40px"></div>${img(ctx, cX, cY)}
+${layer(`<rect x="${cX + q1[0]}" y="${cY + q1[1]}" width="${q2[0] - q1[0]}" height="${q2[1] - q1[1]}" rx="10" fill="none" stroke="${GOLD}" stroke-width="5"/>
+<path d="M${cX + q1[0]} ${cY + q2[1]}L${520} ${top + 260}" stroke="${GOLD}" stroke-width="3" stroke-dasharray="3 12" stroke-linecap="round"/>
+<path d="M${lx + 10} ${ly}C${lx + 160} ${ly} ${cx - 420} ${cy} ${cx - 330} ${cy}" stroke="${GOLD}" stroke-width="5" fill="none" stroke-dasharray="4 14" stroke-linecap="round"/><circle cx="${lx}" cy="${ly}" r="14" fill="${GOLD}"/>
 <circle cx="${cx}" cy="${cy}" r="320" fill="rgba(255,255,255,.9)" stroke="${GOLD}" stroke-width="8"/>
 <path d="${skin}" stroke="${PINK}" stroke-width="26" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/>
 ${[0.8, 1.9, 3, 4.1, 5.2].map((y) => arrow(X + 9.4 * k, sy + y * k, X + 7.5 * k, sy + y * k, GOLD_INK, 9, 24)).join('')}
@@ -185,19 +209,6 @@ ${[0.8, 1.9, 3, 4.1, 5.2].map((y) => arrow(X + 9.4 * k, sy + y * k, X + 7.5 * k,
 <path d="M${X + 5 * k + 14} ${sy - 14}L${X + 5 * k + 70} ${sy - 70}" stroke="${MUTED}" stroke-width="4" stroke-linecap="round"/>`)}
 <p class="a c t1" style="left:${X - 130}px;top:${sy + 3 * k}px;font-size:56px">6<span style="font-size:.55em"> mm</span></p>
 <p class="a c t1" style="left:${X + 5 * k + 105}px;top:${sy - 100}px;font-size:52px;color:${MUTED}">R2</p>`;
-    },
-  },
-  // 4枚目：中身がわからない（化粧箱は「Luca Bloom」の文字だけ。中は専用のクッション材）
-  {
-    file: '04-privacy',
-    text: ['Discreet by design.', 'Made in China · Inspected & assembled in Japan · 18+'],
-    async html(S) {
-      const back = await S({ kind: 'box', w: 1300, h: 1000, yaw: 200, lid: 0, dist: 430, fov: 26, look: [0, 20, 0], dir: [0.15, 0.42, 1] });
-      const open = await S({ kind: 'box', w: 1300, h: 1150, yaw: 0, lid: 1.85, dist: 470, fov: 26, look: [0, 42, 10], dir: [-0.3, 0.75, 1] });
-      return `${glow(1000, 1200, 3000, 1600)}${mark}
-${head('', 'Discreet<br><em>by design.</em>', '', 130, 110)}
-${img(back, 760, 330)}${img(open, -60, 760)}
-<p class="foot">Made in China · Inspected &amp; assembled in Japan · 18+</p>`;
     },
   },
 ];

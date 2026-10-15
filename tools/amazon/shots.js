@@ -94,7 +94,7 @@ const tip = (p, t, r, h) => {
 // ハンドルの回転の矢印：ハンドルの軸（x 方向、高さ y=10）を囲む輪。手前側で上へ回る向き＝アームが開く向き
 const turnArrow = new Group();
 {
-  const R = 19;
+  const R = 15;
   const X = -50;
   const P = (f) => new Vector3(X, 10 + R * Math.sin(f), R * Math.cos(f));
   // 奥の上から下を回って手前を上がり、矢じりは手前で上を向く
@@ -102,10 +102,10 @@ const turnArrow = new Group();
   const f1 = (20 * Math.PI) / 180;
   const pts = [];
   for (let i = 0; i <= 80; i++) pts.push(P(f0 + ((f1 - f0) * i) / 80));
-  const tube = new Mesh(new TubeGeometry(new CatmullRomCurve3(pts), 160, 2, 20, false), GOLD);
+  const tube = new Mesh(new TubeGeometry(new CatmullRomCurve3(pts), 160, 0.95, 16, false), GOLD);
   tube.castShadow = true;
   turnArrow.add(tube);
-  turnArrow.add(tip(P(f1), new Vector3(0, Math.cos(f1), -Math.sin(f1)), 5, 11));
+  turnArrow.add(tip(P(f1), new Vector3(0, Math.cos(f1), -Math.sin(f1)), 2.6, 6.5));
 }
 device.dev.add(turnArrow);
 // 直線の矢印（a → b）
