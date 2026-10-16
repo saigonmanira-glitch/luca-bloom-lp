@@ -15,6 +15,21 @@ export const LIGHT = Math.PI;
 export const prefersReducedMotion = () =>
   !!window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+// 描画の重さの見張り：最初の約1秒（40コマ）の平均が 1コマ 50ms（毎秒20コマ）を超える端末では、
+// 自動の動き（回転・開閉）を止め、操作した時だけ描く。遅い端末で画面の操作が重くなるのを防ぐ
+export function createFrameGuard() {
+  let n = 0;
+  let sum = 0;
+  let slow = false;
+  return (dt) => {
+    if (slow || n >= 40 || dt <= 0) return slow;
+    n++;
+    sum += dt;
+    if (n === 40 && sum / n > 0.05) slow = true;
+    return slow;
+  };
+}
+
 // 0〜1 のなめらかな補間
 export function smoothstep(a, b, x) {
   const t = Math.min(1, Math.max(0, (x - a) / (b - a)));

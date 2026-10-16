@@ -14,13 +14,13 @@ https://luca-bloom.com/ のソース一式です。静的サイトで、GitHub P
 | `assets/fonts/` | サイトで使う文字だけを収録した Web フォント（`tools/build-fonts.mjs` が生成） |
 | `tools/` | ビルド用スクリプト |
 | `package.json` | ビルド設定（esbuild） |
-| `hero-fallback.webp` | 3D が表示されるまで／表示できない端末で出す静止画（29KB） |
+| `hero-fallback.webp`・`hero-fallback-700.webp` | 3D が表示されるまで／3D を出さない端末で出す静止画（31KB・19KB）。実際の 3D の最初の1コマを背景透明で撮影したもので、全言語共通。`npm run build:still` で作り直す |
 | `og.png` | SNS 共有用画像（1200×630） |
 | `favicon.svg` / `apple-touch-icon.png` | アイコン |
 | `privacy.html` | プライバシーポリシー |
 | `404.html` | 存在しない URL を開いたときのページ（GitHub Pages が自動で使用） |
 | `jp/` | 同梱カードの QR コード（`https://luca-bloom.com/jp`）の飛び先。`index.html`＝選択画面、`manual.html`＝ご使用マニュアル（画像は `jp/img/`）、`disclaimer.pdf`＝取扱説明書 兼 免責事項、`support.css`＝共通スタイル |
-| `en/`・`us/`・`ca/`・`ca/fr/`・`mx/` | 海外向けページ（英国・豪州／米国／カナダ〈英語・フランス語〉／メキシコ）。各 `index.html`（商品ページ）・`privacy.html`（その国の法律に合わせたプライバシーポリシー）。**手で編集せず**、`tools/i18n/` の言語ファイルから `npm run build` で生成する。共有画像・静止画（`og.png`・`hero-fallback*.webp`）は `npm run build:og` で生成 |
+| `en/`・`us/`・`ca/`・`ca/fr/`・`mx/` | 海外向けページ（英国・豪州／米国／カナダ〈英語・フランス語〉／メキシコ）。各 `index.html`（商品ページ）・`privacy.html`（その国の法律に合わせたプライバシーポリシー）。**手で編集せず**、`tools/i18n/` の言語ファイルから `npm run build` で生成する。共有画像（`og.png`）は `npm run build:og` で生成（3D が出るまでの静止画は全言語でルートの `hero-fallback*.webp` を共用） |
 | `sns/en/` | 英国・豪州向けSNS自動投稿キット（投稿30本・AI用プロンプト・画像の指示書。詳細は `sns/en/README.md`）。投稿前に `node tools/sns-check.mjs` で禁止語と文字数を確認（`npm run check` にも含む） |
 | `column/` | コラム。`index.html`＝一覧、各記事は `*.html`、`column.css`＝全記事共通のスタイル |
 | `robots.txt` / `sitemap.xml` | 検索エンジン向け |
@@ -34,6 +34,7 @@ https://luca-bloom.com/ のソース一式です。静的サイトで、GitHub P
   - シェーダーは並行コンパイル（`compileAsync`）してから描画を始め、読み込み時に画面が固まらないようにしています。
   - 本体の回転は340°の向きから始まります。
   - 3D が描画されるまで、また WebGL が使えない・three.js を読み込めない場合は `hero-fallback.webp` を表示します。
+  - GPU がなく CPU で描く環境（SwiftShader など）とデータ節約モードでは、3D のプログラム自体を読み込みません。描画が遅い端末（最初の40コマの平均が1コマ50msを超える）では自動の動きを止め、操作した時だけ描きます。
   - タブが非表示の間と、3D が画面外にある間は描画を止めます。
 - **フォント**：Zen Kaku Gothic New（400/700/900）・Quicksand・Montserrat（化粧箱ロゴ用）を自サイトから配信します（外部サービスへの接続なし）。各太さには、実際にその太さで表示される文字だけを収録しています（合計約240KB）。`font-display: swap` のため、フォントの読み込み中も文字は先に表示されます。
 - **構造化データ**：Product（価格 5,800円・税込）、FAQPage、WebPage。FAQ の文言を変えるときは、画面の FAQ と JSON-LD の両方を直してください。

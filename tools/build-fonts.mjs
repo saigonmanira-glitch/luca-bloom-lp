@@ -13,6 +13,7 @@ import { createServer } from 'node:http';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import subsetFont from 'subset-font';
+import { LOCALES } from './i18n/site.mjs';
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
 const CACHE = path.join(ROOT, '.cache/fonts');
@@ -63,6 +64,10 @@ async function source(rel) {
 
 const SKIP = ['node_modules', '.cache', '.git', 'index.backup.html', 'assets/'];
 const pages = await listFiles(ROOT, ['.html'], SKIP);
+// 商品ページ（日本語版と各国版）。和文フォントは「商品ページで使う文字」と「それ以外のページだけで使う文字」の2ファイルに分け、
+// 後者には unicode-range（そのフォントが受け持つ文字）を付ける。ブラウザは表示する文字を含むファイルだけを取りに行くので、
+// 商品ページはコラムなどでしか使わない漢字を読み込まない
+const LP_FILES = new Set(['index.html', ...LOCALES.map((L) => `${L.dir}index.html`)].map((f) => path.join(ROOT, f)));
 const scripts = await listFiles(path.join(ROOT, 'src'), ['.js'], []);
 
 // ---------- 1. ソースから文字を集める（全ての太さの下限。ASCII は常に含める） ----------
@@ -91,6 +96,10 @@ for (const f of scripts) add(jsChars, decode(visible(await readFile(f, 'utf8'), 
 for (const c of jsChars) all.add(c);
 
 // ---------- 2. 実際に表示して、太さごとの文字を調べる（Playwright がある場合） ----------
+// ページごとに、文字の表示に使っているフォント（先読みの対象）
+const usedFonts = new Map();
+// 太さごとに、商品ページで表示される文字
+const lpChars = {};
 async function charsByWeight() {
   let chromium;
   const req = createRequire(import.meta.url);
@@ -124,6 +133,8 @@ async function charsByWeight() {
     ...(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {}),
   });
   const found = { 400: new Set(), 700: new Set(), 900: new Set() };
+  usedFonts.clear();
+  for (const w of [400, 700, 900]) lpChars[w] = new Set();
   try {
     for (const width of [375, 1280]) {
       const page = await browser.newPage({ viewport: { width, height: 900 }, javaScriptEnabled: false });
@@ -132,19 +143,29 @@ async function charsByWeight() {
         // この関数はブラウザ内で実行される（document などはブラウザの変数）
         /* global document, NodeFilter, getComputedStyle */
         const res = await page.evaluate((JP) => {
-          const out = { 400: '', 700: '', 900: '' };
+          const out = { 400: '', 700: '', 900: '', fonts: [] };
+          const used = new Set();
           const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
           for (let n = walker.nextNode(); n; n = walker.nextNode()) {
             const el = n.parentElement;
             if (!el || el.closest('script,style,noscript')) continue;
             const cs = getComputedStyle(el);
-            if (!cs.fontFamily.includes(JP)) continue;
             const w = +cs.fontWeight;
+            const first = cs.fontFamily.split(',')[0].replace(/["']/g, '').trim();
+            if (n.textContent.trim()) {
+              if (first === 'Quicksand') used.add('quicksand.woff2');
+              else if (first === 'Montserrat') used.add('montserrat-200.woff2');
+              else if (first === JP) used.add(`zenkaku-${w <= 550 ? 400 : w <= 800 ? 700 : 900}.woff2`);
+            }
+            if (!cs.fontFamily.includes(JP)) continue;
             out[w <= 550 ? 400 : w <= 800 ? 700 : 900] += n.textContent;
           }
+          out.fonts = [...used];
           return out;
         }, JP);
         for (const w of [400, 700, 900]) add(found[w], res[w]);
+        if (LP_FILES.has(f)) for (const w of [400, 700, 900]) add(lpChars[w], res[w]);
+        if (width === 375) usedFonts.set(f, new Set(res.fonts));
       }
       await page.close();
     }
@@ -164,29 +185,64 @@ const textFor = (f) => {
   return [...s].join('');
 };
 
+// unicode-range の書き方（連続する文字はまとめる）：U+3041-3043,U+4E00,…
+const unicodeRange = (chars) => {
+  const cps = [...chars].map((c) => c.codePointAt(0)).sort((a, b) => a - b);
+  const out = [];
+  for (let i = 0; i < cps.length; i++) {
+    let j = i;
+    while (j + 1 < cps.length && cps[j + 1] === cps[j] + 1) j++;
+    const h = (n) => n.toString(16).toUpperCase();
+    out.push(i === j ? `U+${h(cps[i])}` : `U+${h(cps[i])}-${h(cps[j])}`);
+    i = j;
+  }
+  return out.join(',');
+};
+
 // ---------- 3. フォントを作る ----------
 await mkdir(OUT, { recursive: true });
 const faces = [];
-for (const f of FONTS) {
-  const text = textFor(f);
+const write = async (f, out, text, range) => {
   const buf = await subsetFont(await source(f.src), text, {
     targetFormat: 'woff2',
     ...(f.axes ? { variationAxes: f.axes } : {}),
   });
-  await writeFile(path.join(OUT, f.out), buf);
-  console.log(`${f.out.padEnd(22)} ${String([...text].length).padStart(4)} 文字  ${(buf.length / 1024).toFixed(1)} KB`);
-  faces.push(`@font-face{font-family:"${f.family}";font-style:normal;font-weight:${f.weight};font-display:swap;src:url(/assets/fonts/${f.out}) format("woff2")}`);
+  await writeFile(path.join(OUT, out), buf);
+  console.log(`${out.padEnd(22)} ${String([...text].length).padStart(4)} 文字  ${(buf.length / 1024).toFixed(1)} KB`);
+  faces.push(`@font-face{font-family:"${f.family}";font-style:normal;font-weight:${f.weight};font-display:swap;src:url(/assets/fonts/${out}) format("woff2")${range ? `;unicode-range:${range}` : ''}}`);
+};
+const splitJP = byWeight && Object.keys(lpChars).length;
+for (const f of FONTS) {
+  const text = textFor(f);
+  if (f.family !== JP || !splitJP) {
+    await write(f, f.out, text);
+    continue;
+  }
+  // 商品ページ用：英数字・記号（U+2000 未満）と、JavaScript が出す文字と、商品ページに出る文字
+  const main = new Set([...text].filter((c) => c.codePointAt(0) < 0x2000 || jsChars.has(c) || lpChars[f.weight].has(c)));
+  const rest = new Set([...text].filter((c) => !main.has(c)));
+  await write(f, f.out, [...main].join(''));
+  if (rest.size) await write(f, f.out.replace('.woff2', '-x.woff2'), [...rest].join(''), unicodeRange(rest));
 }
 if (!byWeight) console.log('※ Playwright が無いため、太さごとの絞り込みは行っていません');
 
-// ---------- 4. 各ページの <head> に @font-face を書き込む（マーカーの間を置き換え） ----------
-const block = `<!-- fonts:start （tools/build-fonts.mjs が生成。手で編集しない） -->\n<style>${faces.join('')}</style>\n<!-- fonts:end -->`;
+// ---------- 4. 各ページの <head> に @font-face と、そのページで使うフォントの先読みを書き込む（マーカーの間を置き換え） ----------
+// 先読み（preload）：フォントを HTML の読み込み直後から取りに行き、最初のレイアウトから Web フォントで組む。
+// 代わりのフォントで一度組んでから組み直す二度手間がなくなり、最初のレイアウトの時間が約5分の1になる（2026-10-16 計測：520ms → 110ms）
+const ORDER = FONTS.map((f) => f.out);
+const block = (f) => {
+  const pre = [...(usedFonts.get(f) || [])]
+    .sort((a, b) => ORDER.indexOf(a) - ORDER.indexOf(b))
+    .map((o) => `<link rel="preload" href="/assets/fonts/${o}" as="font" type="font/woff2" crossorigin>`)
+    .join('\n');
+  return `<!-- fonts:start （tools/build-fonts.mjs が生成。手で編集しない） -->\n${pre ? `${pre}\n` : ''}<style>${faces.join('')}</style>\n<!-- fonts:end -->`;
+};
 const re = /<!-- fonts:start[^>]*-->[\s\S]*?<!-- fonts:end -->/;
 let n = 0;
 for (const f of pages) {
   const html = await readFile(f, 'utf8');
   if (!re.test(html)) continue;
-  await writeFile(f, html.replace(re, block));
+  await writeFile(f, html.replace(re, block(f)));
   n++;
 }
 console.log(`${n} ページに書き込み`);

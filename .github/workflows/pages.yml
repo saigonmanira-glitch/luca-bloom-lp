@@ -1,0 +1,43 @@
+# 公開：push のたびに、サイトに必要なファイルだけを集めて GitHub Pages に公開する。
+# 制作用のファイル（tools/・tests/・src/・SNS の原稿や指示文・README など）はサイトに出さない（tools/build-site.mjs の許可リスト）。
+# リポジトリの Settings → Pages → Build and deployment → Source を「GitHub Actions」にすると有効になる。
+name: 公開（GitHub Pages）
+on:
+  push:
+    branches: [claude/keen-pascal-bs4hhf]
+  workflow_dispatch:
+# 最小権限：リポジトリは読むだけ。Pages への公開と、その本人確認（OIDC）だけ許可する
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+# 公開は1本ずつ。途中の公開は打ち切らない（中途半端な状態を出さない）
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      # 外部の部品はバージョン名ではなくコミットID（書き換え不可）で固定する
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+      - name: 公開するファイルだけを _site に集める
+        run: node tools/build-site.mjs
+      - name: 集めたファイルにリンク切れ・参照切れがないか
+        run: node tools/check-site.mjs
+        env:
+          SITE_ROOT: _site
+      - uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4.0.0
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5

@@ -7,7 +7,8 @@ import path from 'node:path';
 import { INTL_PAGES } from './i18n/site.mjs';
 import { COLUMN_PAGES } from './i18n/columns.mjs';
 
-const ROOT = path.resolve(import.meta.dirname, '..');
+// SITE_ROOT を指定すると、そのフォルダ（公開用に集めた _site/ など）を調べる
+const ROOT = process.env.SITE_ROOT ? path.resolve(process.env.SITE_ROOT) : path.resolve(import.meta.dirname, '..');
 const SITE = 'https://luca-bloom.com/';
 const pages = ['index.html', 'privacy.html', '404.html']
   .concat(fs.readdirSync(path.join(ROOT, 'jp')).filter((f) => f.endsWith('.html')).map((f) => `jp/${f}`))

@@ -3,7 +3,8 @@ import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 
-const ROOT = path.resolve(import.meta.dirname, '..');
+// SITE_ROOT を指定すると、そのフォルダ（公開用に集めた _site/ など）を配信する
+const ROOT = process.env.SITE_ROOT ? path.resolve(process.env.SITE_ROOT) : path.resolve(import.meta.dirname, '..');
 const PORT = Number(process.env.PORT || 4173);
 const TYPES = {
   '.html': 'text/html; charset=utf-8',

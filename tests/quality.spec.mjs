@@ -28,10 +28,11 @@ for (const p of [...pages, 'no-such-page']) {
 }
 
 // ---------- フォント：表示される文字が、その太さのフォントに全て入っていること ----------
-// 文章を変えて npm run build:fonts を忘れると、ここで失敗する
-const fonts = Object.fromEntries(
-  [400, 700, 900].map((w) => [w, fontkit.openSync(new URL(`assets/fonts/zenkaku-${w}.woff2`, ROOT).pathname)]),
-);
+// 文章を変えて npm run build:fonts を忘れると、ここで失敗する。
+// 和文フォントは「商品ページで使う文字」（zenkaku-400.woff2 など）と「それ以外」（-x.woff2）に分かれている。
+// 商品ページの文字は全て前者に入っていること（商品ページが -x を読み込まないこと）も確かめる
+const open = (f) => (fs.existsSync(new URL(`assets/fonts/${f}`, ROOT)) ? fontkit.openSync(new URL(`assets/fonts/${f}`, ROOT).pathname) : null);
+const fonts = Object.fromEntries([400, 700, 900].map((w) => [w, [open(`zenkaku-${w}.woff2`), open(`zenkaku-${w}-x.woff2`)].filter(Boolean)]));
 const NOT_IN_SOURCE = new Set(['φ']); // 元フォント自体に無い文字（端末の標準書体で表示される）
 
 test('フォント：全ページの表示文字が、それぞれの太さのフォントに収録されている', async ({ page }) => {
@@ -55,7 +56,8 @@ test('フォント：全ページの表示文字が、それぞれの太さの�
     for (const [w, text] of Object.entries(byWeight)) {
       for (const ch of new Set(text)) {
         if (/\s/.test(ch) || NOT_IN_SOURCE.has(ch)) continue;
-        if (!fonts[w].hasGlyphForCodePoint(ch.codePointAt(0))) missing.push(`/${p} ${w}：${ch}`);
+        const cp = ch.codePointAt(0);
+        if (LP.includes(p) ? !fonts[w][0].hasGlyphForCodePoint(cp) : !fonts[w].some((f) => f.hasGlyphForCodePoint(cp))) missing.push(`/${p} ${w}：${ch}`);
       }
     }
   }

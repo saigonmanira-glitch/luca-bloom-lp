@@ -10,6 +10,9 @@ export default defineConfig({
   use: {
     baseURL: `http://localhost:${PORT}/`,
     ...devices['Pixel 7'],
+    // テスト環境は GPU がなく CPU で描く（SwiftShader）。本番ではこの環境に 3D を出さないため、
+    // 動作テストでは localStorage の lb:3d=force で 3D を必ず表示させる（src/app.js の canRender3D）
+    storageState: { cookies: [], origins: [{ origin: `http://localhost:${PORT}`, localStorage: [{ name: 'lb:3d', value: 'force' }] }] },
     launchOptions: {
       // GPUのない環境でも3D（WebGL）を描画できるようにする
       args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'],
@@ -18,7 +21,7 @@ export default defineConfig({
   },
   webServer: {
     command: `node tools/serve.mjs`,
-    env: { PORT: String(PORT) },
+    env: { PORT: String(PORT), ...(process.env.SITE_ROOT ? { SITE_ROOT: process.env.SITE_ROOT } : {}) },
     url: `http://localhost:${PORT}/`,
     reuseExistingServer: !process.env.CI,
   },

@@ -1,4 +1,4 @@
-// 海外向けページの共有画像（og.png・1200×630）と、3D が出るまでの静止画（hero-fallback.webp・-800.webp）を
+// 海外向けページの共有画像（og.png・1200×630）を
 // 言語ファイルの og（見出し・特長）から作る。文言を変えたら実行してコミットする。
 //   node tools/build-og.mjs            … 全言語
 //   node tools/build-og.mjs fr-CA      … 指定した言語だけ
@@ -92,29 +92,10 @@ for (const L of LOCALES.filter((l) => !only || l.code === only)) {
   await page.setContent(html(L.og));
   await page.evaluate(() => document.fonts.ready);
   const png = await page.screenshot({ type: 'png' });
-  // ブラウザの画像変換で WebP（1200px・800px）を作る
-  /* global document, Image */
-  const webp = await page.evaluate(async (b64) => {
-    const img = new Image();
-    img.src = `data:image/png;base64,${b64}`;
-    await img.decode();
-    const out = [];
-    for (const [w, h, q] of [[1200, 630, 0.82], [800, 420, 0.8]]) {
-      const c = document.createElement('canvas');
-      c.width = w;
-      c.height = h;
-      const g = c.getContext('2d');
-      g.imageSmoothingQuality = 'high';
-      g.drawImage(img, 0, 0, w, h);
-      out.push(c.toDataURL('image/webp', q).split(',')[1]);
-    }
-    return out;
-  }, png.toString('base64'));
+  /* global document */
   const dir = path.join(ROOT, L.dir);
   fs.mkdirSync(dir, { recursive: true });
   fs.writeFileSync(path.join(dir, 'og.png'), png);
-  fs.writeFileSync(path.join(dir, 'hero-fallback.webp'), Buffer.from(webp[0], 'base64'));
-  fs.writeFileSync(path.join(dir, 'hero-fallback-800.webp'), Buffer.from(webp[1], 'base64'));
-  console.log(`${L.dir}og.png ${Math.round(png.length / 1024)}KB / hero-fallback.webp ${Math.round((webp[0].length * 3) / 4 / 1024)}KB`);
+  console.log(`${L.dir}og.png ${Math.round(png.length / 1024)}KB`);
 }
 await browser.close();

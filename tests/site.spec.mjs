@@ -89,6 +89,22 @@ test('3D：WebGLが使えない端末では静止画のまま', async ({ page })
   expect(errors).toEqual([]);
 });
 
+test('3D：GPU がなく CPU で描く環境では、3D のプログラムを読み込まず静止画のまま', async ({ browser }) => {
+  // lb:3d=force を設定しない（本番の閲覧者と同じ）状態で開く。テスト環境の WebGL は SwiftShader（CPU で描画）
+  const ctx = await browser.newContext({ storageState: { cookies: [], origins: [] } });
+  const page = await ctx.newPage();
+  const chunks = [];
+  page.on('request', (r) => {
+    if (r.url().includes('/assets/js/chunks/')) chunks.push(r.url());
+  });
+  await page.goto('', { waitUntil: 'load' });
+  await page.waitForTimeout(3000);
+  await expect(page.locator('#stage canvas')).toHaveCount(0);
+  await expect(page.locator('#fb')).toBeVisible();
+  expect(chunks).toEqual([]);
+  await ctx.close();
+});
+
 test('化粧箱の3Dは、近づくまで作らない', async ({ page }) => {
   await page.goto('', { waitUntil: 'load' });
   await expect(page.locator('#stage canvas')).toHaveCount(1, { timeout: 30_000 });

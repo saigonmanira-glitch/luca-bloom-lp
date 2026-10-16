@@ -11,7 +11,7 @@ import {
   Vector3,
 } from 'three';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
-import { LIGHT, addDrag, createRenderer, onContextLost, prefersReducedMotion, whenCompiled } from './common.js';
+import { LIGHT, addDrag, createFrameGuard, createRenderer, onContextLost, prefersReducedMotion, whenCompiled } from './common.js';
 import { buildDevice } from './device.js';
 import { buildSleeve } from './sleeve.js';
 
@@ -112,6 +112,7 @@ export function initHero(state) {
   const HOLD = 2;
   const USERV = 10;
   const reduce = prefersReducedMotion();
+  const guard = createFrameGuard();
   // 定位置：正面から見て本体が画面と平行な向き。ドラッグを離して5秒後に、1.2秒かけて定位置へ戻る
   // 向きは四元数（回転を表す値）で持ち、上下左右どの方向にも制限なく回る
   const HOME = new Quaternion();
@@ -172,7 +173,7 @@ export function initHero(state) {
     if (!alive) return;
     const dt = Math.min(0.1, last ? (now - last) / 1000 : 0);
     last = now;
-    const anim = !reduce;
+    const anim = !reduce && !guard(dt);
     goHome(dt);
 
     if (!state.demo) {
@@ -211,7 +212,7 @@ export function initHero(state) {
       state.slider.value = 10 + state.current;
     }
 
-    seeThrough(dt, reduce);
+    seeThrough(dt, !anim);
     place();
     renderer.render(scene, camera);
     if (visible && !document.hidden && (anim || back >= 0 || state.current !== state.target)) {

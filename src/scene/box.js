@@ -18,7 +18,7 @@ import {
   ShadowMaterial,
   Vector3,
 } from 'three';
-import { LIGHT, addDrag, createRenderer, onContextLost, prefersReducedMotion, smoothstep, whenCompiled } from './common.js';
+import { LIGHT, addDrag, createFrameGuard, createRenderer, onContextLost, prefersReducedMotion, smoothstep, whenCompiled } from './common.js';
 import { buildDevice, upright } from './device.js';
 import { HOLE_A, HOLE_B } from './box-foam.js';
 
@@ -60,6 +60,7 @@ export function initBox() {
 
   // 動き
   const reduce = prefersReducedMotion();
+  const guard = createFrameGuard();
   let ang = Math.PI * 0.8;
   let running = false;
   let visible = true;
@@ -79,10 +80,11 @@ export function initBox() {
     if (!alive) return;
     const dt = Math.min(0.1, last ? (now - last) / 1000 : 0);
     last = now;
-    if (!reduce && !drag.on) ang += ((Math.PI * 2) / 36) * dt;
+    const anim = !reduce && !guard(dt);
+    if (anim && !drag.on) ang += ((Math.PI * 2) / 36) * dt;
     pose();
     renderer.render(scene, cam);
-    if (visible && !reduce && !document.hidden) {
+    if (visible && anim && !document.hidden) {
       requestAnimationFrame(frame);
     } else {
       running = false;

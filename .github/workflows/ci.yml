@@ -32,5 +32,14 @@ jobs:
           git diff --exit-code -- assets/js
       - name: ブラウザ（Chromium）の準備
         run: npx playwright install --with-deps chromium
+      - name: 公開するファイルだけを集める（公開と同じ手順。tools/build-site.mjs）
+        run: node tools/build-site.mjs
+      - name: 集めたファイルにリンク切れ・参照切れがないか
+        run: node tools/check-site.mjs
+        env:
+          SITE_ROOT: _site
+      # テストするのは、実際に公開されるファイルそのもの（集め漏れがあれば、ここで失敗する）
       - name: ブラウザでの動作テスト
         run: npm test
+        env:
+          SITE_ROOT: _site

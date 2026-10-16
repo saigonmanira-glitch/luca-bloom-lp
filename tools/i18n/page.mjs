@@ -82,7 +82,7 @@ ${OG_LOCALES.filter((o) => o !== L.ogLocale).map((o) => `<meta property="og:loca
 <meta name="twitter:title" content="${esc(title)}">
 <meta name="twitter:image" content="${og}">
 ${extraLd.map(ld).join('\n')}
-${FONTS_PLACEHOLDER}`;
+${kind === 'lp' ? `<!-- 一番大きく表示される画像（3D が出るまでの静止画）を、フォントより先に取りに行く -->\n<link rel="preload" as="image" href="/hero-fallback.webp" imagesrcset="/hero-fallback-700.webp 700w, /hero-fallback.webp 1040w" imagesizes="(min-width: 600px) 520px, calc(100vw - 40px)" fetchpriority="high">\n` : ''}${FONTS_PLACEHOLDER}`;
 }
 
 const organization = (url) => ({
@@ -165,8 +165,8 @@ ${SPRITE}
     <p class="lead">${t.heroLead}</p>
 
     <div class="stage" id="stage" role="img" aria-label="${esc(t.stageAria)}">
-      <img class="fb-img" id="fb" src="hero-fallback.webp" srcset="hero-fallback-800.webp 800w, hero-fallback.webp 1200w" sizes="(min-width: 600px) 520px, calc(100vw - 40px)" alt="${esc(t.imageAlt)}" width="1200" height="630" fetchpriority="high" decoding="async">
-      <noscript><img class="fb-img" src="hero-fallback.webp" alt="${esc(t.imageAlt)}" width="1200" height="630"></noscript>
+      <img class="fb-img" id="fb" src="/hero-fallback.webp" srcset="/hero-fallback-700.webp 700w, /hero-fallback.webp 1040w" sizes="(min-width: 600px) 520px, calc(100vw - 40px)" alt="${esc(t.imageAlt)}" width="1040" height="854" fetchpriority="high" decoding="async">
+      <noscript><img class="fb-img" src="/hero-fallback.webp" alt="${esc(t.imageAlt)}" width="1040" height="854"></noscript>
     </div>
     <p class="stage-note"><i aria-hidden="true"></i>${t.stageNote.map((n) => `<span class="nb">${n}</span>`).join(' ')}</p>
     <div class="meter">
