@@ -128,3 +128,9 @@ https://luca-bloom.com/ のソース一式です。静的サイトで、GitHub P
    - CNAME レコード（名前 `www`）：saigonmanira-glitch.github.io
 4. Pages 画面で「Enforce HTTPS」にチェック。
 5. ブランチに push すると、1〜2分でサイトに反映されます。
+
+## 公開のしくみ
+
+- push すると `.github/workflows/pages.yml` が、サイトに必要なファイルだけを `_site/` に集めて（`tools/build-site.mjs` の許可リスト）GitHub Pages に公開します。制作用のファイル（`tools/`・`tests/`・`src/`・`amazon/`・SNS の原稿や指示文・README など）はサイトに出しません。
+- 有効にするには、GitHub のリポジトリの Settings → Pages → Build and deployment → Source を「GitHub Actions」にします。
+- CI（`.github/workflows/ci.yml`）は、公開されるファイル（`_site/`）そのものに対して動作テストを行います。

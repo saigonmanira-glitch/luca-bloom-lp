@@ -230,6 +230,50 @@ footer p{margin-top:8px}
 .bar .p{color:var(--white);font-family:var(--font-en);font-weight:700;font-size:19px;line-height:1.1;white-space:nowrap}
 .bar .p small{display:block;font-family:var(--font-jp);font-size:12px;font-weight:400;color:var(--on-navy-muted)}
 .bar .cta{min-height:48px;font-size:15px;flex:1;white-space:nowrap;letter-spacing:.02em}
+/* ---------- パソコン（幅1024px以上）：横に広い画面では、ヒーローを左右2列に、各欄の項目を2〜3列に組む ---------- */
+@media (min-width:1024px){
+  :root{--gutter:48px}
+  .wrap{max-width:1180px}
+  .sec{padding-block:104px}
+  .sec h2{font-size:36px;margin-top:14px}
+  .sec .sub{max-width:760px;font-size:16px}
+  .label{font-size:13px}
+  /* ヒーロー：左に見出し・特長・購入、右に 3D と開き幅の操作 */
+  .hero{padding-bottom:72px}
+  .hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:64px;align-items:start}
+  .hero .top{grid-column:1/-1}
+  .hero h1{grid-column:1;grid-row:2;margin-top:56px;font-size:42px;line-height:1.42}
+  .hero h1 .for{font-size:15px;margin-bottom:14px}
+  .hero .lead{grid-column:1;grid-row:3;margin-top:22px;font-size:17px;line-height:1.9}
+  .hero .badges{grid-column:1;grid-row:4;margin-top:32px}
+  .hero .buy{grid-column:1;grid-row:5;margin-top:32px;align-self:start}
+  .hero .visual{grid-column:2;grid-row:2/span 4;align-self:start;position:sticky;top:24px;margin-top:36px}   /* 左の列が長い時も、3D は画面に残す */
+  .hero .stage-note{margin:8px 0 14px}
+  .cta{min-height:64px;font-size:18px}
+  /* 各欄 */
+  .worry{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  .reasons{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px}
+  .reason{display:flex;flex-direction:column}
+  .reason .ill{flex:none;min-height:260px}
+  .voices{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+  .types{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+  .cmp{max-width:880px}
+  .steps{grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+  .steps li{grid-template-columns:1fr;align-items:start;padding:20px}
+  .steps .pic{width:120px}
+  .guide{max-width:640px;margin-inline:auto}
+  .trust{grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+  .trust div{grid-template-columns:1fr;align-items:start;padding:24px}
+  .faq,.news,.line-link,.dc-link,.col-link,.support-links{max-width:880px}
+  .support-links{grid-template-columns:repeat(2,minmax(0,1fr))}
+  /* 化粧箱：左に見出しと特長、右に 3D */
+  .privacy .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:64px;align-items:start}
+  .privacy .wrap>*{grid-column:1}
+  .privacy .boxstage{grid-column:2;grid-row:1/6;margin-top:0}
+  .privacy .box-cap{grid-column:2;grid-row:6}
+  .final .buy{max-width:520px;margin-inline:auto}
+  .final h2{font-size:40px}
+}
 @media (prefers-reduced-motion:reduce){.bar{transition:none}summary::after{transition:none}}
 .sprite{position:absolute}.ib{display:inline-block}.sec.pt0{padding-top:0}sup.s12{font-size:12px}.c-inherit{color:inherit}.nw{white-space:nowrap}
 .cta-2{background:transparent;color:var(--gold);border:1.5px solid var(--gold);box-shadow:none}

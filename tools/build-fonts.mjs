@@ -62,7 +62,7 @@ async function source(rel) {
   return readFile(file);
 }
 
-const SKIP = ['node_modules', '.cache', '.git', 'index.backup.html', 'assets/'];
+const SKIP = ['node_modules', '.cache', '.git', 'index.backup.html', 'assets/', '_site', 'out/'];
 const pages = await listFiles(ROOT, ['.html'], SKIP);
 // 商品ページ（日本語版と各国版）。和文フォントは「商品ページで使う文字」と「それ以外のページだけで使う文字」の2ファイルに分け、
 // 後者には unicode-range（そのフォントが受け持つ文字）を付ける。ブラウザは表示する文字を含むファイルだけを取りに行くので、

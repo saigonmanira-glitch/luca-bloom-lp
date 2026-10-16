@@ -82,7 +82,7 @@ ${OG_LOCALES.filter((o) => o !== L.ogLocale).map((o) => `<meta property="og:loca
 <meta name="twitter:title" content="${esc(title)}">
 <meta name="twitter:image" content="${og}">
 ${extraLd.map(ld).join('\n')}
-${kind === 'lp' ? `<!-- 一番大きく表示される画像（3D が出るまでの静止画）を、フォントより先に取りに行く -->\n<link rel="preload" as="image" href="/hero-fallback.webp" imagesrcset="/hero-fallback-700.webp 700w, /hero-fallback.webp 1040w" imagesizes="(min-width: 600px) 520px, calc(100vw - 40px)" fetchpriority="high">\n` : ''}${FONTS_PLACEHOLDER}`;
+${kind === 'lp' ? `<!-- 一番大きく表示される画像（3D が出るまでの静止画）を、フォントより先に取りに行く -->\n<link rel="preload" as="image" href="/hero-fallback.webp" imagesrcset="/hero-fallback-700.webp 700w, /hero-fallback.webp 1040w" imagesizes="(min-width: 1024px) 640px, (min-width: 600px) 520px, calc(100vw - 40px)" fetchpriority="high">\n` : ''}${FONTS_PLACEHOLDER}`;
 }
 
 const organization = (url) => ({
@@ -164,15 +164,17 @@ ${SPRITE}
     <h1 id="top"><span class="for">${t.heroFor}</span><span class="catch">${t.heroCatch.map((c) => `<span>${c}</span>`).join(' ')}</span></h1>
     <p class="lead">${t.heroLead}</p>
 
-    <div class="stage" id="stage" role="img" aria-label="${esc(t.stageAria)}">
-      <img class="fb-img" id="fb" src="/hero-fallback.webp" srcset="/hero-fallback-700.webp 700w, /hero-fallback.webp 1040w" sizes="(min-width: 600px) 520px, calc(100vw - 40px)" alt="${esc(t.imageAlt)}" width="1040" height="854" fetchpriority="high" decoding="async">
-      <noscript><img class="fb-img" src="/hero-fallback.webp" alt="${esc(t.imageAlt)}" width="1040" height="854"></noscript>
-    </div>
-    <p class="stage-note"><i aria-hidden="true"></i>${t.stageNote.map((n) => `<span class="nb">${n}</span>`).join(' ')}</p>
-    <div class="meter">
-      <div class="meter-row"><span>${t.meterLabel}</span><b id="gapv">${t.closed}</b></div>
-      <input id="gap" type="range" min="10" max="70" step="1" value="10" aria-label="${esc(t.sliderAria)}" aria-valuetext="${esc(t.closed)}">
-      <div class="ends"><span>${t.closed}</span><span>${t.max}</span></div>
+    <div class="visual">
+      <div class="stage" id="stage" role="img" aria-label="${esc(t.stageAria)}">
+        <img class="fb-img" id="fb" src="/hero-fallback.webp" srcset="/hero-fallback-700.webp 700w, /hero-fallback.webp 1040w" sizes="(min-width: 1024px) 640px, (min-width: 600px) 520px, calc(100vw - 40px)" alt="${esc(t.imageAlt)}" width="1040" height="854" fetchpriority="high" decoding="async">
+        <noscript><img class="fb-img" src="/hero-fallback.webp" alt="${esc(t.imageAlt)}" width="1040" height="854"></noscript>
+      </div>
+      <p class="stage-note"><i aria-hidden="true"></i>${t.stageNote.map((n) => `<span class="nb">${n}</span>`).join(' ')}</p>
+      <div class="meter">
+        <div class="meter-row"><span>${t.meterLabel}</span><b id="gapv">${t.closed}</b></div>
+        <input id="gap" type="range" min="10" max="70" step="1" value="10" aria-label="${esc(t.sliderAria)}" aria-valuetext="${esc(t.closed)}">
+        <div class="ends"><span>${t.closed}</span><span>${t.max}</span></div>
+      </div>
     </div>
 
     <ul class="badges">
