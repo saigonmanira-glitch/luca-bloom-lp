@@ -1,5 +1,5 @@
 // 品質テスト：アクセシビリティ（WCAG 2.1 AA・推奨事項）・フォントの抜け字・表示の軽さ・構造化データ・セキュリティ設定
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures.mjs';
 import AxeBuilder from '@axe-core/playwright';
 import fs from 'node:fs';
 import { INTL_PAGES, LOCALES } from '../tools/i18n/site.mjs';
@@ -65,11 +65,11 @@ test('フォント：全ページの表示文字が、それぞれの太さの�
 });
 
 // ---------- 表示の軽さ：トップページの通信量・外部サーバーへの接続・レイアウトのずれ ----------
-test('軽さ：トップページは3D表示まで含めて500KB以内（圧縮後）、外部サーバーに接続しない、レイアウトのずれ0.05未満', async ({ page }) => {
+test('軽さ：トップページは3D表示まで含めて500KB以内（圧縮後）、集計（Cloudflare）以外の外部サーバーに接続しない、レイアウトのずれ0.05未満', async ({ page }) => {
   const external = [];
   let bytes = 0;
   page.on('request', (req) => {
-    if (!req.url().startsWith('http://localhost')) external.push(req.url());
+    if (!req.url().startsWith('http://localhost') && !/^https:\/\/(static\.)?cloudflareinsights\.com\//.test(req.url())) external.push(req.url());
   });
   // 本番（GitHub Pages）は文字系のファイルを gzip 圧縮して送るため、同じ条件で数える
   const pending = [];
@@ -148,11 +148,20 @@ for (const p of [...pages, 'no-such-page']) {
 }
 
 // ---------- セキュリティ：CSP の中身（危険な許可がないこと）と、脆弱性の連絡先（security.txt） ----------
-test('セキュリティ：全ページの CSP に unsafe-inline・unsafe-eval・外部ドメインの許可がない', async () => {
+// 例外は Cloudflare Web Analytics（閲覧数の集計）の読み込み先・送信先だけで、計測タグのある商品ページに限る
+const BEACON_SRC = ' https://static.cloudflareinsights.com';
+const BEACON_CONNECT = ' https://cloudflareinsights.com';
+test('セキュリティ：全ページの CSP に unsafe-inline・unsafe-eval・外部ドメインの許可がない（集計の例外は商品ページだけ）', async () => {
   const bad = [];
   for (const f of [...pages.map((p) => (p === '' || p.endsWith('/') ? `${p}index.html` : p)), '404.html']) {
     const html = fs.readFileSync(new URL(f, ROOT), 'utf8');
-    const csp = (html.match(/http-equiv="Content-Security-Policy" content="([^"]*)"/) || [])[1] || '';
+    let csp = (html.match(/http-equiv="Content-Security-Policy" content="([^"]*)"/) || [])[1] || '';
+    const isLP = LP.some((p) => f === `${p}index.html`);
+    if (isLP) {
+      if (!html.includes('https://static.cloudflareinsights.com/beacon.min.js')) bad.push(`${f}：集計タグがない`);
+      if (!csp.includes(`script-src 'self'${BEACON_SRC};`) || !csp.includes(`connect-src 'self'${BEACON_CONNECT};`)) bad.push(`${f}：集計の許可が想定と違う`);
+      csp = csp.replace(BEACON_SRC, '').replace(BEACON_CONNECT, '');
+    }
     if (!csp.startsWith("default-src 'none'")) bad.push(`${f}：default-src 'none' ではない`);
     if (/unsafe-|https?:|\*|data:|blob:/.test(csp)) bad.push(`${f}：危険な許可 ${csp.match(/unsafe-[a-z-]+|https?:\S*|\*|data:|blob:/)[0]}`);
     if (!csp.includes("require-trusted-types-for 'script'")) bad.push(`${f}：Trusted Types なし`);

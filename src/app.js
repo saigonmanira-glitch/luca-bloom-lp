@@ -64,8 +64,10 @@ function createState() {
       }
     },
   };
+  const tip = document.getElementById('gaptip'); // 初めて手で動かしたときだけ「手を離してもこの幅で止まる」と添える
   slider.addEventListener('input', () => {
     state.demo = false;
+    if (tip && slider.value > 10) tip.hidden = false;
     state.target = parseFloat(slider.value) - 10;
     state.show(state.target);
     state.kick();

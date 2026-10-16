@@ -137,7 +137,8 @@ async function charsByWeight() {
   for (const w of [400, 700, 900]) lpChars[w] = new Set();
   try {
     for (const width of [375, 1280]) {
-      const page = await browser.newPage({ viewport: { width, height: 900 }, javaScriptEnabled: false });
+      // bypassCSP：CSS を書き換えた直後（CSP の許可値の更新前）でもスタイルを効かせ、文字を正しく集める
+      const page = await browser.newPage({ viewport: { width, height: 900 }, javaScriptEnabled: false, bypassCSP: true });
       for (const f of pages) {
         await page.goto(base + '/' + path.relative(ROOT, f).split(path.sep).join('/'));
         // この関数はブラウザ内で実行される（document などはブラウザの変数）

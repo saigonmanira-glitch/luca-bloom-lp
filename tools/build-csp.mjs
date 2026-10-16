@@ -19,7 +19,8 @@ const files = execFileSync('git', ['ls-files', '*.html'], { encoding: 'utf8' })
 
 const META = /<meta http-equiv="Content-Security-Policy" content="[^"]*">/;
 
-// SNS用の中継ページ（go/）だけは、Cloudflare Web Analytics の計測スクリプトを許可する（tools/build-go.mjs）
+// Cloudflare Web Analytics（閲覧数の集計。Cookie を使わない）の計測タグがあるページ（商品ページ・SNS用の中継ページ go/）だけ、
+// その読み込み先と送信先を許可する（tools/build-go.mjs・tools/i18n/page.mjs・index.html）
 const BEACON = /static\.cloudflareinsights\.com\/beacon\.min\.js/;
 
 function policy(styleHashes, beacon = false) {
@@ -55,7 +56,7 @@ for (const f of files) {
     (m) => `'sha256-${createHash('sha256').update(m[1], 'utf8').digest('base64')}'`,
   );
   const unique = [...new Set(hashes)];
-  const next = html.replace(META, `<meta http-equiv="Content-Security-Policy" content="${policy(unique, f.startsWith('go/') && BEACON.test(html))}">`);
+  const next = html.replace(META, `<meta http-equiv="Content-Security-Policy" content="${policy(unique, BEACON.test(html))}">`);
   if (next === html) continue;
   stale++;
   if (check) console.error(`CSP が最新ではありません（npm run build を実行してください）：${f}`);

@@ -3,20 +3,19 @@
 // どのSNSから何人が Amazon へ移動したかを、Cloudflare Web Analytics（無料のアクセス集計）で数えられる。
 //
 // 集計を有効にするには、Cloudflare の Web Analytics でサイトを追加し、表示されたトークン（公開して問題ない識別子）を
-// CF_TOKEN に入れて npm run build を実行する。トークンが空の間は、移動だけ行い集計はしない。
+// tools/analytics.mjs の CF_TOKEN に入れて npm run build を実行する。トークンが空の間は、移動だけ行い集計はしない。
 // リンクを貼ったときの画像は go/og-amazon.png(白基調・1200×630)。
-// 外部の計測スクリプトを読み込むのはこの中継ページだけで、他のページの CSP は変えない（tools/build-csp.mjs）。
+// 計測タグとトークンは tools/analytics.mjs（商品ページと共通）。
 import fs from 'node:fs';
 import path from 'node:path';
+import { BEACON, CF_TOKEN } from './analytics.mjs';
 
-export const CF_TOKEN = 'f84e8a91cd1443f0ba481943c1bf1e02';
+export { CF_TOKEN };
 const AMAZON = 'https://www.amazon.co.jp/dp/B0HHXQ1X4C';
 export const CHANNELS = ['instagram', 'threads', 'facebook', 'x', 'note'];
 
 const ROOT = path.resolve(import.meta.dirname, '..');
-const beacon = CF_TOKEN
-  ? `<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "${CF_TOKEN}"}'></script>\n`
-  : '';
+const beacon = BEACON ? `${BEACON}\n` : '';
 
 for (const ch of CHANNELS) {
   const url = `https://luca-bloom.com/go/${ch}/`;

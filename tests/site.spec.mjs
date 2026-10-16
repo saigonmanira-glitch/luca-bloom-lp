@@ -1,5 +1,5 @@
 // ブラウザ動作テスト：全ページの表示とエラー、3D・スライダー・購入導線・異常時の静止画
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures.mjs';
 import fs from 'node:fs';
 import { findBanned } from '../tools/claims.mjs';
 import { MENU, INTL_PAGES, LOCALES, alternates } from '../tools/i18n/site.mjs';
@@ -55,8 +55,10 @@ test('3D：描画が始まると静止画が隠れ、スライダーで開き幅
   await expect(page.locator('#stage canvas')).toHaveCount(1, { timeout: 30_000 });
   await expect(page.locator('#fb')).toBeHidden();
   await expect(page.locator('#gapv')).toHaveText('全閉');
+  await expect(page.locator('#gaptip')).toBeHidden(); // 手で動かすまでは出さない
   await page.locator('#gap').fill('70');
   await expect(page.locator('#gapv')).toHaveText('70mm');
+  await expect(page.locator('#gaptip')).toHaveText('手を離しても、この幅で止まります。');
   await page.locator('#gap').fill('35');
   await expect(page.locator('#gapv')).toHaveText('35mm');
   expect(errors).toEqual([]);
