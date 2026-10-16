@@ -34,6 +34,7 @@ export default {
     country: 'Chine',
     skip: 'Aller au contenu',
     langLabel: 'Langue',
+    motto: 'Ouvrir, par design.', // ブランドの一言（日本語：開く、を設計する。）
     heroFor: 'Outil de soin du prépuce',
     heroCatch: ['Un souci intime,', 'entre vos mains,', 'à votre rythme.'],
     heroLead: 'Il suffit de tourner la molette. Les bras sont conçus pour ne pas glisser et ne se referment pas quand vous lâchez. Ouvrez jusqu’à 70 mm, aussi progressivement que vous le souhaitez.',

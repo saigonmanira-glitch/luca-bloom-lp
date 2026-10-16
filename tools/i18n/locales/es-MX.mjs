@@ -26,6 +26,7 @@ export default {
     country: 'China',
     skip: 'Saltar al contenido',
     langLabel: 'Idioma',
+    motto: 'Abrir, por diseño.', // ブランドの一言（日本語：開く、を設計する。）
     heroFor: 'Herramienta para el cuidado del prepucio',
     heroCatch: ['Una preocupación íntima,', 'en tus manos,', 'a tu ritmo.'],
     heroLead: 'Solo gira la manija. Los brazos están diseñados para no deslizarse y no se regresan al soltarlos. Ábrela hasta 70 mm, tan poco a poco como quieras.',

@@ -159,7 +159,7 @@ ${SPRITE}
 <header class="hero">
   <div class="wrap">
     <div class="top">
-      <a class="logo" href="#top">Luca Bloom</a>
+      <div class="brand"><a class="logo" href="#top">Luca Bloom</a><p class="motto">${t.motto}</p></div>
       ${langMenu(L, 'lp')}
     </div>
     <h1 id="top"><span class="for">${t.heroFor}</span><span class="catch">${t.heroCatch.map((c) => `<span>${c}</span>`).join(' ')}</span></h1>

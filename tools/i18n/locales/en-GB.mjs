@@ -34,6 +34,7 @@ export default {
     country: 'China',
     skip: 'Skip to content',
     langLabel: 'Language',
+    motto: 'Opening, by design.', // ブランドの一言（日本語：開く、を設計する。）
     heroFor: 'Foreskin care tool',
     heroCatch: ['A private concern,', 'in your own hands,', 'at your own pace.'],
     heroLead: 'Just turn the handle. The arms are shaped not to slip, and they won’t spring back when you let go. Open up to 70 mm, as gradually as you like.',
