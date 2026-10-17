@@ -240,6 +240,22 @@ ${t.voices.map(([n, q, who]) => `      <figure class="voice">
   </div>
 </section>
 
+<!-- ================= STRUCTURE（部品が組み上がる 3D：src/scene/assembly.js） ================= -->
+<section class="sec structure" id="structure">
+  <div class="wrap">
+    <p class="label">${t.asm.label}</p>
+    <h2>${t.asm.h2}</h2>
+    <p class="sub">${t.asm.sub}</p>
+    <div class="asm-stage" id="asmstage" role="img" aria-label="${esc(t.asm.aria)}">
+      <img class="fb-img" id="asmfb" src="/asm-fallback.webp" srcset="/asm-fallback-700.webp 700w, /asm-fallback.webp 1040w" sizes="(min-width: 1024px) 760px, calc(100vw - 40px)" alt="" width="1040" height="780" loading="lazy" decoding="async">
+    </div>
+    <ol class="asm-parts">
+${t.asm.parts.map(([b, s]) => `      <li><b>${b}</b>${s}</li>`).join('\n')}
+    </ol>
+    <p class="asm-replay"><button type="button" id="asmreplay" hidden>${t.asm.replay}</button></p>
+  </div>
+</section>
+
 <!-- ================= REASONS ================= -->
 <section class="sec pt0">
   <div class="wrap">

@@ -236,8 +236,8 @@ test.describe('色のコントラスト（画面のピクセルで判定）', ()
         const H = await page.evaluate(() => document.documentElement.scrollHeight);
         const bad = [];
         for (let y = 0; y < H; y += 900) {
-          await page.evaluate((y) => scrollTo(0, y), y);
-          await page.waitForTimeout(150);
+          await page.evaluate((y) => scrollTo({ top: y, behavior: 'instant' }), y); // なめらかなスクロールの途中で撮らない
+          await page.waitForTimeout(200);
           const b64 = (await page.screenshot()).toString('base64');
           bad.push(...(await page.evaluate(async (b64) => {
             const img = new Image();

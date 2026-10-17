@@ -424,3 +424,37 @@ test('計測：Google アナリティクスが読み込まれ、購入リンク�
   await page.goto('privacy.html', { waitUntil: 'load' });
   expect(await page.evaluate(() => 'dataLayer' in window)).toBe(false);
 });
+
+test('構造の欄：画面に入ると部品が自動で組み上がり、部品名がすべて強調され、「もう一度」で再生し直せる', async ({ page }) => {
+  const errors = watchErrors(page);
+  await page.goto('', { waitUntil: 'load' });
+  await page.locator('#structure').scrollIntoViewIfNeeded();
+  await expect(page.locator('#asmstage canvas')).toHaveCount(1, { timeout: 30_000 });
+  await expect(page.locator('#asmfb')).toBeHidden();
+  await expect(page.locator('.asm-parts li.on')).toHaveCount(4, { timeout: 15_000 }); // 組み上がったら4部品すべて
+  await expect(page.locator('#asmreplay')).toBeVisible();
+  await page.locator('#asmreplay').click();
+  await expect(page.locator('#asmreplay')).toBeHidden();
+  await expect(page.locator('#asmreplay')).toBeVisible({ timeout: 15_000 });
+  expect(errors).toEqual([]);
+});
+
+test('構造の欄：動きを減らす設定では、最初から組み上がった状態で「もう一度」は出さない', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('', { waitUntil: 'load' });
+  await page.locator('#structure').scrollIntoViewIfNeeded();
+  await expect(page.locator('#asmstage canvas')).toHaveCount(1, { timeout: 30_000 });
+  await expect(page.locator('.asm-parts li.on')).toHaveCount(4);
+  await expect(page.locator('#asmreplay')).toBeHidden();
+});
+
+test('表示崩れ：スマホ幅で、どの商品ページも横にはみ出さない（横スクロールが出ない）', async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 800 });
+  const wide = [];
+  for (const L of LOCALES.map((x) => x.dir).concat([''])) {
+    await page.goto(L, { waitUntil: 'load' });
+    const [sw, iw] = await page.evaluate(() => [document.documentElement.scrollWidth, innerWidth]);
+    if (sw > iw) wide.push(`/${L}：${sw}px > ${iw}px`);
+  }
+  expect(wide).toEqual([]);
+});

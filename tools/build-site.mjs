@@ -19,6 +19,8 @@ const FILES = [
   'og.png',
   'hero-fallback.webp',
   'hero-fallback-700.webp',
+  'asm-fallback.webp', // 構造の欄の静止画（3D を出さない端末・読み込み前）。tools/build-assembly-still.mjs
+  'asm-fallback-700.webp',
   'robots.txt',
   'sitemap.xml',
   'llms.txt',

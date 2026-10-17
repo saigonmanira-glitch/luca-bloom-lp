@@ -6,7 +6,7 @@
     "build": "npm run build:go && npm run build:js && npm run build:i18n && npm run build:csp && npm run build:fonts && npm run build:csp",
     "build:i18n": "node tools/build-i18n.mjs",
     "build:og": "node tools/build-og.mjs",
-    "build:still": "node tools/build-hero-still.mjs",
+    "build:still": "node tools/build-hero-still.mjs && node tools/build-assembly-still.mjs",
     "build:js": "rm -rf assets/js && esbuild src/app.js src/ga.js --bundle --splitting --format=esm --minify --target=es2020 --outdir=assets/js --chunk-names=chunks/[name]-[hash] --legal-comments=eof",
     "build:fonts": "node tools/build-fonts.mjs",
     "build:csp": "node tools/build-csp.mjs",

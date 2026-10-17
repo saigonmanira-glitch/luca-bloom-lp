@@ -311,6 +311,7 @@ export function buildDevice({ backArrowUp = false } = {}) {
     add(kg, POM_FLAT, shaft);
   }
 
+  const plate = new Group(); // 組み上がりの演出（assembly.js）で動かすため、外から参照できるようにする
   // リリースプレート（キーホール留め具）：図面（尺度5:1）どおり。
   // 外形 10.5×14.25 の長円、厚み1.75。鍵穴形の抜き＝幅4mmのスロット（送りねじの溝 φ4 にはまる）と φ6.5 の穴を R0.5 でつなぐ。
   // 穴のふちは両面とも C0.5 の面取り（表裏0.5mmの層は穴を0.5mm大きく、中央0.75mmの層は図面の寸法）。
@@ -348,7 +349,6 @@ export function buildDevice({ backArrowUp = false } = {}) {
       g.rotateY(Math.PI / 2);
       return g;
     };
-    const plate = new Group();
     plate.position.set(42.8, 0, 0);
     dev.add(plate);
     add(layer(keyhole(2.5, 3.75, 1), 0, 0.5), POM, plate); // 本体側の面（面取り分だけ穴が大きい）
@@ -371,6 +371,7 @@ export function buildDevice({ backArrowUp = false } = {}) {
     dev,
     mover,
     shaft,
+    plate,
     housing,
     decal,
     decalBack,

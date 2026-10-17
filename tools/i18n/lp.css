@@ -86,10 +86,10 @@ small.gl{font-size:12px;color:var(--muted);font-weight:400}
 .price b{font-family:var(--font-en);font-size:17px;color:var(--gold);margin:0 2px}
 
 /* ---------- 明るい配色（動画と同じ淡いグレーの光）：ヒーローと化粧箱の欄。紺は文字・枠・ボタンに残す ---------- */
-.hero,.privacy{--on-navy:var(--ink);--on-navy-muted:#414657;--navy-2:rgba(255,255,255,.72);--navy-line:#C4CAD6;--silver:var(--navy);color:var(--ink);background:radial-gradient(120% 70% at 50% 40%,#F6F7FA 0%,#E4E7EE 55%,#D3D8E2 100%)}
-.hero .for,.hero h1 .for,.hero .price b,.hero .label,.privacy .label{color:#5E4007}
+.hero,.privacy,.structure{--on-navy:var(--ink);--on-navy-muted:#414657;--navy-2:rgba(255,255,255,.72);--navy-line:#C4CAD6;--silver:var(--navy);color:var(--ink);background:radial-gradient(120% 70% at 50% 40%,#F6F7FA 0%,#E4E7EE 55%,#D3D8E2 100%)}
+.hero .for,.hero h1 .for,.hero .price b,.hero .label,.privacy .label,.structure .label{color:#5E4007}
 .hero .top .pill,.hero .langs summary{border-color:rgba(22,26,41,.22);background:rgba(255,255,255,.35)}   /* 背景の光の上でも枠が見えるように */
-.privacy .sub{color:var(--on-navy-muted)}
+.privacy .sub,.structure .sub{color:var(--on-navy-muted)}
 .hero .badges b,.hero .meter-row b{color:var(--navy)}
 .hero .badges li{background:rgba(255,255,255,.55)}
 .hero .cta-2{color:var(--navy);border-color:var(--navy)}
@@ -97,6 +97,19 @@ small.gl{font-size:12px;color:var(--muted);font-weight:400}
 .hero .stage::before{content:"";position:absolute;z-index:-1;left:50%;top:44%;width:max(200vw,1600px);height:230%;transform:translate(-50%,-50%);pointer-events:none;background:radial-gradient(closest-side,rgba(112,126,158,.6) 0%,rgba(113,127,159,.57) 20%,rgba(117,130,161,.49) 36%,rgba(123,136,166,.38) 50%,rgba(131,143,171,.26) 63%,rgba(140,152,178,.15) 75%,rgba(150,161,186,.07) 86%,rgba(158,168,192,.02) 94%,rgba(160,170,194,0) 100%)}   /* 白い本体が背景に溶けないよう、本体の後ろに青みのグレーの光。画面の幅より広くとり、上下へ長い距離でなめらかに薄くして輪郭を出さない */
 .hero .stage canvas{filter:drop-shadow(0 10px 14px rgba(22,26,41,.2))}   /* 本体の輪郭に沿った影で、白い本体の形をはっきり見せる */
 
+/* 構造の欄（部品が組み上がる 3D）。背景は化粧箱の欄と同じ明るいグレー */
+.structure{overflow:hidden}   /* 後ろの光が画面の外にはみ出して、横にスクロールできてしまうのを防ぐ */
+.asm-stage{position:relative;aspect-ratio:4/3;margin:24px auto 0;max-width:760px;touch-action:pan-y;cursor:grab}
+.asm-stage canvas,.asm-stage .fb-img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.asm-stage::before{content:"";position:absolute;inset:-10% -20%;pointer-events:none;background:radial-gradient(closest-side,rgba(112,126,158,.42) 0%,rgba(123,136,166,.26) 45%,rgba(150,161,186,.08) 80%,rgba(160,170,194,0) 100%)}   /* 白い部品が背景に溶けないよう、後ろに青みのグレーの光（ヒーローと同じ） */
+.asm-parts{list-style:none;margin:18px auto 0;padding:0;max-width:760px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;counter-reset:asm}
+.asm-parts li{counter-increment:asm;background:rgba(255,255,255,.6);border:1px solid var(--navy-line);border-radius:12px;padding:10px 12px;font-size:12.5px;line-height:1.5;color:var(--on-navy-muted);transition:border-color .3s,background .3s}
+.asm-parts li b{display:block;font-size:14px;color:var(--ink)}
+.asm-parts li b::before{content:counter(asm) ". ";font-family:var(--font-en);color:#5E4007}
+.asm-parts li.on{border-color:var(--gold);background:#fff}
+.asm-replay{margin:12px 0 0;text-align:center}
+.asm-replay button{font:inherit;font-size:13px;font-weight:700;color:var(--ink);background:none;border:1px solid var(--navy-line);border-radius:99px;padding:8px 18px;min-height:40px;cursor:pointer}
+@media (prefers-reduced-motion:reduce){.asm-parts li{transition:none}}
 /* ---------- WORRY ---------- */
 .worry{list-style:none;padding:0;margin:26px 0 0;display:grid;gap:10px}
 .worry li{display:flex;gap:12px;align-items:flex-start;background:var(--white);border-radius:14px;padding:16px;font-weight:700;font-size:15.5px;line-height:1.6}
@@ -265,6 +278,7 @@ footer p{margin-top:8px}
   .voices{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
   .types{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
   .cmp{max-width:880px}
+  .asm-parts{grid-template-columns:repeat(4,minmax(0,1fr))}
   .steps{grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
   .steps li{grid-template-columns:1fr;align-items:start;padding:20px}
   .steps .pic{width:120px}
