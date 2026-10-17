@@ -17,7 +17,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04 # ubuntu-latest は 2026-10-19 から Ubuntu 26 に切り替わるため、検証済みの版に固定
     timeout-minutes: 10
     environment:
       name: github-pages
