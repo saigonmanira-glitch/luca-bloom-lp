@@ -69,7 +69,7 @@ test('軽さ：トップページは3D表示まで含めて500KB以内（圧縮�
   const external = [];
   let bytes = 0;
   page.on('request', (req) => {
-    if (!req.url().startsWith('http://localhost') && !/^https:\/\/(static\.)?cloudflareinsights\.com\//.test(req.url())) external.push(req.url());
+    if (!req.url().startsWith('http://localhost') && !/^https:\/\/((static\.)?cloudflareinsights\.com|www\.googletagmanager\.com)\//.test(req.url())) external.push(req.url());
   });
   // 本番（GitHub Pages）は文字系のファイルを gzip 圧縮して送るため、同じ条件で数える
   const pending = [];
@@ -151,11 +151,22 @@ for (const p of [...pages, 'no-such-page']) {
 // 例外は Cloudflare Web Analytics（閲覧数の集計）の読み込み先・送信先だけで、計測タグのある商品ページに限る
 const BEACON_SRC = ' https://static.cloudflareinsights.com';
 const BEACON_CONNECT = ' https://cloudflareinsights.com';
-test('セキュリティ：全ページの CSP に unsafe-inline・unsafe-eval・外部ドメインの許可がない（集計の例外は商品ページだけ）', async () => {
+const G_SCRIPT = ' https://www.googletagmanager.com';
+const G_SEND = ' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com';
+test('セキュリティ：全ページの CSP に unsafe-inline・unsafe-eval・外部ドメインの許可がない（集計の例外は商品ページ・日本語のページだけ）', async () => {
   const bad = [];
   for (const f of [...pages.map((p) => (p === '' || p.endsWith('/') ? `${p}index.html` : p)), '404.html']) {
     const html = fs.readFileSync(new URL(f, ROOT), 'utf8');
     let csp = (html.match(/http-equiv="Content-Security-Policy" content="([^"]*)"/) || [])[1] || '';
+    // Google アナリティクス：日本語のページだけ。Google の読み込み先・送信先と、ga.js の Trusted Types ポリシーだけを許可
+    const isJa = f === 'index.html' || f.startsWith('column/') || f.startsWith('jp/');
+    if (html.includes('src="/assets/js/ga.js"') !== isJa) bad.push(`${f}：GA の有無が想定と違う（日本語のページだけに入れる）`);
+    if (isJa) {
+      for (const part of [`${G_SCRIPT};`, `img-src 'self'${G_SEND};`, `${G_SEND};`, 'trusted-types default goog#html']) {
+        if (!csp.includes(part)) bad.push(`${f}：GA の許可が想定と違う（${part}）`);
+      }
+      csp = csp.replaceAll(G_SEND, '').replace(G_SCRIPT, '').replace('trusted-types default goog#html', "trusted-types 'none'");
+    }
     const isLP = LP.some((p) => f === `${p}index.html`);
     if (isLP) {
       if (!html.includes('https://static.cloudflareinsights.com/beacon.min.js')) bad.push(`${f}：集計タグがない`);

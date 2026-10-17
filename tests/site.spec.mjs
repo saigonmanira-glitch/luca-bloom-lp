@@ -384,3 +384,17 @@ test('コラム：各記事の hreflang が日本語版を含めて相互に指�
     }
   }
 });
+
+test('計測：日本語のページで Google アナリティクスが読み込まれ、購入リンクのクリックが記録される（海外のページでは読み込まない）', async ({ page }) => {
+  const gtagReq = [];
+  page.on('request', (r) => r.url().includes('googletagmanager.com/gtag/js') && gtagReq.push(r.url()));
+  await page.goto('', { waitUntil: 'load' });
+  await expect.poll(() => gtagReq.length).toBe(1);
+  expect(gtagReq[0]).toContain('id=G-24CWN0WMTW');
+  await page.evaluate(() => document.addEventListener('click', (e) => e.preventDefault())); // 実際には Amazon へ移動しない
+  await page.locator('.final a[href*="amazon.co.jp"]').click();
+  const ev = await page.evaluate(() => window.dataLayer.map((a) => Array.from(a)).find((a) => a[0] === 'event' && a[1] === 'click_buy'));
+  expect(ev[2]).toMatchObject({ store: 'amazon', link_location: 'final' });
+  await page.goto('en/', { waitUntil: 'load' });
+  expect(await page.evaluate(() => 'dataLayer' in window)).toBe(false);
+});

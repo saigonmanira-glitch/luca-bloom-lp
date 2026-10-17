@@ -3,9 +3,8 @@
 //   中身が1文字でも変わるとハッシュが変わるため、CSS を編集したら必ず npm run build を実行すること。
 // ・node tools/build-csp.mjs --check：書き込まずに、最新でないページがあれば失敗する（CI・npm run check で使用）
 //
-// Google アナリティクスを有効にする場合は、script-src / connect-src / img-src に
-// https://*.googletagmanager.com https://*.google-analytics.com を追加し、
-// src/app.js の script.src 代入のため require-trusted-types-for を外すこと。
+// Google アナリティクス 4（src/ga.js。日本語のページだけ）を読み込むページは、Google の読み込み先・送信先だけを追加で許可する。
+// Trusted Types は外さず、ga.js が作る default ポリシー（Google の計測用ドメインの URL だけ通す）を許可する。
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -22,15 +21,18 @@ const META = /<meta http-equiv="Content-Security-Policy" content="[^"]*">/;
 // Cloudflare Web Analytics（閲覧数の集計。Cookie を使わない）の計測タグがあるページ（商品ページ・SNS用の中継ページ go/）だけ、
 // その読み込み先と送信先を許可する（tools/build-go.mjs・tools/i18n/page.mjs・index.html）
 const BEACON = /static\.cloudflareinsights\.com\/beacon\.min\.js/;
+const GA = /src="\/assets\/js\/ga\.js"/;
+const G_SCRIPT = ' https://www.googletagmanager.com';
+const G_SEND = ' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com';
 
-function policy(styleHashes, beacon = false) {
+function policy(styleHashes, beacon = false, ga = false) {
   return [
     "default-src 'none'", // 下で許可したもの以外は、すべて読み込まない
-    `script-src 'self'${beacon ? ' https://static.cloudflareinsights.com' : ''}`, // スクリプトは自サイトのファイルのみ（HTML 内に直接書いたスクリプト・eval は不可）
+    `script-src 'self'${beacon ? ' https://static.cloudflareinsights.com' : ''}${ga ? G_SCRIPT : ''}`, // スクリプトは自サイトのファイルのみ（HTML 内に直接書いたスクリプト・eval は不可）
     `style-src 'self' ${styleHashes.join(' ')}`.trim(),
-    "img-src 'self'",
+    `img-src 'self'${ga ? G_SEND : ''}`,
     "font-src 'self'",
-    `connect-src 'self'${beacon ? ' https://cloudflareinsights.com' : ''}`,
+    `connect-src 'self'${beacon ? ' https://cloudflareinsights.com' : ''}${ga ? G_SEND : ''}`,
     "manifest-src 'self'",
     "media-src 'none'",
     "frame-src 'none'",
@@ -40,7 +42,7 @@ function policy(styleHashes, beacon = false) {
     "form-action 'none'",
     'upgrade-insecure-requests', // http の読み込みを自動で https に
     "require-trusted-types-for 'script'", // innerHTML などへの文字列の直接代入を禁止（DOM 経由の攻撃対策）
-    "trusted-types 'none'",
+    ga ? "trusted-types default goog#html" : "trusted-types 'none'", // GA のページは ga.js の default ポリシーと Google のタグ自身のポリシーだけ
   ].join('; ');
 }
 
@@ -56,7 +58,7 @@ for (const f of files) {
     (m) => `'sha256-${createHash('sha256').update(m[1], 'utf8').digest('base64')}'`,
   );
   const unique = [...new Set(hashes)];
-  const next = html.replace(META, `<meta http-equiv="Content-Security-Policy" content="${policy(unique, BEACON.test(html))}">`);
+  const next = html.replace(META, `<meta http-equiv="Content-Security-Policy" content="${policy(unique, BEACON.test(html), GA.test(html))}">`);
   if (next === html) continue;
   stale++;
   if (check) console.error(`CSP が最新ではありません（npm run build を実行してください）：${f}`);

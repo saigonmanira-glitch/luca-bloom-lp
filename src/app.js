@@ -1,33 +1,5 @@
-// Luca Bloom LP：ページ全体の動き（スライダー表示・購入バー・3Dの読み込み・アクセス解析）
+// Luca Bloom LP：ページ全体の動き（スライダー表示・購入バー・3Dの読み込み）。Google アナリティクスは src/ga.js（日本語のページだけ）
 // ビルド：npm run build（esbuild で assets/js/ に出力）
-
-// ---------- アクセス解析（Google アナリティクス 4） ----------
-// 測定ID（G-から始まる文字列）を入れると計測が始まる。空欄の間は何も読み込まない。
-// 有効にする際は privacy.html の「5. アクセス解析ツール・外部サービス」と、tools/build-csp.mjs の
-// CSP（Google のドメインの許可・Trusted Types の解除。ファイル冒頭の説明を参照）も更新すること。
-const GA_ID = '';
-
-function initAnalytics() {
-  if (!GA_ID) return;
-  window.dataLayer = window.dataLayer || [];
-  window.gtag = function gtag() {
-    window.dataLayer.push(arguments);
-  };
-  window.gtag('js', new Date());
-  window.gtag('config', GA_ID);
-  const s = document.createElement('script');
-  s.async = true;
-  s.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
-  document.head.appendChild(s);
-
-  // Amazon への購入ボタンのクリックを計測（どのボタンか location で区別。英語版は UK・豪州の2種類）
-  document.querySelectorAll('a[href*="www.amazon."]').forEach((a, i) => {
-    a.addEventListener('click', () => {
-      const where = a.closest('#bar') ? 'sticky_bar' : `button_${i + 1}`;
-      window.gtag('event', 'click_buy', { location: where, store: new URL(a.href).hostname, transport_type: 'beacon' });
-    });
-  });
-}
 
 // ---------- 開き幅スライダー ----------
 // target / current = アームの移動量(mm) 0〜60。開き幅 = 10 + 移動量
@@ -132,7 +104,6 @@ function loadScene(state) {
 document.addEventListener('DOMContentLoaded', () => {
   const state = createState();
   initBuyBar();
-  initAnalytics();
   if (document.readyState === 'complete') loadScene(state);
   else window.addEventListener('load', () => loadScene(state), { once: true });
 });

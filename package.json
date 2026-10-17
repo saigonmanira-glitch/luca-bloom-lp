@@ -7,7 +7,7 @@
     "build:i18n": "node tools/build-i18n.mjs",
     "build:og": "node tools/build-og.mjs",
     "build:still": "node tools/build-hero-still.mjs",
-    "build:js": "rm -rf assets/js && esbuild src/app.js --bundle --splitting --format=esm --minify --target=es2020 --outdir=assets/js --chunk-names=chunks/[name]-[hash] --legal-comments=eof",
+    "build:js": "rm -rf assets/js && esbuild src/app.js src/ga.js --bundle --splitting --format=esm --minify --target=es2020 --outdir=assets/js --chunk-names=chunks/[name]-[hash] --legal-comments=eof",
     "build:fonts": "node tools/build-fonts.mjs",
     "build:csp": "node tools/build-csp.mjs",
     "lint": "eslint . && html-validate index.html privacy.html 404.html \"jp/*.html\" \"en/*.html\" \"us/*.html\" \"mx/*.html\" \"ca/*.html\" \"ca/fr/*.html\" \"intl/*.html\" \"en/column/*.html\" \"us/column/*.html\" \"ca/column/*.html\" \"ca/fr/column/*.html\" \"mx/column/*.html\" \"intl/*/*.html\" \"column/*.html\"",
