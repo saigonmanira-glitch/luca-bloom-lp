@@ -1,12 +1,12 @@
 {
-  "name": "luca-bloom-waitlist",
+  "name": "luca-bloom-worker",
   "private": true,
   "type": "module",
-  "description": "北米の事前登録フォームの受け口（Cloudflare Workers + D1）。サイト本体（GitHub Pages）とは別に、.github/workflows/worker.yml が公開する",
+  "description": "luca-bloom.com の配信と北米の事前登録の受け口（Cloudflare Workers + D1）。.github/workflows/pages.yml が公開する",
   "scripts": {
     "test": "node --test --no-warnings test/*.test.js"
   },
   "devDependencies": {
-    "wrangler": "4.147.0"
+    "wrangler": "4.149.0"
   }
 }

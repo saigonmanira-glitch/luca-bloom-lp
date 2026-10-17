@@ -1,9 +1,20 @@
-# 北米の事前登録フォームの受け口：https://luca-bloom.com/api/* だけをこの Worker が受け、ほかはこれまで通り GitHub Pages が返す
-name = "luca-bloom-waitlist"
+# luca-bloom.com の配信（サイトのファイル）と、北米の事前登録フォームの受け口（/api/*）
+# 公開は .github/workflows/pages.yml（Cloudflare の秘密情報が登録されているとき）
+name = "luca-bloom"
 main = "src/index.js"
 compatibility_date = "2026-10-01"
 workers_dev = false
-routes = [{ pattern = "luca-bloom.com/api/*", zone_name = "luca-bloom.com" }]
+routes = [
+  { pattern = "luca-bloom.com/*", zone_name = "luca-bloom.com" },
+  { pattern = "www.luca-bloom.com/*", zone_name = "luca-bloom.com" },
+]
+
+# サイトのファイル：tools/build-site.mjs が集めた _site/。ファイルに当たる URL は Worker を通さず Cloudflare が直接返す
+[assets]
+directory = "../_site"
+binding = "ASSETS"
+html_handling = "none"        # /privacy.html を /privacy に転送しない（今の URL・検索エンジンの登録をそのまま保つ）
+not_found_handling = "none"   # ファイルに当たらない URL は Worker（src/index.js）が受ける
 
 [[d1_databases]]
 binding = "DB"

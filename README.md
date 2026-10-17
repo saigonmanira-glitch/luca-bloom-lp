@@ -131,6 +131,10 @@ https://luca-bloom.com/ のソース一式です。静的サイトで、GitHub P
 
 ## 公開のしくみ
 
-- push すると `.github/workflows/pages.yml` が、サイトに必要なファイルだけを `_site/` に集めて（`tools/build-site.mjs` の許可リスト）GitHub Pages に公開します。制作用のファイル（`tools/`・`tests/`・`src/`・`amazon/`・SNS の原稿や指示文・README など）はサイトに出しません。
-- 有効にするには、GitHub のリポジトリの Settings → Pages → Build and deployment → Source を「GitHub Actions」にします。
+- push すると `.github/workflows/pages.yml` が、サイトに必要なファイルだけを `_site/` に集めて（`tools/build-site.mjs` の許可リスト）公開します。制作用のファイル（`tools/`・`tests/`・`src/`・`amazon/`・SNS の原稿や指示文・README など）はサイトに出しません。
+- 公開先は Cloudflare Workers（`worker/`）。`_site/` のファイルは Cloudflare が直接返し（無料・回数無制限）、ファイルに当たらない URL（フォルダの index.html、`/api/waitlist` の事前登録、404）だけ Worker が受けます。URL は `.html` 付きのまま。
+- 事前登録は Cloudflare D1（データベース `luca-bloom-waitlist`）に保存。一覧は Cloudflare → D1 → コンソールで `SELECT email, market, created_at FROM signups ORDER BY id;`
+- 公開に必要な秘密情報（GitHub → Settings → Secrets and variables → Actions）：`CLOUDFLARE_API_TOKEN`（Workers スクリプト・D1・Workers ルートの編集権限）、`CLOUDFLARE_ACCOUNT_ID`
+- GitHub Pages への公開は、リポジトリが公開（public）の間だけ移行用に続けます。非公開にすると自動で止まります。
+- 手元で本番と同じ配信を試す：`node tools/build-site.mjs` のあと `cd worker && npx wrangler dev`（データベースは手元の仮のもの）
 - CI（`.github/workflows/ci.yml`）は、公開されるファイル（`_site/`）そのものに対して動作テストを行います。

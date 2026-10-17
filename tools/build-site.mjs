@@ -4,6 +4,7 @@
 // サイトとして公開するのは下の「許可リスト」に載ったものだけにする。載っていないものは公開されない（安全側に倒す）。
 import fs from 'node:fs';
 import path from 'node:path';
+import { HEADERS_FILE } from '../worker/src/headers.js';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const OUT = path.join(ROOT, '_site');
@@ -65,4 +66,9 @@ for (const [dir, exts] of Object.entries(DIRS)) {
     n++;
   }
 }
+// Cloudflare（worker/）で配信するときの安全設定・キャッシュの設定。中身は worker/src/headers.js と共通
+fs.writeFileSync(
+  path.join(OUT, '_headers'),
+  `${HEADERS_FILE}/assets/js/chunks/*\n  cache-control: public, max-age=31536000, immutable\n`,
+);
 console.log(`_site/ に ${n} ファイル`);

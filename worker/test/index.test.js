@@ -82,3 +82,40 @@ test('件数の取得と、未知の URL', async () => {
   assert.match(r.headers.get('cache-control'), /max-age=60/);
   assert.equal((await worker.fetch(new Request('https://luca-bloom.com/api/other'), e)).status, 404);
 });
+
+// ---------- サイトの配信（ファイルに当たらない URL だけ Worker が受ける） ----------
+const FILES = { '/index.html': 'top', '/en/index.html': 'en', '/404.html': 'not found', '/privacy.html': 'privacy' };
+const assets = {
+  fetch: async (req) => {
+    const p = new URL(req.url).pathname;
+    return p in FILES ? new Response(FILES[p], { headers: { 'content-type': 'text/html' } }) : new Response('', { status: 404 });
+  },
+};
+const get = (url) => worker.fetch(new Request(url), { ...env(), ASSETS: assets });
+
+test('フォルダの URL はその中の index.html を返し、安全設定のヘッダーを付ける', async () => {
+  const r = await get('https://luca-bloom.com/en/');
+  assert.equal(r.status, 200);
+  assert.equal(await r.text(), 'en');
+  assert.match(r.headers.get('content-security-policy'), /frame-ancestors 'self'/);
+  assert.equal(r.headers.get('x-frame-options'), 'SAMEORIGIN');
+  assert.equal(await (await get('https://luca-bloom.com/')).text(), 'top');
+});
+
+test('/en は /en/ へ、www は www なしへ転送する', async () => {
+  const a = await get('https://luca-bloom.com/en?x=1');
+  assert.equal(a.status, 301);
+  assert.equal(a.headers.get('location'), 'https://luca-bloom.com/en/?x=1');
+  const b = await get('https://www.luca-bloom.com/privacy.html');
+  assert.equal(b.status, 301);
+  assert.equal(b.headers.get('location'), 'https://luca-bloom.com/privacy.html');
+});
+
+test('存在しない URL は 404.html を状態 404 で返す。/api/ の未知の URL は JSON の 404', async () => {
+  const r = await get('https://luca-bloom.com/no-such-page');
+  assert.equal(r.status, 404);
+  assert.equal(await r.text(), 'not found');
+  const api = await get('https://luca-bloom.com/api/nothing');
+  assert.equal(api.status, 404);
+  assert.match(api.headers.get('content-type'), /json/);
+});

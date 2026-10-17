@@ -1,29 +1,80 @@
-# 公開：push のたびに、サイトに必要なファイルだけを集めて GitHub Pages に公開する。
+# 公開：push のたびに、サイトに必要なファイルだけを集めて公開する。
 # 制作用のファイル（tools/・tests/・src/・SNS の原稿や指示文・README など）はサイトに出さない（tools/build-site.mjs の許可リスト）。
-# リポジトリの Settings → Pages → Build and deployment → Source を「GitHub Actions」にすると有効になる。
-name: 公開（GitHub Pages）
+#
+# 公開先は2つ（移行期間中）：
+#   ① Cloudflare Workers（worker/）：サイトの配信と、北米の事前登録の受け口（/api/*）。
+#      秘密情報 CLOUDFLARE_API_TOKEN・CLOUDFLARE_ACCOUNT_ID が登録されていると公開する。
+#   ② GitHub Pages：リポジトリが公開（public）の間だけ。非公開にすると自動で行わなくなる。
+#      Cloudflare Workers が luca-bloom.com を受けるようになると、こちらは使われない。
+name: 公開
 on:
   push:
     branches: [claude/keen-pascal-bs4hhf]
   workflow_dispatch:
-# 最小権限：リポジトリは読むだけ。Pages への公開と、その本人確認（OIDC）だけ許可する
 permissions:
   contents: read
-  pages: write
-  id-token: write
 # 公開は1本ずつ。途中の公開は打ち切らない（中途半端な状態を出さない）
 concurrency:
   group: pages
   cancel-in-progress: false
 jobs:
-  deploy:
-    runs-on: ubuntu-24.04 # ubuntu-latest は 2026-10-19 から Ubuntu 26 に切り替わるため、検証済みの版に固定
+  cloudflare:
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      WRANGLER_SEND_METRICS: 'false'
+    steps:
+      # 外部の部品はバージョン名ではなくコミットID（書き換え不可）で固定する
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+        with:
+          node-version: 22
+      - name: 秘密情報が未登録なら、ここで終了
+        id: ready
+        run: |
+          if [ -n "$CLOUDFLARE_API_TOKEN" ] && [ -n "$CLOUDFLARE_ACCOUNT_ID" ]; then echo "ok=1" >> "$GITHUB_OUTPUT"; else echo "::notice::Cloudflare の秘密情報が未登録のため、Cloudflare への公開は行いません"; fi
+      - name: 公開するファイルだけを _site に集める
+        if: steps.ready.outputs.ok == '1'
+        run: node tools/build-site.mjs
+      - name: 集めたファイルにリンク切れ・参照切れがないか
+        if: steps.ready.outputs.ok == '1'
+        run: node tools/check-site.mjs
+        env:
+          SITE_ROOT: _site
+      - name: Worker の準備とテスト
+        if: steps.ready.outputs.ok == '1'
+        working-directory: worker
+        run: |
+          npm ci
+          npm test
+      - name: データベース（D1）を用意し、表を最新にする
+        if: steps.ready.outputs.ok == '1'
+        working-directory: worker
+        run: |
+          node scripts/ensure-d1.mjs
+          npx wrangler d1 migrations apply luca-bloom-waitlist --remote
+      - name: 公開（Cloudflare Workers）
+        if: steps.ready.outputs.ok == '1'
+        working-directory: worker
+        run: npx wrangler deploy
+
+  github-pages:
+    if: ${{ !github.event.repository.private }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    # 最小権限：Pages への公開と、その本人確認（OIDC）だけ許可する
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      # 外部の部品はバージョン名ではなくコミットID（書き換え不可）で固定する
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
         with:
           persist-credentials: false

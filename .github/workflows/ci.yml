@@ -1,7 +1,9 @@
 # 自動チェック：push のたびに、文法・リンク・ビルド結果・ブラウザでの動作を確認する
 name: CI
 on:
+  # SNS の画像・原稿だけの更新（毎日の自動投稿）では実行しない（非公開リポジトリの無料枠：月2,000分を節約）
   push:
+    paths-ignore: ['sns/**', '**/*.md']
   pull_request:
 # 最小権限：リポジトリの読み取りのみ（万一ビルド中に不正なコードが動いても、書き込み・公開はできない）
 permissions:
@@ -22,6 +24,12 @@ jobs:
       - run: npm ci
       - name: 依存パッケージの既知の脆弱性チェック
         run: npm audit --audit-level=moderate
+      - name: 配信・事前登録の Worker のテスト（worker/）
+        working-directory: worker
+        run: |
+          npm ci
+          npm audit --audit-level=moderate
+          npm test
       - name: 文法チェック（ESLint・HTML）
         run: npm run lint
       - name: リンク・メタ情報・sitemap・CSP のチェック
