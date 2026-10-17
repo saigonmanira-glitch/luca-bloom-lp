@@ -67,7 +67,6 @@ export function initAssembly() {
   let playing = false;
   let alive = true;
   let running = false;
-  let last = 0;
   let aspect = 1;
 
   const ease = (r) => smoothstep(r[0], r[1], t);
@@ -112,12 +111,13 @@ export function initAssembly() {
     go();
   });
 
+  // 再生位置は時計で決める（遅い端末でもコマを飛ばして約2.6秒で終わる。コマ数に比例して長引かない）
+  let start = 0;
   function frame(now) {
     if (!alive) return;
-    const dt = Math.min(0.1, last ? (now - last) / 1000 : 0);
-    last = now;
     if (playing) {
-      t = Math.min(DURATION, t + dt);
+      if (!start) start = now;
+      t = Math.min(DURATION, (now - start) / 1000);
       if (t >= DURATION) {
         playing = false;
         if (replay) replay.hidden = false;
@@ -126,10 +126,7 @@ export function initAssembly() {
     pose();
     renderer.render(scene, camera);
     if ((playing || drag.on) && !document.hidden) requestAnimationFrame(frame);
-    else {
-      running = false;
-      last = 0;
-    }
+    else running = false;
   }
   function go() {
     if (alive && !running && !document.hidden) {
@@ -140,6 +137,7 @@ export function initAssembly() {
   function play() {
     if (reduce) return;
     t = 0;
+    start = 0;
     playing = true;
     if (replay) replay.hidden = true;
     go();
