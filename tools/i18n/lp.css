@@ -51,7 +51,7 @@ small.gl{font-size:12px;color:var(--muted);font-weight:400}
 .top{display:flex;align-items:center;justify-content:space-between;padding-block:16px}
 .logo{font-family:var(--font-en);font-weight:600;font-size:22px;letter-spacing:.06em;color:var(--silver);text-decoration:none}
 .brand{display:flex;align-items:center;gap:14px;min-width:0}
-.motto{margin:0;padding-left:14px;border-left:1px solid currentColor;font-size:13px;font-weight:700;letter-spacing:.14em;line-height:1.3;white-space:nowrap;color:#7A540C}   /* ブランドの一言。ロゴの横（狭い画面ではロゴの下） */
+.motto{margin:0;padding-left:14px;border-left:1px solid currentColor;font-size:13px;font-weight:700;letter-spacing:.14em;line-height:1.3;white-space:nowrap;color:#5E4007}   /* ブランドの一言。ロゴの横（狭い画面ではロゴの下） */
 @media (max-width:420px){.brand{flex-direction:column;align-items:flex-start;gap:2px}.motto{padding-left:1px;border-left:0;font-size:11px;letter-spacing:.12em}}
 .top .pill{font-size:12px;color:var(--on-navy-muted);border:1px solid var(--navy-line);border-radius:99px;padding:3px 10px}
 .hero .for{margin-top:18px;font-size:13px;color:var(--gold);font-weight:700;letter-spacing:.1em}
@@ -86,8 +86,9 @@ small.gl{font-size:12px;color:var(--muted);font-weight:400}
 .price b{font-family:var(--font-en);font-size:17px;color:var(--gold);margin:0 2px}
 
 /* ---------- 明るい配色（動画と同じ淡いグレーの光）：ヒーローと化粧箱の欄。紺は文字・枠・ボタンに残す ---------- */
-.hero,.privacy{--on-navy:var(--ink);--on-navy-muted:#4C5263;--navy-2:rgba(255,255,255,.72);--navy-line:#C4CAD6;--silver:var(--navy);color:var(--ink);background:radial-gradient(120% 70% at 50% 40%,#F6F7FA 0%,#E4E7EE 55%,#D3D8E2 100%)}
-.hero .for,.hero h1 .for,.hero .price b,.hero .label,.privacy .label{color:#7A540C}
+.hero,.privacy{--on-navy:var(--ink);--on-navy-muted:#414657;--navy-2:rgba(255,255,255,.72);--navy-line:#C4CAD6;--silver:var(--navy);color:var(--ink);background:radial-gradient(120% 70% at 50% 40%,#F6F7FA 0%,#E4E7EE 55%,#D3D8E2 100%)}
+.hero .for,.hero h1 .for,.hero .price b,.hero .label,.privacy .label{color:#5E4007}
+.hero .top .pill,.hero .langs summary{border-color:rgba(22,26,41,.22);background:rgba(255,255,255,.35)}   /* 背景の光の上でも枠が見えるように */
 .privacy .sub{color:var(--on-navy-muted)}
 .hero .badges b,.hero .meter-row b{color:var(--navy)}
 .hero .badges li{background:rgba(255,255,255,.55)}
@@ -230,11 +231,11 @@ footer p{margin-top:8px}
 .bar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:rgba(22,26,41,.94);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-top:1px solid var(--navy-line);padding:10px var(--gutter) calc(10px + env(safe-area-inset-bottom,0px));transition:transform .25s ease}
 .bar.hide{transform:translateY(120%)}
 .bar .in{max-width:560px;margin:0 auto;display:flex;gap:12px;align-items:center}
-.bar .price{max-width:560px;margin:0 auto 6px;font-size:12px}
-.bar .price b{font-size:14px}
 .bar .p{color:var(--white);font-family:var(--font-en);font-weight:700;font-size:19px;line-height:1.1;white-space:nowrap}
 .bar .p small{display:block;font-family:var(--font-jp);font-size:12px;font-weight:400;color:var(--on-navy-muted)}
 .bar .cta{min-height:48px;font-size:15px;flex:1;white-space:nowrap;letter-spacing:.02em}
+.bar .p-price b{display:block;font-family:var(--font-en);font-size:20px;line-height:1.15;color:var(--gold);letter-spacing:.01em}   /* 画面下のバー：価格と購入ボタンを1行に（バーの高さを抑え、本文を隠さない） */
+.bar .p-price small{font-size:11px;line-height:1.35;margin-top:2px}
 /* ---------- パソコン（幅1024px以上）：横に広い画面では、ヒーローを左右2列に、各欄の項目を2〜3列に組む ---------- */
 @media (min-width:1024px){
   :root{--gutter:48px}
@@ -253,6 +254,7 @@ footer p{margin-top:8px}
   .hero .badges{grid-column:1;grid-row:4;margin-top:32px}
   .hero .buy{grid-column:1;grid-row:5;margin-top:32px;align-self:start}
   .hero .visual{grid-column:2;grid-row:2/span 4;align-self:start;position:sticky;top:24px;margin-top:36px}   /* 左の列が長い時も、3D は画面に残す */
+  .hero .top{position:relative;z-index:2}.hero h1,.hero .lead,.hero .badges,.hero .buy{position:relative;z-index:1}   /* 右列（sticky）の後ろの光が、左列の見出し・ボタンに重なって灰色にくすまないよう、左列を手前に */
   .hero .stage-note{margin:8px 0 14px}
   .cta{min-height:64px;font-size:18px}
   /* 各欄 */
@@ -307,12 +309,13 @@ body{letter-spacing:.01em}
 .wl-n{margin:0;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12.5px;color:var(--on-navy-muted)}
 .wl-n span:first-child{font-weight:700;color:var(--on-navy)}
 .wl-deal{margin:14px 0 0;font-size:17px;line-height:1.5;font-weight:900;color:var(--gold)}
+.hero .wl-count b{color:#8F6510}.hero .wl-deal{color:#6E4B0A}   /* 明るいカードの上では金を濃くして読みやすく（コントラスト比 4.5 以上） */
 .wl-note{margin:6px 0 0;font-size:12.5px;line-height:1.6;color:var(--on-navy-muted)}
 .wl-alt{margin:10px 0 0;font-size:12.5px;line-height:1.7;color:var(--on-navy-muted);text-align:center}
 .wl-alt a{color:var(--on-navy);font-weight:700;text-decoration:underline;text-underline-offset:2px}
 .wl-addr{font-family:var(--font-en);font-weight:700;color:var(--on-navy);-webkit-user-select:all;user-select:all;overflow-wrap:anywhere}
 /* 事前登録フォーム（src/waitlist.js）。ヒーロー（明るい背景）と最後（紺の背景）の2か所 */
-.wl-form{margin-top:16px;text-align:left}
+.wl-form{margin-top:16px;padding-top:16px;border-top:1px solid var(--navy-line);text-align:left}
 .wl-label{display:block;font-size:13.5px;font-weight:700;margin-bottom:6px}
 .wl-row{display:flex;flex-direction:column;gap:10px}
 .wl-row input{width:100%;min-height:54px;border:1.5px solid var(--navy-line);border-radius:14px;padding:0 16px;font:inherit;font-size:16px;color:var(--navy);background:#fff}   /* 16px 以上：iPhone で入力時に画面が拡大されない */
@@ -321,6 +324,8 @@ body{letter-spacing:.01em}
 .wl-row .cta:disabled{opacity:.6;cursor:progress}
 .wl-hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}   /* 人には見えない欄（機械による登録の見分け） */
 .wl-msg{margin:8px 0 0;min-height:1.5em;font-size:14px;font-weight:700}
+.wl-msg:empty{margin:0;min-height:0}
+.wl-form .wl-note{margin-top:8px;text-align:center}
 .wl-msg.bad{color:#B42318}
 .dark .wl-msg.bad{color:#FFB4A9}
 .wl-ref{margin-top:10px;padding:12px;border-radius:12px;background:rgba(227,179,78,.14);border:1px solid var(--gold)}
@@ -329,7 +334,7 @@ body{letter-spacing:.01em}
 .wl-ref-url{flex:1;min-width:0;min-height:44px;border:1px solid var(--navy-line);border-radius:10px;padding:0 10px;font:inherit;font-size:14px;color:var(--navy);background:#fff}
 .wl-copy{min-height:44px;padding:0 16px;border:0;border-radius:10px;background:var(--navy);color:#fff;font:inherit;font-weight:700;cursor:pointer}
 .dark .wl-copy{background:var(--gold);color:var(--navy)}
-.wl-consent{margin:10px 0 0;font-size:12px;line-height:1.6;opacity:.85}
+.wl-consent{margin:12px 0 0;font-size:11.5px;line-height:1.65;color:var(--on-navy-muted)}
 .wl-consent a{color:inherit;text-decoration:underline;text-underline-offset:2px}
 @media (min-width:600px){.wl-row{flex-direction:row}.wl-row input{flex:1}.wl-row .cta{width:auto;flex:none;padding:0 22px}}
 .wl-share{margin-top:14px;padding-top:12px;border-top:1px solid var(--navy-line)}

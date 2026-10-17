@@ -114,13 +114,13 @@ export function lpHtml(L) {
         <div class="wl-row"><input id="wl-email-${n}" type="email" name="email" autocomplete="email" inputmode="email" maxlength="254" required placeholder="${esc(w.placeholder)}"><button class="cta${cls}" type="submit">${w.cta}</button></div>
         <input class="wl-hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
         <p class="wl-msg" role="status" aria-live="polite"></p>
+        <p class="wl-note">${w.note}</p>
         <div class="wl-ref" hidden><p>${w.refH}</p><div class="wl-ref-row"><input class="wl-ref-url" type="text" readonly aria-label="${esc(w.refH)}"><button class="wl-copy" type="button">${w.copy}</button></div></div>
         <p class="wl-consent">${w.consent} <a href="privacy.html">${w.privacyLink}</a></p>
-      </form>
-      <p class="wl-alt">${w.alt} <a class="wl-addr" href="${esc(w.href)}">${w.address}</a></p>`;
+      </form>`;
   };
   const buttons = (cls) =>
-    w ? form(cls)
+    w ? ''
       : L.stores
         .map((s, i) => `      <a class="cta${i ? ' cta-2' : ''}${cls}" href="${s.href}" target="_blank" rel="noopener sponsored">${s.cta}\n        ${arrow}</a>`)
         .join('\n');
@@ -140,16 +140,17 @@ export function lpHtml(L) {
     ].map(([n, h]) => `<a href="${esc(h)}" target="_blank" rel="noopener">${n}</a>`).join('')
       + `<a href="${esc(`mailto:?subject=${encodeURIComponent('Luca Bloom')}&body=${tx}%20${u}`)}">${w.mail}</a>`;
   };
-  const waitlistBox = () =>
+  const waitlistBox = (cls) =>
     w ? `      <div class="wl" data-left="${esc(w.left(999999).replace('999999', '{n}'))}" data-done="${esc(w.left(0))}" data-progress="${esc(w.progress(888888, 999999).replace('888888', '{c}').replace('999999', '{t}'))}" data-live="${esc(w.live)}">
         <p class="wl-goal">${w.goal}</p>
         <p class="wl-count"><b>${WAITLIST.count}</b><span>/ ${WAITLIST.target} ${w.votes}</span></p>
         <progress class="wl-bar" max="${WAITLIST.target}" value="${WAITLIST.count}" aria-label="${esc(w.progress(WAITLIST.count, WAITLIST.target))}">${w.progress(WAITLIST.count, WAITLIST.target)}</progress>
         <p class="wl-n"><span>${w.left(WAITLIST.target - WAITLIST.count)}</span><span>${w.updated(wlDate)}</span></p>
         <p class="wl-deal">${w.deal}</p>
-        <p class="wl-note">${w.note}</p>
+${form(cls)}
         <div class="wl-share"><p>${w.shareH}</p><div>${share(w.shareText)}</div></div>
-      </div>\n` : '';
+      </div>
+      <p class="wl-alt">${w.alt} <a class="wl-addr" href="${esc(w.href)}">${w.address}</a></p>\n` : '';
   const product = {
     '@context': 'https://schema.org', '@type': 'Product', name: 'Luca Bloom', description: plain(t.ldDescription),
     brand: { '@type': 'Brand', name: 'Luca Bloom' }, image: [`${url}og.png`], material: t.material, category: t.category,
@@ -201,7 +202,7 @@ ${t.badges.map(([b, s]) => `      <li><b>${b}</b>${s}</li>`).join('\n')}
 
     <div class="buy">
       <p class="price">${L.price || t.buyNote}</p>
-${waitlistBox()}${buttons(' js-buy')}
+${waitlistBox(' js-buy')}${buttons(' js-buy')}
     </div>
   </div>
 </header>
@@ -490,7 +491,7 @@ ${supportLinks(L)}
     <h2>${t.finalH2}</h2>
     <p class="sub">${t.finalSub}</p>
     <div class="buy">
-${L.price ? `      <p class="price">${L.price}</p>\n` : ''}${waitlistBox()}${buttons(' js-buy')}
+${L.price ? `      <p class="price">${L.price}</p>\n` : ''}${waitlistBox(' js-buy')}${buttons(' js-buy')}
     </div>
   </div>
 </section>
@@ -499,8 +500,8 @@ ${L.price ? `      <p class="price">${L.price}</p>\n` : ''}${waitlistBox()}${but
 ${footer(L, '')}
 
 <aside class="bar" id="bar" aria-label="${esc(t.barAria)}">
-${L.price ? `  <p class="price">${L.price}</p>\n` : ''}  <div class="in">
-    <p class="p">Luca Bloom<small>${t.barSmall}</small></p>
+  <div class="in">
+    ${L.price && L.barPrice ? `<p class="p p-price">${L.barPrice}</p>` : `<p class="p">Luca Bloom<small>${t.barSmall}</small></p>`}
     ${barButtons}
   </div>
 </aside>

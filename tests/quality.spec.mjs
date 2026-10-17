@@ -217,3 +217,68 @@ test('表示崩れ：狭い画面でも、文章が縦書きのように1文字�
   }
   expect(bad).toEqual([]);
 });
+
+// ---------- 色のコントラスト：実際に描かれた背景（グラデーション・半透明の重なりを含む）に対して、文字が読める濃さか ----------
+// axe-core はグラデーションや半透明の背景の上の文字を判定できない（「判定不能」として扱い、違反にしない）ため、
+// 画面のピクセルから背景色を取り、WCAG の基準（本文 4.5:1、大きな文字 3:1）を満たすかを確かめる
+test.describe('色のコントラスト（画面のピクセルで判定）', () => {
+  test.use({ bypassCSP: true }); // 画面の画像をページ内で読み込むため（このテストだけ）
+  for (const p of ['', 'us/', 'en/']) {
+    for (const width of [390, 1366]) {
+      test(`/${p} @${width}px`, async ({ page }) => {
+        test.setTimeout(120_000);
+        await page.setViewportSize({ width, height: 900 });
+        await page.goto(p, { waitUntil: 'load' });
+        await page.addStyleTag({ content: '#bar{display:none!important}' });
+        await page.waitForTimeout(500);
+        const H = await page.evaluate(() => document.documentElement.scrollHeight);
+        const bad = [];
+        for (let y = 0; y < H; y += 900) {
+          await page.evaluate((y) => scrollTo(0, y), y);
+          await page.waitForTimeout(150);
+          const b64 = (await page.screenshot()).toString('base64');
+          bad.push(...(await page.evaluate(async (b64) => {
+            const img = new Image();
+            img.src = `data:image/png;base64,${b64}`;
+            await img.decode();
+            const c = document.createElement('canvas');
+            [c.width, c.height] = [img.width, img.height];
+            const g = c.getContext('2d', { willReadFrequently: true });
+            g.drawImage(img, 0, 0);
+            const lum = (rgb) => rgb.map((v) => (v /= 255) <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4).reduce((s, v, i) => s + v * [0.2126, 0.7152, 0.0722][i], 0);
+            const out = [];
+            const tw = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+            const seen = new Set();
+            for (let n = tw.nextNode(); n; n = tw.nextNode()) {
+              const el = n.parentElement;
+              if (!el || seen.has(el) || !n.textContent.trim() || el.closest('script,style,noscript,svg,canvas')) continue;
+              seen.add(el);
+              const r = el.getBoundingClientRect();
+              if (r.width < 4 || r.height < 4 || r.top < 0 || r.bottom > innerHeight || r.left < 0 || r.right > innerWidth) continue;
+              const hit = document.elementFromPoint(r.left + Math.min(r.width, 20) / 2, r.top + r.height / 2);
+              if (!hit || !(hit === el || el.contains(hit) || hit.contains(el))) continue; // ほかの要素の下に隠れている
+              const cs = getComputedStyle(el);
+              const [cr, cg, cb, ca = 1] = cs.color.match(/[\d.]+/g).map(Number);
+              const k = img.width / innerWidth; // 画面の画像は端末の画素密度の分だけ大きい
+              const d = g.getImageData(Math.round(r.left * k), Math.round(r.top * k), Math.max(1, Math.round(r.width * k)), Math.max(1, Math.round(r.height * k))).data;
+              const count = new Map();
+              for (let i = 0; i < d.length; i += 4) {
+                const key = `${d[i] >> 3},${d[i + 1] >> 3},${d[i + 2] >> 3}`;
+                count.set(key, (count.get(key) || 0) + 1);
+              }
+              const bg = [...count].sort((a, b) => b[1] - a[1])[0][0].split(',').map((v) => v * 8 + 4); // 枠の中で一番多い色＝背景
+              const fg = [cr, cg, cb].map((v, i) => v * ca + bg[i] * (1 - ca));
+              const [hi, lo] = [lum(fg), lum(bg)].sort((a, b) => b - a);
+              const ratio = (hi + 0.05) / (lo + 0.05);
+              const size = parseFloat(cs.fontSize);
+              const large = size >= 24 || (size >= 18.66 && +cs.fontWeight >= 700);
+              if (ratio < (large ? 3 : 4.5)) out.push(`${ratio.toFixed(2)}：「${n.textContent.trim().slice(0, 24)}」`);
+            }
+            return out;
+          }, b64)));
+        }
+        expect([...new Set(bad)]).toEqual([]);
+      });
+    }
+  }
+});

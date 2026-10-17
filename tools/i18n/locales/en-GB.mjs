@@ -13,6 +13,7 @@ export default {
     { href: `https://www.amazon.com.au/dp/${ASIN}`, cta: 'Buy on Amazon Australia', short: 'Australia' },
   ],
   // 初期ロットの限定価格（日本の「初期ロット100個限定価格」と同じ扱い）。購入欄・最後の購入欄・下部の固定バーに出す
+  barPrice: '<b>£42.99</b><small>Australia A$79.95</small>', // 画面下のバー（1行に収める短い表記）
   price: 'Launch price, first 30 units only: <span class="nb"><b>£42.99</b> UK (incl. VAT)</span> · <span class="nb"><b>A$79.95</b> Australia (incl. GST)</span>',
   // 構造化データ（JSON-LD）の販売情報。価格は上の price と同じ初期ロット限定価格
   offers: [
