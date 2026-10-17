@@ -311,6 +311,27 @@ body{letter-spacing:.01em}
 .wl-alt{margin:10px 0 0;font-size:12.5px;line-height:1.7;color:var(--on-navy-muted);text-align:center}
 .wl-alt a{color:var(--on-navy);font-weight:700;text-decoration:underline;text-underline-offset:2px}
 .wl-addr{font-family:var(--font-en);font-weight:700;color:var(--on-navy);-webkit-user-select:all;user-select:all;overflow-wrap:anywhere}
+/* 事前登録フォーム（src/waitlist.js）。ヒーロー（明るい背景）と最後（紺の背景）の2か所 */
+.wl-form{margin-top:16px;text-align:left}
+.wl-label{display:block;font-size:13.5px;font-weight:700;margin-bottom:6px}
+.wl-row{display:flex;flex-direction:column;gap:10px}
+.wl-row input{width:100%;min-height:54px;border:1.5px solid var(--navy-line);border-radius:14px;padding:0 16px;font:inherit;font-size:16px;color:var(--navy);background:#fff}   /* 16px 以上：iPhone で入力時に画面が拡大されない */
+.wl-row input:focus-visible{outline:3px solid var(--gold);outline-offset:1px;border-color:var(--navy)}
+.wl-row .cta{border:0;cursor:pointer;font-family:inherit}
+.wl-row .cta:disabled{opacity:.6;cursor:progress}
+.wl-hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}   /* 人には見えない欄（機械による登録の見分け） */
+.wl-msg{margin:8px 0 0;min-height:1.5em;font-size:14px;font-weight:700}
+.wl-msg.bad{color:#B42318}
+.dark .wl-msg.bad{color:#FFB4A9}
+.wl-ref{margin-top:10px;padding:12px;border-radius:12px;background:rgba(227,179,78,.14);border:1px solid var(--gold)}
+.wl-ref p{margin:0 0 8px;font-size:13.5px;font-weight:700;line-height:1.5}
+.wl-ref-row{display:flex;gap:8px}
+.wl-ref-url{flex:1;min-width:0;min-height:44px;border:1px solid var(--navy-line);border-radius:10px;padding:0 10px;font:inherit;font-size:14px;color:var(--navy);background:#fff}
+.wl-copy{min-height:44px;padding:0 16px;border:0;border-radius:10px;background:var(--navy);color:#fff;font:inherit;font-weight:700;cursor:pointer}
+.dark .wl-copy{background:var(--gold);color:var(--navy)}
+.wl-consent{margin:10px 0 0;font-size:12px;line-height:1.6;opacity:.85}
+.wl-consent a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+@media (min-width:600px){.wl-row{flex-direction:row}.wl-row input{flex:1}.wl-row .cta{width:auto;flex:none;padding:0 22px}}
 .wl-share{margin-top:14px;padding-top:12px;border-top:1px solid var(--navy-line)}
 .wl-share p{margin:0;font-size:13.5px;font-weight:700;color:var(--on-navy)}
 .wl-share div{margin-top:8px;display:flex;flex-wrap:wrap;justify-content:center;gap:8px}

@@ -100,15 +100,31 @@ const organization = (url) => ({
 export function lpHtml(L) {
   const t = L.t;
   const url = SITE + L.dir;
-  // 発売前の国（L.waitlist）は、購入ボタンの代わりに発売通知のメールボタンと、目標までの残り件数を出す
+  // 発売前の国（L.waitlist）は、購入ボタンの代わりに事前登録のフォーム（送信先は worker/）と、目標までの残り件数を出す
+  // フォームはヒーローと最後の2か所。文言（結果の表示など）は data-* に入れ、src/waitlist.js が使う
   const w = L.waitlist;
+  let formNo = 0;
+  const form = (cls) => {
+    const n = ++formNo;
+    const msg = Object.fromEntries(['sending', 'ok', 'dup', 'invalid', 'rate', 'fail', 'copied'].map((k) => [`data-${k}`, w[k]]));
+    const attrs = Object.entries({ 'data-market': w.market, 'data-url': url, ...msg }).map(([k, v]) => `${k}="${esc(v)}"`).join(' ');
+    // novalidate：入力の誤りはブラウザの吹き出しではなく、ページの言語の文言（.wl-msg）で知らせる
+    return `      <form class="wl-form"${n === 1 ? ' id="signup"' : ''} novalidate ${attrs}>
+        <label class="wl-label" for="wl-email-${n}">${w.label}</label>
+        <div class="wl-row"><input id="wl-email-${n}" type="email" name="email" autocomplete="email" inputmode="email" maxlength="254" required placeholder="${esc(w.placeholder)}"><button class="cta${cls}" type="submit">${w.cta}</button></div>
+        <input class="wl-hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <p class="wl-msg" role="status" aria-live="polite"></p>
+        <div class="wl-ref" hidden><p>${w.refH}</p><div class="wl-ref-row"><input class="wl-ref-url" type="text" readonly aria-label="${esc(w.refH)}"><button class="wl-copy" type="button">${w.copy}</button></div></div>
+        <p class="wl-consent">${w.consent} <a href="privacy.html">${w.privacyLink}</a></p>
+      </form>
+      <p class="wl-alt">${w.alt} <a class="wl-addr" href="${esc(w.href)}">${w.address}</a></p>`;
+  };
   const buttons = (cls) =>
-    w ? `      <a class="cta${cls}" href="${esc(w.href)}">${w.cta}\n        ${arrow}</a>
-      <p class="wl-alt">${w.alt} ${w.web.map(([n, h]) => `<a href="${esc(h)}" target="_blank" rel="noopener">${n}</a>`).join(' · ')} ${w.or} <span class="wl-addr">${w.address}</span></p>`
+    w ? form(cls)
       : L.stores
         .map((s, i) => `      <a class="cta${i ? ' cta-2' : ''}${cls}" href="${s.href}" target="_blank" rel="noopener sponsored">${s.cta}\n        ${arrow}</a>`)
         .join('\n');
-  const barButtons = w ? `<a class="cta" href="${esc(w.href)}" aria-label="${esc(w.cta)}">${w.short}</a>`
+  const barButtons = w ? `<a class="cta" href="#signup" aria-label="${esc(w.cta)}">${w.short}</a>`
     : L.stores
       .map((s, i) => `<a class="cta${i ? ' cta-2' : ''}" href="${s.href}" target="_blank" rel="noopener sponsored"${s.short !== s.cta ? ` aria-label="${esc(s.cta)}"` : ''}>${s.short}</a>`)
       .join('\n    ');
@@ -125,7 +141,7 @@ export function lpHtml(L) {
       + `<a href="${esc(`mailto:?subject=${encodeURIComponent('Luca Bloom')}&body=${tx}%20${u}`)}">${w.mail}</a>`;
   };
   const waitlistBox = () =>
-    w ? `      <div class="wl">
+    w ? `      <div class="wl" data-left="${esc(w.left(999999).replace('999999', '{n}'))}" data-done="${esc(w.left(0))}" data-progress="${esc(w.progress(888888, 999999).replace('888888', '{c}').replace('999999', '{t}'))}" data-live="${esc(w.live)}">
         <p class="wl-goal">${w.goal}</p>
         <p class="wl-count"><b>${WAITLIST.count}</b><span>/ ${WAITLIST.target} ${w.votes}</span></p>
         <progress class="wl-bar" max="${WAITLIST.target}" value="${WAITLIST.count}" aria-label="${esc(w.progress(WAITLIST.count, WAITLIST.target))}">${w.progress(WAITLIST.count, WAITLIST.target)}</progress>

@@ -104,6 +104,7 @@ function loadScene(state) {
 document.addEventListener('DOMContentLoaded', () => {
   const state = createState();
   initBuyBar();
+  if (document.querySelector('.wl-form')) import('./waitlist.js').then((m) => m.initWaitlist()); // 発売前の国だけ読み込む
   if (document.readyState === 'complete') loadScene(state);
   else window.addEventListener('load', () => loadScene(state), { once: true });
 });

@@ -1,0 +1,12 @@
+{
+  "name": "luca-bloom-waitlist",
+  "private": true,
+  "type": "module",
+  "description": "北米の事前登録フォームの受け口（Cloudflare Workers + D1）。サイト本体（GitHub Pages）とは別に、.github/workflows/worker.yml が公開する",
+  "scripts": {
+    "test": "node --test --no-warnings test/*.test.js"
+  },
+  "devDependencies": {
+    "wrangler": "4.147.0"
+  }
+}

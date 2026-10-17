@@ -127,6 +127,12 @@ for (const pdf of SUPPORT_PDFS) {
 }
 patch('sitemap.xml', 'i18n', urls.join('\n'));
 
+// ---------- Google アナリティクス 4（src/ga.js）：プライバシーポリシー以外の全ページ ----------
+// 英国・豪州向け（en-GB）とケベック州向け（fr-CA）のページでは、ga.js が Cookie を使わない計測に切り替える
+for (const [rel, html] of files) {
+  if (rel.endsWith('.html') && !/(^|\/)privacy\.html$/.test(rel) && !html.includes('/assets/js/ga.js')) files.set(rel, html.replace('</head>', '<script type="module" src="/assets/js/ga.js"></script>\n</head>'));
+}
+
 // ---------- 書き出し・確認 ----------
 let stale = 0;
 for (const [rel, html] of files) {

@@ -1,0 +1,16 @@
+# 北米の事前登録フォームの受け口：https://luca-bloom.com/api/* だけをこの Worker が受け、ほかはこれまで通り GitHub Pages が返す
+name = "luca-bloom-waitlist"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+workers_dev = false
+routes = [{ pattern = "luca-bloom.com/api/*", zone_name = "luca-bloom.com" }]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "luca-bloom-waitlist"
+database_id = "__D1_ID__" # 公開時に scripts/ensure-d1.mjs が実際の ID に置き換える（無ければ作る）
+migrations_dir = "migrations"
+
+[vars]
+BASE_COUNT = "0" # フォーム化の前にメールで届いた登録数（表示する件数に足す）
+TARGET = "30"

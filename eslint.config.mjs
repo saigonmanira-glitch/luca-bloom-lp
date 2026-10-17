@@ -3,7 +3,7 @@ import js from '@eslint/js';
 import globals from 'globals';
 
 export default [
-  { ignores: ['assets/**', 'node_modules/**', 'test-results/**', 'playwright-report/**', '_site/**', 'out/**'] },
+  { ignores: ['assets/**', 'node_modules/**', 'test-results/**', 'playwright-report/**', '_site/**', 'out/**', 'worker/node_modules/**', 'worker/.wrangler/**'] },
   js.configs.recommended,
   {
     files: ['src/**/*.js'],
@@ -18,6 +18,15 @@ export default [
     // Amazon 用動画・SNS 用の製品画像の描画（ブラウザ内で実行）
     files: ['tools/video/scene.js', 'tools/sns/product.js', 'tools/amazon/shots.js'],
     languageOptions: { ecmaVersion: 2022, sourceType: 'module', globals: globals.browser },
+  },
+  {
+    // 事前登録フォームの受け口（Cloudflare Workers：ブラウザに近い実行環境）
+    files: ['worker/src/**/*.js'],
+    languageOptions: { ecmaVersion: 2022, sourceType: 'module', globals: { ...globals.serviceworker, console: 'readonly' } },
+  },
+  {
+    files: ['worker/test/**/*.js', 'worker/scripts/**/*.mjs'],
+    languageOptions: { ecmaVersion: 2022, sourceType: 'module', globals: globals.node },
   },
   {
     files: ['tools/**/*.mjs', '*.config.mjs'],

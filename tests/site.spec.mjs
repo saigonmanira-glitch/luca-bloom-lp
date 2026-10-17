@@ -162,21 +162,41 @@ for (const L of LOCALE_TESTS) {
   // 発売前の国（tools/i18n/waitlist.mjs）は、購入ボタンの代わりに発売通知のメールボタンと残り件数を出す
   const pre = LOCALES.find((x) => x.lang === L.lang).waitlist;
   if (pre) {
-    test(`${L.lang}：発売前は、Amazon へのリンクがなく、投票のメールボタン・票数・シェアのリンクがある`, async ({ page }) => {
+    test(`${L.lang}：発売前は、Amazon へのリンクがなく、事前登録のフォーム・票数・シェアのリンクがある`, async ({ page }) => {
       await page.goto(L.dir, { waitUntil: 'domcontentloaded' });
       await expect(page.locator('a[href*="www.amazon."]')).toHaveCount(0);
-      const mail = page.locator('a.cta[href^="mailto:info@luca-bloom.com?subject="]');
-      expect(await mail.count()).toBeGreaterThanOrEqual(3); // ヒーロー・最後・下部バー
-      const href = await mail.first().getAttribute('href');
-      expect(decodeURIComponent(new URL(href).searchParams.get('subject'))).toBe(pre.subject);
-      // メールアプリが開かない環境向けに、Gmail・Outlook の作成画面とアドレスを出す（ヒーロー・最後）
-      expect(await page.locator('.wl-alt a[href^="https://mail.google.com/mail/?view=cm"]').count()).toBeGreaterThanOrEqual(2);
-      expect(await page.locator('.wl-alt a[href^="https://outlook.live.com/mail/0/deeplink/compose"]').count()).toBeGreaterThanOrEqual(2);
+      await expect(page.locator('form.wl-form')).toHaveCount(2); // ヒーロー・最後
+      await expect(page.locator('form.wl-form').first()).toHaveAttribute('data-market', pre.market);
+      await expect(page.locator('#bar a.cta')).toHaveAttribute('href', '#signup');
       await expect(page.locator('.wl-addr').first()).toHaveText('info@luca-bloom.com');
+      expect(decodeURIComponent(new URL(await page.locator('.wl-addr').first().getAttribute('href')).searchParams.get('subject'))).toBe(pre.subject);
       await expect(page.locator('.wl-bar').first()).toHaveAttribute('max', String(WAITLIST.target));
-      await expect(page.locator('.wl-bar').first()).toHaveAttribute('value', String(WAITLIST.count));
       await expect(page.locator('.wl-count b').first()).toHaveText(String(WAITLIST.count));
       await expect(page.locator('.wl-share a[href^="https://twitter.com/intent/tweet"]').first()).toHaveAttribute('href', new RegExp(encodeURIComponent(`https://luca-bloom.com/${L.dir}`)));
+    });
+
+    test(`${L.lang}：事前登録フォームで登録すると、結果・最新の件数・自分専用の共有リンクが出る`, async ({ page }) => {
+      const sent = [];
+      await page.route('**/api/waitlist/count', (r) => r.fulfill({ json: { count: 7, target: 30 } }));
+      await page.route('**/api/waitlist', (r) => {
+        sent.push(r.request().postDataJSON());
+        r.fulfill({ json: { ok: true, status: 'new', code: 'abcdefgh', count: 8, target: 30 } });
+      });
+      await page.goto(`${L.dir}?ref=zzzzzzzz`, { waitUntil: 'load' });
+      await expect(page.locator('.wl-count b').first()).toHaveText('7'); // 開いたときに最新の件数
+      const form = page.locator('form.wl-form').first();
+      await form.locator('input[type="email"]').fill('Someone@Example.com');
+      await form.locator('button[type="submit"]').click();
+      await expect(form.locator('.wl-msg')).toHaveText(pre.ok);
+      expect(sent).toEqual([{ email: 'Someone@Example.com', market: pre.market, ref: 'zzzzzzzz', website: '' }]);
+      await expect(page.locator('.wl-count b').first()).toHaveText('8');
+      await expect(form.locator('.wl-ref-url')).toHaveValue(`https://luca-bloom.com/${L.dir}?ref=abcdefgh`);
+      await expect(page.locator('.wl-share a[href^="https://twitter.com/intent/tweet"]').first()).toHaveAttribute('href', new RegExp(encodeURIComponent(`https://luca-bloom.com/${L.dir}?ref=abcdefgh`)));
+      // 不正なアドレスは送らずに知らせる
+      await form.locator('input[type="email"]').fill('nope');
+      await form.locator('button[type="submit"]').click();
+      await expect(form.locator('.wl-msg')).toHaveText(pre.invalid);
+      expect(sent).toHaveLength(1);
     });
   }
 
@@ -385,7 +405,7 @@ test('コラム：各記事の hreflang が日本語版を含めて相互に指�
   }
 });
 
-test('計測：日本語のページで Google アナリティクスが読み込まれ、購入リンクのクリックが記録される（海外のページでは読み込まない）', async ({ page }) => {
+test('計測：Google アナリティクスが読み込まれ、購入リンクのクリックが記録される。英国・豪州向けとケベック州向けのページは Cookie を使わない', async ({ page }) => {
   const gtagReq = [];
   page.on('request', (r) => r.url().includes('googletagmanager.com/gtag/js') && gtagReq.push(r.url()));
   await page.goto('', { waitUntil: 'load' });
@@ -395,6 +415,12 @@ test('計測：日本語のページで Google アナリティクスが読み込
   await page.locator('.final a[href*="amazon.co.jp"]').click();
   const ev = await page.evaluate(() => window.dataLayer.map((a) => Array.from(a)).find((a) => a[0] === 'event' && a[1] === 'click_buy'));
   expect(ev[2]).toMatchObject({ store: 'amazon', link_location: 'final' });
-  await page.goto('en/', { waitUntil: 'load' });
+  const storage = (dir) =>
+    page.goto(dir, { waitUntil: 'load' }).then(() => page.evaluate(() => window.dataLayer.map((a) => Array.from(a)).find((a) => a[0] === 'consent' && a[1] === 'default')[2]));
+  expect(await storage('')).toMatchObject({ analytics_storage: 'granted', ad_storage: 'denied' });
+  expect(await storage('us/')).toMatchObject({ analytics_storage: 'granted', ad_storage: 'denied' });
+  expect(await storage('en/')).toMatchObject({ analytics_storage: 'denied', ad_storage: 'denied' });
+  expect(await storage('ca/fr/')).toMatchObject({ analytics_storage: 'denied', ad_storage: 'denied' });
+  await page.goto('privacy.html', { waitUntil: 'load' });
   expect(await page.evaluate(() => 'dataLayer' in window)).toBe(false);
 });
