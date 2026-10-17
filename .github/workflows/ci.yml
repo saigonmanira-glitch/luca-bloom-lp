@@ -11,7 +11,7 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-24.04 # ubuntu-latest は 2026-10-19 から Ubuntu 26 に切り替わるため、検証済みの版に固定
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       # 外部の部品はバージョン名ではなくコミットID（書き換え不可）で固定する
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0

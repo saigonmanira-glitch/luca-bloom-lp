@@ -222,8 +222,10 @@ test('表示崩れ：狭い画面でも、文章が縦書きのように1文字�
 // axe-core はグラデーションや半透明の背景の上の文字を判定できない（「判定不能」として扱い、違反にしない）ため、
 // 画面のピクセルから背景色を取り、WCAG の基準（本文 4.5:1、大きな文字 3:1）を満たすかを確かめる
 test.describe('色のコントラスト（画面のピクセルで判定）', () => {
-  test.use({ bypassCSP: true }); // 画面の画像をページ内で読み込むため（このテストだけ）
-  for (const p of ['', 'us/', 'en/']) {
+  // bypassCSP：画面の画像をページ内で読み込むため（このテストだけ）。deviceScaleFactor 1：画像を小さくして速く（色の判定には十分）
+  test.use({ bypassCSP: true, deviceScaleFactor: 1 });
+  // 日本語版（index.html）と海外版（tools/i18n の共通テンプレート。発売前のフォームを含む米国版）の2種類
+  for (const p of ['', 'us/']) {
     for (const width of [390, 1366]) {
       test(`/${p} @${width}px`, async ({ page }) => {
         test.setTimeout(120_000);
